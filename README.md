@@ -1,0 +1,2 @@
+# Fruit Bounty
+Fruits Bounty is a modern online fruit ordering platform developed using the MERN Stack (MongoDB, Express.js, React.js, Node.js). The platform is designed to provide fresh fruits and fully customizable fruit bowls to customers. Admins can manage fruit inventory,prices, and orders, while customers can browse fruits, create their own fruit bowls, place orders, and make online payments.
