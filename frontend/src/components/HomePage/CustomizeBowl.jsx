@@ -1,6 +1,9 @@
 import CustomizeStepCard from "./CustomizeStepCard";
+import { useNavigate } from "react-router-dom";
 
 function CustomizeBowl() {
+  const navigate = useNavigate();
+
   const steps = [
     {
       stepNo: "Step 1",
@@ -38,17 +41,14 @@ function CustomizeBowl() {
       {/* Steps */}
       <div className="grid gap-10 place-items-center md:grid-cols-3">
         {steps.map((step, index) => (
-          <CustomizeStepCard
-            key={index}
-            step={step}
-            index={index} 
-          />
+          <CustomizeStepCard key={index} step={step} index={index} />
         ))}
       </div>
 
       {/* CTA */}
       <div className="flex justify-center mt-10">
         <button
+          onClick={() => navigate("/customize")}
           className="
             bg-green-700
             hover:bg-green-800
