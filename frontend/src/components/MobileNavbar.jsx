@@ -1,4 +1,5 @@
 import { Home, Salad, ShoppingBag, User } from "lucide-react";
+import { Link } from "react-router-dom";
 
 function MobileNavbar() {
   return (
@@ -31,10 +32,10 @@ function MobileNavbar() {
         <span className="text-xs mt-1">Cart</span>
       </button>
 
-      <button className="flex flex-col items-center text-gray-500 hover:text-green-700 transition">
+      <Link to="/dashboard" className="flex flex-col items-center text-gray-500 hover:text-green-700 transition">
         <User size={22} />
         <span className="text-xs mt-1">Profile</span>
-      </button>
+      </Link>
     </div>
   );
 }
