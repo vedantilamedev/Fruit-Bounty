@@ -23,9 +23,9 @@ function CustomizeBowl() {
   ];
 
   return (
-    <section className="py-24 px-6 md:px-16 lg:px-24 bg-[#FBF8F2]">
+    <section className="py-16 px-6 md:px-16 lg:px-24 bg-[#FBF8F2]">
       {/* Heading */}
-      <div className="text-center mb-20">
+      <div className="text-center mb-12">
         <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
           Customize Your Bowl
         </h2>
@@ -36,35 +36,31 @@ function CustomizeBowl() {
       </div>
 
       {/* Steps */}
-      <div
-        className="
-        grid
-        gap-14
-        place-items-center
-        sm:grid-cols-1
-        md:grid-cols-3
-      "
-      >
+      <div className="grid gap-10 place-items-center md:grid-cols-3">
         {steps.map((step, index) => (
-          <CustomizeStepCard key={index} step={step} />
+          <CustomizeStepCard
+            key={index}
+            step={step}
+            index={index} 
+          />
         ))}
       </div>
 
       {/* CTA */}
-      <div className="flex justify-center mt-20">
+      <div className="flex justify-center mt-10">
         <button
           className="
-          bg-green-700
-          hover:bg-green-800
-          text-white
-          px-12 py-4
-          rounded-full
-          font-semibold
-          text-lg
-          shadow-lg
-          hover:scale-105
-          transition
-        "
+            bg-green-700
+            hover:bg-green-800
+            text-white
+            px-12 py-4
+            rounded-full
+            font-semibold
+            text-lg
+            shadow-lg
+            hover:scale-105
+            transition duration-300
+          "
         >
           Build Your Bowl
         </button>

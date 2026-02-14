@@ -1,4 +1,47 @@
+import { useEffect, useRef, useState } from "react";
+
 function WhatIsFruitSalad() {
+  const leftRef = useRef(null);
+  const middleRef = useRef(null);
+  const rightRef = useRef(null);
+
+  const [visible, setVisible] = useState({
+    left: false,
+    middle: false,
+    right: false,
+  });
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const isVisible = entry.isIntersecting;
+
+          if (entry.target === leftRef.current) {
+            setVisible((prev) => ({ ...prev, left: isVisible }));
+          }
+
+          if (entry.target === middleRef.current) {
+            setVisible((prev) => ({ ...prev, middle: isVisible }));
+          }
+
+          if (entry.target === rightRef.current) {
+            setVisible((prev) => ({ ...prev, right: isVisible }));
+          }
+        });
+      },
+      {
+        threshold: 0.25,
+      },
+    );
+
+    if (leftRef.current) observer.observe(leftRef.current);
+    if (middleRef.current) observer.observe(middleRef.current);
+    if (rightRef.current) observer.observe(rightRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section className="py-24 px-6 md:px-16 lg:px-24 bg-[#FBF8F2]">
       {/* Heading */}
@@ -17,93 +60,63 @@ function WhatIsFruitSalad() {
       </div>
 
       {/* Cards */}
-      <div
-        className="
-        grid
-        gap-10
-        place-items-center
-        sm:grid-cols-1
-        md:grid-cols-2
-        lg:grid-cols-3
-      "
-      >
-        {/* Card 1 */}
+      <div className="grid gap-10 place-items-center md:grid-cols-2 lg:grid-cols-3">
+        {/* Left */}
         <div
-          className="
-          w-full max-w-[340px]
-          rounded-3xl
-          bg-gradient-to-br from-[#E8F5E9] to-[#DFF1E5]
-          px-8 py-10
-          text-center
-          shadow-sm
-          hover:shadow-xl
-          transition duration-300
-          hover:-translate-y-2
-        "
+          ref={leftRef}
+          className={`card-base transition-all duration-700 ${
+            visible.left
+              ? "opacity-100 translate-x-0"
+              : "opacity-0 -translate-x-24"
+          }`}
         >
-          <div className="w-20 h-20 mx-auto rounded-full bg-[#B7B06A] flex items-center justify-center mb-6">
+          <div className="icon-box">
             <img
               src="/images/natural.png"
               alt="100% Natural"
               className="w-10"
             />
           </div>
-
-          <h3 className="text-xl font-bold text-gray-800 mb-3">100% Natural</h3>
-
-          <p className="text-gray-600 text-sm leading-relaxed">
+          <h3 className="card-title">100% Natural</h3>
+          <p className="card-desc">
             No preservatives, no artificial flavors. Just pure, fresh fruits
             picked at peak ripeness for maximum taste and nutrition.
           </p>
         </div>
 
-        {/* Card 2 */}
+        {/* Middle */}
         <div
-          className="
-          w-full max-w-[340px]
-          rounded-3xl
-          bg-gradient-to-br from-[#E8F5E9] to-[#DFF1E5]
-          px-8 py-10
-          text-center
-          shadow-sm
-          hover:shadow-xl
-          transition duration-300
-          hover:-translate-y-2
-        "
+          ref={middleRef}
+          className={`card-base transition-all duration-700 ${
+            visible.middle
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 -translate-y-24"
+          }`}
         >
-          <div className="w-20 h-20 mx-auto rounded-full bg-[#B7B06A] flex items-center justify-center mb-6">
+          <div className="icon-box">
             <img src="/images/rice.png" alt="Vitamin Rich" className="w-10" />
           </div>
-
-          <h3 className="text-xl font-bold text-gray-800 mb-3">Vitamin Rich</h3>
-
-          <p className="text-gray-600 text-sm leading-relaxed">
+          <h3 className="card-title">Vitamin Rich</h3>
+          <p className="card-desc">
             Packed with essential vitamins, minerals, and antioxidants that
             boost immunity and promote overall wellness.
           </p>
         </div>
 
-        {/* Card 3 */}
+        {/* Right */}
         <div
-          className="
-          w-full max-w-[340px]
-          rounded-3xl
-          bg-gradient-to-br from-[#E8F5E9] to-[#DFF1E5]
-          px-8 py-10
-          text-center
-          shadow-sm
-          hover:shadow-xl
-          transition duration-300
-          hover:-translate-y-2
-        "
+          ref={rightRef}
+          className={`card-base transition-all duration-700 ${
+            visible.right
+              ? "opacity-100 translate-x-0"
+              : "opacity-0 translate-x-24"
+          }`}
         >
-          <div className="w-20 h-20 mx-auto rounded-full bg-[#B7B06A] flex items-center justify-center mb-6">
+          <div className="icon-box">
             <img src="/images/daily.png" alt="Fresh Daily" className="w-10" />
           </div>
-
-          <h3 className="text-xl font-bold text-gray-800 mb-3">Fresh Daily</h3>
-
-          <p className="text-gray-600 text-sm leading-relaxed">
+          <h3 className="card-title">Fresh Daily</h3>
+          <p className="card-desc">
             Prepared fresh every morning with locally sourced fruits to ensure
             maximum freshness and flavor in every bite.
           </p>

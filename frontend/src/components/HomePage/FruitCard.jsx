@@ -1,6 +1,32 @@
+import { useEffect, useRef, useState } from "react";
+
 function FruitCard({ fruit }) {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Toggle true/false based on visibility
+        setVisible(entry.isIntersecting);
+      },
+      {
+        threshold: 0.25,
+      },
+    );
+
+    if (ref.current) observer.observe(ref.current);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="relative w-[220px] h-[170px]">
+    <div
+      ref={ref}
+      className={`relative w-[220px] h-[170px] transition-all duration-700 ease-out ${
+        visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-28"
+      }`}
+    >
       {/* Card */}
       <div
         className="
@@ -10,6 +36,7 @@ function FruitCard({ fruit }) {
         rounded-2xl
         border-2 border-green-800
         overflow-hidden
+        shadow-lg
       "
       >
         {/* Left Strip */}
