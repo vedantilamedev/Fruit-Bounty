@@ -1,35 +1,55 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
+import TopBar from "./components/TopBar";
+import Navbar from "./components/Navbar";
+import MobileNavbar from "./components/MobileNavbar";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import Login from "./pages/Login"; // Ensure you have created this file
+import Register from "./pages/Register"; // Ensure you have created this file
 
 function App() {
-  const [count, setCount] = useState(0)
+  useEffect(() => {
+    AOS.init({
+      duration: 900,
+      easing: "ease-out-cubic",
+      once: false,
+      mirror: true,
+      offset: 100,
+    });
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <Router>
+      <div className="w-full overflow-x-hidden bg-[#FBF8F2]">
+        {/* ===== Desktop Top Section ===== */}
+        <div className="hidden lg:block fixed top-0 left-0 w-full z-50">
+          <TopBar />
+          <Navbar />
+        </div>
+
+        {/* ===== Page Content ===== */}
+        {/* The padding-top ensures content isn't hidden behind the fixed Navbar */}
+        <main className="pt-[140px] lg:pt-[160px] min-h-screen">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </main>
+
+        <Footer />
+
+        {/* ===== Mobile Bottom Navbar ===== */}
+        <div className="lg:hidden">
+          <MobileNavbar />
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </Router>
+  );
 }
 
-export default App
+export default App;
