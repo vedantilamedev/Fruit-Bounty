@@ -39,6 +39,7 @@ function SaladSection() {
 
   return (
     <section className="py-24 px-6 md:px-14 lg:px-24 bg-[#FBF8F2]">
+      {/* Heading */}
       <div className="text-center mb-16">
         <h2 className="text-4xl font-bold text-gray-800">Our Salad Bowls</h2>
         <p className="text-gray-500 mt-3">
@@ -46,18 +47,14 @@ function SaladSection() {
         </p>
       </div>
 
-      <div
-        className="
-        grid
-        gap-12
-        place-items-center
-        sm:grid-cols-1
-        md:grid-cols-2
-        lg:grid-cols-3
-      "
-      >
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+      {/* Cards */}
+      <div className="grid gap-12 place-items-center sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {products.map((product, index) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            index={index} 
+          />
         ))}
       </div>
     </section>

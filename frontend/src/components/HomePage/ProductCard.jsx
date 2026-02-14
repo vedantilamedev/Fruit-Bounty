@@ -1,17 +1,55 @@
-function ProductCard({ product }) {
+import { useEffect, useRef, useState } from "react";
+
+function ProductCard({ product, index }) {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+        } else {
+          setVisible(false); // 🔥 scroll up pe phir se animate karega
+        }
+      },
+      { threshold: 0.25 },
+    );
+
+    if (ref.current) observer.observe(ref.current);
+
+    return () => {
+      if (ref.current) observer.unobserve(ref.current);
+    };
+  }, []);
+
   return (
     <div
-      className="
-      w-full max-w-[360px]
+      ref={ref}
+      className={`w-full max-w-[420px]
       rounded-[28px]
       border border-green-800
       bg-[#F6F1E7]
-      px-7 py-8
+      px-8 py-8
       shadow-sm
       hover:shadow-xl
-      transition duration-300
+      transition-all duration-700
       flex flex-col items-center
-    "
+      
+      ${
+        visible
+          ? index === 0
+            ? "opacity-100 translate-x-0"
+            : index === 1
+              ? "opacity-100 translate-y-0"
+              : "opacity-100 translate-x-0"
+          : index === 0
+            ? "opacity-0 -translate-x-24"
+            : index === 1
+              ? "opacity-0 -translate-y-24"
+              : "opacity-0 translate-x-24"
+      }
+      `}
     >
       {/* Tag */}
       <span className="text-xs font-semibold bg-green-700 text-white px-4 py-1 rounded-full mb-3">
@@ -21,17 +59,11 @@ function ProductCard({ product }) {
       {/* Title */}
       <h3 className="text-2xl font-bold text-gray-800">{product.title}</h3>
 
-      {/* IMAGE — Perfect Size */}
+      {/* Image */}
       <img
         src={product.image}
         alt={product.title}
-        className="
-          w-44
-          h-44
-          object-contain
-          my-5
-          drop-shadow-xl
-        "
+        className="w-48 h-48 object-contain my-6 drop-shadow-xl"
       />
 
       {/* Info */}
@@ -52,30 +84,15 @@ function ProductCard({ product }) {
         </div>
       </div>
 
-      {/* Description */}
       <p className="text-sm text-gray-500 mt-4 text-center">
         {product.description}
       </p>
 
-      {/* Divider */}
       <div className="w-full h-[1px] bg-green-800/30 my-5"></div>
 
-      {/* Price */}
       <div className="text-3xl font-bold text-green-900">₹{product.price}</div>
 
-      {/* Button */}
-      <button
-        className="
-        w-full
-        mt-4
-        bg-green-800
-        hover:bg-green-900
-        text-white
-        py-3
-        rounded-full
-        font-semibold
-      "
-      >
+      <button className="w-full mt-4 bg-green-800 hover:bg-green-900 text-white py-3 rounded-full font-semibold transition">
         Order Now
       </button>
     </div>
