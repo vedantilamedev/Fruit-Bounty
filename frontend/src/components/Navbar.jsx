@@ -1,8 +1,12 @@
-import { ShoppingBag, User, LogIn, UserPlus } from "lucide-react";
+import { ShoppingBag, ShoppingCart, User, LogIn, UserPlus } from "lucide-react";
+import { useCart } from "../context/CartContext";
+
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
 function Navbar() {
+    const { cart } = useCart();
+
   const [show, setShow] = useState(true);
   const [lastScroll, setLastScroll] = useState(0);
   const [authOpen, setAuthOpen] = useState(false);
@@ -48,15 +52,36 @@ function Navbar() {
             </Link>
             <div className="flex gap-8 text-gray-700 font-medium">
               <Link to="/" className="hover:text-green-700 transition cursor-pointer">Home</Link>
-              <a className="hover:text-green-700 transition cursor-pointer">Customize Bowl</a>
+               <Link
+                  to="/customize"
+                  className="hover:text-green-700 transition cursor-pointer"
+                >
+                  Customize Bowl
+                </Link>
             </div>
           </div>
 
           {/* RIGHT */}
           <div className="flex items-center gap-3">
-            <button className="w-10 h-10 bg-green-700 rounded-full flex items-center justify-center hover:bg-green-800 transition">
-              <ShoppingBag size={18} color="white" />
-            </button>
+            <Link to="/shop">
+               <button className="w-10 h-10 bg-green-700 rounded-full flex items-center justify-center hover:bg-green-800 transition">
+                 <ShoppingBag size={18} color="white" />
+               </button>
+             </Link>
+
+              {/* Cart */}
+              <Link to="/cart">
+                <button className="w-10 h-10 bg-green-700 rounded-full flex items-center justify-center hover:bg-green-800 transition relative">
+                  <ShoppingCart size={18} color="white" />
+
+                  {cart.length > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
+                      {cart.length}
+                    </span>
+                  )}
+                </button>
+              </Link>
+
 
             {/* Profile Dropdown */}
             <div className="relative" ref={authDropdownRef}>
