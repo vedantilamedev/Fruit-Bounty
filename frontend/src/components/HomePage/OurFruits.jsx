@@ -25,33 +25,29 @@ function OurFruits() {
   ];
 
   return (
-    <section className="py-20 bg-[#FBF8F2]">
+    <section className="py-16 bg-[#FBF8F2]">
       {/* Heading */}
-      <div className="text-center mb-20">
-        <h2 className="text-4xl font-bold text-gray-800">Our Fruits</h2>
+      <div className="text-center mb-14">
+        <h2 className="text-3xl font-bold text-gray-800">Our Fruits</h2>
 
-        <div className="w-24 h-1 bg-green-700 mx-auto my-4 rounded-full"></div>
+        <div className="w-20 h-[3px] bg-green-700 mx-auto my-3 rounded-full"></div>
 
-        <p className="text-gray-600 text-lg">
+        <p className="text-gray-600 text-base">
           Carefully selected seasonal fruits in every bowl
         </p>
       </div>
 
-      {/* GRID CONTAINER */}
+      {/* Grid */}
       <div
         className="
-          max-w-[1240px]
-          mx-auto
-          px-6
-          grid
-          grid-cols-1
-          sm:grid-cols-2
-          lg:grid-cols-3
-          xl:grid-cols-4
-          gap-x-14
-          gap-y-24
-          justify-items-center
-        "
+    max-w-[1100px]
+    mx-auto
+    px-4
+    grid
+    grid-cols-4
+    gap-x-14
+    justify-items-center
+  "
       >
         {fruits.map((fruit, index) => (
           <FruitCard key={index} fruit={fruit} />
