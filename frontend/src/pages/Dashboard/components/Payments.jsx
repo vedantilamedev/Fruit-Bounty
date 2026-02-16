@@ -4,50 +4,56 @@ import { CreditCard, CheckCircle, XCircle, Clock } from 'lucide-react';
 const Payments = ({ payments }) => {
     const getStatusIcon = (status) => {
         switch (status) {
-            case 'Success': return <CheckCircle size={16} className="text-green-500" />;
-            case 'Pending': return <Clock size={16} className="text-yellow-500" />;
-            case 'Failed': return <XCircle size={16} className="text-red-500" />;
-            default: return <Clock size={16} className="text-gray-400" />;
+            case 'Success': return <CheckCircle size={14} strokeWidth={3} />;
+            case 'Pending': return <Clock size={14} strokeWidth={3} />;
+            case 'Failed': return <XCircle size={14} strokeWidth={3} />;
+            default: return <Clock size={14} strokeWidth={3} />;
         }
     };
 
     const statusStyles = {
-        Success: 'bg-green-50 text-green-700 border-green-100',
-        Pending: 'bg-yellow-50 text-yellow-700 border-yellow-100',
-        Failed: 'bg-red-50 text-red-700 border-red-100',
+        Success: 'bg-[#3e7b3f]/10 text-[#3e7b3f] border-[#3e7b3f]/20',
+        Pending: 'bg-[#B7A261]/10 text-[#B7A261] border-[#B7A261]/20',
+        Failed: 'bg-[#A44A3F]/10 text-[#A44A3F] border-[#A44A3F]/20',
     };
 
     return (
-        <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-800">Payment History</h2>
+        <div className="space-y-8 animate-fadeIn">
+            <div className="px-2">
+                <h2 className="text-2xl font-black text-[#2f6131] tracking-tight italic uppercase">Financial Vault</h2>
+                <p className="text-[#B7A261] font-bold text-[10px] uppercase tracking-widest mt-1">Timeline of your freshness investments</p>
+            </div>
 
             {payments.length === 0 ? (
-                <div className="flex flex-col items-center justify-center p-12 bg-gray-50 rounded-xl border-dashed border-2 border-gray-200">
-                    <CreditCard size={48} className="text-gray-300 mb-4" />
-                    <p className="text-gray-500 font-medium text-lg">No payments yet</p>
+                <div className="flex flex-col items-center justify-center p-20 bg-white rounded-[3rem] border-2 border-dashed border-[#E8E4D9] shadow-inner text-center">
+                    <div className="bg-[#F7F5EF] p-8 rounded-[2rem] mb-6 shadow-sm">
+                        <CreditCard size={64} className="text-[#B7A261] opacity-40" strokeWidth={1} />
+                    </div>
+                    <p className="text-[#2f6131] font-black text-xl italic mb-2 tracking-tight">Financial Records Clear!</p>
+                    <p className="text-[#6B705C] font-medium text-sm max-w-xs">You haven't made any fruit investments yet. Your vault is ready when you are.</p>
                 </div>
             ) : (
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div className="bg-white rounded-[3rem] shadow-sm border border-[#E8E4D9] overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="bg-gray-50 border-b border-gray-200 text-xs text-gray-500 uppercase font-semibold tracking-wide">
-                                    <th className="p-4">Transaction ID</th>
-                                    <th className="p-4">Date</th>
-                                    <th className="p-4">Amount</th>
-                                    <th className="p-4">Method</th>
-                                    <th className="p-4">Status</th>
+                                <tr className="bg-[#F7F5EF] text-[10px] text-[#B7A261] uppercase font-black tracking-[0.15em] border-b border-[#E8E4D9]">
+                                    <th className="p-6">Treasury Link</th>
+                                    <th className="p-6">Transaction Date</th>
+                                    <th className="p-6">Amount Invested</th>
+                                    <th className="p-6">Channel</th>
+                                    <th className="p-6">Verification</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-100 text-sm">
+                            <tbody className="divide-y divide-[#E8E4D9]/30 text-sm">
                                 {payments.map((payment) => (
-                                    <tr key={payment.id} className="hover:bg-gray-50/50 transition">
-                                        <td className="p-4 font-mono text-gray-600 font-medium">#{payment.id}</td>
-                                        <td className="p-4 text-gray-600">{payment.date}</td>
-                                        <td className="p-4 font-bold text-gray-900">₹{payment.amount}</td>
-                                        <td className="p-4 text-gray-600 capitalize">{payment.method}</td>
-                                        <td className="p-4">
-                                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${statusStyles[payment.status] || 'bg-gray-50 text-gray-600'}`}>
+                                    <tr key={payment.id} className="hover:bg-[#FBF8F2] transition duration-300 group">
+                                        <td className="p-6 font-black text-[#6B705C] text-xs">#{payment.id}</td>
+                                        <td className="p-6 text-[#6B705C] font-bold italic opacity-80">{payment.date}</td>
+                                        <td className="p-6 font-black text-[#2f6131] text-lg">₹{payment.amount}</td>
+                                        <td className="p-6 font-black text-[#B7A261] uppercase text-[10px] tracking-widest">{payment.method}</td>
+                                        <td className="p-6">
+                                            <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border ${statusStyles[payment.status] || 'bg-gray-50 text-gray-600'}`}>
                                                 {getStatusIcon(payment.status)}
                                                 {payment.status}
                                             </span>
@@ -62,5 +68,6 @@ const Payments = ({ payments }) => {
         </div>
     );
 };
+
 
 export default Payments;
