@@ -53,7 +53,7 @@ function SaladSection() {
           <ProductCard
             key={product.id}
             product={product}
-            index={index} 
+            index={index}
           />
         ))}
       </div>

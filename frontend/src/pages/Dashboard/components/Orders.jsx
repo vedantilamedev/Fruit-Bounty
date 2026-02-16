@@ -7,30 +7,29 @@ const Orders = ({ orders }) => {
     const StatusBadge = ({ status }) => {
         switch (status) {
             case 'Pending':
-                return <span className="text-yellow-600 bg-yellow-100 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 w-fit"><Clock size={12} /> Pending</span>;
+                return <span className="text-[#B7A261] bg-[#B7A261]/10 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 w-fit border border-[#B7A261]/20"><Clock size={12} strokeWidth={2.5} /> Pending</span>;
             case 'Confirmed':
-                return <span className="text-blue-600 bg-blue-100 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 w-fit"><Truck size={12} /> Confirmed</span>;
+                return <span className="text-[#3e7b3f] bg-[#3e7b3f]/10 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 w-fit border border-[#3e7b3f]/20"><Truck size={12} strokeWidth={2.5} /> Confirmed</span>;
             case 'Delivered':
-                return <span className="text-green-600 bg-green-100 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 w-fit"><CheckCircle size={12} /> Delivered</span>;
+                return <span className="text-[#2f6131] bg-[#2f6131]/10 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 w-fit border border-[#2f6131]/20"><CheckCircle size={12} strokeWidth={2.5} /> Delivered</span>;
             default:
-                return <span className="text-gray-600 bg-gray-100 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 w-fit"><XCircle size={12} /> Unknown</span>;
+                return <span className="text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 w-fit border border-gray-200"><XCircle size={12} strokeWidth={2.5} /> Unknown</span>;
         }
     };
 
     const PaymentBadge = ({ status }) => {
         switch (status) {
             case 'Paid':
-                return <span className="text-green-600 bg-green-50 px-2 py-1 rounded-full text-xs font-medium w-fit">Paid</span>;
+                return <span className="text-[#3e7b3f] text-[10px] font-black uppercase tracking-tighter bg-[#3e7b3f]/5 px-2 py-0.5 rounded-md">Paid</span>;
             case 'Pending':
-                return <span className="text-yellow-600 bg-yellow-50 px-2 py-1 rounded-full text-xs font-medium w-fit">Pending</span>;
+                return <span className="text-[#B7A261] text-[10px] font-black uppercase tracking-tighter bg-[#B7A261]/5 px-2 py-0.5 rounded-md">Pending</span>;
             case 'Failed':
-                return <span className="text-red-600 bg-red-50 px-2 py-1 rounded-full text-xs font-medium w-fit">Failed</span>;
+                return <span className="text-[#A44A3F] text-[10px] font-black uppercase tracking-tighter bg-[#A44A3F]/5 px-2 py-0.5 rounded-md">Failed</span>;
             default:
-                return <span className="text-gray-600 bg-gray-50 px-2 py-1 rounded-full text-xs font-medium w-fit">-</span>;
+                return <span className="text-gray-400 text-[10px] font-black uppercase tracking-tighter">-</span>;
         }
     };
 
-    // Function to calculate delivery date (Order Date + 1 Day)
     const calculateDeliveryDate = (orderDateStr) => {
         const date = new Date(orderDateStr);
         date.setDate(date.getDate() + 1);
@@ -42,58 +41,61 @@ const Orders = ({ orders }) => {
     };
 
     return (
-        <div className="space-y-6">
-            <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold text-gray-800">My Orders</h2>
-                <span className="text-sm text-gray-500">Showing all {orders.length} orders</span>
+        <div className="space-y-8 animate-fadeIn mt-4">
+            <div className="flex justify-end mb-4 px-2">
+                <span className="text-[11px] font-black text-[#3e7b3f] bg-white px-4 py-2 rounded-full border border-[#E8E4D9] shadow-sm uppercase tracking-tighter">
+                    {orders.length} Total Treasures
+                </span>
             </div>
 
             {orders.length === 0 ? (
-                <div className="flex flex-col items-center justify-center p-12 bg-gray-50 rounded-xl border-dashed border-2 border-gray-200">
-                    <ShoppingBag size={48} className="text-gray-300 mb-4" />
-                    <p className="text-gray-500 font-medium text-lg">No orders yet</p>
-                    <p className="text-gray-400 text-sm mt-1">Start by browsing our fresh bowls!</p>
-                    <button className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
-                        Browse Menu
+                <div className="flex flex-col items-center justify-center p-20 bg-white rounded-[3rem] border-2 border-dashed border-[#E8E4D9] shadow-inner text-center">
+                    <div className="bg-[#F7F5EF] p-8 rounded-[2rem] mb-6 shadow-sm">
+                        <ShoppingBag size={64} className="text-[#B7A261] opacity-40" strokeWidth={1} />
+                    </div>
+                    <p className="text-[#2f6131] font-black text-xl italic mb-2 tracking-tight">Your Basket is Empty!</p>
+                    <p className="text-[#6B705C] font-normal text-sm max-w-xs mb-8">It seems you haven't started your journey of freshness yet.</p>
+                    <button className="px-10 py-4 bg-[#3e7b3f] text-white rounded-full font-black text-sm uppercase tracking-widest hover:bg-[#2f6131] transition-all duration-300 shadow-xl shadow-green-900/20">
+                        Start Shopping
                     </button>
                 </div>
             ) : (
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div className="bg-white rounded-[3rem] shadow-sm border border-[#E8E4D9] overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="bg-gray-50 border-b border-gray-200 text-xs text-gray-500 uppercase font-semibold tracking-wide">
-                                    <th className="p-4">Order ID</th>
-                                    <th className="p-4">Date</th>
-                                    <th className="p-4">Delivery Due</th>
-                                    <th className="p-4">Amount</th>
-                                    <th className="p-4">Status</th>
-                                    <th className="p-4">Payment</th>
-                                    <th className="p-4 text-center">Action</th>
+                                <tr className="bg-[#F7F5EF] text-[10px] text-[#B7A261] uppercase font-black tracking-[0.15em] border-b border-[#E8E4D9]">
+                                    <th className="p-6">Treasury ID</th>
+                                    <th className="p-6">Harvest Date</th>
+                                    <th className="p-6">Expected Arrival</th>
+                                    <th className="p-6">Investment</th>
+                                    <th className="p-6">Status</th>
+                                    <th className="p-6">Payment</th>
+                                    <th className="p-6 text-center">Action</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-100 text-sm">
+                            <tbody className="divide-y divide-[#E8E4D9]/30 text-sm">
                                 {orders.map((order) => (
-                                    <tr key={order.id} className="hover:bg-gray-50/50 transition duration-150">
-                                        <td className="p-4 font-mono font-medium text-gray-700">#{order.id}</td>
-                                        <td className="p-4 text-gray-600">{order.date}</td>
-                                        <td className="p-4 text-gray-800 font-medium">
+                                    <tr key={order.id} className="hover:bg-[#FBF8F2] transition duration-300 group">
+                                        <td className="p-6 font-bold text-[#6B705C] text-xs">#{order.id}</td>
+                                        <td className="p-6 text-[#2f6131] font-medium italic opacity-80">{order.date}</td>
+                                        <td className="p-6 text-[#3e7b3f] font-bold tracking-tight">
                                             {calculateDeliveryDate(order.date)}
                                         </td>
-                                        <td className="p-4 font-semibold text-gray-900">₹{order.amount}</td>
-                                        <td className="p-4">
+                                        <td className="p-6 font-bold text-[#2f6131] text-lg">₹{order.amount}</td>
+                                        <td className="p-6">
                                             <StatusBadge status={order.status} />
                                         </td>
-                                        <td className="p-4">
+                                        <td className="p-6">
                                             <PaymentBadge status={order.paymentStatus} />
                                         </td>
-                                        <td className="p-4 text-center">
+                                        <td className="p-6 text-center">
                                             <button
                                                 onClick={() => setSelectedOrder(order)}
-                                                className="text-gray-400 hover:text-green-600 transition p-2 rounded-full hover:bg-green-50"
+                                                className="bg-[#F7F5EF] text-[#3e7b3f] hover:bg-[#3e7b3f] hover:text-white transition-all duration-300 p-3 rounded-2xl shadow-sm group-hover:scale-110"
                                                 title="View Details"
                                             >
-                                                <Eye size={18} />
+                                                <Eye size={18} strokeWidth={2.5} />
                                             </button>
                                         </td>
                                     </tr>
@@ -106,65 +108,70 @@ const Orders = ({ orders }) => {
 
             {/* Order Details Modal */}
             {selectedOrder && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-fadeIn">
-                        <div className="flex justify-between items-center p-4 border-b border-gray-100 bg-gray-50/50">
-                            <h3 className="font-bold text-gray-800 text-lg">Order Details</h3>
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-green-900/20 backdrop-blur-md p-4 animate-fadeIn">
+                    <div className="bg-[#FBF8F2] rounded-[3.5rem] shadow-2xl w-full max-w-[28rem] overflow-hidden border-2 border-white/50">
+                        <div className="flex justify-between items-center p-8 border-b border-[#E8E4D9] bg-white/50 relative">
+                            <div>
+                                <h3 className="font-black text-[#2f6131] text-xl italic tracking-tight uppercase">Treasure Receipt</h3>
+                                <p className="text-[10px] font-black text-[#B7A261] tracking-widest mt-1">Order Details Breakdown</p>
+                            </div>
                             <button
                                 onClick={() => setSelectedOrder(null)}
-                                className="text-gray-400 hover:text-gray-600 transition p-1 rounded-full hover:bg-gray-100"
+                                className="bg-[#F7F5EF] text-[#6B705C] hover:bg-[#A44A3F] hover:text-white transition-all duration-300 p-2 rounded-full absolute top-6 right-8"
                             >
-                                <X size={20} />
+                                <X size={20} strokeWidth={2.5} />
                             </button>
                         </div>
 
-                        <div className="p-6 space-y-4">
+                        <div className="p-10 space-y-8 overflow-y-auto max-h-[70vh]">
                             <div className="flex justify-between items-start">
                                 <div>
-                                    <p className="text-xs text-gray-500 uppercase font-semibold mb-1">Order ID</p>
-                                    <p className="text-xl font-mono text-gray-900 font-bold">#{selectedOrder.id}</p>
+                                    <p className="text-[10px] font-black text-[#B7A261] uppercase tracking-widest mb-1 italic">Treasure ID</p>
+                                    <p className="text-2xl font-black text-[#2f6131] tracking-tighter italic">#{selectedOrder.id}</p>
                                 </div>
                                 <StatusBadge status={selectedOrder.status} />
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                            <div className="grid grid-cols-2 gap-4 bg-white p-6 rounded-[2.5rem] border border-[#E8E4D9] shadow-sm">
                                 <div>
-                                    <p className="text-xs text-gray-500 mb-1">Order Date</p>
-                                    <p className="text-sm font-medium text-gray-800">{selectedOrder.date}</p>
+                                    <p className="text-[10px] font-black text-[#B7A261] uppercase tracking-widest mb-1 italic">Harvested</p>
+                                    <p className="text-sm font-black text-[#6B705C]">{selectedOrder.date}</p>
                                 </div>
                                 <div>
-                                    <p className="text-xs text-gray-500 mb-1">Expected Delivery</p>
-                                    <p className="text-sm font-medium text-green-700">
+                                    <p className="text-[10px] font-black text-[#B7A261] uppercase tracking-widest mb-1 italic">Arriving</p>
+                                    <p className="text-sm font-black text-[#3e7b3f]">
                                         {calculateDeliveryDate(selectedOrder.date)}
                                     </p>
                                 </div>
                             </div>
 
                             <div>
-                                <p className="text-xs text-gray-500 mb-2 font-semibold uppercase">Products</p>
-                                <ul className="space-y-2">
-                                    {/* Dummy Loop if items exist, otherwise show generic */}
+                                <p className="text-[10px] font-black text-[#B7A261] uppercase tracking-widest mb-4 italic ml-2">Delights Contained</p>
+                                <ul className="space-y-3 bg-white/40 p-2 rounded-3xl">
                                     {selectedOrder.items ? (
                                         selectedOrder.items.map((item, idx) => (
-                                            <li key={idx} className="flex justify-between text-sm py-1 border-b border-dashed border-gray-100 last:border-0">
-                                                <span className="text-gray-700">{item.name}</span>
-                                                <span className="font-medium">x{item.qty}</span>
+                                            <li key={idx} className="flex justify-between text-base px-6 py-4 bg-white rounded-2xl shadow-sm border border-[#E8E4D9]/30">
+                                                <span className="font-bold text-[#6B705C]">{item.name}</span>
+                                                <span className="font-black text-[#3e7b3f] bg-[#F7F5EF] px-3 py-1 rounded-lg text-sm">x{item.qty}</span>
                                             </li>
                                         ))
                                     ) : (
-                                        <li className="text-sm text-gray-500 italic">Details not available</li>
+                                        <li className="text-sm text-gray-500 italic px-6">Details not available</li>
                                     )}
                                 </ul>
                             </div>
 
-                            <div className="flex justify-between pt-4 border-t border-gray-100 mt-4">
-                                <span className="font-bold text-gray-800">Total Amount</span>
-                                <span className="font-bold text-green-700 text-lg">₹{selectedOrder.amount}</span>
+                            <div className="flex justify-between pt-8 border-t border-[#E8E4D9] mt-6 items-end">
+                                <div>
+                                    <p className="text-[10px] font-black text-[#B7A261] uppercase tracking-widest italic">Total Investment</p>
+                                    <span className="text-sm font-black text-[#3e7b3f]">{selectedOrder.paymentStatus}</span>
+                                </div>
+                                <span className="font-black text-[#2f6131] text-3xl tracking-tighter">₹{selectedOrder.amount}</span>
                             </div>
                         </div>
 
-                        <div className="p-4 bg-gray-50 text-center text-xs text-gray-500 border-t border-gray-100">
-                            Need help with this order? <a href="#" className="underline hover:text-green-600">Contact Support</a>
+                        <div className="p-6 bg-[#3e7b3f] text-center text-[10px] font-black text-white uppercase tracking-[0.2em] shadow-2xl">
+                            Harvested with love by FruitsBounty
                         </div>
                     </div>
                 </div>
@@ -172,5 +179,6 @@ const Orders = ({ orders }) => {
         </div>
     );
 };
+
 
 export default Orders;

@@ -11,7 +11,7 @@ import LocationDrawer from "./components/LocationDrawer";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
 import Fruits from "./pages/Fruits";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
@@ -19,6 +19,7 @@ import OrderSuccess from "./pages/OrderSuccess";
 import FruitShop from "./pages/FruitShop";
 import CustomBowlPage from "./pages/CustomBowlPage";
 import CartPage from "./pages/CartPage";
+import Dashboard from "./pages/Dashboard/Dashboard";
 
 import AdminRoutes from "./admin/routes/AdminRoutes";
 
@@ -27,7 +28,6 @@ function Layout({ children }) {
   const location = useLocation();
   const [locationOpen, setLocationOpen] = useState(false);
 
-  // check if current path is admin
   const isAdmin = location.pathname.startsWith("/admin");
 
   useEffect(() => {
@@ -44,13 +44,11 @@ function Layout({ children }) {
     <div className="w-full bg-[#FBF8F2] relative">
       {!isAdmin && (
         <>
-          {/* ===== Fixed Header ===== */}
           <div className="fixed top-0 left-0 w-full z-40">
             <TopBar onOpen={() => setLocationOpen(true)} />
             <Navbar />
           </div>
 
-          {/* ===== Location Drawer (Above Everything) ===== */}
           <LocationDrawer
             open={locationOpen}
             onClose={() => setLocationOpen(false)}
@@ -58,7 +56,6 @@ function Layout({ children }) {
         </>
       )}
 
-      {/* ===== Page Content ===== */}
       <main
         className={`min-h-screen overflow-x-hidden ${
           !isAdmin ? "pt-[120px] lg:pt-[110px]" : ""
@@ -70,8 +67,6 @@ function Layout({ children }) {
       {!isAdmin && (
         <>
           <Footer />
-
-          {/* Mobile Bottom Navbar */}
           <div className="lg:hidden">
             <MobileNavbar />
           </div>
@@ -86,10 +81,10 @@ function App() {
     <Router>
       <Layout>
         <Routes>
-          {/* User Website Routes */}
+          {/* User Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/fruits" element={<Fruits />} />
           <Route path="/shop" element={<FruitShop />} />
           <Route path="/cart" element={<Cart />} />
@@ -97,6 +92,7 @@ function App() {
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/customize" element={<CustomBowlPage />} />
           <Route path="/cart-page" element={<CartPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
 
           {/* Admin Panel */}
           <Route path="/admin/*" element={<AdminRoutes />} />
