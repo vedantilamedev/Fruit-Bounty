@@ -64,12 +64,14 @@ const Dashboard = () => {
     ];
 
     const menuItems = [
-        { id: 'overview', label: 'Dashboard', icon: Home },
-        { id: 'calendar', label: 'Harvest Calendar', icon: CalendarIcon },
-        { id: 'orders', label: 'My Orders', icon: ShoppingCart },
-        { id: 'packages', label: 'My Subscription', icon: Package },
-        { id: 'payments', label: 'Payments', icon: CreditCard },
+        { id: 'overview', label: 'Dashboard', icon: Home, subtitle: "Managing your organic freshness" },
+        { id: 'calendar', label: 'Harvest Calendar', icon: CalendarIcon, subtitle: "Tracking nature's schedule" },
+        { id: 'orders', label: 'My Orders', icon: ShoppingCart, subtitle: "Tracing your fresh harvest journey" },
+        { id: 'packages', label: 'My Subscription', icon: Package, subtitle: "Your premium wellness plan" },
+        { id: 'payments', label: 'Payments', icon: CreditCard, subtitle: "Safe & Secure Transactions" },
     ];
+
+    const activeMenu = menuItems.find(item => item.id === activeTab) || menuItems[0];
 
     const renderContent = () => {
         switch (activeTab) {
@@ -99,11 +101,13 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#FBF8F2] flex flex-col lg:flex-row font-sans">
+        <div className="min-h-screen bg-[#FBF8F2] flex flex-col lg:flex-row">
 
             {/* Mobile Header */}
             <div className="lg:hidden bg-white shadow-sm p-4 flex justify-between items-center sticky top-0 z-20">
-                <h1 className="text-xl font-black text-[#3e7b3f]">FruitsBounty</h1>
+                <div className="flex items-center gap-2">
+                    {/* Title Removed */}
+                </div>
                 <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 text-gray-600">
                     {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
@@ -116,12 +120,8 @@ const Dashboard = () => {
             `}>
                 <div className="h-full flex flex-col bg-[#F7F5EF]/50">
                     {/* Logo Area */}
-                    <div className="p-8 border-b border-[#E8E4D9] hidden lg:block">
-                        <h1 className="text-2xl font-black text-[#3e7b3f] flex items-center gap-2 tracking-tight">
-                            <span className="bg-[#3e7b3f] p-2 rounded-2xl shadow-lg shadow-green-100 italic font-black text-white px-3">FB</span>
-                            FRUITSBOUNTY
-                        </h1>
-                    </div>
+                    {/* Logo Area REMOVED */}
+
 
                     {/* User Profile Mini Card */}
                     <div className="p-6 mx-4 mt-6 rounded-[2rem] bg-gradient-to-br from-[#3e7b3f] to-[#2f6131] shadow-xl shadow-green-900/10">
@@ -131,20 +131,20 @@ const Dashboard = () => {
                             </div>
                             <div className="overflow-hidden">
                                 <p className="font-bold text-[#FBF8F2] truncate tracking-wide">{userData.name}</p>
-                                <p className="text-xs text-[#FBF8F2]/70 truncate font-medium uppercase tracking-widest mt-0.5">{userData.email.split('@')[0]}</p>
+                                <p className="text-xs text-[#FBF8F2]/70 truncate font-normal uppercase tracking-widest mt-0.5">{userData.email.split('@')[0]}</p>
                             </div>
                         </div>
                     </div>
 
                     {/* Menu Links */}
                     <nav className="flex-1 px-4 py-8 space-y-3 overflow-y-auto">
-                        <p className="px-4 text-[10px] font-black text-[#B7A261] uppercase tracking-[0.2em] mb-4">MAIN MENU</p>
+                        <p className="px-4 text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.2em] mb-4">MAIN MENU</p>
                         {menuItems.map((item) => (
                             <button
                                 key={item.id}
                                 onClick={() => handleTabChange(item.id)}
-                                className={`w-full flex items-center gap-4 px-6 py-4 rounded-[1.5rem] transition-all duration-300 font-bold tracking-tight text-[15px] ${activeTab === item.id
-                                    ? 'bg-[#3e7b3f] text-white shadow-xl shadow-green-900/20 translate-x-1'
+                                className={`w-full flex items-center gap-4 px-6 py-4 rounded-[1.5rem] transition-all duration-300 font-medium tracking-tight text-[15px] ${activeTab === item.id
+                                    ? 'bg-[#3e7b3f] text-white shadow-xl shadow-green-900/20 translate-x-1 font-bold'
                                     : 'text-[#6B705C] hover:bg-white hover:text-[#3e7b3f] hover:translate-x-1'
                                     }`}
                             >
@@ -176,16 +176,20 @@ const Dashboard = () => {
             )}
 
             {/* Main Content Area */}
-            <main className="flex-1 p-6 lg:p-12 overflow-y-auto h-[calc(100vh-64px)] lg:h-screen bg-[#FBF8F2]">
-                <div className="max-w-6xl mx-auto">
-                    {/* Top Stats or Breadcrumbs can go here */}
-                    <div className="mb-10 lg:flex lg:items-center lg:justify-between animate-fadeIn">
+            <main className="flex-1 p-6 lg:p-12 overflow-y-auto h-[calc(100vh-64px)] lg:h-screen bg-[#FBF8F2] scroll-smooth-container">
+                <div className="max-w-7xl mx-auto">
+                    {/* Unified Page Header */}
+                    <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 animate-fadeIn px-2">
                         <div>
-                            <h2 className="text-3xl lg:text-4xl font-black text-[#2f6131] tracking-tight">
-                                My Dashboard
+                            <h2 className="text-3xl lg:text-4xl font-black text-[#2f6131] tracking-tight uppercase italic">
+                                {activeMenu.label}
                             </h2>
-                            <p className="text-[#B7A261] font-bold mt-2 uppercase tracking-widest text-xs italic">Managing your organic freshness</p>
+                            <p className="text-[#B7A261] font-medium mt-2 uppercase tracking-widest text-[10px] lg:text-xs italic">
+                                {activeMenu.subtitle}
+                            </p>
                         </div>
+                        {/* Dynamic Slot for Header Extras (like Calendar Nav) */}
+                        <div id="dashboard-header-extra"></div>
                     </div>
                     {renderContent()}
                 </div>
