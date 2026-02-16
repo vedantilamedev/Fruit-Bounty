@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Home, Package, ShoppingCart, CreditCard, LogOut, Menu, X, User } from 'lucide-react';
+import { Home, Package, ShoppingCart, CreditCard, LogOut, Menu, X, User, Calendar as CalendarIcon } from 'lucide-react';
 import Overview from './components/Overview';
 import Orders from './components/Orders';
 import Packages from './components/Packages';
 import Payments from './components/Payments';
+import HarvestCalendar from './components/HarvestCalendar';
 
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('overview');
@@ -64,6 +65,7 @@ const Dashboard = () => {
 
     const menuItems = [
         { id: 'overview', label: 'Dashboard', icon: Home },
+        { id: 'calendar', label: 'Harvest Calendar', icon: CalendarIcon },
         { id: 'orders', label: 'My Orders', icon: ShoppingCart },
         { id: 'packages', label: 'My Subscription', icon: Package },
         { id: 'payments', label: 'Payments', icon: CreditCard },
@@ -73,6 +75,8 @@ const Dashboard = () => {
         switch (activeTab) {
             case 'overview':
                 return <Overview userData={userData} orders={orders} />;
+            case 'calendar':
+                return <HarvestCalendar />;
             case 'orders':
                 return <Orders orders={orders} />;
             case 'packages':
@@ -95,68 +99,69 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
+        <div className="min-h-screen bg-[#FBF8F2] flex flex-col lg:flex-row font-sans">
 
             {/* Mobile Header */}
             <div className="lg:hidden bg-white shadow-sm p-4 flex justify-between items-center sticky top-0 z-20">
-                <h1 className="text-xl font-bold text-green-700">FruitsBounty</h1>
-                <button icon={isMobileMenuOpen ? X : Menu} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 text-gray-600">
+                <h1 className="text-xl font-black text-[#3e7b3f]">FruitsBounty</h1>
+                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 text-gray-600">
                     {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
             </div>
 
             {/* Sidebar Navigation */}
             <aside className={`
-        fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:shadow-none border-r border-gray-100
-        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
-      `}>
-                <div className="h-full flex flex-col">
+                fixed inset-y-0 left-0 z-30 w-72 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:shadow-none border-r border-[#E8E4D9]
+                ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
+            `}>
+                <div className="h-full flex flex-col bg-[#F7F5EF]/50">
                     {/* Logo Area */}
-                    <div className="p-6 border-b border-gray-100 hidden lg:block">
-                        <h1 className="text-2xl font-bold text-green-700 flex items-center gap-2">
-                            <span className="bg-green-100 p-1.5 rounded-lg"><User size={20} className="text-green-600" /></span>
-                            Customer Panel
+                    <div className="p-8 border-b border-[#E8E4D9] hidden lg:block">
+                        <h1 className="text-2xl font-black text-[#3e7b3f] flex items-center gap-2 tracking-tight">
+                            <span className="bg-[#3e7b3f] p-2 rounded-2xl shadow-lg shadow-green-100 italic font-black text-white px-3">FB</span>
+                            FRUITSBOUNTY
                         </h1>
                     </div>
 
                     {/* User Profile Mini Card */}
-                    <div className="p-6 bg-gradient-to-b from-green-50 to-white">
+                    <div className="p-6 mx-4 mt-6 rounded-[2rem] bg-gradient-to-br from-[#3e7b3f] to-[#2f6131] shadow-xl shadow-green-900/10">
                         <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-full bg-green-200 flex items-center justify-center text-green-700 font-bold text-lg border-2 border-white shadow-sm">
+                            <div className="w-14 h-14 rounded-2xl bg-[#FBF8F2] flex items-center justify-center text-[#3e7b3f] font-black text-xl border-2 border-white/20 shadow-inner">
                                 {userData.name.charAt(0)}
                             </div>
                             <div className="overflow-hidden">
-                                <p className="font-bold text-gray-800 truncate">{userData.name}</p>
-                                <p className="text-xs text-gray-500 truncate">{userData.email}</p>
+                                <p className="font-bold text-[#FBF8F2] truncate tracking-wide">{userData.name}</p>
+                                <p className="text-xs text-[#FBF8F2]/70 truncate font-medium uppercase tracking-widest mt-0.5">{userData.email.split('@')[0]}</p>
                             </div>
                         </div>
                     </div>
 
                     {/* Menu Links */}
-                    <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+                    <nav className="flex-1 px-4 py-8 space-y-3 overflow-y-auto">
+                        <p className="px-4 text-[10px] font-black text-[#B7A261] uppercase tracking-[0.2em] mb-4">MAIN MENU</p>
                         {menuItems.map((item) => (
                             <button
                                 key={item.id}
                                 onClick={() => handleTabChange(item.id)}
-                                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium ${activeTab === item.id
-                                        ? 'bg-green-600 text-white shadow-md shadow-green-200'
-                                        : 'text-gray-600 hover:bg-gray-50 hover:text-green-600'
+                                className={`w-full flex items-center gap-4 px-6 py-4 rounded-[1.5rem] transition-all duration-300 font-bold tracking-tight text-[15px] ${activeTab === item.id
+                                    ? 'bg-[#3e7b3f] text-white shadow-xl shadow-green-900/20 translate-x-1'
+                                    : 'text-[#6B705C] hover:bg-white hover:text-[#3e7b3f] hover:translate-x-1'
                                     }`}
                             >
-                                <item.icon size={20} />
+                                <item.icon size={22} strokeWidth={activeTab === item.id ? 2.5 : 2} />
                                 {item.label}
                             </button>
                         ))}
                     </nav>
 
                     {/* Logout Button */}
-                    <div className="p-4 border-t border-gray-100">
+                    <div className="p-6 border-t border-[#E8E4D9]">
                         <button
                             onClick={handleLogout}
-                            className="w-full flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl transition font-medium"
+                            className="w-full flex items-center gap-4 px-6 py-4 text-[#A44A3F] hover:bg-[#FDF2F0] rounded-[1.5rem] transition-all duration-300 font-bold tracking-tight"
                         >
-                            <LogOut size={20} />
-                            Sign Out
+                            <LogOut size={22} />
+                            Log Out
                         </button>
                     </div>
                 </div>
@@ -165,19 +170,29 @@ const Dashboard = () => {
             {/* Overlay for mobile sidebar */}
             {isMobileMenuOpen && (
                 <div
-                    className="fixed inset-0 bg-black/20 z-20 lg:hidden backdrop-blur-sm"
+                    className="fixed inset-0 bg-black/40 z-20 lg:hidden backdrop-blur-md transition-opacity duration-300"
                     onClick={() => setIsMobileMenuOpen(false)}
                 />
             )}
 
             {/* Main Content Area */}
-            <main className="flex-1 p-4 lg:p-8 overflow-y-auto h-[calc(100vh-64px)] lg:h-screen">
-                <div className="max-w-6xl mx-auto animate-fadeIn">
+            <main className="flex-1 p-6 lg:p-12 overflow-y-auto h-[calc(100vh-64px)] lg:h-screen bg-[#FBF8F2]">
+                <div className="max-w-6xl mx-auto">
+                    {/* Top Stats or Breadcrumbs can go here */}
+                    <div className="mb-10 lg:flex lg:items-center lg:justify-between animate-fadeIn">
+                        <div>
+                            <h2 className="text-3xl lg:text-4xl font-black text-[#2f6131] tracking-tight">
+                                My Dashboard
+                            </h2>
+                            <p className="text-[#B7A261] font-bold mt-2 uppercase tracking-widest text-xs italic">Managing your organic freshness</p>
+                        </div>
+                    </div>
                     {renderContent()}
                 </div>
             </main>
         </div>
     );
+
 };
 
 export default Dashboard;

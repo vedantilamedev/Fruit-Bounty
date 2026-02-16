@@ -8,8 +8,6 @@ import Navbar from "./components/Navbar";
 import MobileNavbar from "./components/MobileNavbar";
 import Footer from "./components/Footer";
 import LocationDrawer from "./components/LocationDrawer";
-import Dashboard from "./pages/Dashboard/Dashboard";
-
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -64,7 +62,6 @@ function App() {
             <Route path="/order-success" element={<OrderSuccess />} />
             <Route path="/customize" element={<CustomBowlPage />} />
             <Route path="/cart-page" element={<CartPage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </main>
 
