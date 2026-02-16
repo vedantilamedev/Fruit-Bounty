@@ -18,12 +18,8 @@ const Packages = ({ activePackage }) => {
     }
 
     return (
-        <div className="space-y-8 animate-fadeIn">
-            <div className="flex justify-between items-end mb-4 px-2">
-                <div>
-                    <h2 className="text-2xl font-black text-[#2f6131] tracking-tight italic uppercase">Current Subscription</h2>
-                    <p className="text-[#B7A261] font-bold text-[10px] uppercase tracking-widest mt-1">Your personalized harvest ritual</p>
-                </div>
+        <div className="space-y-8 animate-fadeIn mt-4">
+            <div className="flex justify-end mb-4 px-2">
                 <span className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border shadow-sm ${activePackage.status === 'Active' ? 'bg-[#3e7b3f]/10 text-[#3e7b3f] border-[#3e7b3f]/20' : 'bg-gray-100 text-gray-600'
                     }`}>
                     {activePackage.status} System

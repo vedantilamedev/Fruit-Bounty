@@ -18,11 +18,7 @@ const Payments = ({ payments }) => {
     };
 
     return (
-        <div className="space-y-8 animate-fadeIn">
-            <div className="px-2">
-                <h2 className="text-2xl font-black text-[#2f6131] tracking-tight italic uppercase">Financial Vault</h2>
-                <p className="text-[#B7A261] font-bold text-[10px] uppercase tracking-widest mt-1">Timeline of your freshness investments</p>
-            </div>
+        <div className="space-y-8 animate-fadeIn mt-4">
 
             {payments.length === 0 ? (
                 <div className="flex flex-col items-center justify-center p-20 bg-white rounded-[3rem] border-2 border-dashed border-[#E8E4D9] shadow-inner text-center">

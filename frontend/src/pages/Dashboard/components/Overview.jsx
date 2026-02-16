@@ -14,9 +14,9 @@ const StatCard = ({ title, value, icon: Icon, color, subtitle, trend }) => (
       )}
     </div>
     <div>
-      <p className="text-[#B7A261] text-[10px] font-black uppercase tracking-widest mb-1 italic opacity-80">{title}</p>
+      <p className="text-[#B7A261] text-[10px] font-bold uppercase tracking-widest mb-1 italic opacity-80">{title}</p>
       <h3 className="text-3xl font-black text-[#2f6131] tracking-tight">{value}</h3>
-      {subtitle && <p className="text-[11px] text-gray-400 font-bold mt-2 uppercase tracking-tight">{subtitle}</p>}
+      {subtitle && <p className="text-[11px] text-gray-400 font-medium mt-2 uppercase tracking-tight">{subtitle}</p>}
     </div>
   </div>
 );
@@ -74,8 +74,8 @@ const Overview = ({ userData, orders }) => {
           </div>
           <div className="text-center lg:text-left flex-1">
             <h3 className="text-2xl font-black text-[#2f6131] tracking-tight mb-3 italic">Freshness First Protocol!</h3>
-            <p className="text-[#6B705C] font-medium leading-relaxed max-w-2xl">
-              To guarantee maximum freshness from orchard to your bowl, <strong className="text-[#3e7b3f]">Same-day delivery is currently paused.</strong> All new fruit treasures will reach you within 24 hours of harvest preparation.
+            <p className="text-[#6B705C] font-normal leading-relaxed max-w-2xl">
+              To guarantee maximum freshness from orchard to your bowl, <strong className="font-black text-[#3e7b3f]">Same-day delivery is currently paused.</strong> All new fruit treasures will reach you within 24 hours of harvest preparation.
             </p>
           </div>
           <button className="bg-[#B7A261] text-white px-8 py-4 rounded-full font-black text-sm uppercase tracking-widest hover:bg-[#3e7b3f] transition-all duration-300 shadow-lg shadow-orange-900/10">

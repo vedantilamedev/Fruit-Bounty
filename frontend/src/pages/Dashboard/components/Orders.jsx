@@ -41,12 +41,8 @@ const Orders = ({ orders }) => {
     };
 
     return (
-        <div className="space-y-8 animate-fadeIn">
-            <div className="flex justify-between items-end mb-4 px-2">
-                <div>
-                    <h2 className="text-2xl font-black text-[#2f6131] tracking-tight italic">Order History</h2>
-                    <p className="text-[#B7A261] font-bold text-[10px] uppercase tracking-widest mt-1">Tracing your fresh harvest journey</p>
-                </div>
+        <div className="space-y-8 animate-fadeIn mt-4">
+            <div className="flex justify-end mb-4 px-2">
                 <span className="text-[11px] font-black text-[#3e7b3f] bg-white px-4 py-2 rounded-full border border-[#E8E4D9] shadow-sm uppercase tracking-tighter">
                     {orders.length} Total Treasures
                 </span>
@@ -58,7 +54,7 @@ const Orders = ({ orders }) => {
                         <ShoppingBag size={64} className="text-[#B7A261] opacity-40" strokeWidth={1} />
                     </div>
                     <p className="text-[#2f6131] font-black text-xl italic mb-2 tracking-tight">Your Basket is Empty!</p>
-                    <p className="text-[#6B705C] font-medium text-sm max-w-xs mb-8">It seems you haven't started your journey of freshness yet.</p>
+                    <p className="text-[#6B705C] font-normal text-sm max-w-xs mb-8">It seems you haven't started your journey of freshness yet.</p>
                     <button className="px-10 py-4 bg-[#3e7b3f] text-white rounded-full font-black text-sm uppercase tracking-widest hover:bg-[#2f6131] transition-all duration-300 shadow-xl shadow-green-900/20">
                         Start Shopping
                     </button>
@@ -81,12 +77,12 @@ const Orders = ({ orders }) => {
                             <tbody className="divide-y divide-[#E8E4D9]/30 text-sm">
                                 {orders.map((order) => (
                                     <tr key={order.id} className="hover:bg-[#FBF8F2] transition duration-300 group">
-                                        <td className="p-6 font-black text-[#6B705C] text-xs">#{order.id}</td>
-                                        <td className="p-6 text-[#2f6131] font-bold italic opacity-80">{order.date}</td>
-                                        <td className="p-6 text-[#3e7b3f] font-black tracking-tight">
+                                        <td className="p-6 font-bold text-[#6B705C] text-xs">#{order.id}</td>
+                                        <td className="p-6 text-[#2f6131] font-medium italic opacity-80">{order.date}</td>
+                                        <td className="p-6 text-[#3e7b3f] font-bold tracking-tight">
                                             {calculateDeliveryDate(order.date)}
                                         </td>
-                                        <td className="p-6 font-black text-[#2f6131] text-lg">₹{order.amount}</td>
+                                        <td className="p-6 font-bold text-[#2f6131] text-lg">₹{order.amount}</td>
                                         <td className="p-6">
                                             <StatusBadge status={order.status} />
                                         </td>
