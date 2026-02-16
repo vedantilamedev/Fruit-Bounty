@@ -18,6 +18,7 @@ import OrderSuccess from "./pages/OrderSuccess";
 import FruitShop from "./pages/FruitShop";
 import CustomBowlPage from "./pages/CustomBowlPage";
 import CartPage from "./pages/CartPage";
+import Dashboard from "./pages/Dashboard/Dashboard";
 
 function App() {
   const [locationOpen, setLocationOpen] = useState(false);
@@ -59,6 +60,7 @@ function App() {
             <Route path="/order-success" element={<OrderSuccess />} />
             <Route path="/customize" element={<CustomBowlPage />} />
             <Route path="/cart-page" element={<CartPage />} />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </main>
 
