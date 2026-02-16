@@ -11,7 +11,6 @@ import LocationDrawer from "./components/LocationDrawer";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Register from "./pages/Register";
 import Fruits from "./pages/Fruits";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
@@ -53,8 +52,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-
             <Route path="/fruits" element={<Fruits />} />
             <Route path="/shop" element={<FruitShop />} />
             <Route path="/cart" element={<Cart />} />
