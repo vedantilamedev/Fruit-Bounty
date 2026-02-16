@@ -19,7 +19,7 @@ import OrderSuccess from "./pages/OrderSuccess";
 import FruitShop from "./pages/FruitShop";
 import CustomBowlPage from "./pages/CustomBowlPage";
 import CartPage from "./pages/CartPage";
-import Dashboard from "./pages/Dashboard/Dashboard";
+import Dashboard from "./pages/UserDashboard/Dashboard";
 
 function App() {
   const [locationOpen, setLocationOpen] = useState(false);
@@ -74,7 +74,7 @@ function App() {
             </Route>
 
             {/* Dashboard without Global Footer */}
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/user-dashboard" element={<Dashboard />} />
           </Routes>
         </main>
 
