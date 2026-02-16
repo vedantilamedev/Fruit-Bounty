@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
 function Navbar() {
-    const { cart } = useCart();
+  const { cart } = useCart();
 
   const [show, setShow] = useState(true);
   const [lastScroll, setLastScroll] = useState(0);
@@ -52,35 +52,35 @@ function Navbar() {
             </Link>
             <div className="flex gap-8 text-gray-700 font-medium">
               <Link to="/" className="hover:text-green-700 transition cursor-pointer">Home</Link>
-               <Link
-                  to="/customize"
-                  className="hover:text-green-700 transition cursor-pointer"
-                >
-                  Customize Bowl
-                </Link>
+              <Link
+                to="/customize"
+                className="hover:text-green-700 transition cursor-pointer"
+              >
+                Customize Bowl
+              </Link>
             </div>
           </div>
 
           {/* RIGHT */}
           <div className="flex items-center gap-3">
             <Link to="/shop">
-               <button className="w-10 h-10 bg-green-700 rounded-full flex items-center justify-center hover:bg-green-800 transition">
-                 <ShoppingBag size={18} color="white" />
-               </button>
-             </Link>
+              <button className="w-10 h-10 bg-green-700 rounded-full flex items-center justify-center hover:bg-green-800 transition">
+                <ShoppingBag size={18} color="white" />
+              </button>
+            </Link>
 
-              {/* Cart */}
-              <Link to="/cart">
-                <button className="w-10 h-10 bg-green-700 rounded-full flex items-center justify-center hover:bg-green-800 transition relative">
-                  <ShoppingCart size={18} color="white" />
+            {/* Cart */}
+            <Link to="/cart">
+              <button className="w-10 h-10 bg-green-700 rounded-full flex items-center justify-center hover:bg-green-800 transition relative">
+                <ShoppingCart size={18} color="white" />
 
-                  {cart.length > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
-                      {cart.length}
-                    </span>
-                  )}
-                </button>
-              </Link>
+                {cart.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
+                    {cart.length}
+                  </span>
+                )}
+              </button>
+            </Link>
 
 
             {/* Profile Dropdown */}
@@ -108,7 +108,7 @@ function Navbar() {
                   </div>
 
                   <div className="border-t border-gray-100 p-2">
-                    <Link to="/dashboard" onClick={() => setAuthOpen(false)} className="w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-green-700 bg-green-50 rounded-xl hover:bg-green-100 transition">
+                    <Link to="/user-dashboard" onClick={() => setAuthOpen(false)} className="w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-green-700 bg-green-50 rounded-xl hover:bg-green-100 transition">
                       <User size={16} />
                       Dashboard (Demo)
                     </Link>
