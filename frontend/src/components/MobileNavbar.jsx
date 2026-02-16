@@ -32,7 +32,7 @@ function MobileNavbar() {
         <span className="text-xs mt-1">Cart</span>
       </Link>
 
-      <Link to="/dashboard" className="flex flex-col items-center text-gray-500 hover:text-green-700 transition active:text-green-800">
+      <Link to="/user-dashboard" className="flex flex-col items-center text-gray-500 hover:text-green-700 transition active:text-green-800">
         <User size={22} />
         <span className="text-xs mt-1">Profile</span>
       </Link>
