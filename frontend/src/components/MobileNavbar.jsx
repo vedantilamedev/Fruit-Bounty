@@ -17,26 +17,26 @@ function MobileNavbar() {
         z-50
       "
     >
-      <button className="flex flex-col items-center text-green-700">
+      <Link to="/" className="flex flex-col items-center text-gray-500 hover:text-green-700 transition active:text-green-800">
         <Home size={22} />
         <span className="text-xs mt-1">Home</span>
-      </button>
+      </Link>
 
-      <button className="flex flex-col items-center text-gray-500 hover:text-green-700 transition">
+      <Link to="/customize" className="flex flex-col items-center text-gray-500 hover:text-green-700 transition active:text-green-800">
         <Salad size={22} />
         <span className="text-xs mt-1">Bowl</span>
-      </button>
+      </Link>
 
-      <button className="flex flex-col items-center text-gray-500 hover:text-green-700 transition">
+      <Link to="/cart-page" className="flex flex-col items-center text-gray-500 hover:text-green-700 transition active:text-green-800">
         <ShoppingBag size={22} />
         <span className="text-xs mt-1">Cart</span>
-      </button>
+      </Link>
 
-      <Link to="/dashboard" className="flex flex-col items-center text-gray-500 hover:text-green-700 transition">
+      <Link to="/user-dashboard" className="flex flex-col items-center text-gray-500 hover:text-green-700 transition active:text-green-800">
         <User size={22} />
         <span className="text-xs mt-1">Profile</span>
       </Link>
-    </div>
+    </div >
   );
 }
 

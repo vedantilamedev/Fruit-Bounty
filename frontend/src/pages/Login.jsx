@@ -8,12 +8,12 @@ const LoginRegister = () => {
   const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
-    setAnimate(false);
     const timer = setTimeout(() => setAnimate(true), 100);
     return () => clearTimeout(timer);
   }, [isRegistering]);
 
   const toggleMode = () => {
+    setAnimate(false);
     setIsRegistering(!isRegistering);
   };
 
@@ -31,17 +31,17 @@ const LoginRegister = () => {
       backgroundColor: '#2D5A27',
       fontFamily: "'Poppins', sans-serif",
       overflow: 'hidden',
-      position: 'fixed', 
+      position: 'fixed',
       top: 0,
       left: 0,
-      zIndex: 9999, 
+      zIndex: 9999,
     },
     mainBox: {
       position: 'relative',
       width: '100vw',
       height: '100vh',
       backgroundColor: '#2D5A27',
-      borderRadius: '0px', 
+      borderRadius: '0px',
       display: 'flex',
       boxShadow: 'none',
       overflow: 'hidden',
@@ -72,14 +72,14 @@ const LoginRegister = () => {
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'center', 
+      justifyContent: 'center',
       color: '#FFFFFF',
       transition: 'opacity 0.5s ease, transform 0.5s ease',
       opacity: animate ? 1 : 0,
       transform: animate ? 'scale(1)' : 'scale(0.98)',
-      overflowY: 'auto', 
+      overflowY: 'auto',
       overflowX: 'hidden',
-      paddingBottom: '20px', 
+      paddingBottom: '20px',
     },
     input: {
       width: '100%',
@@ -140,7 +140,7 @@ const LoginRegister = () => {
         </div>
 
         {/* LEFT FORM (Signup) */}
-        <div className="form-column signup-col" style={{...styles.formSide, visibility: isRegistering ? 'visible' : 'hidden', padding: '0 10%'}}>
+        <div className="form-column signup-col" style={{ ...styles.formSide, visibility: isRegistering ? 'visible' : 'hidden', padding: '0 10%' }}>
           <h1 style={{ fontSize: '3rem', marginBottom: '30px', paddingTop: '40px' }}>Sign Up</h1>
           <div style={{ marginBottom: '15px' }}><label>Full Name</label><input type="text" placeholder="John Doe" style={styles.input} /></div>
           <div style={{ marginBottom: '15px' }}><label>Email</label><input type="email" placeholder="john@example.com" style={styles.input} /></div>
@@ -159,7 +159,7 @@ const LoginRegister = () => {
         </div>
 
         {/* RIGHT FORM (Login) */}
-        <div className="form-column login-col" style={{...styles.formSide, visibility: !isRegistering ? 'visible' : 'hidden', padding: '0 10%'}}>
+        <div className="form-column login-col" style={{ ...styles.formSide, visibility: !isRegistering ? 'visible' : 'hidden', padding: '0 10%' }}>
           <h1 style={{ fontSize: '3rem', marginBottom: '30px' }}>Login</h1>
           <div style={{ marginBottom: '20px' }}>
             <label>Mobile Number</label>
@@ -176,7 +176,7 @@ const LoginRegister = () => {
           <button className="primary-btn" style={{ width: '100%', padding: '15px', marginTop: '20px', backgroundColor: '#FFF', color: '#2D5A27', fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
             <Google style={{ color: '#EA4335' }} /> Continue with Google
           </button>
-          
+
           <p style={{ textAlign: 'center', marginTop: '20px' }}>
             {/* Updated to use Link */}
             <Link to="/forgot-password" style={{ color: '#4CAF50', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '500', textDecoration: 'none' }}>Forget password?</Link>
