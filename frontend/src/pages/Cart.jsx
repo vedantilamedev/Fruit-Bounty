@@ -13,7 +13,7 @@ const Cart = () => {
           onClick={() => navigate("/")}
           className="mt-4 bg-green-600 text-white px-4 py-2 rounded"
         >
-          Shop Fruits
+          Add Fruit Bowl
         </button>
       </div>
     );
