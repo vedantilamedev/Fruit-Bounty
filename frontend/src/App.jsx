@@ -16,6 +16,7 @@ import Fruits from "./pages/Fruits";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
+import ContactUs from "./pages/ContactUs";
 import FruitShop from "./pages/FruitShop";
 import CustomBowlPage from "./pages/CustomBowlPage";
 import CartPage from "./pages/CartPage";
@@ -69,6 +70,7 @@ function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/order-success" element={<OrderSuccess />} />
+              <Route path="/contactus" element={<ContactUs />} />
               <Route path="/customize" element={<CustomBowlPage />} />
               <Route path="/cart-page" element={<CartPage />} />
             </Route>
