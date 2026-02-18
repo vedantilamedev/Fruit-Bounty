@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Outlet, useLocation } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -24,8 +24,10 @@ import CustomBowlPage from "./pages/CustomBowlPage";
 import CartPage from "./pages/CartPage";
 import Dashboard from "./pages/UserDashboard/Dashboard";
 
-function App() {
+function AppContent() {
   const [locationOpen, setLocationOpen] = useState(false);
+  const location = useLocation();
+  const isDashboard = location.pathname === "/user-dashboard";
 
   useEffect(() => {
     AOS.init({
@@ -45,50 +47,60 @@ function App() {
   );
 
   return (
-    <Router>
-      <div className="w-full bg-[#FBF8F2] relative">
-        {/* ===== Fixed Header ===== */}
+    <div className="w-full bg-[#FBF8F2] relative">
+      {/* ===== Fixed Header ===== */}
+      {!isDashboard && (
         <div className="fixed top-0 left-0 w-full z-40">
           <TopBar onOpen={() => setLocationOpen(true)} />
           <Navbar />
         </div>
+      )}
 
-        {/* ===== Location Drawer (Above Everything) ===== */}
-        <LocationDrawer
-          open={locationOpen}
-          onClose={() => setLocationOpen(false)}
-        />
+      {/* ===== Location Drawer (Above Everything) ===== */}
+      <LocationDrawer
+        open={locationOpen}
+        onClose={() => setLocationOpen(false)}
+      />
 
-        {/* ===== Page Content ===== */}
-        <main className="pt-[120px] lg:pt-[110px] min-h-screen overflow-x-hidden">
-          <Routes>
-            {/* Routes with Footer */}
-            <Route element={<MainLayout />}>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/fruits" element={<Fruits />} />
-              <Route path="/shop" element={<FruitShop />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/order-success" element={<OrderSuccess />} />
-              <Route path="/subscription" element={<Subscription />} />
-              <Route path="/plancustomization" element={<PlanCustomization />} />
-              <Route path="/contactus" element={<ContactUs />} />
-              <Route path="/customize" element={<CustomBowlPage />} />
-              <Route path="/cart-page" element={<CartPage />} />
-            </Route>
+      {/* ===== Page Content ===== */}
+      <main className={`${!isDashboard ? "pt-[120px] lg:pt-[110px]" : ""} min-h-screen overflow-x-hidden`}>
+        <Routes>
+          {/* Routes with Footer */}
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/fruits" element={<Fruits />} />
+            <Route path="/shop" element={<FruitShop />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/order-success" element={<OrderSuccess />} />
+            <Route path="/subscription" element={<Subscription />} />
+            <Route path="/plancustomization" element={<PlanCustomization />} />
+            <Route path="/contactus" element={<ContactUs />} />
+            <Route path="/customize" element={<CustomBowlPage />} />
+            <Route path="/cart-page" element={<CartPage />} />
+          </Route>
 
-            {/* Dashboard without Global Footer */}
-            <Route path="/user-dashboard" element={<Dashboard />} />
-          </Routes>
-        </main>
+          {/* Dashboard without Global Footer */}
+          <Route path="/user-dashboard" element={<Dashboard />} />
+        </Routes>
+      </main>
 
-        {/* Mobile Bottom Navbar */}
+      {/* Mobile Bottom Navbar */}
+      {!isDashboard && (
         <div className="lg:hidden">
           <MobileNavbar />
         </div>
-      </div>
+      )}
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }

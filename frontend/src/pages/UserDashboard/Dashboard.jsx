@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
-import { Home, Package, ShoppingCart, CreditCard, LogOut, Menu, X, User, Calendar as CalendarIcon, Edit2, Save } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Home, Package, ShoppingCart, CreditCard, LogOut, Menu, X, Calendar as CalendarIcon, Settings as SettingsIcon, ArrowLeft } from 'lucide-react';
 import Overview from '../../components/UserDashboardComponents/Overview';
 import Orders from '../../components/UserDashboardComponents/Orders';
 import Packages from '../../components/UserDashboardComponents/Packages';
 import Payments from '../../components/UserDashboardComponents/Payments';
 import HarvestCalendar from '../../components/UserDashboardComponents/HarvestCalendar';
-import Footer from '../../components/Footer';
+import Settings from '../../components/UserDashboardComponents/Settings';
+
 
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('overview');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
-    const [editForm, setEditForm] = useState({ name: '', email: '', phone: '' });
+
 
     // Dummy Data for Development
     const [userData, setUserData] = useState({
@@ -35,28 +36,12 @@ const Dashboard = () => {
             { id: "TXN789456", date: "2026-02-15", amount: 2499, status: "Success", method: "UPI" },
             { id: "TXN789123", date: "2026-01-15", amount: 2499, status: "Success", method: "Card" },
             { id: "TXN788901", date: "2025-12-15", amount: 2499, status: "Success", method: "UPI" },
+            { id: "TXN788888", date: "2026-02-19", amount: 499, status: "Pending", method: "UPI" },
+            { id: "TXN788777", date: "2026-02-18", amount: 1299, status: "Failed", method: "Card" },
         ]
     });
 
-    const handleEditProfile = () => {
-        setEditForm({
-            name: userData.name,
-            email: userData.email,
-            phone: userData.phone
-        });
-        setIsEditProfileOpen(true);
-    };
 
-    const handleSaveProfile = (e) => {
-        e.preventDefault();
-        setUserData(prev => ({
-            ...prev,
-            name: editForm.name,
-            email: editForm.email,
-            phone: editForm.phone
-        }));
-        setIsEditProfileOpen(false);
-    };
 
     const orders = [
         {
@@ -86,6 +71,33 @@ const Dashboard = () => {
             deliveryDate: "2026-02-13",
             items: [{ name: "Fresh Citrus Bowl", qty: 1 }]
         },
+        {
+            id: "ORD-2026-102",
+            date: "2026-02-10",
+            amount: 250,
+            status: "Canceled",
+            paymentStatus: "Failed",
+            deliveryDate: "2026-02-11",
+            items: [{ name: "Daily Citrus Pack", qty: 1 }]
+        },
+        {
+            id: "ORD-2026-101",
+            date: "2026-02-18",
+            amount: 450,
+            status: "Confirmed",
+            paymentStatus: "Paid",
+            deliveryDate: "2026-02-19",
+            items: [{ name: "Royal Mango Platter", qty: 1 }]
+        },
+        {
+            id: "ORD-2026-100",
+            date: "2026-02-17",
+            amount: 320,
+            status: "Confirmed",
+            paymentStatus: "Paid",
+            deliveryDate: "2026-02-18",
+            items: [{ name: "Berry Blast Box", qty: 1 }]
+        }
     ];
 
     const menuItems = [
@@ -94,6 +106,7 @@ const Dashboard = () => {
         { id: 'orders', label: 'My Orders', icon: ShoppingCart, subtitle: "Tracing your fresh harvest journey" },
         { id: 'packages', label: 'My Subscription', icon: Package, subtitle: "Your premium wellness plan" },
         { id: 'payments', label: 'Payments', icon: CreditCard, subtitle: "Safe & Secure Transactions" },
+        { id: 'settings', label: 'Settings', icon: SettingsIcon, subtitle: "Manage your account preferences" },
     ];
 
     const activeMenu = menuItems.find(item => item.id === activeTab) || menuItems[0];
@@ -110,6 +123,8 @@ const Dashboard = () => {
                 return <Packages activePackage={userData.activePackage} />;
             case 'payments':
                 return <Payments payments={userData.payments} />;
+            case 'settings':
+                return <Settings userData={userData} />;
             default:
                 return <Overview userData={userData} orders={orders} />;
         }
@@ -126,12 +141,15 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="h-[calc(100vh-120px)] lg:h-[calc(100vh-110px)] bg-[#FBF8F2] flex flex-col lg:flex-row overflow-hidden relative">
+        <div className="h-screen bg-[#FBF8F2] flex flex-col lg:flex-row overflow-hidden relative">
 
             {/* Mobile Header */}
             <div className="lg:hidden bg-white shadow-sm p-4 flex justify-between items-center shrink-0 z-30">
                 <div className="flex items-center gap-2">
-                    {/* Title Removed */}
+                    <Link to="/" className="p-2 text-[#3C7E44] flex items-center gap-2">
+                        <ArrowLeft size={20} />
+                        <span className="text-[10px] font-black uppercase tracking-widest mt-0.5">Exit to Home</span>
+                    </Link>
                 </div>
                 <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 text-gray-600">
                     {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -149,17 +167,19 @@ const Dashboard = () => {
 
 
 
-                    {/* User Profile Mini Card */}
-                    <div className="p-6 mx-4 mt-6 rounded-[2rem] bg-gradient-to-br from-[#3C7E44] to-[#3C7E44] shadow-xl shadow-green-900/10">
-                        <div className="flex items-center gap-4">
-                            <div className="w-14 h-14 rounded-2xl bg-[#FBF8F2] flex items-center justify-center text-[#3C7E44] font-normal text-xl border-2 border-white/20 shadow-inner">
-                                {userData.name.charAt(0)}
+
+
+                    {/* Back to Home Button */}
+                    <div className="px-6 pt-10 pb-4">
+                        <Link
+                            to="/"
+                            className="group flex items-center gap-3 px-6 py-4 bg-white border border-[#E8E4D9] rounded-[1.5rem] text-gray-400 hover:text-[#3C7E44] hover:border-[#3C7E44]/30 hover:shadow-xl hover:shadow-green-900/5 transition-all duration-500"
+                        >
+                            <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-[#3C7E44]/10 transition-colors">
+                                <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
                             </div>
-                            <div className="overflow-hidden">
-                                <p className="font-normal text-[#FBF8F2] truncate tracking-wide">{userData.name}</p>
-                                <p className="text-xs text-[#FBF8F2]/70 truncate font-normal uppercase tracking-widest mt-0.5">{userData.email.split('@')[0]}</p>
-                            </div>
-                        </div>
+                            <span className="text-xs font-black uppercase tracking-[0.2em]">Home Portal</span>
+                        </Link>
                     </div>
 
                     {/* Menu Links */}
@@ -205,121 +225,15 @@ const Dashboard = () => {
             <main className="flex-1 overflow-y-auto bg-[#FBF8F2] scroll-smooth-container h-full">
                 <div className="p-4 lg:p-12 min-h-full flex flex-col">
                     <div className="max-w-7xl mx-auto w-full flex-1">
-                        {/* Top Main Header */}
-                        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-                            <div>
-                                <h1 className="text-2xl lg:text-3xl font-bold text-[#3C7E44] tracking-tight">
-                                    Hello, {userData.name.split(' ')[0]}! 👋
-                                </h1>
-                                <p className="text-[#B7A261] font-medium mt-1">Ready for your fresh harvest?</p>
-                            </div>
-                            <button
-                                onClick={handleEditProfile}
-                                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-[#E8E4D9] rounded-xl hover:shadow-md hover:border-[#3C7E44] transition-all group"
-                            >
-                                <div className="w-8 h-8 rounded-lg bg-[#3C7E44]/10 flex items-center justify-center group-hover:bg-[#3C7E44] transition-colors">
-                                    <Edit2 size={16} className="text-[#3C7E44] group-hover:text-white transition-colors" />
-                                </div>
-                                <span className="text-sm font-semibold text-[#3C7E44]">Edit Profile</span>
-                            </button>
-                        </div>
+
 
                         {renderContent()}
                     </div>
 
-                    {/* Footer inside Main Content */}
-                    <div className="mt-12 pt-8 border-t border-[#E8E4D9]">
-                        <Footer />
-                    </div>
                 </div>
             </main>
 
-            {/* Edit Profile Modal */}
-            {isEditProfileOpen && (
-                <div
-                    className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-md flex items-center justify-center p-4"
-                    onClick={() => setIsEditProfileOpen(false)}
-                >
-                    <div
-                        className="bg-white rounded-[2rem] shadow-2xl w-full max-w-md overflow-hidden border border-[#E8E4D9]"
-                        onClick={e => e.stopPropagation()}
-                    >
-                        <div className="bg-[#3C7E44] px-8 py-6 relative overflow-hidden">
-                            <div className="relative z-10">
-                                <h3 className="text-2xl font-bold text-white tracking-tight">Edit Profile</h3>
-                                <p className="text-green-100/90 text-sm mt-1">Update your personal details</p>
-                            </div>
-                            <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
 
-                            <button
-                                onClick={() => setIsEditProfileOpen(false)}
-                                className="absolute top-6 right-6 p-2 bg-black/10 hover:bg-black/20 rounded-full text-white transition-colors z-50 cursor-pointer"
-                                type="button"
-                            >
-                                <X size={20} />
-                            </button>
-                        </div>
-
-                        <form onSubmit={handleSaveProfile} className="p-8 space-y-5">
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-xs font-bold text-[#B7A261] uppercase tracking-wider mb-2 ml-1">Full Name</label>
-                                    <div className="relative">
-                                        <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                                        <input
-                                            type="text"
-                                            value={editForm.name}
-                                            onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                                            className="w-full pl-12 pr-4 py-3 bg-[#FBF8F2] border border-[#E8E4D9] rounded-xl focus:outline-none focus:border-[#3C7E44] focus:ring-1 focus:ring-[#3C7E44] text-gray-800 font-medium transition-all"
-                                            placeholder="Enter your name"
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label className="block text-xs font-bold text-[#B7A261] uppercase tracking-wider mb-2 ml-1">Email Address</label>
-                                    <div className="relative">
-                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">@</span>
-                                        <input
-                                            type="email"
-                                            value={editForm.email}
-                                            onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                                            className="w-full pl-12 pr-4 py-3 bg-[#FBF8F2] border border-[#E8E4D9] rounded-xl focus:outline-none focus:border-[#3C7E44] focus:ring-1 focus:ring-[#3C7E44] text-gray-800 font-medium transition-all"
-                                            placeholder="Enter your email"
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label className="block text-xs font-bold text-[#B7A261] uppercase tracking-wider mb-2 ml-1">Phone Number</label>
-                                    <div className="relative">
-                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">#</span>
-                                        <input
-                                            type="tel"
-                                            value={editForm.phone}
-                                            onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
-                                            className="w-full pl-12 pr-4 py-3 bg-[#FBF8F2] border border-[#E8E4D9] rounded-xl focus:outline-none focus:border-[#3C7E44] focus:ring-1 focus:ring-[#3C7E44] text-gray-800 font-medium transition-all"
-                                            placeholder="Enter your phone"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="pt-2">
-                                <button
-                                    type="submit"
-                                    className="w-full py-3.5 bg-[#3C7E44] text-white rounded-xl font-bold tracking-wide shadow-lg shadow-green-900/20 hover:shadow-xl hover:bg-[#2f6131] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2"
-                                >
-                                    <Save size={18} />
-                                    Save Changes
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
         </div>
     );
 
