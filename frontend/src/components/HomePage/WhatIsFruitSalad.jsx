@@ -1,126 +1,112 @@
 import { useEffect, useRef, useState } from "react";
+import { Leaf, Sparkles, Apple } from "lucide-react";
 
 function WhatIsFruitSalad() {
-  const leftRef = useRef(null);
-  const middleRef = useRef(null);
-  const rightRef = useRef(null);
-
-  const [visible, setVisible] = useState({
-    left: false,
-    middle: false,
-    right: false,
-  });
+  const sectionRef = useRef(null);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const isVisible = entry.isIntersecting;
-
-          if (entry.target === leftRef.current) {
-            setVisible((prev) => ({ ...prev, left: isVisible }));
-          }
-
-          if (entry.target === middleRef.current) {
-            setVisible((prev) => ({ ...prev, middle: isVisible }));
-          }
-
-          if (entry.target === rightRef.current) {
-            setVisible((prev) => ({ ...prev, right: isVisible }));
-          }
-        });
+      ([entry]) => {
+        setVisible(entry.isIntersecting);
       },
-      {
-        threshold: 0.25,
-      },
+      { threshold: 0.2 },
     );
 
-    if (leftRef.current) observer.observe(leftRef.current);
-    if (middleRef.current) observer.observe(middleRef.current);
-    if (rightRef.current) observer.observe(rightRef.current);
-
+    if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
 
+  const cards = [
+    {
+      icon: <Leaf size={28} />,
+      title: "100% Natural",
+      desc1:
+        "Made using only fresh, preservative-free fruits sourced from trusted farms.",
+      desc2:
+        "No artificial colors or added sugars — just pure, clean nutrition.",
+    },
+    {
+      icon: <Sparkles size={28} />,
+      title: "Vitamin Rich",
+      desc1:
+        "Packed with essential vitamins, fiber and antioxidants for overall wellness.",
+      desc2: "Supports immunity, digestion and natural daily energy levels.",
+    },
+    {
+      icon: <Apple size={28} />,
+      title: "Freshly Prepared",
+      desc1: "Cut and mixed daily to maintain maximum freshness and flavor.",
+      desc2: "Delivered fresh so you experience peak taste every time.",
+    },
+  ];
+
   return (
-    <section className="py-24 px-6 md:px-16 lg:px-24 bg-[#FBF8F2]">
-      {/* Heading */}
-      <div className="text-center max-w-3xl mx-auto mb-20">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
+    <section
+      ref={sectionRef}
+      className="relative py-16 md:py-20 px-6 md:px-16 lg:px-24 bg-[#FBF8F2] overflow-hidden"
+    >
+      {/* Soft Background Texture */}
+      <div className="absolute inset-0 opacity-40 pointer-events-none bg-[radial-gradient(circle_at_20%_30%,rgba(34,197,94,0.08),transparent_40%),radial-gradient(circle_at_80%_70%,rgba(16,185,129,0.08),transparent_40%)]"></div>
+
+      {/* ================= Heading ================= */}
+      <div
+        className={`relative text-center max-w-3xl mx-auto mb-16 transition-all duration-700
+        ${visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"}`}
+      >
+        <h2 className="text-4xl md:text-5xl font-bold text-gray-800 font-['Playfair_Display']">
           What is Fruit Salad?
         </h2>
 
-        <div className="w-24 h-1 bg-green-700 mx-auto my-4 rounded-full"></div>
+        <div className="w-20 h-[3px] bg-gradient-to-r from-green-600 to-emerald-500 mx-auto my-6 rounded-full"></div>
 
-        <p className="text-gray-600 leading-relaxed">
-          A delightful combination of nature's finest fruits, carefully selected
-          and mixed to create a refreshing, nutritious treat that energizes your
-          day.
+        <p className="text-gray-600 leading-relaxed text-lg">
+          Fruit salad is a refreshing blend of freshly cut seasonal fruits,
+          carefully selected to provide a perfect balance of flavor, texture,
+          and nutrition.
         </p>
+
       </div>
 
-      {/* Cards */}
-      <div className="grid gap-10 place-items-center md:grid-cols-2 lg:grid-cols-3">
-        {/* Left */}
-        <div
-          ref={leftRef}
-          className={`card-base transition-all duration-700 ${
-            visible.left
-              ? "opacity-100 translate-x-0"
-              : "opacity-0 -translate-x-24"
-          }`}
-        >
-          <div className="icon-box">
-            <img
-              src="/images/natural.png"
-              alt="100% Natural"
-              className="w-10"
-            />
-          </div>
-          <h3 className="card-title">100% Natural</h3>
-          <p className="card-desc">
-            No preservatives, no artificial flavors. Just pure, fresh fruits
-            picked at peak ripeness for maximum taste and nutrition.
-          </p>
-        </div>
+      {/* ================= Cards ================= */}
+      <div className="relative grid gap-10 md:gap-12 items-stretch md:grid-cols-2 lg:grid-cols-3">
+        {cards.map((card, index) => (
+          <div
+            key={index}
+            className={`relative rounded-3xl p-[1px]
+            bg-gradient-to-br from-green-400/40 via-emerald-300/40 to-green-600/40
+            transition-all duration-700 ease-[cubic-bezier(.22,1,.36,1)]
+            ${
+              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+            }`}
+            style={{
+              transitionDelay: visible ? `${index * 200}ms` : "0ms",
+            }}
+          >
+            {/* Inner Card */}
+            <div className="bg-white rounded-3xl p-8 shadow-md hover:-translate-y-3 hover:shadow-2xl transition-all duration-500 flex flex-col h-full group">
+              {/* Icon */}
+              <div className="relative mb-6 flex justify-center">
+                <div className="absolute w-20 h-20 rounded-full bg-green-200 blur-xl opacity-40 group-hover:opacity-70 transition"></div>
+                <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center text-green-700 relative z-10 group-hover:scale-110 transition duration-300">
+                  {card.icon}
+                </div>
+              </div>
 
-        {/* Middle */}
-        <div
-          ref={middleRef}
-          className={`card-base transition-all duration-700 ${
-            visible.middle
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 -translate-y-24"
-          }`}
-        >
-          <div className="icon-box">
-            <img src="/images/rice.png" alt="Vitamin Rich" className="w-10" />
-          </div>
-          <h3 className="card-title">Vitamin Rich</h3>
-          <p className="card-desc">
-            Packed with essential vitamins, minerals, and antioxidants that
-            boost immunity and promote overall wellness.
-          </p>
-        </div>
+              <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">
+                {card.title}
+              </h3>
 
-        {/* Right */}
-        <div
-          ref={rightRef}
-          className={`card-base transition-all duration-700 ${
-            visible.right
-              ? "opacity-100 translate-x-0"
-              : "opacity-0 translate-x-24"
-          }`}
-        >
-          <div className="icon-box">
-            <img src="/images/daily.png" alt="Fresh Daily" className="w-10" />
+              <p className="text-gray-600 text-sm leading-relaxed text-center">
+                {card.desc1}
+              </p>
+
+              <p className="text-gray-500 text-sm mt-3 text-center">
+                {card.desc2}
+              </p>
+            </div>
           </div>
-          <h3 className="card-title">Fresh Daily</h3>
-          <p className="card-desc">
-            Prepared fresh every morning with locally sourced fruits to ensure
-            maximum freshness and flavor in every bite.
-          </p>
-        </div>
+        ))}
       </div>
     </section>
   );
