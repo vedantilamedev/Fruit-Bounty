@@ -49,10 +49,10 @@ const HarvestCalendar = () => {
             <div className="flex items-center gap-6">
                 <div>
                     <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Harvest Ecosystem</h2>
-                    <p className="text-[#B7A261] font-bold text-[10px] mt-1 uppercase tracking-[0.2em] flex items-center gap-2">
+                    <div className="text-[#B7A261] font-bold text-[10px] mt-1 uppercase tracking-[0.2em] flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-[#B7A261] animate-ping" />
                         Live Orchard Tracking
-                    </p>
+                    </div>
                 </div>
                 <div className="h-10 w-px bg-gray-100 hidden lg:block" />
                 <div className="flex items-center gap-2 bg-gray-50 p-1 rounded-2xl border border-gray-100">
@@ -208,7 +208,7 @@ const HarvestCalendar = () => {
                     <div className="flex flex-col lg:flex-row gap-10 items-start">
                         <div className="bg-[#FBF8F2] p-8 rounded-[2.5rem] min-w-[200px] text-center border border-[#E8E4D9] relative overflow-hidden group">
                             <div className="absolute inset-0 bg-gradient-to-b from-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                            <span className="block text-10px font-extrabold text-[#B7A261] uppercase tracking-[0.3em] mb-4">Selected Date</span>
+                            <span className="block text-[10px] font-extrabold text-[#B7A261] uppercase tracking-[0.3em] mb-4">Selected Date</span>
                             <span className="block text-6xl font-black text-[#3C7E44] mb-2 tracking-tighter">{selectedDate.getDate()}</span>
                             <span className="block text-lg text-gray-900 font-bold uppercase tracking-widest">
                                 {selectedDate.toLocaleString('default', { month: 'long' })}
