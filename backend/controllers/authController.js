@@ -3,16 +3,19 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import sendEmail from "../utils/sendEmail.js"; // Brevo email utility
 
-// 🔹 Generate JWT Token
+//  Generate JWT Token
 const generateToken = (id, role) => {
   return jwt.sign(
     { id, role },
     process.env.JWT_SECRET,
     { expiresIn: "7d" }
   );
+
+
+  
 };
 
-// ✅ Register User (Customer or Admin)
+//  Register User (Customer or Admin)
 export const registerUser = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -33,7 +36,7 @@ export const registerUser = async (req, res) => {
     });
 
     if (user) {
-      // 🔹 Send Welcome Email using Brevo
+      //  Send Welcome Email using Brevo
       try {
         await sendEmail({
           email: user.email,
@@ -63,7 +66,7 @@ export const registerUser = async (req, res) => {
   }
 };
 
-// ✅ Login User
+//  Login User
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -137,7 +140,7 @@ export const forgotPassword = async (req, res) => {
     });
   }
 };
-// ✅ Reset Password
+// Reset Password
 export const resetPassword = async (req, res) => {
   try {
     const resetPasswordToken = crypto
