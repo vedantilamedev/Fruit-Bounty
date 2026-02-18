@@ -96,15 +96,10 @@ function Navbar() {
                       <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center text-green-700 group-hover:bg-green-700 group-hover:text-white transition">
                         <LogIn size={16} />
                       </div>
-                      <span className="font-semibold text-gray-700">Login</span>
+                      <span className="font-semibold text-gray-700">Register</span>
                     </Link>
 
-                    <Link to="/register" onClick={() => setAuthOpen(false)} className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-green-50 rounded-xl transition group">
-                      <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center text-green-700 group-hover:bg-green-700 group-hover:text-white transition">
-                        <UserPlus size={16} />
-                      </div>
-                      <span className="font-semibold text-gray-700">Sign Up</span>
-                    </Link>
+                    
                   </div>
 
                   <div className="border-t border-gray-100 p-2">

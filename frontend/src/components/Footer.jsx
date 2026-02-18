@@ -78,7 +78,7 @@ function Footer() {
             <ul className="space-y-3 text-white/80">
               <li className="flex items-center gap-3">
                 <FaPhoneAlt className="text-[#C9C27A]" />
-                <span>+91 98765 43210</span>
+                <span>+91 8955276223</span>
               </li>
 
               <li className="hover:text-[#C9C27A] transition cursor-pointer">
