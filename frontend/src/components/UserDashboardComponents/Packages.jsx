@@ -1,100 +1,285 @@
-import React from 'react';
-import { Package, Users, Calendar, Check, XCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import {
+    Package, Users, Calendar, Check, XCircle,
+    Zap, Award, ArrowUpCircle, Star, Sparkles,
+    ChevronRight, ArrowRight, ShieldCheck,
+    Clock, RefreshCcw, TrendingUp, Gem
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Packages = ({ activePackage }) => {
+    const [isCompareOpen, setIsCompareOpen] = useState(false);
+
+    const upgradeTiers = [
+        {
+            id: 'starter',
+            name: "Wellness Starter",
+            price: "₹999",
+            period: "Monthly",
+            description: "Essential seasonal harvest for individuals starting their wellness journey.",
+            features: ["5 Seasonal Fruits", "Weekly Delivery", "Standard Packaging", "Market Updates"],
+            color: "from-blue-600 to-indigo-700",
+            tag: "BEGINNER CHOICE",
+            icon: Package
+        },
+        {
+            id: 'family',
+            name: "Family Bounty",
+            price: "₹2499",
+            period: "Monthly",
+            description: "Abundant variety designed to satisfy the health of your entire tribe.",
+            features: ["12 Multi-category Fruits", "Bi-weekly Delivery", "Eco Crates", "Priority Support"],
+            color: "from-[#B7A261] to-[#8c7a42]",
+            tag: "BEST VALUE",
+            icon: Users
+        },
+        {
+            id: 'elite',
+            name: "Elite Harvest",
+            price: "₹3499",
+            period: "Monthly",
+            description: "For true connoisseurs seeking the rarest orchard selections.",
+            features: ["Exotic Fruits", "Priority Next-Day", "Fruit Sommelier", "Lifetime Fees"],
+            color: "from-[#3C7E44] to-[#1a472a]",
+            tag: "MOST POPULAR",
+            icon: Gem
+        }
+    ];
+
+    const StatCard = ({ title, value, icon: Icon, color, subtitle }) => (
+        <motion.div
+            whileHover={{ y: -5 }}
+            className="bg-white p-6 rounded-[2.5rem] border border-[#E8E4D9] shadow-sm relative overflow-hidden group"
+        >
+            <div className={`absolute -top-4 -right-4 w-24 h-24 ${color} opacity-[0.03] rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700`} />
+            <div className="relative z-10 flex justify-between items-start">
+                <div>
+                    <p className="text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.2em] mb-2">{title}</p>
+                    <h3 className="text-2xl font-bold text-gray-900 tracking-tight">{value}</h3>
+                    {subtitle && <p className="text-[10px] mt-2 text-gray-400 font-bold uppercase tracking-widest">{subtitle}</p>}
+                </div>
+                <div className={`w-12 h-12 rounded-2xl ${color} bg-opacity-10 flex items-center justify-center text-white overflow-hidden relative shadow-inner`}>
+                    <div className={`absolute inset-0 ${color} opacity-20`} />
+                    <Icon size={22} className={color.replace('bg-', 'text-')} strokeWidth={1.5} />
+                </div>
+            </div>
+        </motion.div>
+    );
+
     if (!activePackage) {
         return (
             <div className="flex flex-col items-center justify-center p-20 bg-white rounded-[3rem] border-2 border-dashed border-[#E8E4D9] shadow-inner text-center animate-fadeIn">
                 <div className="bg-[#F7F5EF] p-8 rounded-[2rem] mb-6 shadow-sm">
                     <Package size={64} className="text-[#B7A261] opacity-40" strokeWidth={1} />
                 </div>
-                <p className="text-black font-normal text-xl mb-2 tracking-tight">No Active Harvest Plan!</p>
-                <p className="text-black font-medium text-sm max-w-xs mb-8">Unlock the full bounty of freshness with our subscription plans.</p>
-                <button className="px-10 py-4 bg-[#3C7E44] text-white rounded-full font-normal text-sm uppercase tracking-widest hover:bg-[#3C7E44] transition-all duration-300 shadow-xl shadow-green-900/20">
-                    Explore Plans
+                <h3 className="text-2xl font-bold text-gray-900 mb-2 tracking-tight">No Active Harvest Ritual</h3>
+                <p className="text-gray-500 text-sm max-w-xs mb-8">Reconnect with nature's rhythm by choosing a subscription plan.</p>
+                <button className="px-12 py-4 bg-[#3C7E44] text-white rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:bg-[#2f6131] transition-all duration-300 shadow-2xl shadow-green-900/20">
+                    Explore Rituals
                 </button>
             </div>
         );
     }
 
     return (
-        <div className="space-y-8 animate-fadeIn mt-4">
-            <div className="flex justify-end mb-4 px-2">
-                <span className={`px-6 py-2 rounded-full text-[10px] font-normal uppercase tracking-[0.2em] border shadow-sm ${activePackage.status === 'Active' ? 'bg-[#3C7E44]/10 text-[#3C7E44] border-[#3C7E44]/20' : 'bg-gray-100 text-gray-600'
-                    }`}>
-                    {activePackage.status} System
-                </span>
+        <div className="space-y-10 animate-fadeIn pb-16">
+            {/* Executive Status Header */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <StatCard
+                    title="Active Plan"
+                    value={activePackage.name}
+                    icon={Award}
+                    color="bg-[#3C7E44]"
+                    subtitle={`Valid until ${activePackage.endDate}`}
+                />
+                <StatCard
+                    title="Next Ritual"
+                    value={activePackage.renewalDate}
+                    icon={RefreshCcw}
+                    color="bg-[#B7A261]"
+                    subtitle="Automatic Renewal"
+                />
+                <StatCard
+                    title="Bounty Limit"
+                    value={`${activePackage.fruits.length} Varieties`}
+                    icon={TrendingUp}
+                    color="bg-[#3C7E44]"
+                    subtitle="Orchard Fresh Only"
+                />
             </div>
 
-            <div className="bg-white rounded-[3.5rem] shadow-sm border border-[#E8E4D9] overflow-hidden group">
-                <div className="bg-gradient-to-br from-[#3C7E44] to-[#3C7E44] p-6 lg:p-14 text-white relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl" />
-                    <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                        <div>
-                            <div className="flex items-center gap-4 mb-3">
-                                <div className="bg-white/20 p-3 rounded-2xl backdrop-blur-md">
-                                    <Package className="text-white" size={28} />
+            {/* Main Interactive Plan Board */}
+            <div className="bg-white rounded-[3.5rem] border border-[#E8E4D9] shadow-xl shadow-green-900/5 overflow-hidden">
+                <div className="lg:flex">
+                    {/* Visual Plan Hero */}
+                    <div className="lg:w-1/3 bg-gradient-to-br from-[#3C7E44] to-[#1a472a] p-10 lg:p-14 text-white relative">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-20 -mt-20 blur-3xl animate-pulse" />
+                        <div className="relative z-10 flex flex-col h-full justify-between">
+                            <div>
+                                <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-[9px] font-bold uppercase tracking-[0.2em] mb-8 border border-white/10">
+                                    <Sparkles size={12} className="text-[#B7A261]" /> Current Subscription
+                                </span>
+                                <h3 className="text-4xl font-bold tracking-tighter leading-tight mb-4">{activePackage.name}</h3>
+                                <p className="text-white/60 text-sm font-medium leading-relaxed">You are currently experiencing our premium harvest curation at the highest standards.</p>
+                            </div>
+
+                            <div className="mt-12 space-y-6">
+                                <div className="p-5 bg-white/10 rounded-3xl border border-white/10 backdrop-blur-sm">
+                                    <p className="text-[9px] font-bold uppercase tracking-widest opacity-60 mb-2">Cycle Cadence</p>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-xl font-bold">{activePackage.frequency}</span>
+                                        <Zap size={20} className="text-[#B7A261]" />
+                                    </div>
                                 </div>
-                                <h3 className="text-3xl lg:text-4xl font-normal tracking-tight">{activePackage.name}</h3>
+                                <div className="p-5 bg-white/10 rounded-3xl border border-white/10 backdrop-blur-sm">
+                                    <p className="text-[9px] font-bold uppercase tracking-widest opacity-60 mb-2">Renewal Flow</p>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-xl font-bold">{activePackage.duration}</span>
+                                        <Clock size={20} className="text-[#B7A261]" />
+                                    </div>
+                                </div>
                             </div>
-                            <p className="text-white/70 font-normal uppercase tracking-[0.2em] text-xs">Aura of Freshness valid until <span className="text-[#B7A261]">{activePackage.endDate}</span></p>
                         </div>
-                        <div className="bg-black/10 backdrop-blur-md px-8 py-4 rounded-[2rem] border border-white/10">
-                            <p className="text-[10px] font-normal uppercase tracking-widest opacity-60 mb-1">Harvest Frequency</p>
-                            <p className="text-xl font-normal">{activePackage.frequency}</p>
+                    </div>
+
+                    {/* Detailed Ecosystem Content */}
+                    <div className="lg:w-2/3 p-10 lg:p-14 bg-[#FBF8F2]/30">
+                        <div className="flex flex-col lg:flex-row gap-10">
+                            {/* Capabilities */}
+                            <div className="flex-1 space-y-6">
+                                <h4 className="text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.2em] mb-6">Plan Topology</h4>
+                                <div className="grid grid-cols-1 gap-4">
+                                    <div className="flex items-center gap-5 p-6 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                                        <div className="w-12 h-12 bg-[#3C7E44]/5 rounded-2xl flex items-center justify-center text-[#3C7E44]">
+                                            <Users size={24} strokeWidth={1.5} />
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-gray-900 leading-none">{activePackage.type} Aura</p>
+                                            <p className="text-xs text-gray-400 font-medium mt-1">Sustaining {activePackage.peopleCount} Senses</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-5 p-6 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                                        <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-[#B7A261]">
+                                            <ShieldCheck size={24} strokeWidth={1.5} />
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-gray-900 leading-none">Protection Ritual</p>
+                                            <p className="text-xs text-gray-400 font-medium mt-1">Transit & Quality Guarantee</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Bounty Manifest */}
+                            <div className="flex-1">
+                                <div className="flex items-center justify-between mb-6">
+                                    <h4 className="text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.2em]">Crate Manifest</h4>
+                                    <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{activePackage.fruits.length} Items</span>
+                                </div>
+                                <div className="grid grid-cols-1 gap-2.5">
+                                    {activePackage.fruits.map((fruit, idx) => (
+                                        <motion.div
+                                            key={idx}
+                                            whileHover={{ x: 5 }}
+                                            className="flex items-center gap-3 p-4 bg-white/60 rounded-[1.25rem] border border-white"
+                                        >
+                                            <Check size={14} className="text-[#3C7E44]" strokeWidth={3} />
+                                            <span className="text-sm font-bold text-gray-700">{fruit}</span>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Status Bar */}
+                        <div className="mt-12 pt-8 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-6">
+                            <div className="flex items-center gap-4">
+                                <div className="flex -space-x-3">
+                                    {[1, 2, 3].map(i => (
+                                        <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-gray-200 overflow-hidden">
+                                            <div className="w-full h-full bg-[#3C7E44]/10 flex items-center justify-center">
+                                                <Users size={12} className="text-[#3C7E44]" />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Shared within your tribe</p>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <button className="px-8 py-3 bg-white border border-[#E8E4D9] text-gray-600 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-all shadow-sm">Manage Billing</button>
+                                <button className="text-[#A44A3F] font-bold text-[10px] uppercase tracking-widest px-4 hover:underline">Exit Plan</button>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div className="p-10 lg:p-14 grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 bg-[#FBF8F2]/30">
-                    <div className="space-y-6">
-                        <div className="flex items-center gap-5 p-6 bg-white rounded-[2.5rem] border border-[#E8E4D9]/50 shadow-sm hover:shadow-md transition-shadow">
-                            <div className="bg-[#3C7E44]/10 p-4 rounded-2xl">
-                                <Users className="text-[#3C7E44]" size={24} strokeWidth={2.5} />
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-normal text-[#B7A261] uppercase tracking-widest mb-1">Tribe Capacity</p>
-                                <p className="text-lg font-normal text-[#3C7E44]">{activePackage.type} <span className="text-[#B7A261] font-normal text-sm">({activePackage.peopleCount} Senses)</span></p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center gap-5 p-6 bg-white rounded-[2.5rem] border border-[#E8E4D9]/50 shadow-sm hover:shadow-md transition-shadow">
-                            <div className="bg-[#b7a261]/10 p-4 rounded-2xl">
-                                <Calendar className="text-[#b7a261]" size={24} strokeWidth={2.5} />
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-normal text-[#B7A261] uppercase tracking-widest mb-1">Ritual Duration</p>
-                                <p className="text-lg font-normal text-[#3C7E44]">{activePackage.duration} <span className="text-[#B7A261] font-normal text-sm">Cycle</span></p>
-                            </div>
-                        </div>
+            {/* Professional Upgrade Path */}
+            <div className="pt-20">
+                <div className="flex flex-col items-center mb-16">
+                    <div className="inline-flex items-center gap-3 px-6 py-2 bg-white rounded-full border border-[#E8E4D9] shadow-sm mb-6">
+                        <Gem size={18} className="text-[#3C7E44]" />
+                        <span className="text-[10px] font-bold text-gray-900 uppercase tracking-[0.2em]">Upgrade Your Harvest Ritual</span>
                     </div>
-
-                    <div>
-                        <h4 className="text-black font-normal text-xl mb-6 flex items-center gap-3">
-                            Included Bounty
-                            <span className="bg-[#B7A261] text-white text-[10px] px-3 py-1 rounded-full font-normal uppercase tracking-widest">
-                                {activePackage.fruits.length} Fruits
-                            </span>
-                        </h4>
-                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {activePackage.fruits.map((fruit, idx) => (
-                                <li key={idx} className="flex items-center text-black font-normal bg-white p-4 rounded-2xl shadow-sm border border-[#E8E4D9]/30">
-                                    <span className="w-6 h-6 rounded-full bg-[#3C7E44] text-white flex items-center justify-center mr-3 shadow-lg shadow-green-900/10">
-                                        <Check size={14} strokeWidth={4} />
-                                    </span>
-                                    {fruit}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                    <h2 className="text-4xl font-black text-gray-900 tracking-tighter text-center">Architect Your Freshness Aura</h2>
                 </div>
 
-                <div className="px-10 py-8 bg-[#F7F5EF] border-t border-[#E8E4D9] flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-normal text-[#B7A261] uppercase tracking-widest leading-none">Next Harvest Renewal:</span>
-                        <span className="font-normal text-[#3C7E44]">{activePackage.renewalDate}</span>
-                    </div>
-                    <button className="text-[#A44A3F] hover:bg-[#A44A3F]/5 border border-transparent hover:border-[#A44A3F]/20 px-6 py-2 rounded-full transition-all font-normal text-[10px] uppercase tracking-widest">Terminate Ritual</button>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 px-2 lg:px-0">
+                    {upgradeTiers.map((tier, idx) => (
+                        <motion.div
+                            key={tier.id}
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: idx * 0.1 }}
+                            whileHover={{ y: -10 }}
+                            className="bg-white rounded-[3rem] border border-[#E8E4D9] p-8 lg:p-10 shadow-xl shadow-green-900/5 flex flex-col items-stretch relative overflow-hidden group/plan"
+                        >
+                            <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${tier.color} opacity-[0.03] rounded-full -mr-16 -mt-16 group-hover/plan:scale-150 transition-transform duration-700`} />
+
+                            <div className="mb-8">
+                                <span className="bg-[#3C7E44]/5 text-[#3C7E44] px-4 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest mb-6 inline-block">
+                                    {tier.tag}
+                                </span>
+                                <div className="flex items-center gap-4 mb-3">
+                                    <div className={`w-12 h-12 bg-gradient-to-br ${tier.color} rounded-2xl flex items-center justify-center text-white shadow-lg`}>
+                                        <tier.icon size={24} strokeWidth={1.5} />
+                                    </div>
+                                    <h5 className="text-2xl font-bold text-gray-900 tracking-tight">{tier.name}</h5>
+                                </div>
+                                <p className="text-gray-400 text-xs font-medium leading-relaxed">{tier.description}</p>
+                            </div>
+
+                            <div className="mb-10 pb-8 border-b border-gray-100">
+                                <div className="flex items-baseline gap-1">
+                                    <span className="text-4xl font-black text-gray-900 tracking-tighter">{tier.price}</span>
+                                    <span className="text-gray-400 text-xs font-bold uppercase tracking-wider">/ Every {tier.period}</span>
+                                </div>
+                            </div>
+
+                            <div className="space-y-4 mb-12 flex-1">
+                                {tier.features.map((feature, fIdx) => (
+                                    <div key={fIdx} className="flex items-center gap-4">
+                                        <div className="w-5 h-5 bg-emerald-50 rounded-lg flex items-center justify-center shrink-0">
+                                            <Check size={12} className="text-[#3C7E44]" strokeWidth={4} />
+                                        </div>
+                                        <span className="text-[13px] font-bold text-gray-700">{feature}</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <motion.button
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className={`w-full py-5 rounded-[1.5rem] font-bold text-[11px] uppercase tracking-[0.2em] shadow-xl transition-all flex items-center justify-center gap-2 group/btn
+                                    ${tier.id === 'elite'
+                                        ? 'bg-[#3C7E44] text-white shadow-green-900/20 hover:bg-[#2f6131]'
+                                        : 'bg-white border border-[#E8E4D9] text-[#3C7E44] hover:bg-[#FBF8F2]'
+                                    }`}
+                            >
+                                Ascend Ritual <ArrowRight size={16} className="group-hover/btn:translate-x-1.5 transition-transform" />
+                            </motion.button>
+                        </motion.div>
+                    ))}
                 </div>
             </div>
         </div>
