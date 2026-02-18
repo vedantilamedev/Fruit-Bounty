@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Home, Package, ShoppingCart, CreditCard, LogOut, Menu, X, Calendar as CalendarIcon, Settings as SettingsIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Home, Package, ShoppingCart, CreditCard, LogOut, Menu, X, Calendar as CalendarIcon, Settings as SettingsIcon, ArrowLeft } from 'lucide-react';
 import Overview from '../../components/UserDashboardComponents/Overview';
 import Orders from '../../components/UserDashboardComponents/Orders';
 import Packages from '../../components/UserDashboardComponents/Packages';
@@ -145,7 +146,10 @@ const Dashboard = () => {
             {/* Mobile Header */}
             <div className="lg:hidden bg-white shadow-sm p-4 flex justify-between items-center shrink-0 z-30">
                 <div className="flex items-center gap-2">
-                    {/* Title Removed */}
+                    <Link to="/" className="p-2 text-[#3C7E44] flex items-center gap-2">
+                        <ArrowLeft size={20} />
+                        <span className="text-[10px] font-black uppercase tracking-widest mt-0.5">Exit to Home</span>
+                    </Link>
                 </div>
                 <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 text-gray-600">
                     {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -164,6 +168,19 @@ const Dashboard = () => {
 
 
 
+
+                    {/* Back to Home Button */}
+                    <div className="px-6 pt-10 pb-4">
+                        <Link
+                            to="/"
+                            className="group flex items-center gap-3 px-6 py-4 bg-white border border-[#E8E4D9] rounded-[1.5rem] text-gray-400 hover:text-[#3C7E44] hover:border-[#3C7E44]/30 hover:shadow-xl hover:shadow-green-900/5 transition-all duration-500"
+                        >
+                            <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-[#3C7E44]/10 transition-colors">
+                                <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                            </div>
+                            <span className="text-xs font-black uppercase tracking-[0.2em]">Home Portal</span>
+                        </Link>
+                    </div>
 
                     {/* Menu Links */}
                     <nav className="flex-1 px-4 py-8 space-y-3 overflow-y-auto">
