@@ -17,8 +17,9 @@ import {
   ResponsiveContainer,
   LineChart,
   Line,
-  AreaChart,
-  Area,
+  PieChart,
+  Pie,
+  Cell,
 } from "recharts";
 
 // ---------------- DATA ----------------
@@ -46,15 +47,14 @@ const revenueData = {
     { name: "Apr", revenue: 145000 },
     { name: "May", revenue: 162000 },
   ],
+  total: [
+    { name: "Jan", revenue: 98000 },
+    { name: "Feb", revenue: 210000 },
+    { name: "Mar", revenue: 335000 },
+    { name: "Apr", revenue: 480000 },
+    { name: "May", revenue: 642580 },
+  ],
 };
-
-const totalRevenueGrowth = [
-  { name: "Jan", total: 98000 },
-  { name: "Feb", total: 210000 },
-  { name: "Mar", total: 335000 },
-  { name: "Apr", total: 480000 },
-  { name: "May", total: 642580 },
-];
 
 const peakOrderTimes = [
   { time: "9 AM", orders: 20 },
@@ -72,7 +72,13 @@ const bestSellingBowls = [
   { name: "Classic Combo", orders: 80 },
 ];
 
-const COLORS = ["#22c55e", "#16a34a", "#4ade80", "#86efac", "#15803d"];
+const orderTypePie = [
+  { name: "Normal", value: 55, count: 180 },
+  { name: "Subscription", value: 30, count: 98 },
+  { name: "Corporate", value: 15, count: 46 },
+];
+
+const COLORS = ["#22c55e", "#3b82f6", "#f97316", "#16a34a", "#86efac"];
 
 const metrics = [
   {
@@ -113,6 +119,14 @@ export default function Dashboard() {
   return (
     <div className="p-4 md:p-6 space-y-6 bg-gray-50 min-h-screen">
 
+      {/* PAGE HEADING */}
+      <div>
+        <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
+        <p className="text-sm text-gray-500">
+          Overview of your business performance
+        </p>
+      </div>
+
       {/* METRIC CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {metrics.map((item, i) => {
@@ -129,25 +143,7 @@ export default function Dashboard() {
                 <div>
                   <p className="text-sm text-gray-500">{item.title}</p>
                   <h2 className="text-3xl font-bold mt-1">{item.value}</h2>
-
-                  <div className="flex items-center gap-1 mt-2">
-                    {item.trend === "up" ? (
-                      <TrendingUp className="w-4 h-4 text-green-500" />
-                    ) : (
-                      <TrendingDown className="w-4 h-4 text-red-500" />
-                    )}
-                    <span
-                      className={`text-sm font-medium ${
-                        item.trend === "up"
-                          ? "text-green-500"
-                          : "text-red-500"
-                      }`}
-                    >
-                      {item.change}
-                    </span>
-                  </div>
                 </div>
-
                 <div className="w-12 h-12 rounded-lg bg-[#427A43] flex items-center justify-center">
                   <Icon className="w-6 h-6 text-white" />
                 </div>
@@ -159,15 +155,13 @@ export default function Dashboard() {
 
       {/* REVENUE + PEAK */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-        {/* Revenue Trend */}
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
           <div className="bg-white p-6 rounded-xl border shadow-sm">
             <div className="flex justify-between items-center mb-4">
               <h3 className="font-semibold text-lg">Revenue Trend</h3>
 
               <div className="flex gap-2">
-                {["daily", "weekly", "monthly"].map((view) => (
+                {["daily", "weekly", "monthly", "total"].map((view) => (
                   <button
                     key={view}
                     onClick={() => setRevenueView(view)}
@@ -200,7 +194,6 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
-        {/* Peak Orders */}
         <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
           <div className="bg-white p-6 rounded-xl border shadow-sm">
             <h3 className="font-semibold text-lg mb-4">
@@ -213,85 +206,107 @@ export default function Dashboard() {
                 <XAxis dataKey="time" />
                 <YAxis />
                 <Tooltip />
-                <Bar
-                  dataKey="orders"
-                  fill="#FFE66D"
-                  radius={[8, 8, 0, 0]}
-                />
+                <Bar dataKey="orders" fill="#FFE66D" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </motion.div>
-
       </div>
 
-      {/* TOTAL REVENUE GROWTH */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="bg-white p-6 rounded-xl border shadow-sm">
-          <h3 className="text-lg font-semibold mb-4">
-            Total Revenue Growth
-          </h3>
+      {/* BEST SELLING + PIE CHART */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-          <ResponsiveContainer width="100%" height={300}>
-            <AreaChart data={totalRevenueGrowth}>
-              <defs>
-                <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#427A43" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#427A43" stopOpacity={0.1} />
-                </linearGradient>
-              </defs>
-
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Area
-                type="monotone"
-                dataKey="total"
-                stroke="#427A43"
-                fillOpacity={1}
-                fill="url(#colorTotal)"
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-      </motion.div>
-
-      {/* BEST SELLING BOWLS */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="bg-white p-6 rounded-xl border shadow-sm">
-          <h3 className="text-lg font-semibold mb-4">
-            Best Selling Bowl Combos
-          </h3>
-
-          <div className="space-y-4">
-            {bestSellingBowls.map((bowl, index) => (
-              <div key={index} className="flex items-center gap-4">
-                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center font-bold text-green-600">
-                  {index + 1}
-                </div>
-
-                <div className="flex-1">
-                  <p className="text-sm font-medium">{bowl.name}</p>
-                  <div className="w-full bg-gray-100 h-2 rounded-full mt-2">
+        {/* Best Selling */}
                     <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${(bowl.orders / 145) * 100}%` }}
-                      transition={{ duration: 1 }}
-                      className="h-2 rounded-full"
-                      style={{ background: COLORS[index] }}
-                    />
-                  </div>
-                </div>
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <div className="bg-white p-6 rounded-xl border shadow-sm">
+                <h3 className="text-lg font-semibold mb-4">
+                  Best Selling Bowl Combos
+                </h3>
 
-                <span className="font-semibold">
-                  {bowl.orders}
-                </span>
+                <div className="space-y-4">
+                  {bestSellingBowls.map((bowl, index) => (
+                    <div key={index} className="flex items-center gap-4">
+                      <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center font-bold text-green-600">
+                        {index + 1}
+                      </div>
+
+                      <div className="flex-1">
+                        <p className="text-sm font-medium">{bowl.name}</p>
+                        <div className="w-full bg-gray-100 h-2 rounded-full mt-2">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${(bowl.orders / 145) * 100}%` }}
+                            transition={{ duration: 1 }}
+                            className="h-2 rounded-full"
+                            style={{ background: "#22c55e" }}
+                          />
+                        </div>
+                      </div>
+
+                      <span className="font-semibold">{bowl.orders}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
+            </motion.div>
+
+
+        {/* Pie Chart (FIXED STYLE) */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+          <div className="bg-white p-6 rounded-xl border shadow-sm">
+            <h3 className="text-lg font-semibold mb-4">
+              Order Type Distribution
+            </h3>
+
+            <ResponsiveContainer width="100%" height={280}>
+              <PieChart>
+                <Pie
+                  data={orderTypePie}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={({ name, value }) => `${name}: ${value}%`}
+                  outerRadius={95}
+                  dataKey="value"
+                >
+                  {orderTypePie.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+
+            <div className="mt-4 space-y-2">
+              {orderTypePie.map((item, index) => (
+                <div
+                  key={item.name}
+                  className="flex items-center justify-between p-2 rounded-lg bg-slate-50"
+                >
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="w-3 h-3 rounded-full"
+                      style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                    />
+                    <span className="text-sm text-slate-700">{item.name}</span>
+                  </div>
+                  <span className="text-sm font-semibold text-slate-700">
+                    {item.count} orders
+                  </span>
+                </div>
+              ))}
+            </div>
+
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+
+      </div>
 
     </div>
   );

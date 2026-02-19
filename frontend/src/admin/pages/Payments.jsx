@@ -5,11 +5,11 @@ import {
   CreditCard,
   Wallet,
   XCircle,
-  TrendingUp,
   Search,
   Calendar,
 } from "lucide-react";
 
+/* ------------------ Data ------------------ */
 const paymentsData = [
   { id: "PAY-1001", customer: "John Smith", amount: 120, method: "Card", status: "Paid", date: "2026-02-01" },
   { id: "PAY-1002", customer: "Sarah Johnson", amount: 95, method: "Card", status: "Paid", date: "2026-02-01" },
@@ -19,11 +19,16 @@ const paymentsData = [
   { id: "PAY-1006", customer: "Lisa Anderson", amount: 75, method: "Card", status: "Failed", date: "2026-02-01" },
 ];
 
+/* Conversion rate USD → INR */
+const conversionRate = 83;
+
+/* ------------------ Main Component ------------------ */
 export default function Payments() {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("All");
   const [sort, setSort] = useState("latest");
 
+  /* Filter + Sort */
   const filteredPayments = useMemo(() => {
     let data = [...paymentsData];
 
@@ -47,6 +52,7 @@ export default function Payments() {
     return data;
   }, [search, status, sort]);
 
+  /* Stats */
   const totalEarnings = paymentsData
     .filter((p) => p.status === "Paid")
     .reduce((sum, p) => sum + p.amount, 0);
@@ -56,7 +62,9 @@ export default function Payments() {
   const failedPayments = paymentsData.filter((p) => p.status === "Failed").length;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 md:p-8 space-y-6">
+
+      {/* Header */}
       <div>
         <h2 className="text-3xl font-bold">Payments & Revenue</h2>
         <p className="text-gray-500">Track earnings and payment status</p>
@@ -66,14 +74,32 @@ export default function Payments() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
           title="Total Earnings"
-          value={`$${totalEarnings}`}
+          value={`₹${(totalEarnings * conversionRate).toFixed(0)}`}
           icon={<DollarSign />}
           color="green"
           sub="+22.5% from last month"
         />
-        <StatCard title="Paid Orders" value={paidOrders} icon={<CreditCard />} color="blue" sub="Successfully completed" />
-        <StatCard title="COD Orders" value={codOrders} icon={<Wallet />} color="orange" sub="Cash on delivery" />
-        <StatCard title="Failed Payments" value={failedPayments} icon={<XCircle />} color="red" sub="Need attention" />
+        <StatCard
+          title="Paid Orders"
+          value={paidOrders}
+          icon={<CreditCard />}
+          color="blue"
+          sub="Successfully completed"
+        />
+        <StatCard
+          title="COD Orders"
+          value={codOrders}
+          icon={<Wallet />}
+          color="orange"
+          sub="Cash on delivery"
+        />
+        <StatCard
+          title="Failed Payments"
+          value={failedPayments}
+          icon={<XCircle />}
+          color="red"
+          sub="Need attention"
+        />
       </div>
 
       {/* Filters */}
@@ -89,14 +115,22 @@ export default function Payments() {
           />
         </div>
 
-        <select className="border rounded-lg px-3 py-2" value={status} onChange={(e) => setStatus(e.target.value)}>
+        <select
+          className="border rounded-lg px-3 py-2"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+        >
           <option value="All">All Status</option>
           <option value="Paid">Paid</option>
           <option value="Pending">Pending</option>
           <option value="Failed">Failed</option>
         </select>
 
-        <select className="border rounded-lg px-3 py-2" value={sort} onChange={(e) => setSort(e.target.value)}>
+        <select
+          className="border rounded-lg px-3 py-2"
+          value={sort}
+          onChange={(e) => setSort(e.target.value)}
+        >
           <option value="latest">Latest</option>
           <option value="oldest">Oldest</option>
           <option value="amountAsc">Amount Low → High</option>
@@ -119,10 +153,15 @@ export default function Payments() {
           </thead>
           <tbody className="divide-y">
             {filteredPayments.map((p) => (
-              <tr key={p.id} className="hover:bg-gray-50">
+              <tr
+                key={p.id}
+                className="hover:bg-gray-50 transition-colors duration-150"
+              >
                 <Td className="font-semibold">{p.id}</Td>
                 <Td>{p.customer}</Td>
-                <Td className="font-bold text-green-600">${p.amount}</Td>
+                <Td className="font-bold text-green-600">
+                  ₹{(p.amount * conversionRate).toFixed(0)}
+                </Td>
                 <Td>{p.method}</Td>
                 <Td>
                   <span
@@ -154,7 +193,6 @@ export default function Payments() {
 }
 
 /* ---------------- Components ---------------- */
-
 const StatCard = ({ title, value, icon, color, sub }) => {
   const colors = {
     green: "bg-green-500",
@@ -164,16 +202,21 @@ const StatCard = ({ title, value, icon, color, sub }) => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow border p-5 flex justify-between items-center">
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      className="bg-white rounded-2xl shadow border p-5 flex justify-between items-center transition-transform duration-200"
+    >
       <div>
         <p className="text-sm text-gray-500">{title}</p>
         <h3 className="text-3xl font-bold mt-1">{value}</h3>
         <p className="text-xs text-gray-500 mt-1">{sub}</p>
       </div>
-      <div className={`w-12 h-12 flex items-center justify-center rounded-xl text-white ${colors[color]}`}>
+      <div
+        className={`w-12 h-12 flex items-center justify-center rounded-xl text-white ${colors[color]}`}
+      >
         {icon}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
