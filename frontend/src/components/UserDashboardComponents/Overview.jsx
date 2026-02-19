@@ -115,7 +115,7 @@ const Overview = ({ userData, orders }) => {
         animate="visible"
         className="space-y-6 pb-6"
       >
-        {/* Freshness Protocol Banner */}
+        {/* Freshness Policy Banner */}
         <motion.div
           variants={itemVariants}
           className="bg-gradient-to-br from-white to-[#FBF8F2] border border-[#E8E4D9] rounded-[3rem] p-6 lg:p-8 relative overflow-hidden group hover:shadow-lg hover:shadow-emerald-900/5 transition-all duration-500"
@@ -136,9 +136,9 @@ const Overview = ({ userData, orders }) => {
               <Calendar className="text-white relative z-10" size={36} strokeWidth={1.5} />
             </motion.div>
             <div className="text-center lg:text-left flex-1 space-y-2">
-              <h3 className="text-xl lg:text-2xl font-medium text-[#3C7E44] tracking-tight">Freshness First Protocol!</h3>
+              <h3 className="text-xl lg:text-2xl font-medium text-[#3C7E44] tracking-tight">Freshness First Policy</h3>
               <p className="text-gray-600 font-normal leading-relaxed max-w-2xl text-sm">
-                To guarantee maximum freshness from orchard to your bowl, <strong className="font-medium text-[#3C7E44] bg-[#3C7E44]/10 px-2 py-0.5 rounded-md">Same-day delivery is currently paused.</strong> All new fruit treasures will reach you within 24 hours.
+                To guarantee maximum freshness from orchard to your bowl, <strong className="font-medium text-[#3C7E44] bg-[#3C7E44]/10 px-2 py-0.5 rounded-md">Same-day delivery is currently paused.</strong> All new fruit orders will reach you within 24 hours.
               </p>
             </div>
             <motion.button
@@ -256,7 +256,7 @@ const Overview = ({ userData, orders }) => {
                 onClick={() => setIsTrackingOpen(true)}
                 className="w-full py-4 bg-white text-[#3C7E44] rounded-[1.5rem] font-bold text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-[#FBF8F2] transition-colors shadow-lg shadow-black/10 hover:shadow-xl group/btn"
               >
-                Track Component <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
+                Track Order <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
               </motion.button>
             </div>
           </motion.div>
@@ -290,7 +290,7 @@ const Overview = ({ userData, orders }) => {
                     <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-white/20 rounded-full text-[9px] font-bold uppercase tracking-widest mb-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" /> Live Tracking
                     </div>
-                    <h3 className="text-xl font-bold tracking-tight">Delivery Journey</h3>
+                    <h3 className="text-xl font-bold tracking-tight">Delivery Status</h3>
                     <p className="text-green-100/70 text-[10px] mt-0.5 font-medium">Order ID: <span className="text-white">#FRUIT-2026-X10</span></p>
                   </div>
                   <motion.button
@@ -359,7 +359,7 @@ const Overview = ({ userData, orders }) => {
 
                   {/* Courier Profile */}
                   <div className="space-y-3">
-                    <h4 className="text-[9px] font-bold text-[#B7A261] uppercase tracking-[0.2em]">Delivery Hero</h4>
+                    <h4 className="text-[9px] font-bold text-[#B7A261] uppercase tracking-[0.2em]">Delivery Partner</h4>
                     <div className="flex items-center gap-3 p-3 bg-white rounded-2xl border border-[#E8E4D9/50] shadow-sm">
                       <div className="relative">
                         <div className="w-10 h-10 rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center">
@@ -388,7 +388,7 @@ const Overview = ({ userData, orders }) => {
 
                   {/* Order Preview */}
                   <div className="space-y-3">
-                    <h4 className="text-[9px] font-bold text-[#B7A261] uppercase tracking-[0.2em]">Harvest Items</h4>
+                    <h4 className="text-[9px] font-bold text-[#B7A261] uppercase tracking-[0.2em]">Your Fruits</h4>
                     <div className="bg-white p-4 rounded-[1.5rem] border border-[#E8E4D9/50] shadow-sm space-y-2">
                       <div className="flex items-center gap-2">
                         <div className="w-6 h-6 bg-[#FBF8F2] rounded flex items-center justify-center text-[#3C7E44]">
