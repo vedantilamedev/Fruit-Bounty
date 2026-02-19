@@ -272,7 +272,7 @@ const Overview = ({ userData, orders }) => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsTrackingOpen(false)}
-              className="absolute inset-0 bg-[#3C7E44]/10 backdrop-blur-2xl"
+              className="absolute inset-0 bg-[#3C7E44]/15"
             />
 
             <motion.div
