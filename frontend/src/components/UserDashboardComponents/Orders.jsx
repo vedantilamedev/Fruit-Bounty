@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import {
     ShoppingBag, Eye, X, Calendar, Package, CreditCard,
     Truck, CheckCircle, Clock, Search, Filter, ArrowRight,
-    Download, RefreshCcw, MapPin, ChevronRight, AlertCircle
+    Download, RefreshCcw, MapPin, ChevronRight, AlertCircle, Ban
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const Orders = ({ orders }) => {
+const Orders = ({ orders, onCancelOrder }) => {
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [statusFilter, setStatusFilter] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
@@ -204,7 +204,7 @@ const Orders = ({ orders }) => {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setSelectedOrder(null)}
-                            className="absolute inset-0 bg-[#3C7E44]/10 backdrop-blur-2xl px-4"
+                            className="absolute inset-0 bg-[#3C7E44]/15 px-4"
                         />
 
                         <motion.div
@@ -301,6 +301,21 @@ const Orders = ({ orders }) => {
                                     >
                                         <RefreshCcw size={16} className="text-[#B7A261]" /> Reorder Fresh Items
                                     </motion.button>
+                                    {(selectedOrder.status === 'Pending' || selectedOrder.status === 'Confirmed') && (
+                                        <motion.button
+                                            whileHover={{ scale: 1.02 }}
+                                            whileTap={{ scale: 0.98 }}
+                                            onClick={() => {
+                                                if (window.confirm("Are you sure you want to cancel this order?")) {
+                                                    onCancelOrder(selectedOrder.id);
+                                                    setSelectedOrder(null);
+                                                }
+                                            }}
+                                            className="flex-1 py-4 bg-rose-50 border border-rose-100 text-rose-600 rounded-[1.5rem] font-bold text-xs uppercase tracking-[0.2em] hover:bg-rose-100 transition-colors flex items-center justify-center gap-3"
+                                        >
+                                            <Ban size={16} /> Cancel Order
+                                        </motion.button>
+                                    )}
                                 </div>
                             </div>
                         </motion.div>
