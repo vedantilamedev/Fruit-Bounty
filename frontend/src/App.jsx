@@ -21,7 +21,6 @@ import PlanCustomization from "./pages/PlanCustomization";
 import ContactUs from "./pages/ContactUs";
 import FruitShop from "./pages/FruitShop";
 import CustomBowlPage from "./pages/CustomBowlPage";
-import CartPage from "./pages/CartPage";
 import Dashboard from "./pages/UserDashboard/Dashboard";
 
 function AppContent() {
@@ -79,7 +78,7 @@ function AppContent() {
             <Route path="/plancustomization" element={<PlanCustomization />} />
             <Route path="/contactus" element={<ContactUs />} />
             <Route path="/customize" element={<CustomBowlPage />} />
-            <Route path="/cart-page" element={<CartPage />} />
+            
           </Route>
 
           {/* Dashboard without Global Footer */}
