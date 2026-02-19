@@ -19,20 +19,23 @@ const containerVariants = {
 };
 
 const InputField = ({ label, icon: Icon, type = "text", defaultValue, readOnly, placeholder }) => (
-    <motion.div variants={containerVariants} className="space-y-2.5">
-        <label className="text-[10px] font-black text-[#B7A261] uppercase tracking-[0.2em] ml-1">{label}</label>
+    <motion.div variants={containerVariants} className="space-y-2">
+        <div className="flex justify-between items-center ml-1 mb-1">
+            <label className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">{label}</label>
+            {readOnly && <span className="text-[9px] font-black text-[#B7A261] uppercase tracking-widest bg-[#B7A261]/5 px-2 py-0.5 rounded-md italic">SYSTEM LOCKED</span>}
+        </div>
         <div className="relative group">
-            <div className={`absolute left-0 top-0 bottom-0 w-1 rounded-r-full transition-all duration-300 ${readOnly ? 'bg-gray-200' : 'bg-[#3C7E44] scale-y-0 group-focus-within:scale-y-100'}`} />
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#3C7E44] transition-colors">
-                <Icon size={18} strokeWidth={2} />
+            <div className={`absolute left-0 top-0 bottom-0 w-1 transition-all duration-500 rounded-full ${readOnly ? 'bg-gray-100' : 'bg-[#3C7E44] scale-y-0 group-focus-within:scale-y-100'}`} />
+            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#3C7E44] transition-all duration-300">
+                <Icon size={18} strokeWidth={readOnly ? 1.5 : 2} />
             </div>
             <input
                 type={type}
                 defaultValue={defaultValue}
                 readOnly={readOnly}
                 placeholder={placeholder}
-                className={`w-full pl-12 pr-4 py-4 bg-white border border-[#E8E4D9] rounded-[1.5rem] focus:outline-none focus:border-[#3C7E44]/30 focus:ring-4 focus:ring-[#3C7E44]/5 text-gray-900 font-bold text-sm transition-all placeholder:text-gray-300
-                    ${readOnly ? 'bg-gray-50/50 cursor-not-allowed text-gray-500' : 'hover:border-[#3C7E44]/20'}
+                className={`w-full pl-14 pr-6 py-5 bg-white border border-[#E8E4D9] rounded-[1.75rem] focus:outline-none focus:border-[#3C7E44]/40 focus:ring-4 focus:ring-[#3C7E44]/5 text-gray-900 font-bold text-sm transition-all duration-300 placeholder:text-gray-300 hover:shadow-lg hover:shadow-black/5
+                    ${readOnly ? 'bg-gray-50/50 cursor-not-allowed text-gray-400 border-dashed opacity-80' : 'hover:border-[#3C7E44]/30'}
                 `}
             />
         </div>
@@ -81,7 +84,6 @@ const Settings = ({ userData }) => {
         { id: 'profile', label: 'My Profile', icon: User, description: 'Manage your personal details & profile photo' },
         { id: 'notifications', label: 'Notifications', icon: Bell, description: 'Choose how you want to receive alerts' },
         { id: 'security', label: 'Security', icon: Lock, description: 'Update your password & account safety' },
-        { id: 'privacy', label: 'Privacy', icon: Shield, description: 'Manage your data & tracking preferences' },
     ];
 
     const renderContent = () => {
@@ -89,79 +91,97 @@ const Settings = ({ userData }) => {
             case 'profile':
                 return (
                     <div className="space-y-8">
-                        <div className="mb-10 p-10 bg-[#FBF8F2] rounded-[2.5rem] border border-[#E8E4D9]">
-                            <div>
-                                <h4 className="text-3xl font-black text-gray-900 tracking-tight">{userData.name}</h4>
-                                <p className="text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.4em] mt-1">Valued Member</p>
-                                <div className="flex items-center gap-3 mt-4">
-                                    <span className="px-4 py-1.5 bg-emerald-50 text-emerald-700 text-[10px] font-bold rounded-xl border border-emerald-100">VERIFIED ACCOUNT</span>
-                                    <span className="px-4 py-1.5 bg-[#3C7E44] text-white text-[10px] font-bold rounded-xl uppercase tracking-wider shadow-lg shadow-green-900/10 cursor-pointer">Upgrade Plan</span>
+                        {/* Executive Profile Header */}
+                        <div className="relative p-8 bg-gradient-to-br from-[#FBF8F2] to-white rounded-[3rem] border border-[#E8E4D9] shadow-sm overflow-hidden group/header">
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-[#3C7E44]/5 rounded-full blur-[100px] -mr-32 -mt-32 transition-transform duration-1000 group-hover/header:scale-150" />
+                            <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
+                                <div className="relative">
+                                    <div className="w-28 h-28 rounded-full border-4 border-white shadow-2xl overflow-hidden bg-white">
+                                        <div className="w-full h-full bg-[#f3f1e9] flex items-center justify-center text-[#B7A261]">
+                                            <User size={50} strokeWidth={1} />
+                                        </div>
+                                    </div>
+                                    <motion.button
+                                        whileHover={{ scale: 1.1 }}
+                                        whileTap={{ scale: 0.9 }}
+                                        className="absolute bottom-1 right-1 w-10 h-10 bg-[#3C7E44] text-white rounded-2xl flex items-center justify-center shadow-xl border-4 border-white"
+                                    >
+                                        <Smartphone size={16} />
+                                    </motion.button>
+                                </div>
+                                <div className="text-center md:text-left">
+                                    <h4 className="text-3xl font-black text-gray-900 tracking-tighter mb-2">{userData.name}</h4>
+                                    <p className="text-[#B7A261] text-[10px] font-black uppercase tracking-[0.5em] mb-4">Valued Premium Member</p>
+                                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-2.5">
+                                        <div className="flex items-center gap-2 px-4 py-1.5 bg-white rounded-full border border-emerald-100 shadow-sm">
+                                            <ShieldCheck size={14} className="text-emerald-500" />
+                                            <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-widest">KYC Verified</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 px-4 py-1.5 bg-[#3C7E44] text-white rounded-full shadow-lg shadow-green-900/20 cursor-pointer hover:bg-[#2d5a3f] transition-colors">
+                                            <Gem size={14} className="text-[#B7A261]" />
+                                            <span className="text-[10px] font-bold uppercase tracking-widest">Active Plan: Individual</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                             <InputField label="Full Name" icon={User} defaultValue={userData.name} />
                             <InputField label="Email Address" icon={Mail} defaultValue={userData.email} readOnly />
-                            <InputField label="Phone Number" icon={Phone} defaultValue={userData.phone} readOnly />
-                            <InputField label="City/Location" icon={Globe} defaultValue="Bengaluru, IND" />
+                            <InputField label="Mobile Number" icon={Phone} defaultValue={userData.phone} readOnly />
+                            <InputField label="My Location" icon={Globe} defaultValue="Bengaluru, India" />
                         </div>
 
-                        <div className="pt-6 border-t border-gray-100 flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <ShieldCheck size={18} className="text-emerald-500" />
-                                <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest leading-none">Your data is safely encrypted</p>
+                        <div className="pt-10 border-t border-gray-100 flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-500">
+                                    <Lock size={20} />
+                                </div>
+                                <div>
+                                    <p className="text-sm font-black text-gray-900 tracking-tight">Account Security</p>
+                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Your account is protected with extra security</p>
+                                </div>
                             </div>
                             <motion.button
-                                whileHover={{ scale: 1.05 }}
+                                whileHover={{ scale: 1.05, y: -2 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="px-10 py-4 bg-[#3C7E44] text-white rounded-2xl font-bold text-xs uppercase tracking-[0.2em] shadow-2xl shadow-green-900/20 flex items-center gap-3"
+                                className="px-12 py-5 bg-[#3C7E44] text-white rounded-2xl font-bold text-xs uppercase tracking-[0.3em] shadow-2xl shadow-green-900/20 flex items-center gap-4 group/save"
                             >
-                                <Save size={18} /> Save Changes
+                                <Save size={20} className="group-hover/save:rotate-12 transition-transform" /> Save Changes
                             </motion.button>
                         </div>
                     </div>
                 );
             case 'notifications':
                 return (
-                    <div className="space-y-8">
-                        <div className="p-8 bg-gradient-to-br from-[#3C7E44] to-[#2d5a3f] rounded-[3rem] text-white relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full blur-3xl -mr-20 -mt-20" />
-                            <div className="relative z-10 flex items-center justify-between">
-                                <div>
-                                    <h4 className="text-2xl font-black tracking-tight mb-2">Notification Preferences</h4>
-                                    <p className="text-white/60 text-sm font-medium max-w-sm">Manage how and when you want to be notified about your orders.</p>
-                                </div>
-                                <div className="w-16 h-16 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 flex items-center justify-center">
-                                    <Zap size={32} className="text-[#B7A261]" />
-                                </div>
-                            </div>
-                        </div>
+                    <div className="space-y-10">
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <Toggle
                                 active={notifications.email}
                                 onClick={() => setNotifications({ ...notifications, email: !notifications.email })}
-                                label="Email Notifications"
-                                desc="Get order summaries via email"
+                                label="Email Updates"
+                                desc="Receive order updates and monthly summaries"
                             />
                             <Toggle
                                 active={notifications.whatsapp}
                                 onClick={() => setNotifications({ ...notifications, whatsapp: !notifications.whatsapp })}
                                 label="WhatsApp Alerts"
-                                desc="Get direct updates on WhatsApp"
+                                desc="Get instant updates directly on WhatsApp"
                             />
                             <Toggle
                                 active={notifications.sms}
                                 onClick={() => setNotifications({ ...notifications, sms: !notifications.sms })}
-                                label="SMS Alerts"
-                                desc="Get urgent updates via SMS"
+                                label="SMS Notifications"
+                                desc="Receive important alerts via text message"
                             />
                             <Toggle
                                 active={notifications.marketing}
                                 onClick={() => setNotifications({ ...notifications, marketing: !notifications.marketing })}
-                                label="Offers & Updates"
-                                desc="Learn about new harvests & deals"
+                                label="Special Offers"
+                                desc="Stay updated on new fruits and seasonal deals"
                             />
                         </div>
                     </div>
@@ -222,8 +242,8 @@ const Settings = ({ userData }) => {
                             </motion.div>
                         </div>
                         <div>
-                            <p className="text-gray-900 font-black text-xl tracking-tight">Ritual Coming Soon</p>
-                            <p className="text-gray-400 text-[10px] font-bold uppercase tracking-[0.3em]">Our architects are calibrating this sector</p>
+                            <p className="text-gray-900 font-black text-xl tracking-tight">Feature Coming Soon</p>
+                            <p className="text-gray-400 text-[10px] font-bold uppercase tracking-[0.3em]">We are working on this section</p>
                         </div>
                     </div>
                 );
@@ -234,10 +254,7 @@ const Settings = ({ userData }) => {
         <div className="flex flex-col lg:flex-row gap-10 animate-fadeIn min-h-[700px]">
             {/* Professional Sidebar Navigation */}
             <div className="lg:w-1/3 xl:w-1/4 space-y-4">
-                <div className="mb-8 px-4">
-                    <h3 className="text-3xl font-black text-gray-900 tracking-tighter">Account Settings</h3>
-                    <p className="text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.4em] mt-1">Manage your account details</p>
-                </div>
+
 
                 <div className="space-y-2">
                     {sections.map((section) => (
@@ -301,7 +318,7 @@ const Settings = ({ userData }) => {
                 </div>
             </div>
 
-            {/* Architectural Content Area */}
+            {/* Settings Content Area */}
             <div className="flex-1">
                 <motion.div
                     layout
@@ -348,7 +365,7 @@ const Settings = ({ userData }) => {
                     </div>
                     <div className="flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-[#B7A261]" />
-                        <span className="text-[9px] font-extrabold text-gray-400 uppercase tracking-widest italic">Global Node: 1A-4G</span>
+                        <span className="text-[9px] font-extrabold text-gray-400 uppercase tracking-widest italic">Server Status: Online</span>
                     </div>
                 </div>
             </div>

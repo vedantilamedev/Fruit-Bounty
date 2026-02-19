@@ -87,7 +87,7 @@ const Payments = ({ payments = [] }) => {
                     whileTap={{ scale: 0.95 }}
                     className="px-16 py-5 bg-[#3C7E44] text-white rounded-[2rem] font-bold text-xs uppercase tracking-[0.3em] shadow-2xl shadow-green-900/30"
                 >
-                    Sow First Ritual
+                    Make First Payment
                 </motion.button>
             </div>
         );
@@ -104,7 +104,7 @@ const Payments = ({ payments = [] }) => {
                         icon={TrendingUp}
                         trend="+12.5%"
                         color="bg-[#3C7E44]"
-                        label="Life-time fresh fuel"
+                        label="Total payment history"
                     />
                     <StatCard
                         title="Active Credits"
@@ -112,10 +112,10 @@ const Payments = ({ payments = [] }) => {
                         icon={Wallet}
                         trend="Balance"
                         color="bg-[#B7A261]"
-                        label="Treasury Credits"
+                        label="Wallet Credits"
                     />
                     <StatCard
-                        title="Savings Aura"
+                        title="Total Savings"
                         value="₹1,250"
                         icon={ShieldCheck}
                         trend="Verified"
@@ -129,7 +129,7 @@ const Payments = ({ payments = [] }) => {
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-12">
                             <div>
                                 <h3 className="text-3xl font-black text-gray-900 tracking-tighter mb-2">Transaction History</h3>
-                                <p className="text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.4em]">Tracing your financial harvest</p>
+                                <p className="text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.4em]">View your payment history</p>
                             </div>
 
                             <div className="flex flex-wrap items-center gap-4">
@@ -233,7 +233,7 @@ const Payments = ({ payments = [] }) => {
                                         <Sparkles size={32} />
                                     </div>
                                     <div>
-                                        <h5 className="text-xl font-black text-gray-900 tracking-tight">Need a Detailed Ledger?</h5>
+                                        <h5 className="text-xl font-black text-gray-900 tracking-tight">Need Payment History?</h5>
                                         <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mt-1">Download your annual harvest financial summary</p>
                                     </div>
                                 </div>
@@ -258,9 +258,9 @@ const Payments = ({ payments = [] }) => {
                             <div className="w-14 h-14 bg-white/10 backdrop-blur-xl rounded-2xl flex items-center justify-center mb-8 border border-white/20">
                                 <Landmark size={28} className="text-[#B7A261]" />
                             </div>
-                            <h3 className="text-4xl font-black tracking-tighter mb-4">Financial Aura Analysis</h3>
+                            <h3 className="text-4xl font-black tracking-tighter mb-4">Payment Analysis</h3>
                             <p className="text-white/60 text-base font-medium leading-relaxed mb-8">
-                                Your investments into the Fruit Bounty ecosystem have secured a <span className="text-white font-bold">100% Nutritive ROI</span>. Each transaction ritual directly feeds your personal wellness garden.
+                                Your payments for Fruit Bounty have secured a <span className="text-white font-bold">100% Quality Benefit</span>. Each payment helps maintain your fresh fruit supply.
                             </p>
                             <div className="flex flex-wrap gap-4">
                                 <div className="px-6 py-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 flex items-center gap-3">
@@ -284,7 +284,7 @@ const Payments = ({ payments = [] }) => {
                                 <div className="text-center z-10">
                                     <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#B7A261] mb-2">Total Yield</p>
                                     <p className="text-6xl font-black tracking-tighter">₹{totalInvested.toLocaleString()}</p>
-                                    <p className="text-[9px] font-bold uppercase tracking-[0.2em] opacity-40 mt-2">Verified Ledger</p>
+                                    <p className="text-[9px] font-bold uppercase tracking-[0.2em] opacity-40 mt-2">Verified History</p>
                                 </div>
                             </div>
                         </div>
@@ -322,8 +322,8 @@ const Payments = ({ payments = [] }) => {
                                         <CheckCircle size={12} />
                                     </div>
                                 </motion.div>
-                                <h3 className="text-3xl font-black tracking-tighter mb-1">Ritual Verified</h3>
-                                <p className="text-[#B7A261] text-[9px] font-black uppercase tracking-[0.4em]">Official Treasury Receipt</p>
+                                <h3 className="text-3xl font-black tracking-tighter mb-1">Payment Verified</h3>
+                                <p className="text-[#B7A261] text-[9px] font-black uppercase tracking-[0.4em]">Official Payment Receipt</p>
                                 <button
                                     onClick={() => setSelectedPayment(null)}
                                     className="absolute top-8 right-8 p-3 bg-white/5 hover:bg-white/10 rounded-full transition-colors group"
@@ -347,7 +347,7 @@ const Payments = ({ payments = [] }) => {
                                         <p className="text-sm font-black text-gray-900 tracking-tight">{selectedPayment.date}</p>
                                     </div>
                                     <div className="space-y-1 text-right">
-                                        <p className="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">Status Protocol</p>
+                                        <p className="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">Current Status</p>
                                         <p className={`text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full border inline-block ${statusStyles[selectedPayment.status]}`}>
                                             {selectedPayment.status}
                                         </p>
@@ -360,13 +360,13 @@ const Payments = ({ payments = [] }) => {
                                 </div>
 
                                 <div className="space-y-4">
-                                    <p className="text-[10px] font-extrabold text-[#B7A261] uppercase tracking-[0.2em] mb-4">Investment Breakdown</p>
+                                    <p className="text-[10px] font-extrabold text-[#B7A261] uppercase tracking-[0.2em] mb-4">Payment Breakdown</p>
                                     <div className="flex justify-between items-center text-xs font-bold text-gray-600">
-                                        <span>Base Ritual Price</span>
+                                        <span>Base Price</span>
                                         <span>₹{(selectedPayment.amount * 0.82).toFixed(2)}</span>
                                     </div>
                                     <div className="flex justify-between items-center text-xs font-bold text-gray-600">
-                                        <span>Institutional Tax (GST 18%)</span>
+                                        <span>Tax (GST 18%)</span>
                                         <span>₹{(selectedPayment.amount * 0.18).toFixed(2)}</span>
                                     </div>
                                     <div className="pt-4 flex justify-between items-end border-t border-gray-100">

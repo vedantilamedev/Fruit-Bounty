@@ -51,16 +51,16 @@ const Orders = ({ orders, onCancelOrder }) => {
     const StatCard = ({ title, value, icon: Icon, color, trend }) => (
         <motion.div
             whileHover={{ y: -5 }}
-            className="bg-white p-6 rounded-[2.5rem] border border-[#E8E4D9] shadow-sm relative overflow-hidden group"
+            className="bg-white p-6 rounded-none border border-[#E8E4D9] shadow-sm relative overflow-hidden group"
         >
-            <div className={`absolute -top-4 -right-4 w-24 h-24 ${color} opacity-[0.03] rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700`} />
+            <div className={`absolute -top-4 -right-4 w-24 h-24 ${color} opacity-[0.03] rounded-none blur-2xl group-hover:scale-150 transition-transform duration-700`} />
             <div className="relative z-10 flex justify-between items-start">
                 <div>
                     <p className="text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.2em] mb-2">{title}</p>
                     <h3 className="text-3xl font-bold text-gray-900 tracking-tight">{value}</h3>
                     {trend && <p className="text-[10px] mt-2 text-emerald-600 font-bold uppercase tracking-widest">{trend}</p>}
                 </div>
-                <div className={`w-12 h-12 rounded-2xl ${color} bg-opacity-10 flex items-center justify-center text-white overflow-hidden relative shadow-inner`}>
+                <div className={`w-12 h-12 rounded-none ${color} bg-opacity-10 flex items-center justify-center text-white overflow-hidden relative shadow-inner`}>
                     <div className={`absolute inset-0 ${color} opacity-20`} />
                     <Icon size={22} className={color.replace('bg-', 'text-')} strokeWidth={1.5} />
                 </div>
@@ -94,27 +94,27 @@ const Orders = ({ orders, onCancelOrder }) => {
             </div>
 
             {/* toolbar */}
-            <div className="bg-white p-4 lg:p-6 rounded-[3rem] border border-[#E8E4D9] shadow-xl shadow-green-900/5 flex flex-col lg:flex-row gap-6 items-center justify-between">
-                <div className="relative w-full lg:w-[450px]">
-                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[#B7A261]" size={18} />
+            <div className="bg-white p-2 lg:p-3 rounded-none border border-[#E8E4D9] shadow-sm flex flex-col lg:flex-row gap-4 items-center justify-between">
+                <div className="relative w-full lg:flex-1">
+                    <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-[#B7A261]" size={16} />
                     <input
                         type="text"
                         placeholder="Search by ID, item name or date..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-14 pr-6 py-4 bg-[#FBF8F2] border border-[#E8E4D9/60] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#3C7E44]/10 focus:border-[#3C7E44] transition-all text-sm placeholder:text-gray-400 font-medium"
+                        className="w-full pl-14 pr-6 py-4 bg-[#FBF8F2] border border-transparent rounded-none focus:outline-none focus:ring-1 focus:ring-[#3C7E44] transition-all text-xs placeholder:text-gray-400 font-bold uppercase tracking-widest"
                     />
                 </div>
 
-                <div className="flex items-center gap-2 overflow-x-auto w-full lg:w-auto px-2 lg:px-0 no-scrollbar">
+                <div className="flex items-center gap-0 w-full lg:w-auto px-1 lg:px-0 no-scrollbar overflow-x-auto">
                     {['All', 'Pending', 'Confirmed', 'Delivered', 'Canceled'].map((status) => (
                         <button
                             key={status}
                             onClick={() => setStatusFilter(status)}
-                            className={`px-6 py-3 rounded-2xl text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap border
+                            className={`px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] transition-all whitespace-nowrap border-r last:border-r-0
                                 ${statusFilter === status
-                                    ? 'bg-[#3C7E44] text-white border-transparent shadow-lg shadow-green-900/20'
-                                    : 'bg-white text-gray-500 border-[#E8E4D9] hover:border-[#3C7E44] hover:text-[#3C7E44]'
+                                    ? 'bg-[#3C7E44] text-white border-transparent'
+                                    : 'bg-white text-gray-400 border-[#E8E4D9] hover:bg-gray-50 hover:text-[#3C7E44]'
                                 }`}
                         >
                             {status}
@@ -130,9 +130,9 @@ const Orders = ({ orders, onCancelOrder }) => {
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="bg-white rounded-[3rem] border border-[#E8E4D9] p-20 text-center shadow-inner"
+                            className="bg-white rounded-none border border-[#E8E4D9] p-20 text-center shadow-inner"
                         >
-                            <div className="w-24 h-24 bg-[#FBF8F2] rounded-full flex items-center justify-center mx-auto mb-6 border border-[#E8E4D9]">
+                            <div className="w-24 h-24 bg-[#FBF8F2] rounded-none flex items-center justify-center mx-auto mb-6 border border-[#E8E4D9]">
                                 <ShoppingBag className="text-[#B7A261]/40" size={40} />
                             </div>
                             <h3 className="text-xl font-medium text-gray-900 mb-2 tracking-tight">Traces of your garden are missing</h3>
@@ -146,12 +146,12 @@ const Orders = ({ orders, onCancelOrder }) => {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: idx * 0.05 }}
-                                className="group bg-white rounded-[2.5rem] border border-[#E8E4D9] overflow-hidden hover:shadow-2xl hover:shadow-green-900/10 transition-all duration-500 cursor-pointer"
+                                className="group bg-white rounded-none border border-[#E8E4D9] overflow-hidden hover:shadow-2xl hover:shadow-green-900/10 transition-all duration-500 cursor-pointer"
                                 onClick={() => setSelectedOrder(order)}
                             >
                                 <div className="p-6 lg:p-8 flex flex-col md:flex-row items-center gap-6">
                                     {/* Order Thumbnail/Icon */}
-                                    <div className="w-20 h-20 bg-[#FBF8F2] rounded-3xl flex items-center justify-center border border-[#E8E4D9] shrink-0 group-hover:scale-110 transition-transform duration-500 relative overflow-hidden">
+                                    <div className="w-20 h-20 bg-[#FBF8F2] rounded-none flex items-center justify-center border border-[#E8E4D9] shrink-0 group-hover:scale-110 transition-transform duration-500 relative overflow-hidden">
                                         <div className="absolute inset-x-0 bottom-0 h-1 bg-[#3C7E44] opacity-0 group-hover:opacity-100 transition-opacity" />
                                         <Package className="text-[#3C7E44]" size={32} strokeWidth={1.5} />
                                     </div>
@@ -160,7 +160,7 @@ const Orders = ({ orders, onCancelOrder }) => {
                                     <div className="flex-1 text-center md:text-left">
                                         <div className="flex flex-col md:flex-row md:items-center gap-2 lg:gap-4 mb-2">
                                             <span className="text-xs font-bold text-[#B7A261] uppercase tracking-widest leading-none">Order #{order.id}</span>
-                                            <div className="hidden md:block w-1 h-1 rounded-full bg-gray-300" />
+                                            <div className="hidden md:block w-1 h-1 rounded-none bg-gray-300" />
                                             <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{formatDate(order.date)}</span>
                                         </div>
                                         <h4 className="text-lg lg:text-xl font-medium text-gray-900 tracking-tight mb-2">
@@ -182,7 +182,7 @@ const Orders = ({ orders, onCancelOrder }) => {
                                             </div>
                                             <motion.div
                                                 whileHover={{ x: 5 }}
-                                                className="w-12 h-12 rounded-full border border-[#E8E4D9] flex items-center justify-center text-[#3C7E44] group-hover:bg-[#3C7E44] group-hover:text-white group-hover:border-transparent transition-all duration-300"
+                                                className="w-12 h-12 rounded-none border border-[#E8E4D9] flex items-center justify-center text-[#3C7E44] group-hover:bg-[#3C7E44] group-hover:text-white group-hover:border-transparent transition-all duration-300"
                                             >
                                                 <ChevronRight size={20} />
                                             </motion.div>
@@ -211,7 +211,7 @@ const Orders = ({ orders, onCancelOrder }) => {
                             initial={{ opacity: 0, scale: 0.95, y: 30 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 30 }}
-                            className="relative bg-white w-full max-w-3xl rounded-[3rem] shadow-[0_25px_70px_-15px_rgba(60,126,68,0.25)] border border-[#E8E4D9] overflow-hidden overflow-y-auto max-h-[90vh]"
+                            className="relative bg-white w-full max-w-3xl rounded-none shadow-[0_25px_70px_-15px_rgba(60,126,68,0.25)] border border-[#E8E4D9] overflow-hidden overflow-y-auto max-h-[90vh]"
                         >
                             {/* Modal Header */}
                             <div className="bg-gradient-to-r from-[#3C7E44] to-[#244f2a] p-10 text-white relative overflow-hidden shrink-0">
@@ -238,10 +238,10 @@ const Orders = ({ orders, onCancelOrder }) => {
                             <div className="p-8 lg:p-12 space-y-10">
                                 {/* Dashboard-style Track Row */}
                                 <div className="flex flex-col md:flex-row gap-6 items-stretch">
-                                    <div className="flex-1 bg-[#FBF8F2] p-6 rounded-[2rem] border border-[#E8E4D9/50] flex flex-col justify-between">
+                                    <div className="flex-1 bg-[#FBF8F2] p-6 rounded-none border border-[#E8E4D9/50] flex flex-col justify-between">
                                         <p className="text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.2em] mb-4">Delivery Status</p>
                                         <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-[#3C7E44] shadow-sm">
+                                            <div className="w-12 h-12 bg-white rounded-none flex items-center justify-center text-[#3C7E44] shadow-sm">
                                                 <Truck size={24} strokeWidth={1.5} />
                                             </div>
                                             <div>
@@ -250,10 +250,10 @@ const Orders = ({ orders, onCancelOrder }) => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="flex-1 bg-[#f0f8f1] p-6 rounded-[2rem] border border-[#3C7E44]/10 flex flex-col justify-between">
+                                    <div className="flex-1 bg-[#f0f8f1] p-6 rounded-none border border-[#3C7E44]/10 flex flex-col justify-between">
                                         <p className="text-[10px] font-bold text-[#3C7E44] uppercase tracking-[0.2em] mb-4">Payment Journey</p>
                                         <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 bg-[#3C7E44] rounded-2xl flex items-center justify-center text-white shadow-lg">
+                                            <div className="w-12 h-12 bg-[#3C7E44] rounded-none flex items-center justify-center text-white shadow-lg">
                                                 <CreditCard size={24} strokeWidth={1.5} />
                                             </div>
                                             <div>
@@ -269,8 +269,8 @@ const Orders = ({ orders, onCancelOrder }) => {
                                     <h4 className="text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.2em]">Crate Contents</h4>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         {selectedOrder.items?.map((item, idx) => (
-                                            <div key={idx} className="flex items-center gap-4 p-5 bg-white border border-[#E8E4D9] rounded-3xl hover:border-[#3C7E44] transition-colors group/item">
-                                                <div className="w-14 h-14 bg-[#FBF8F2] rounded-2xl flex items-center justify-center text-[#3C7E44] group-hover/item:bg-[#3C7E44] group-hover/item:text-white transition-colors">
+                                            <div key={idx} className="flex items-center gap-4 p-5 bg-white border border-[#E8E4D9] rounded-none hover:border-[#3C7E44] transition-colors group/item">
+                                                <div className="w-14 h-14 bg-[#FBF8F2] rounded-none flex items-center justify-center text-[#3C7E44] group-hover/item:bg-[#3C7E44] group-hover/item:text-white transition-colors">
                                                     <Package size={24} strokeWidth={1.5} />
                                                 </div>
                                                 <div className="flex-1">
@@ -290,14 +290,14 @@ const Orders = ({ orders, onCancelOrder }) => {
                                     <motion.button
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
-                                        className="flex-1 py-4 bg-[#3C7E44] text-white rounded-[1.5rem] font-bold text-xs uppercase tracking-[0.2em] shadow-2xl shadow-green-900/20 flex items-center justify-center gap-3"
+                                        className="flex-1 py-4 bg-[#3C7E44] text-white rounded-none font-bold text-xs uppercase tracking-[0.2em] shadow-2xl shadow-green-900/20 flex items-center justify-center gap-3"
                                     >
                                         <Download size={16} /> Download Invoice
                                     </motion.button>
                                     <motion.button
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
-                                        className="flex-1 py-4 bg-white border border-[#E8E4D9] text-gray-700 rounded-[1.5rem] font-bold text-xs uppercase tracking-[0.2em] hover:bg-[#FBF8F2] transition-colors flex items-center justify-center gap-3"
+                                        className="flex-1 py-4 bg-white border border-[#E8E4D9] text-gray-700 rounded-none font-bold text-xs uppercase tracking-[0.2em] hover:bg-[#FBF8F2] transition-colors flex items-center justify-center gap-3"
                                     >
                                         <RefreshCcw size={16} className="text-[#B7A261]" /> Reorder Fresh Items
                                     </motion.button>
@@ -311,7 +311,7 @@ const Orders = ({ orders, onCancelOrder }) => {
                                                     setSelectedOrder(null);
                                                 }
                                             }}
-                                            className="flex-1 py-4 bg-rose-50 border border-rose-100 text-rose-600 rounded-[1.5rem] font-bold text-xs uppercase tracking-[0.2em] hover:bg-rose-100 transition-colors flex items-center justify-center gap-3"
+                                            className="flex-1 py-4 bg-rose-50 border border-rose-100 text-rose-600 rounded-none font-bold text-xs uppercase tracking-[0.2em] hover:bg-rose-100 transition-colors flex items-center justify-center gap-3"
                                         >
                                             <Ban size={16} /> Cancel Order
                                         </motion.button>
