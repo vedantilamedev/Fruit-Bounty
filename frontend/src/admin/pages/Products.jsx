@@ -29,7 +29,13 @@ function ImageWithFallback({ src, alt, className, style, ...rest }) {
 /* ------------------- Card ------------------- */
 function Card({ className, children, ...props }) {
   return (
-    <div className={cn("bg-white text-gray-800 flex flex-col gap-4 rounded-xl border shadow-sm", className)} {...props}>
+    <div
+      className={cn(
+        "bg-white text-gray-800 flex flex-col gap-4 rounded-xl border shadow-sm",
+        className
+      )}
+      {...props}
+    >
       {children}
     </div>
   );
@@ -91,6 +97,7 @@ function BowlForm({ bowl, onSave, onCancel }) {
   const [price, setPrice] = useState(bowl?.price || "");
   const [ingredients, setIngredients] = useState(bowl?.ingredients?.join(", ") || "");
   const [available, setAvailable] = useState(bowl?.available ?? true);
+  const [image, setImage] = useState(bowl?.image || "");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -99,7 +106,16 @@ function BowlForm({ bowl, onSave, onCancel }) {
       price: parseFloat(price),
       ingredients: ingredients.split(",").map((i) => i.trim()),
       available,
+      image,
     });
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setImage(url);
+    }
   };
 
   return (
@@ -129,6 +145,12 @@ function BowlForm({ bowl, onSave, onCancel }) {
             onChange={(e) => setIngredients(e.target.value)}
             required
           />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="border p-2 rounded"
+          />
           <div className="flex items-center gap-2">
             <Switch checked={available} onChange={setAvailable} />
             <span>Available</span>
@@ -151,12 +173,12 @@ function BowlForm({ bowl, onSave, onCancel }) {
 
 /* ------------------- Mock Data ------------------- */
 const mockBowls = [
-  { id: "1", name: "Tropical Paradise", ingredients: ["Mango", "Pineapple", "Kiwi", "Coconut"], price: 15.99, available: true, salesCount: 145, image: "tropical fruit bowl" },
-  { id: "2", name: "Berry Bliss", ingredients: ["Strawberry", "Blueberry", "Raspberry", "Banana"], price: 14.99, available: true, salesCount: 128, image: "berry fruit bowl" },
-  { id: "3", name: "Citrus Burst", ingredients: ["Orange", "Grapefruit", "Lemon", "Lime"], price: 13.99, available: true, salesCount: 98, image: "citrus fruit bowl" },
-  { id: "4", name: "Dragon Delight", ingredients: ["Dragon Fruit", "Papaya", "Mango", "Passion Fruit"], price: 18.99, available: true, salesCount: 87, image: "dragon fruit bowl" },
-  { id: "5", name: "Classic Mix", ingredients: ["Apple", "Banana", "Grapes", "Orange"], price: 12.99, available: true, salesCount: 76, image: "mixed fruit bowl" },
-  { id: "6", name: "Melon Medley", ingredients: ["Watermelon", "Cantaloupe", "Honeydew"], price: 13.99, available: false, salesCount: 65, image: "melon fruit bowl" },
+  { id: "1", name: "Tropical Paradise", ingredients: ["Mango", "Pineapple", "Kiwi", "Coconut"], price: 15.99, available: true, salesCount: 145, image: "" },
+  { id: "2", name: "Berry Bliss", ingredients: ["Strawberry", "Blueberry", "Raspberry", "Banana"], price: 14.99, available: true, salesCount: 128, image: "" },
+  { id: "3", name: "Citrus Burst", ingredients: ["Orange", "Grapefruit", "Lemon", "Lime"], price: 13.99, available: true, salesCount: 98, image: "" },
+  { id: "4", name: "Dragon Delight", ingredients: ["Dragon Fruit", "Papaya", "Mango", "Passion Fruit"], price: 18.99, available: true, salesCount: 87, image: "" },
+  { id: "5", name: "Classic Mix", ingredients: ["Apple", "Banana", "Grapes", "Orange"], price: 12.99, available: true, salesCount: 76, image: "" },
+  { id: "6", name: "Melon Medley", ingredients: ["Watermelon", "Cantaloupe", "Honeydew"], price: 13.99, available: false, salesCount: 65, image: "" },
 ];
 
 /* ------------------- Main Component ------------------- */
@@ -174,7 +196,7 @@ export default function FruitBowlMenu() {
     if (id) {
       setBowls(bowls.map((b) => (b.id === id ? { ...b, ...updated } : b)));
     } else {
-      setBowls([{ id: Date.now().toString(), salesCount: 0, image: "fruit bowl", ...updated }, ...bowls]);
+      setBowls([{ id: Date.now().toString(), salesCount: 0, ...updated }, ...bowls]);
     }
     setEditingBowl(null);
     setAddingBowl(false);
@@ -184,25 +206,25 @@ export default function FruitBowlMenu() {
     <div className="p-8">
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-800 mb-2">Fruit Bowl Menu</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Fruit Bowl Menu</h1>
         <p className="text-slate-500">Manage ready-made fruit bowl offerings</p>
       </motion.div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <Card className="p-6 text-center">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+        <Card className="p-6 text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
           <p className="text-sm text-slate-600 mb-1">Total Bowls</p>
           <h3 className="text-3xl font-bold text-slate-800">{bowls.length}</h3>
         </Card>
-        <Card className="p-6 text-center">
+        <Card className="p-6 text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
           <p className="text-sm text-slate-600 mb-1">Available</p>
           <h3 className="text-3xl font-bold text-green-600">{bowls.filter((b) => b.available).length}</h3>
         </Card>
-        <Card className="p-6 text-center">
+        <Card className="p-6 text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
           <p className="text-sm text-slate-600 mb-1">Unavailable</p>
           <h3 className="text-3xl font-bold text-orange-600">{bowls.filter((b) => !b.available).length}</h3>
         </Card>
-        <Card className="p-6 text-center">
+        <Card className="p-6 text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
           <p className="text-sm text-slate-600 mb-1">Avg Price</p>
           <h3 className="text-3xl font-bold text-slate-800">
             ₹{(bowls.reduce((sum, b) => sum + b.price, 0) / bowls.length).toFixed(2)}
@@ -211,7 +233,7 @@ export default function FruitBowlMenu() {
       </div>
 
       {/* Bowl Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {bowls.map((bowl, index) => (
           <motion.div
             key={bowl.id}
@@ -219,10 +241,11 @@ export default function FruitBowlMenu() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 + index * 0.05 }}
           >
-            <Card className="overflow-hidden hover:shadow-xl transition-all duration-300">
+            <Card className="overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               <div className="relative h-48 bg-gradient-to-br from-green-100 to-emerald-100 overflow-hidden">
                 <ImageWithFallback
-                  src={`https://source.unsplash.com/800x600/?${encodeURIComponent(bowl.image)}`}
+                  key={bowl.image} // <-- key added to force re-render when image changes
+                  src={bowl.image || `https://source.unsplash.com/800x600/?${encodeURIComponent(bowl.name)}`}
                   alt={bowl.name}
                   className="w-full h-full object-cover"
                 />
@@ -284,7 +307,7 @@ export default function FruitBowlMenu() {
         >
           <Card
             onClick={() => setAddingBowl(true)}
-            className="h-full flex items-center justify-center p-6 border-2 border-dashed border-slate-300 hover:border-green-400 hover:bg-green-50/30 transition-all duration-300 cursor-pointer"
+            className="h-full flex items-center justify-center p-6 border-2 border-dashed border-slate-300 hover:border-green-400 hover:bg-green-50/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
           >
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600 text-3xl">
