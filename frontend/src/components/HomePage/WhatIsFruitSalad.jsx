@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Leaf, Sparkles, Apple } from "lucide-react";
+import { Sprout, HeartPulse, Salad } from "lucide-react";
 
 function WhatIsFruitSalad() {
   const sectionRef = useRef(null);
@@ -19,7 +19,7 @@ function WhatIsFruitSalad() {
 
   const cards = [
     {
-      icon: <Leaf size={28} />,
+      icon: <Sprout size={30} strokeWidth={2.2} />,
       title: "100% Natural",
       desc1:
         "Made using only fresh, preservative-free fruits sourced from trusted farms.",
@@ -27,14 +27,14 @@ function WhatIsFruitSalad() {
         "No artificial colors or added sugars — just pure, clean nutrition.",
     },
     {
-      icon: <Sparkles size={28} />,
+      icon: <HeartPulse size={30} strokeWidth={2.2} />,
       title: "Vitamin Rich",
       desc1:
         "Packed with essential vitamins, fiber and antioxidants for overall wellness.",
       desc2: "Supports immunity, digestion and natural daily energy levels.",
     },
     {
-      icon: <Apple size={28} />,
+      icon: <Salad size={30} strokeWidth={2.2} />,
       title: "Freshly Prepared",
       desc1: "Cut and mixed daily to maintain maximum freshness and flavor.",
       desc2: "Delivered fresh so you experience peak taste every time.",
@@ -46,7 +46,7 @@ function WhatIsFruitSalad() {
       ref={sectionRef}
       className="relative py-16 md:py-20 px-6 md:px-16 lg:px-24 bg-[#FBF8F2] overflow-hidden"
     >
-      {/* Soft Background Texture */}
+      {/* Background Texture */}
       <div className="absolute inset-0 opacity-40 pointer-events-none bg-[radial-gradient(circle_at_20%_30%,rgba(34,197,94,0.08),transparent_40%),radial-gradient(circle_at_80%_70%,rgba(16,185,129,0.08),transparent_40%)]"></div>
 
       {/* ================= Heading ================= */}
@@ -65,7 +65,6 @@ function WhatIsFruitSalad() {
           carefully selected to provide a perfect balance of flavor, texture,
           and nutrition.
         </p>
-
       </div>
 
       {/* ================= Cards ================= */}
@@ -87,7 +86,8 @@ function WhatIsFruitSalad() {
             <div className="bg-white rounded-3xl p-8 shadow-md hover:-translate-y-3 hover:shadow-2xl transition-all duration-500 flex flex-col h-full group">
               {/* Icon */}
               <div className="relative mb-6 flex justify-center">
-                <div className="absolute w-20 h-20 rounded-full bg-green-200 blur-xl opacity-40 group-hover:opacity-70 transition"></div>
+                <div className="absolute w-20 h-20 rounded-full bg-green-300 blur-xl opacity-30 group-hover:opacity-50 transition"></div>
+
                 <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center text-green-700 relative z-10 group-hover:scale-110 transition duration-300">
                   {card.icon}
                 </div>
