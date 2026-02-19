@@ -94,224 +94,214 @@ const Payments = ({ payments = [] }) => {
     }
 
     return (
-        <div className="space-y-12 animate-fadeIn pb-24">
-            {/* Professional Stats Row */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <StatCard
-                    title="Treasury Root"
-                    value={`₹${totalInvested.toLocaleString()}`}
-                    icon={Landmark}
-                    color="bg-[#3C7E44]"
-                    trend="+12.5%"
-                    label="Lifecycle Investment"
-                />
-                <StatCard
-                    title="Active Aura"
-                    value={`₹${payments[0]?.amount || 0}`}
-                    icon={Sparkles}
-                    color="bg-[#B7A261]"
-                    trend="Verified"
-                    label="Latest Transaction"
-                />
-                <StatCard
-                    title="Ritual Health"
-                    value="Elite"
-                    icon={ShieldCheck}
-                    color="bg-emerald-500"
-                    trend="Stable"
-                    label="Payment Trust Score"
-                />
-            </div>
-
-            {/* Treasury Control Panel */}
-            <div className="space-y-6">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div className="flex items-center gap-4">
-                        <div className="w-2 h-10 bg-[#3C7E44] rounded-full shadow-lg shadow-green-900/20" />
-                        <div>
-                            <h3 className="text-3xl font-black text-gray-900 tracking-tighter">Financial Ledger</h3>
-                            <p className="text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.4em] mt-1">Institutional Transaction History</p>
-                        </div>
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-4 w-full md:w-auto">
-                        <div className="relative flex-1 md:w-72">
-                            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-                            <input
-                                type="text"
-                                placeholder="Search Links or Channels..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-12 pr-4 py-4 bg-white border border-[#E8E4D9] rounded-2xl text-[11px] font-bold placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#3C7E44]/10 transition-all shadow-sm"
-                            />
-                        </div>
-                        <div className="flex items-center gap-2 bg-gray-50 p-1.5 rounded-2xl border border-gray-100">
-                            {['All', 'Success', 'Pending', 'Failed'].map(status => (
-                                <button
-                                    key={status}
-                                    onClick={() => setFilterStatus(status)}
-                                    className={`px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${filterStatus === status
-                                        ? 'bg-white text-[#3C7E44] shadow-md shadow-gray-200/50'
-                                        : 'text-gray-400 hover:text-gray-600'
-                                        }`}
-                                >
-                                    {status}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
+        <>
+            <div className="space-y-12 animate-fadeIn pb-24">
+                {/* Professional Stats Row */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <StatCard
+                        title="Total Investment"
+                        value={`₹${totalInvested.toLocaleString()}`}
+                        icon={TrendingUp}
+                        trend="+12.5%"
+                        color="bg-[#3C7E44]"
+                        label="Life-time fresh fuel"
+                    />
+                    <StatCard
+                        title="Active Credits"
+                        value="₹840.00"
+                        icon={Wallet}
+                        trend="Balance"
+                        color="bg-[#B7A261]"
+                        label="Treasury Credits"
+                    />
+                    <StatCard
+                        title="Savings Aura"
+                        value="₹1,250"
+                        icon={ShieldCheck}
+                        trend="Verified"
+                        color="bg-[#3C7E44]"
+                        label="Eco Member Discount"
+                    />
                 </div>
 
-                {/* Ledger Body */}
-                <div className="bg-white rounded-[4rem] border border-[#E8E4D9] shadow-2xl shadow-black/[0.02] overflow-hidden">
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left border-separate border-spacing-0">
-                            <thead>
-                                <tr className="bg-[#FBF8F2]/50">
-                                    <th className="px-8 py-8 text-[10px] font-extrabold text-[#B7A261] uppercase tracking-[0.3em] border-b border-[#E8E4D9]/40">Treasury ID</th>
-                                    <th className="px-8 py-8 text-[10px] font-extrabold text-[#B7A261] uppercase tracking-[0.3em] border-b border-[#E8E4D9]/40">Verification</th>
-                                    <th className="px-8 py-8 text-[10px] font-extrabold text-[#B7A261] uppercase tracking-[0.3em] border-b border-[#E8E4D9]/40">Net Value</th>
-                                    <th className="px-8 py-8 text-[10px] font-extrabold text-[#B7A261] uppercase tracking-[0.3em] border-b border-[#E8E4D9]/40">Ritual Channel</th>
-                                    <th className="px-8 py-8 text-[10px] font-extrabold text-[#B7A261] uppercase tracking-[0.3em] border-b border-[#E8E4D9]/40">Status</th>
-                                    <th className="px-8 py-8 text-[10px] font-extrabold text-[#B7A261] uppercase tracking-[0.3em] border-b border-[#E8E4D9]/40 text-center">Protocol</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-[#E8E4D9]/30">
-                                {filteredPayments.map((payment) => {
-                                    const branding = methodBranding[payment.method] || methodBranding.Default;
-                                    const MethodIcon = branding.icon;
+                <div className="bg-white rounded-[3.5rem] border border-[#E8E4D9] shadow-2xl shadow-green-900/5 overflow-hidden">
+                    <div className="p-8 lg:p-12">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-12">
+                            <div>
+                                <h3 className="text-3xl font-black text-gray-900 tracking-tighter mb-2">Transaction History</h3>
+                                <p className="text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.4em]">Tracing your financial harvest</p>
+                            </div>
 
-                                    return (
+                            <div className="flex flex-wrap items-center gap-4">
+                                <div className="relative group">
+                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-[#3C7E44] transition-colors" size={18} />
+                                    <input
+                                        type="text"
+                                        placeholder="Search by ID or Method..."
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        className="pl-12 pr-6 py-4 bg-[#FBF8F2] border border-[#E8E4D9] rounded-2xl text-xs font-bold focus:ring-2 focus:ring-[#3C7E44]/20 outline-none w-full md:w-64 transition-all"
+                                    />
+                                </div>
+                                <div className="flex bg-[#FBF8F2] p-1.5 rounded-2xl border border-[#E8E4D9]">
+                                    {['All', 'Success', 'Pending', 'Failed'].map((status) => (
+                                        <button
+                                            key={status}
+                                            onClick={() => setFilterStatus(status)}
+                                            className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filterStatus === status ? 'bg-[#3C7E44] text-white shadow-lg' : 'text-gray-400 hover:text-gray-600'}`}
+                                        >
+                                            {status}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left">
+                                <thead>
+                                    <tr className="border-b border-gray-100">
+                                        <th className="pb-6 text-[10px] font-black text-[#B7A261] uppercase tracking-[0.2em] px-4">Receipt ID</th>
+                                        <th className="pb-6 text-[10px] font-black text-[#B7A261] uppercase tracking-[0.2em] px-4">Harvest Date</th>
+                                        <th className="pb-6 text-[10px] font-black text-[#B7A261] uppercase tracking-[0.2em] px-4">Amount</th>
+                                        <th className="pb-6 text-[10px] font-black text-[#B7A261] uppercase tracking-[0.2em] px-4">Method</th>
+                                        <th className="pb-6 text-[10px] font-black text-[#B7A261] uppercase tracking-[0.2em] px-4">Status</th>
+                                        <th className="pb-6 text-right text-[10px] font-black text-[#B7A261] uppercase tracking-[0.2em] px-4">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-50 border-b border-gray-100 mb-8">
+                                    {filteredPayments.map((payment) => (
                                         <motion.tr
                                             key={payment.id}
-                                            whileHover={{ backgroundColor: '#FBF8F2' }}
-                                            className="transition-colors group cursor-default"
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            className="group hover:bg-[#FBF8F2]/50 transition-colors"
                                         >
-                                            <td className="px-8 py-7">
+                                            <td className="py-6 px-4">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-[#3C7E44] opacity-40 group-hover:scale-150 transition-transform" />
-                                                    <span className="text-xs font-black text-gray-900 tracking-tight">#{payment.id}</span>
+                                                    <div className="w-10 h-10 bg-[#3C7E44]/5 rounded-xl flex items-center justify-center text-[#3C7E44]">
+                                                        <Receipt size={18} />
+                                                    </div>
+                                                    <span className="text-xs font-bold text-gray-900 group-hover:text-[#3C7E44] transition-colors">#{payment.id}</span>
                                                 </div>
                                             </td>
-                                            <td className="px-8 py-7">
-                                                <div className="flex items-center gap-2 text-gray-400 group-hover:text-gray-900 transition-colors">
-                                                    <Calendar size={14} className="text-[#B7A261]" />
-                                                    <span className="text-xs font-bold uppercase tracking-widest">{payment.date}</span>
+                                            <td className="py-6 px-4 text-xs font-medium text-gray-500 uppercase tracking-widest">{payment.date}</td>
+                                            <td className="py-6 px-4 text-sm font-black text-gray-900">₹{payment.amount.toLocaleString()}</td>
+                                            <td className="py-6 px-4">
+                                                <div className="flex items-center gap-2">
+                                                    <div className={`${methodBranding[payment.method]?.bg || methodBranding.Default.bg} p-1.5 rounded-lg`}>
+                                                        {React.createElement(methodBranding[payment.method]?.icon || methodBranding.Default.icon, { size: 14, className: methodBranding[payment.method]?.color || methodBranding.Default.color })}
+                                                    </div>
+                                                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{payment.method}</span>
                                                 </div>
                                             </td>
-                                            <td className="px-8 py-7">
-                                                <div className="flex flex-col">
-                                                    <span className="text-xl font-black text-[#3C7E44] tracking-tighter">₹{payment.amount.toLocaleString()}</span>
-                                                    <span className="text-[9px] font-bold text-gray-300 uppercase tracking-widest">Digital INR</span>
-                                                </div>
-                                            </td>
-                                            <td className="px-8 py-7">
-                                                <div className={`inline-flex items-center gap-2.5 px-3 py-1.5 rounded-xl border ${branding.bg} ${branding.color} ${branding.border} shadow-sm group-hover:shadow-md transition-all`}>
-                                                    <MethodIcon size={14} strokeWidth={2.5} />
-                                                    <span className="text-[10px] font-extrabold uppercase tracking-widest">{payment.method}</span>
-                                                </div>
-                                            </td>
-                                            <td className="px-8 py-7">
-                                                <span className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] border shadow-sm ${statusStyles[payment.status] || 'bg-gray-50 text-gray-600'}`}>
+                                            <td className="py-6 px-4">
+                                                <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-[9px] font-black uppercase tracking-widest ${statusStyles[payment.status]}`}>
                                                     {getStatusIcon(payment.status)}
                                                     {payment.status}
-                                                </span>
-                                            </td>
-                                            <td className="px-8 py-7 text-center">
-                                                <div className="flex items-center justify-center gap-3">
-                                                    <motion.button
-                                                        whileHover={{ scale: 1.1, backgroundColor: '#3C7E44', color: '#fff' }}
-                                                        whileTap={{ scale: 0.9 }}
-                                                        onClick={() => setSelectedPayment(payment)}
-                                                        className="p-3.5 rounded-[1.25rem] bg-gray-50 text-gray-400 border border-gray-100 transition-all flex items-center gap-2 group/btn"
-                                                    >
-                                                        <Eye size={18} />
-                                                        <span className="text-[10px] font-extrabold uppercase tracking-widest hidden lg:group-hover/btn:block">Inspect Receipt</span>
-                                                    </motion.button>
-                                                    <motion.button
-                                                        whileHover={{ scale: 1.1, y: -2 }}
-                                                        whileTap={{ scale: 0.9 }}
-                                                        className="p-3.5 rounded-[1.25rem] bg-gray-50 text-gray-400 border border-gray-100 transition-all hover:text-[#B7A261]"
-                                                    >
-                                                        <Download size={18} />
-                                                    </motion.button>
                                                 </div>
                                             </td>
+                                            <td className="py-6 px-4 text-right">
+                                                <button
+                                                    onClick={() => setSelectedPayment(payment)}
+                                                    className="p-3 bg-white border border-[#E8E4D9] rounded-xl text-gray-600 hover:text-[#3C7E44] hover:border-[#3C7E44] transition-all hover:scale-110 shadow-sm"
+                                                >
+                                                    <Eye size={18} />
+                                                </button>
+                                            </td>
                                         </motion.tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
-                    {filteredPayments.length === 0 && (
-                        <div className="py-20 text-center bg-gray-50/50">
-                            <div className="mb-4 inline-flex p-6 bg-white rounded-full border border-dashed border-gray-200">
-                                <Search size={32} className="text-gray-300" />
-                            </div>
-                            <p className="text-gray-500 font-bold text-sm">No transaction ritual matches your search.</p>
-                            <p className="text-gray-400 text-[10px] mt-1 font-bold uppercase tracking-widest">Refine your audit or clear filters</p>
+                                    ))}
+                                </tbody>
+                            </table>
+
+                            {filteredPayments.length === 0 && (
+                                <div className="py-20 text-center">
+                                    <div className="w-20 h-20 bg-[#F7F5EF] rounded-3xl flex items-center justify-center mx-auto mb-6 text-[#B7A261] opacity-40">
+                                        <Search size={32} />
+                                    </div>
+                                    <h4 className="text-xl font-bold text-gray-900 mb-2">No Transactions Found</h4>
+                                    <p className="text-gray-400 text-sm font-medium">Try adjusting your search or filters.</p>
+                                </div>
+                            )}
                         </div>
-                    )}
+
+                        <div className="mt-12 p-10 bg-[#FBF8F2] rounded-[3rem] border border-[#E8E4D9] relative overflow-hidden group">
+                            <div className="absolute top-0 right-0 w-48 h-48 bg-[#3C7E44]/5 rounded-full blur-3xl -mr-24 -mt-24 group-hover:scale-150 transition-transform duration-1000" />
+                            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                                <div className="flex items-center gap-6">
+                                    <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-[#B7A261] shadow-xl shadow-amber-900/5">
+                                        <Sparkles size={32} />
+                                    </div>
+                                    <div>
+                                        <h5 className="text-xl font-black text-gray-900 tracking-tight">Need a Detailed Ledger?</h5>
+                                        <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mt-1">Download your annual harvest financial summary</p>
+                                    </div>
+                                </div>
+                                <button className="px-10 py-5 bg-gray-900 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest hover:bg-black transition-colors shadow-2xl shadow-black/20 flex items-center gap-3">
+                                    <Download size={18} /> Export FY 2025-26
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-gradient-to-br from-[#1a472a] to-[#2d5a3f] p-12 rounded-[4rem] text-white overflow-hidden relative group shadow-2xl shadow-green-900/20"
+                >
+                    <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full blur-3xl -mr-32 -mt-32" />
+                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#B7A261]/10 rounded-full blur-[100px] -ml-20 -mb-20" />
+
+                    <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">
+                        <div className="max-w-md">
+                            <div className="w-14 h-14 bg-white/10 backdrop-blur-xl rounded-2xl flex items-center justify-center mb-8 border border-white/20">
+                                <Landmark size={28} className="text-[#B7A261]" />
+                            </div>
+                            <h3 className="text-4xl font-black tracking-tighter mb-4">Financial Aura Analysis</h3>
+                            <p className="text-white/60 text-base font-medium leading-relaxed mb-8">
+                                Your investments into the Fruit Bounty ecosystem have secured a <span className="text-white font-bold">100% Nutritive ROI</span>. Each transaction ritual directly feeds your personal wellness garden.
+                            </p>
+                            <div className="flex flex-wrap gap-4">
+                                <div className="px-6 py-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 flex items-center gap-3">
+                                    <ShieldCheck size={18} className="text-emerald-400" />
+                                    <span className="text-xs font-bold uppercase tracking-widest text-[#B7A261]">SSL SECURED</span>
+                                </div>
+                                <div className="px-6 py-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 flex items-center gap-3">
+                                    <Zap size={18} className="text-violet-400" />
+                                    <span className="text-xs font-bold uppercase tracking-widest text-[#B7A261]">INSTANT Verification</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="relative">
+                            <div className="w-72 h-72 bg-white/5 backdrop-blur-2xl rounded-full border border-white/10 flex items-center justify-center relative shadow-2xl overflow-hidden group">
+                                <motion.div
+                                    animate={{ rotate: 360 }}
+                                    transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+                                    className="absolute inset-0 border-[6px] border-dashed border-[#B7A261]/20 rounded-full"
+                                />
+                                <div className="text-center z-10">
+                                    <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#B7A261] mb-2">Total Yield</p>
+                                    <p className="text-6xl font-black tracking-tighter">₹{totalInvested.toLocaleString()}</p>
+                                    <p className="text-[9px] font-bold uppercase tracking-[0.2em] opacity-40 mt-2">Verified Ledger</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </motion.div>
             </div>
-
-            {/* Premium Insight Section - Only for Expert Overhaul */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-gradient-to-br from-[#1a472a] to-[#2d5a3f] p-12 rounded-[4rem] text-white overflow-hidden relative group shadow-2xl shadow-green-900/20"
-            >
-                <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full blur-3xl -mr-32 -mt-32" />
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#B7A261]/10 rounded-full blur-[100px] -ml-20 -mb-20" />
-
-                <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">
-                    <div className="max-w-md">
-                        <div className="w-14 h-14 bg-white/10 backdrop-blur-xl rounded-2xl flex items-center justify-center mb-8 border border-white/20">
-                            <Landmark size={28} className="text-[#B7A261]" />
-                        </div>
-                        <h3 className="text-4xl font-black tracking-tighter mb-4">Financial Aura Analysis</h3>
-                        <p className="text-white/60 text-base font-medium leading-relaxed mb-8">
-                            Your investments into the Fruit Bounty ecosystem have secured a <span className="text-white font-bold">100% Nutritive ROI</span>. Each transaction ritual directly feeds your personal wellness garden.
-                        </p>
-                        <div className="flex flex-wrap gap-4">
-                            <div className="px-6 py-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 flex items-center gap-3">
-                                <ShieldCheck size={18} className="text-emerald-400" />
-                                <span className="text-xs font-bold uppercase tracking-widest text-[#B7A261]">SSL SECURED</span>
-                            </div>
-                            <div className="px-6 py-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 flex items-center gap-3">
-                                <Zap size={18} className="text-violet-400" />
-                                <span className="text-xs font-bold uppercase tracking-widest text-[#B7A261]">INSTANT Verification</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="relative">
-                        <div className="w-72 h-72 bg-white/5 backdrop-blur-2xl rounded-full border border-white/10 flex items-center justify-center relative shadow-2xl overflow-hidden group">
-                            <motion.div
-                                animate={{ rotate: 360 }}
-                                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-                                className="absolute inset-0 border-[6px] border-dashed border-[#B7A261]/20 rounded-full"
-                            />
-                            <div className="text-center z-10">
-                                <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#B7A261] mb-2">Total Yield</p>
-                                <p className="text-6xl font-black tracking-tighter">₹{totalInvested.toLocaleString()}</p>
-                                <p className="text-[9px] font-bold uppercase tracking-[0.2em] opacity-40 mt-2">Verified Ledger</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </motion.div>
 
             {/* Receipt Modal - Advanced Breakdown */}
             <AnimatePresence>
                 {selectedPayment && (
-                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                    <div className="fixed top-0 left-0 w-full h-full z-[100] flex items-center justify-center p-4">
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setSelectedPayment(null)}
-                            className="fixed inset-0 bg-[#1a472a]/20 backdrop-blur-xl z-[-1]"
+                            className="absolute inset-0 bg-[#1a472a]/40 z-[-1]"
                         />
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9, y: 30 }}
@@ -379,7 +369,7 @@ const Payments = ({ payments = [] }) => {
                                         <span>Institutional Tax (GST 18%)</span>
                                         <span>₹{(selectedPayment.amount * 0.18).toFixed(2)}</span>
                                     </div>
-                                    <div className="pt-4 flex justify-between items-end">
+                                    <div className="pt-4 flex justify-between items-end border-t border-gray-100">
                                         <div>
                                             <p className="text-[10px] font-black text-gray-900 uppercase tracking-widest mb-1">Net Investment</p>
                                             <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Tax Inclusive</p>
@@ -400,7 +390,7 @@ const Payments = ({ payments = [] }) => {
                     </div>
                 )}
             </AnimatePresence>
-        </div>
+        </>
     );
 };
 
