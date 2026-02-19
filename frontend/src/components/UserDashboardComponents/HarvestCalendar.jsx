@@ -45,24 +45,17 @@ const HarvestCalendar = () => {
     ];
 
     const renderHeader = () => (
-        <div className="flex flex-col lg:flex-row items-center justify-between mb-10 gap-6 px-2">
-            <div className="flex items-center gap-6">
-                <div>
-                    <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Harvest Ecosystem</h2>
-                    <div className="text-[#B7A261] font-bold text-[10px] mt-1 uppercase tracking-[0.2em] flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#B7A261] animate-ping" />
-                        Live Orchard Tracking
-                    </div>
-                </div>
-                <div className="h-10 w-px bg-gray-100 hidden lg:block" />
-                <div className="flex items-center gap-2 bg-gray-50 p-1 rounded-2xl border border-gray-100">
+        <div className="grid grid-cols-1 lg:grid-cols-3 items-center mb-10 gap-6 px-2">
+            {/* Filter Group - Left */}
+            <div className="flex justify-start">
+                <div className="flex items-center gap-2 bg-[#FBF8F2] p-1.5 rounded-[1.5rem] border border-[#E8E4D9]">
                     {['all', 'harvest', 'delivery'].map((type) => (
                         <button
                             key={type}
                             onClick={() => setFilter(type)}
-                            className={`px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${filter === type
-                                ? 'bg-white text-[#3C7E44] shadow-sm'
-                                : 'text-gray-400 hover:text-gray-600'
+                            className={`px-6 py-2.5 rounded-[1.2rem] text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${filter === type
+                                ? 'bg-white text-[#3C7E44] shadow-md shadow-green-900/5 ring-1 ring-black/5'
+                                : 'text-gray-400 hover:text-gray-600 hover:bg-white/50'
                                 }`}
                         >
                             {type}
@@ -71,36 +64,41 @@ const HarvestCalendar = () => {
                 </div>
             </div>
 
-            <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-2xl border border-[#E8E4D9] shadow-sm">
+            {/* Month Navigation - Center */}
+            <div className="flex justify-center">
+                <div className="flex items-center gap-1 bg-white p-1 rounded-[1.5rem] border border-[#E8E4D9] shadow-sm">
                     <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
+                        whileHover={{ scale: 1.05, backgroundColor: '#FBF8F2' }}
+                        whileTap={{ scale: 0.95 }}
                         onClick={prevMonth}
-                        className="p-1.5 text-gray-400 hover:text-[#3C7E44] transition-colors"
+                        className="p-3 text-gray-400 hover:text-[#3C7E44] transition-colors rounded-[1rem]"
                     >
                         <ChevronLeft size={18} />
                     </motion.button>
-                    <span className="text-sm font-bold text-gray-900 min-w-[140px] text-center">
+                    <span className="text-[11px] font-black uppercase tracking-[0.2em] text-gray-900 min-w-[160px] text-center">
                         {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
                     </span>
                     <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
+                        whileHover={{ scale: 1.05, backgroundColor: '#FBF8F2' }}
+                        whileTap={{ scale: 0.95 }}
                         onClick={nextMonth}
-                        className="p-1.5 text-gray-400 hover:text-[#3C7E44] transition-colors"
+                        className="p-3 text-gray-400 hover:text-[#3C7E44] transition-colors rounded-[1rem]"
                     >
                         <ChevronRight size={18} />
                     </motion.button>
                 </div>
+            </div>
 
+            {/* Quick Action Button - Right */}
+            <div className="flex justify-end">
                 <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => navigate('/customize')}
-                    className="px-6 py-3.5 bg-[#3C7E44] text-white rounded-2xl text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl shadow-green-900/20 flex items-center gap-2 group"
+                    className="px-8 py-4 bg-[#3C7E44] text-white rounded-[1.5rem] text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-green-900/20 flex items-center gap-3 group transition-all duration-300"
                 >
-                    <ShoppingCart size={14} className="group-hover:rotate-12 transition-transform" /> Quick Order
+                    <ShoppingCart size={15} className="group-hover:rotate-12 transition-transform" strokeWidth={2.5} />
+                    Quick Order
                 </motion.button>
             </div>
         </div>
@@ -117,7 +115,12 @@ const HarvestCalendar = () => {
 
         // Previous month days placeholder
         for (let i = 0; i < startDay; i++) {
-            cells.push(<div key={`empty-${i}`} className="h-28 lg:h-36 bg-[#FBF8F2]/30 rounded-[2rem] border border-dashed border-[#E8E4D9]/50" />);
+            cells.push(
+                <div
+                    key={`empty-${i}`}
+                    className="aspect-square bg-gray-50/50 rounded-none border border-dashed border-gray-200/60"
+                />
+            );
         }
 
         // Current month days
@@ -126,68 +129,72 @@ const HarvestCalendar = () => {
             const event = harvestEvents[dateStr];
             const isSelected = selectedDate.getDate() === day && selectedDate.getMonth() === month && selectedDate.getFullYear() === year;
             const isToday = new Date().toDateString() === new Date(year, month, day).toDateString();
-
             const isFilteredOut = filter !== 'all' && event && event.type !== filter;
 
             cells.push(
                 <motion.div
                     key={day}
                     onClick={() => setSelectedDate(new Date(year, month, day))}
-                    whileHover={{ y: -4 }}
-                    className={`h-28 lg:h-36 p-4 relative cursor-pointer rounded-[2rem] border transition-all duration-300 group overflow-hidden
+                    whileHover={{ scale: 1.02, zIndex: 10 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                    className={`aspect-square p-3 lg:p-4 relative cursor-pointer rounded-none border transition-all duration-300 group
                         ${isSelected
-                            ? 'bg-white border-[#3C7E44] shadow-2xl shadow-green-900/10'
-                            : 'bg-white border-[#E8E4D9] hover:border-[#3C7E44]/40 hover:shadow-xl hover:shadow-green-900/5'
+                            ? 'bg-white border-[#3C7E44] shadow-[0_20px_50px_rgba(60,126,68,0.15)] ring-2 ring-[#3C7E44]/10'
+                            : 'bg-white border-gray-100 hover:border-[#3C7E44]/30 hover:shadow-lg'
                         }
-                        ${isFilteredOut ? 'opacity-30 grayscale-[0.5]' : ''}
+                        ${isFilteredOut ? 'opacity-20 grayscale' : 'opacity-100'}
                     `}
                 >
-                    <div className="flex justify-between items-start">
-                        <span className={`text-xs font-bold rounded-xl w-8 h-8 flex items-center justify-center transition-colors
-                            ${isToday ? 'bg-[#3C7E44] text-white' : isSelected ? 'text-white bg-[#B7A261]' : 'text-gray-400 group-hover:text-gray-900'}
+                    {/* Day Number */}
+                    <div className="flex justify-between items-start mb-1">
+                        <span className={`text-[11px] font-black w-6 h-6 flex items-center justify-center rounded-none transition-colors
+                            ${isToday ? 'bg-[#3C7E44] text-white shadow-md' : isSelected ? 'text-[#3C7E44] bg-[#3C7E44]/5' : 'text-gray-400 group-hover:text-gray-900'}
                         `}>
                             {day}
                         </span>
-                        {isToday && <div className="w-1.5 h-1.5 rounded-full bg-[#B7A261]" />}
-                    </div>
-
-                    <div className="mt-4 flex flex-col gap-1.5">
                         {event && (
-                            <motion.div
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                className={`flex items-center gap-2 p-2 rounded-xl border ${event.type === 'harvest'
-                                    ? 'bg-amber-50 border-amber-100 text-[#B7A261]'
-                                    : 'bg-emerald-50 border-emerald-100 text-[#3C7E44]'
-                                    }`}
-                            >
-                                <div className="text-xs">
-                                    {event.type === 'harvest' ? (event.icon || <Leaf size={10} />) : <Truck size={10} />}
-                                </div>
-                                <span className="text-[9px] font-bold uppercase tracking-wider truncate">{event.title}</span>
-                            </motion.div>
+                            <div className={`w-1.5 h-1.5 rounded-none ${event.type === 'harvest' ? 'bg-amber-400' : 'bg-[#3C7E44]'}`} />
                         )}
                     </div>
 
-                    {isSelected && (
-                        <div className="absolute top-0 right-0 p-2">
-                            <Sparkles size={12} className="text-[#B7A261] animate-pulse" />
+                    {/* Event Preview Icon - Centered */}
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20 group-hover:opacity-40 transition-opacity">
+                        {event && (
+                            <div className="text-3xl lg:text-4xl filter grayscale group-hover:grayscale-0 transition-all duration-500">
+                                {event.type === 'harvest' ? (event.icon || '🌲') : '🚚'}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Bottom Indicator for Events */}
+                    {event && (
+                        <div className="absolute bottom-2 left-0 right-0 px-2">
+                            <div className={`h-1 w-full rounded-none opacity-20 ${event.type === 'harvest' ? 'bg-amber-400' : 'bg-[#3C7E44]'}`} />
                         </div>
+                    )}
+
+                    {isSelected && (
+                        <motion.div
+                            layoutId="glow"
+                            className="absolute inset-0 rounded-none border-2 border-[#3C7E44] pointer-events-none"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                        />
                     )}
                 </motion.div>
             );
         }
 
         return (
-            <div className="bg-white p-8 rounded-[4rem] border border-[#E8E4D9] shadow-xl shadow-green-900/5">
-                <div className="grid grid-cols-7 mb-8 px-4">
+            <div className="bg-white p-6 lg:p-10 rounded-none border border-[#E8E4D9] shadow-xl shadow-green-900/5">
+                <div className="grid grid-cols-7 mb-6 gap-3 lg:gap-4 px-1">
                     {days.map(day => (
-                        <div key={day} className="text-center text-[10px] font-bold text-gray-300 uppercase tracking-[0.3em]">
+                        <div key={day} className="text-center text-[10px] font-black text-gray-300 uppercase tracking-[0.25em]">
                             {day}
                         </div>
                     ))}
                 </div>
-                <div className="grid grid-cols-7 gap-4">
+                <div className="grid grid-cols-7 gap-2 lg:gap-4">
                     {cells}
                 </div>
             </div>
@@ -199,11 +206,11 @@ const HarvestCalendar = () => {
         const event = harvestEvents[dateStr];
 
         return (
-            <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-10">
+            <div className="mt-12">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="lg:col-span-8 bg-white rounded-[3.5rem] p-10 border border-[#E8E4D9] shadow-xl shadow-green-900/5 relative overflow-hidden"
+                    className="w-full bg-white rounded-none p-10 border border-[#E8E4D9] shadow-xl shadow-green-900/5 relative overflow-hidden"
                 >
                     <div className="flex flex-col lg:flex-row gap-10 items-start">
                         <div className="bg-[#FBF8F2] p-8 rounded-[2.5rem] min-w-[200px] text-center border border-[#E8E4D9] relative overflow-hidden group">
@@ -232,7 +239,7 @@ const HarvestCalendar = () => {
                                                         : 'bg-emerald-50 text-[#3C7E44] border-emerald-100'}
                                                 `}>
                                                     {event.type === 'harvest' ? <Leaf size={12} /> : <Truck size={12} />}
-                                                    {event.type === 'harvest' ? 'Direct Orchard Harvest' : 'Luxury Subscription Delivery'}
+                                                    {event.type === 'harvest' ? 'Fresh Orchard Harvest' : 'Scheduled Delivery'}
                                                 </span>
                                                 <div className="bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100 flex items-center gap-2">
                                                     <Clock size={12} className="text-[#B7A261]" />
@@ -242,7 +249,7 @@ const HarvestCalendar = () => {
                                             <h3 className="text-4xl font-black text-gray-900 tracking-tighter mb-2">{event.title}</h3>
                                             <div className="flex items-center gap-2 text-gray-400">
                                                 <MapPin size={14} className="text-[#B7A261]" />
-                                                <span className="text-xs font-bold uppercase tracking-widest">{event.locality || 'Orchard Hub'}</span>
+                                                <span className="text-xs font-bold uppercase tracking-widest">{event.locality || 'Orchard Location'}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -250,13 +257,13 @@ const HarvestCalendar = () => {
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                                         <div>
                                             <h4 className="text-[10px] font-extrabold text-[#B7A261] uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-                                                <Zap size={14} /> Ecosystem Report
+                                                <Zap size={14} /> Description
                                             </h4>
-                                            <p className="text-gray-500 text-sm font-medium leading-relaxed">{event.desc || `The ${event.title} is currently scheduled and verified by our system.`}</p>
+                                            <p className="text-gray-500 text-sm font-medium leading-relaxed">{event.desc || `The ${event.title} is currently scheduled and ready for you.`}</p>
                                         </div>
                                         <div>
                                             <h4 className="text-[10px] font-extrabold text-[#B7A261] uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-                                                <Package size={14} /> Crate Manifest
+                                                <Package size={14} /> What's in the box
                                             </h4>
                                             <div className="flex flex-wrap gap-2">
                                                 {event.items.map((item, idx) => (
@@ -277,14 +284,14 @@ const HarvestCalendar = () => {
                                             className="flex-1 py-5 bg-[#3C7E44] text-white rounded-[1.5rem] text-[11px] font-bold uppercase tracking-[0.2em] shadow-2xl shadow-green-900/30 flex items-center justify-center gap-3 group/btn"
                                         >
                                             <ShoppingBag size={18} className="group-hover/btn:-rotate-12 transition-transform" />
-                                            Initialize Pre-Order
+                                            Order Now
                                         </motion.button>
                                         <motion.button
                                             whileHover={{ scale: 1.02 }}
                                             whileTap={{ scale: 0.98 }}
                                             className="px-10 py-5 bg-white border border-[#E8E4D9] text-gray-900 rounded-[1.5rem] text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-gray-50 transition-all flex items-center justify-center gap-3"
                                         >
-                                            <Info size={16} className="text-[#B7A261]" /> Ritual Details
+                                            <Info size={16} className="text-[#B7A261]" /> More Info
                                         </motion.button>
                                     </div>
                                 </>
@@ -295,7 +302,7 @@ const HarvestCalendar = () => {
                                     </div>
                                     <div>
                                         <h3 className="text-2xl font-bold text-gray-900 tracking-tight">Open Harvest Window</h3>
-                                        <p className="text-gray-400 text-sm font-medium mt-1 max-w-[280px] mx-auto">No specific ritual scheduled for this day, but nature never rests.</p>
+                                        <p className="text-gray-400 text-sm font-medium mt-1 max-w-[280px] mx-auto">No specific events scheduled for this day.</p>
                                     </div>
                                     <motion.button
                                         whileHover={{ scale: 1.05 }}
@@ -310,53 +317,6 @@ const HarvestCalendar = () => {
                         </div>
                     </div>
                 </motion.div>
-
-                <div className="lg:col-span-4 space-y-6">
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className="bg-gradient-to-br from-[#1a472a] to-[#2d5a3f] p-10 rounded-[3.5rem] text-white relative overflow-hidden h-full flex flex-col justify-between group shadow-2xl shadow-green-900/20"
-                    >
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-20 -mt-20 group-hover:scale-125 transition-transform duration-1000" />
-                        <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full blur-2xl -ml-10 -mb-10" />
-
-                        <div className="relative z-10">
-                            <div className="w-16 h-16 bg-white/10 backdrop-blur-xl rounded-[2rem] flex items-center justify-center mb-8 border border-white/20 shadow-2xl">
-                                <Gem size={32} className="text-[#B7A261]" />
-                            </div>
-                            <h4 className="text-3xl font-bold tracking-tight mb-4">Seasonal Rituals</h4>
-                            <p className="text-white/60 text-sm font-medium leading-relaxed mb-10">
-                                Our orchards follow the lunar calendar and precise soil moisture readings. All dates are optimized for peak nutritional density.
-                            </p>
-
-                            <div className="space-y-4 mb-10">
-                                <div className="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm">
-                                    <CheckCircle size={20} className="text-[#B7A261]" />
-                                    <div>
-                                        <p className="text-[10px] font-bold uppercase tracking-widest text-[#B7A261]">Orchard Quality</p>
-                                        <p className="text-sm font-bold text-white">98% Ripeness Index</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm">
-                                    <Navigation size={20} className="text-[#B7A261]" />
-                                    <div>
-                                        <p className="text-[10px] font-bold uppercase tracking-widest text-[#B7A261]">Current Hub</p>
-                                        <p className="text-sm font-bold text-white">Main Valley Groves</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <motion.button
-                            whileHover={{ scale: 1.02, x: 5 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => setIsGuideOpen(true)}
-                            className="relative z-10 w-full py-5 bg-white text-[#1a472a] rounded-[1.5rem] text-[11px] font-extrabold uppercase tracking-[0.2em] shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 group/btn"
-                        >
-                            Open Seasonal Atlas <ArrowRight size={18} className="group-hover/btn:translate-x-2 transition-transform" />
-                        </motion.button>
-                    </motion.div>
-                </div>
             </div>
         );
     };
@@ -395,8 +355,8 @@ const HarvestCalendar = () => {
                                             <CalendarIcon size={32} className="text-[#B7A261]" />
                                         </div>
                                         <div>
-                                            <h3 className="text-4xl font-black tracking-tighter">Harvest Atlas 2026</h3>
-                                            <p className="text-green-100/60 font-bold text-[10px] uppercase tracking-[0.3em] mt-2">The rhythmic synchronization of nature</p>
+                                            <h3 className="text-4xl font-black tracking-tighter">Seasonal Guide 2026</h3>
+                                            <p className="text-green-100/60 font-bold text-[10px] uppercase tracking-[0.3em] mt-2">Best fruits available each season</p>
                                         </div>
                                     </div>
                                     <motion.button
@@ -447,7 +407,7 @@ const HarvestCalendar = () => {
                                     onClick={() => setIsGuideOpen(false)}
                                     className="px-8 py-3 bg-[#3C7E44] text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-[#2f6131] transition-colors shadow-lg shadow-green-900/10"
                                 >
-                                    Dismiss Atlas
+                                    Close Guide
                                 </motion.button>
                             </div>
                         </motion.div>
