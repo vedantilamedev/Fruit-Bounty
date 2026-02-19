@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-    Package, Users, Calendar, Check, XCircle,
+    Package, Users, User, Calendar, Check, XCircle,
     Zap, Award, ArrowUpCircle, Star, Sparkles,
     ChevronRight, ArrowRight, ShieldCheck,
     Clock, RefreshCcw, TrendingUp, Gem
@@ -8,43 +8,10 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Packages = ({ activePackage }) => {
+    const [isSixMonth, setIsSixMonth] = useState(false);
     const [isCompareOpen, setIsCompareOpen] = useState(false);
 
-    const upgradeTiers = [
-        {
-            id: 'starter',
-            name: "Wellness Starter",
-            price: "₹999",
-            period: "Monthly",
-            description: "Essential seasonal harvest for individuals starting their wellness journey.",
-            features: ["5 Seasonal Fruits", "Weekly Delivery", "Standard Packaging", "Market Updates"],
-            color: "from-blue-600 to-indigo-700",
-            tag: "BEGINNER CHOICE",
-            icon: Package
-        },
-        {
-            id: 'family',
-            name: "Family Bounty",
-            price: "₹2499",
-            period: "Monthly",
-            description: "Abundant variety designed to satisfy the health of your entire tribe.",
-            features: ["12 Multi-category Fruits", "Bi-weekly Delivery", "Eco Crates", "Priority Support"],
-            color: "from-[#B7A261] to-[#8c7a42]",
-            tag: "BEST VALUE",
-            icon: Users
-        },
-        {
-            id: 'elite',
-            name: "Elite Harvest",
-            price: "₹3499",
-            period: "Monthly",
-            description: "For true connoisseurs seeking the rarest orchard selections.",
-            features: ["Exotic Fruits", "Priority Next-Day", "Fruit Sommelier", "Lifetime Fees"],
-            color: "from-[#3C7E44] to-[#1a472a]",
-            tag: "MOST POPULAR",
-            icon: Gem
-        }
-    ];
+
 
     const StatCard = ({ title, value, icon: Icon, color, subtitle }) => (
         <motion.div
@@ -221,18 +188,55 @@ const Packages = ({ activePackage }) => {
                         <Gem size={18} className="text-[#3C7E44]" />
                         <span className="text-[10px] font-bold text-gray-900 uppercase tracking-[0.2em]">Upgrade Your Harvest Ritual</span>
                     </div>
-                    <h2 className="text-4xl font-black text-gray-900 tracking-tighter text-center">Architect Your Freshness Aura</h2>
+                    <h2 className="text-4xl font-black text-gray-900 tracking-tighter text-center mb-8">Architect Your Freshness Aura</h2>
+
+                    {/* Duration Toggle */}
+                    <div className="flex items-center gap-4 bg-white p-2 rounded-2xl border border-[#E8E4D9] shadow-sm">
+                        <button
+                            onClick={() => setIsSixMonth(false)}
+                            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${!isSixMonth ? 'bg-[#3C7E44] text-white shadow-lg' : 'text-gray-400 hover:text-gray-600'}`}
+                        >
+                            Monthly
+                        </button>
+                        <button
+                            onClick={() => setIsSixMonth(true)}
+                            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${isSixMonth ? 'bg-[#3C7E44] text-white shadow-lg' : 'text-gray-400 hover:text-gray-600'}`}
+                        >
+                            6 Months
+                        </button>
+                    </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 px-2 lg:px-0">
-                    {upgradeTiers.map((tier, idx) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto px-4 lg:px-0">
+                    {[
+                        {
+                            id: 'individual',
+                            name: "Personal Plan",
+                            price: isSixMonth ? 2499 : 499,
+                            description: "Tailored for solo health enthusiasts. Enjoy a personalized selection of nature's best daily.",
+                            features: ["Fresh and Handpicked Fruits", "Custom Fruit Bowl Designs", "Guaranteed Next-Day Delivery", "Personal Wellness Dashboard"],
+                            color: "from-[#3C7E44] to-[#2d5a3f]",
+                            tag: "INDIVIDUAL",
+                            icon: User
+                        },
+                        {
+                            id: 'corporate',
+                            name: "Corporate Plan",
+                            price: isSixMonth ? 7999 : 1499,
+                            description: "Fuel your team with premium fruit arrangements. Perfect for meetings and office wellness.",
+                            features: ["Bulk Team Arrangements", "Meeting-Ready Displays", "Priority Support", "Custom Branding Options"],
+                            color: "from-[#B7A261] to-[#8c7a42]",
+                            tag: "TEAM BOUNTY",
+                            icon: Users
+                        }
+                    ].map((tier, idx) => (
                         <motion.div
                             key={tier.id}
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: idx * 0.1 }}
                             whileHover={{ y: -10 }}
-                            className="bg-white rounded-[3rem] border border-[#E8E4D9] p-8 lg:p-10 shadow-xl shadow-green-900/5 flex flex-col items-stretch relative overflow-hidden group/plan"
+                            className="bg-white rounded-[3rem] border border-[#E8E4D9] p-10 lg:p-14 shadow-xl shadow-green-900/5 flex flex-col items-stretch relative overflow-hidden group/plan"
                         >
                             <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${tier.color} opacity-[0.03] rounded-full -mr-16 -mt-16 group-hover/plan:scale-150 transition-transform duration-700`} />
 
@@ -240,29 +244,30 @@ const Packages = ({ activePackage }) => {
                                 <span className="bg-[#3C7E44]/5 text-[#3C7E44] px-4 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest mb-6 inline-block">
                                     {tier.tag}
                                 </span>
-                                <div className="flex items-center gap-4 mb-3">
-                                    <div className={`w-12 h-12 bg-gradient-to-br ${tier.color} rounded-2xl flex items-center justify-center text-white shadow-lg`}>
-                                        <tier.icon size={24} strokeWidth={1.5} />
+                                <div className="flex items-center gap-4 mb-4">
+                                    <div className={`w-14 h-14 bg-gradient-to-br ${tier.color} rounded-2xl flex items-center justify-center text-white shadow-lg`}>
+                                        <tier.icon size={28} strokeWidth={1.5} />
                                     </div>
-                                    <h5 className="text-2xl font-bold text-gray-900 tracking-tight">{tier.name}</h5>
+                                    <h5 className="text-3xl font-bold text-gray-900 tracking-tight">{tier.name}</h5>
                                 </div>
-                                <p className="text-gray-400 text-xs font-medium leading-relaxed">{tier.description}</p>
+                                <p className="text-gray-400 text-sm font-medium leading-relaxed">{tier.description}</p>
                             </div>
 
                             <div className="mb-10 pb-8 border-b border-gray-100">
                                 <div className="flex items-baseline gap-1">
-                                    <span className="text-4xl font-black text-gray-900 tracking-tighter">{tier.price}</span>
-                                    <span className="text-gray-400 text-xs font-bold uppercase tracking-wider">/ Every {tier.period}</span>
+                                    <span className="text-5xl font-black text-gray-900 tracking-tighter">₹{tier.price}</span>
+                                    <span className="text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em] ml-2">/ {isSixMonth ? '6 Months' : 'Month'}</span>
                                 </div>
+                                {isSixMonth && <p className="text-emerald-600 text-[10px] font-black uppercase tracking-widest mt-2">Save up to 20% on bi-annual plans</p>}
                             </div>
 
                             <div className="space-y-4 mb-12 flex-1">
                                 {tier.features.map((feature, fIdx) => (
                                     <div key={fIdx} className="flex items-center gap-4">
-                                        <div className="w-5 h-5 bg-emerald-50 rounded-lg flex items-center justify-center shrink-0">
-                                            <Check size={12} className="text-[#3C7E44]" strokeWidth={4} />
+                                        <div className="w-6 h-6 bg-emerald-50 rounded-lg flex items-center justify-center shrink-0">
+                                            <Check size={14} className="text-[#3C7E44]" strokeWidth={4} />
                                         </div>
-                                        <span className="text-[13px] font-bold text-gray-700">{feature}</span>
+                                        <span className="text-sm font-bold text-gray-700">{feature}</span>
                                     </div>
                                 ))}
                             </div>
@@ -270,13 +275,13 @@ const Packages = ({ activePackage }) => {
                             <motion.button
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                className={`w-full py-5 rounded-[1.5rem] font-bold text-[11px] uppercase tracking-[0.2em] shadow-xl transition-all flex items-center justify-center gap-2 group/btn
-                                    ${tier.id === 'elite'
+                                className={`w-full py-6 rounded-[2rem] font-bold text-xs uppercase tracking-[0.2em] shadow-xl transition-all flex items-center justify-center gap-3 group/btn
+                                    ${tier.id === 'corporate'
                                         ? 'bg-[#3C7E44] text-white shadow-green-900/20 hover:bg-[#2f6131]'
                                         : 'bg-white border border-[#E8E4D9] text-[#3C7E44] hover:bg-[#FBF8F2]'
                                     }`}
                             >
-                                Ascend Ritual <ArrowRight size={16} className="group-hover/btn:translate-x-1.5 transition-transform" />
+                                Activate Plan <ArrowRight size={18} className="group-hover/btn:translate-x-2 transition-transform" />
                             </motion.button>
                         </motion.div>
                     ))}
