@@ -11,6 +11,7 @@ import LocationDrawer from "./components/LocationDrawer";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import AdminLogin from "./pages/AdminLogin";
 import ForgotPassword from "./pages/ForgotPassword"; // New Import
 import Fruits from "./pages/Fruits";
 import Cart from "./pages/Cart";
@@ -22,6 +23,7 @@ import ContactUs from "./pages/ContactUs";
 import FruitShop from "./pages/FruitShop";
 import CustomBowlPage from "./pages/CustomBowlPage";
 import Dashboard from "./pages/UserDashboard/Dashboard";
+
 
 function AppContent() {
   const [locationOpen, setLocationOpen] = useState(false);
@@ -68,6 +70,7 @@ function AppContent() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/adminlogin" element={<AdminLogin />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/fruits" element={<Fruits />} />
             <Route path="/shop" element={<FruitShop />} />
