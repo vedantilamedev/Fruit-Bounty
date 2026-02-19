@@ -21,7 +21,7 @@ const Dashboard = () => {
         email: "aditya@fruitbounty.com",
         phone: "+91 98765 43210",
         activePackage: {
-            name: "Premium Wellness Plan",
+            name: "1 Month Individual Plan",
             type: "Individual",
             peopleCount: 1,
             duration: "Monthly",
@@ -41,9 +41,7 @@ const Dashboard = () => {
         ]
     });
 
-
-
-    const orders = [
+    const [orders, setOrders] = useState([
         {
             id: "ORD-2026-105",
             date: "2026-02-16",
@@ -98,7 +96,13 @@ const Dashboard = () => {
             deliveryDate: "2026-02-18",
             items: [{ name: "Berry Blast Box", qty: 1 }]
         }
-    ];
+    ]);
+
+    const handleCancelOrder = (orderId) => {
+        setOrders(prev => prev.map(order =>
+            order.id === orderId ? { ...order, status: 'Canceled' } : order
+        ));
+    };
 
     const menuItems = [
         { id: 'overview', label: 'Dashboard', icon: Home, subtitle: "Managing your organic freshness" },
@@ -118,7 +122,7 @@ const Dashboard = () => {
             case 'calendar':
                 return <HarvestCalendar />;
             case 'orders':
-                return <Orders orders={orders} />;
+                return <Orders orders={orders} onCancelOrder={handleCancelOrder} />;
             case 'packages':
                 return <Packages activePackage={userData.activePackage} />;
             case 'payments':
@@ -178,7 +182,7 @@ const Dashboard = () => {
                             <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-[#3C7E44]/10 transition-colors">
                                 <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
                             </div>
-                            <span className="text-xs font-black uppercase tracking-[0.2em]">Home Portal</span>
+                            <span className="text-xs font-black uppercase tracking-[0.2em]">Back to Home</span>
                         </Link>
                     </div>
 
@@ -216,7 +220,7 @@ const Dashboard = () => {
             {/* Overlay for mobile sidebar */}
             {isMobileMenuOpen && (
                 <div
-                    className="fixed inset-0 bg-black/40 z-40 lg:hidden backdrop-blur-md transition-opacity duration-300"
+                    className="fixed inset-0 bg-black/60 z-40 lg:hidden transition-opacity duration-300"
                     onClick={() => setIsMobileMenuOpen(false)}
                 />
             )}
