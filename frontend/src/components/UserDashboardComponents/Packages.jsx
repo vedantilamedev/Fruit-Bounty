@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     Package, Users, User, Calendar, Check, XCircle,
     Zap, Award, ArrowUpCircle, Star, Sparkles,
@@ -8,6 +9,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Packages = ({ activePackage }) => {
+    const navigate = useNavigate();
     const [isSixMonth, setIsSixMonth] = useState(false);
     const [isCompareOpen, setIsCompareOpen] = useState(false);
 
@@ -39,10 +41,10 @@ const Packages = ({ activePackage }) => {
                 <div className="bg-[#F7F5EF] p-8 rounded-[2rem] mb-6 shadow-sm">
                     <Package size={64} className="text-[#B7A261] opacity-40" strokeWidth={1} />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2 tracking-tight">No Active Harvest Ritual</h3>
-                <p className="text-gray-500 text-sm max-w-xs mb-8">Reconnect with nature's rhythm by choosing a subscription plan.</p>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2 tracking-tight">No Active Harvest Plan</h3>
+                <p className="text-gray-500 text-sm max-w-xs mb-8">Reconnect with fresh fruit by choosing a subscription plan.</p>
                 <button className="px-12 py-4 bg-[#3C7E44] text-white rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:bg-[#2f6131] transition-all duration-300 shadow-2xl shadow-green-900/20">
-                    Explore Rituals
+                    Explore Plans
                 </button>
             </div>
         );
@@ -51,7 +53,7 @@ const Packages = ({ activePackage }) => {
     return (
         <div className="space-y-10 animate-fadeIn pb-16">
             {/* Executive Status Header */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <StatCard
                     title="Active Plan"
                     value={activePackage.name}
@@ -60,18 +62,11 @@ const Packages = ({ activePackage }) => {
                     subtitle={`Valid until ${activePackage.endDate}`}
                 />
                 <StatCard
-                    title="Next Ritual"
+                    title="Next Delivery"
                     value={activePackage.renewalDate}
                     icon={RefreshCcw}
                     color="bg-[#B7A261]"
                     subtitle="Automatic Renewal"
-                />
-                <StatCard
-                    title="Bounty Limit"
-                    value={`${activePackage.fruits.length} Varieties`}
-                    icon={TrendingUp}
-                    color="bg-[#3C7E44]"
-                    subtitle="Orchard Fresh Only"
                 />
             </div>
 
@@ -92,14 +87,14 @@ const Packages = ({ activePackage }) => {
 
                             <div className="mt-12 space-y-6">
                                 <div className="p-5 bg-white/10 rounded-3xl border border-white/10 backdrop-blur-sm">
-                                    <p className="text-[9px] font-bold uppercase tracking-widest opacity-60 mb-2">Cycle Cadence</p>
+                                    <p className="text-[9px] font-bold uppercase tracking-widest opacity-60 mb-2">Delivery Schedule</p>
                                     <div className="flex items-center justify-between">
                                         <span className="text-xl font-bold">{activePackage.frequency}</span>
                                         <Zap size={20} className="text-[#B7A261]" />
                                     </div>
                                 </div>
                                 <div className="p-5 bg-white/10 rounded-3xl border border-white/10 backdrop-blur-sm">
-                                    <p className="text-[9px] font-bold uppercase tracking-widest opacity-60 mb-2">Renewal Flow</p>
+                                    <p className="text-[9px] font-bold uppercase tracking-widest opacity-60 mb-2">Renewal Period</p>
                                     <div className="flex items-center justify-between">
                                         <span className="text-xl font-bold">{activePackage.duration}</span>
                                         <Clock size={20} className="text-[#B7A261]" />
@@ -114,15 +109,15 @@ const Packages = ({ activePackage }) => {
                         <div className="flex flex-col lg:flex-row gap-10">
                             {/* Capabilities */}
                             <div className="flex-1 space-y-6">
-                                <h4 className="text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.2em] mb-6">Plan Topology</h4>
+                                <h4 className="text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.2em] mb-6">Plan Benefits</h4>
                                 <div className="grid grid-cols-1 gap-4">
                                     <div className="flex items-center gap-5 p-6 bg-white rounded-3xl border border-gray-100 shadow-sm">
                                         <div className="w-12 h-12 bg-[#3C7E44]/5 rounded-2xl flex items-center justify-center text-[#3C7E44]">
                                             <Users size={24} strokeWidth={1.5} />
                                         </div>
                                         <div>
-                                            <p className="font-bold text-gray-900 leading-none">{activePackage.type} Aura</p>
-                                            <p className="text-xs text-gray-400 font-medium mt-1">Sustaining {activePackage.peopleCount} Senses</p>
+                                            <p className="font-bold text-gray-900 leading-none">{activePackage.type} Plan</p>
+                                            <p className="text-xs text-gray-400 font-medium mt-1">Perfect for {activePackage.peopleCount} People</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-5 p-6 bg-white rounded-3xl border border-gray-100 shadow-sm">
@@ -130,17 +125,17 @@ const Packages = ({ activePackage }) => {
                                             <ShieldCheck size={24} strokeWidth={1.5} />
                                         </div>
                                         <div>
-                                            <p className="font-bold text-gray-900 leading-none">Protection Ritual</p>
-                                            <p className="text-xs text-gray-400 font-medium mt-1">Transit & Quality Guarantee</p>
+                                            <p className="font-bold text-gray-900 leading-none">Quality Guarantee</p>
+                                            <p className="text-xs text-gray-400 font-medium mt-1">Freshness & Safety Guaranteed</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Bounty Manifest */}
+                            {/* Box Contents */}
                             <div className="flex-1">
                                 <div className="flex items-center justify-between mb-6">
-                                    <h4 className="text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.2em]">Crate Manifest</h4>
+                                    <h4 className="text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.2em]">Box Contents</h4>
                                     <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{activePackage.fruits.length} Items</span>
                                 </div>
                                 <div className="grid grid-cols-1 gap-2.5">
@@ -183,31 +178,14 @@ const Packages = ({ activePackage }) => {
 
             {/* Professional Upgrade Path */}
             <div className="pt-20">
-                <div className="flex flex-col items-center mb-16">
-                    <div className="inline-flex items-center gap-3 px-6 py-2 bg-white rounded-full border border-[#E8E4D9] shadow-sm mb-6">
+                <div className="flex flex-col items-center mb-8">
+                    <div className="inline-flex items-center gap-3 px-6 py-2 bg-white rounded-full border border-[#E8E4D9] shadow-sm">
                         <Gem size={18} className="text-[#3C7E44]" />
-                        <span className="text-[10px] font-bold text-gray-900 uppercase tracking-[0.2em]">Upgrade Your Harvest Ritual</span>
-                    </div>
-                    <h2 className="text-4xl font-black text-gray-900 tracking-tighter text-center mb-8">Architect Your Freshness Aura</h2>
-
-                    {/* Duration Toggle */}
-                    <div className="flex items-center gap-4 bg-white p-2 rounded-2xl border border-[#E8E4D9] shadow-sm">
-                        <button
-                            onClick={() => setIsSixMonth(false)}
-                            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${!isSixMonth ? 'bg-[#3C7E44] text-white shadow-lg' : 'text-gray-400 hover:text-gray-600'}`}
-                        >
-                            Monthly
-                        </button>
-                        <button
-                            onClick={() => setIsSixMonth(true)}
-                            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${isSixMonth ? 'bg-[#3C7E44] text-white shadow-lg' : 'text-gray-400 hover:text-gray-600'}`}
-                        >
-                            6 Months
-                        </button>
+                        <span className="text-[10px] font-bold text-gray-900 uppercase tracking-[0.2em]">Available Upgrade</span>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto px-4 lg:px-0">
+                <div className="grid grid-cols-1 gap-10 max-w-2xl mx-auto px-4 lg:px-0">
                     {[
                         {
                             id: 'individual',
@@ -229,7 +207,7 @@ const Packages = ({ activePackage }) => {
                             tag: "TEAM BOUNTY",
                             icon: Users
                         }
-                    ].map((tier, idx) => (
+                    ].filter(tier => tier.id !== activePackage.type.toLowerCase()).map((tier, idx) => (
                         <motion.div
                             key={tier.id}
                             initial={{ opacity: 0, y: 30 }}
@@ -275,6 +253,7 @@ const Packages = ({ activePackage }) => {
                             <motion.button
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
+                                onClick={() => navigate('/subscription')} // Added onClick handler
                                 className={`w-full py-6 rounded-[2rem] font-bold text-xs uppercase tracking-[0.2em] shadow-xl transition-all flex items-center justify-center gap-3 group/btn
                                     ${tier.id === 'corporate'
                                         ? 'bg-[#3C7E44] text-white shadow-green-900/20 hover:bg-[#2f6131]'

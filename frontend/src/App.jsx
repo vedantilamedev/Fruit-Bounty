@@ -26,17 +26,17 @@ import PlanCustomization from "./pages/PlanCustomization";
 import ContactUs from "./pages/ContactUs";
 import FruitShop from "./pages/FruitShop";
 import CustomBowlPage from "./pages/CustomBowlPage";
-import CartPage from "./pages/CartPage";
 import Dashboard from "./pages/UserDashboard/Dashboard";
+
+// ❗ Add this if you really have CartPage
+// import CartPage from "./pages/CartPage";
 
 import AdminRoutes from "./admin/routes/AdminRoutes";
 
 // ---------------- Layout Wrapper ----------------
-
 function Layout({ children }) {
   const [locationOpen, setLocationOpen] = useState(false);
   const location = useLocation();
-
   const isAdmin = location.pathname.startsWith("/admin");
 
   useEffect(() => {
@@ -51,8 +51,6 @@ function Layout({ children }) {
 
   return (
     <div className="w-full bg-[#FBF8F2] relative">
-
-      {/* Header only for user site */}
       {!isAdmin && (
         <>
           <div className="fixed top-0 left-0 w-full z-40">
@@ -67,7 +65,6 @@ function Layout({ children }) {
         </>
       )}
 
-      {/* Page Content */}
       <main
         className={`min-h-screen overflow-x-hidden ${
           !isAdmin ? "pt-[120px] lg:pt-[110px]" : ""
@@ -76,7 +73,6 @@ function Layout({ children }) {
         {children}
       </main>
 
-      {/* Footer only for user site */}
       {!isAdmin && (
         <>
           <Footer />
@@ -90,14 +86,12 @@ function Layout({ children }) {
 }
 
 // ---------------- App ----------------
-
 export default function App() {
   return (
     <Router>
       <Layout>
         <Routes>
-
-          {/* User Website Routes */}
+          {/* User Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -110,12 +104,12 @@ export default function App() {
           <Route path="/plancustomization" element={<PlanCustomization />} />
           <Route path="/contactus" element={<ContactUs />} />
           <Route path="/customize" element={<CustomBowlPage />} />
-          <Route path="/cart-page" element={<CartPage />} />
+          {/* Remove if not using CartPage */}
+          {/* <Route path="/cart-page" element={<CartPage />} /> */}
           <Route path="/dashboard" element={<Dashboard />} />
 
-          {/* Admin Panel */}
+          {/* Admin */}
           <Route path="/admin/*" element={<AdminRoutes />} />
-
         </Routes>
       </Layout>
     </Router>

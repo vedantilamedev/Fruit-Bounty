@@ -17,7 +17,7 @@ const Navbar = ({ isOpen, setIsOpen }) => {
 
   // 🔥 FIX: If route is /admin → show Dashboard
   if (pageName === "admin" || pageName === "") {
-    pageName = "dashboard";
+    pageName = "Admin Dashboard";
   }
 
   return (

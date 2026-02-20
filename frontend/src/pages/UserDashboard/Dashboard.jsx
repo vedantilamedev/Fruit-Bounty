@@ -118,7 +118,7 @@ const Dashboard = () => {
     const renderContent = () => {
         switch (activeTab) {
             case 'overview':
-                return <Overview userData={userData} orders={orders} />;
+                return <Overview userData={userData} orders={orders} onTabChange={handleTabChange} />;
             case 'calendar':
                 return <HarvestCalendar />;
             case 'orders':
@@ -152,7 +152,7 @@ const Dashboard = () => {
                 <div className="flex items-center gap-2">
                     <Link to="/" className="p-2 text-[#3C7E44] flex items-center gap-2">
                         <ArrowLeft size={20} />
-                        <span className="text-[10px] font-black uppercase tracking-widest mt-0.5">Exit to Home</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest mt-0.5">Back to Home</span>
                     </Link>
                 </div>
                 <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 text-gray-600">
@@ -174,15 +174,13 @@ const Dashboard = () => {
 
 
                     {/* Back to Home Button */}
-                    <div className="px-6 pt-10 pb-4">
+                    <div className="px-10 pt-10 pb-2">
                         <Link
                             to="/"
-                            className="group flex items-center gap-3 px-6 py-4 bg-white border border-[#E8E4D9] rounded-[1.5rem] text-gray-400 hover:text-[#3C7E44] hover:border-[#3C7E44]/30 hover:shadow-xl hover:shadow-green-900/5 transition-all duration-500"
+                            className="group flex items-center gap-3 text-gray-400 hover:text-[#3C7E44] transition-all duration-300"
                         >
-                            <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-[#3C7E44]/10 transition-colors">
-                                <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                            </div>
-                            <span className="text-xs font-black uppercase tracking-[0.2em]">Back to Home</span>
+                            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+                            <span className="text-[11px] font-black uppercase tracking-[0.2em]">Back to Home</span>
                         </Link>
                     </div>
 
