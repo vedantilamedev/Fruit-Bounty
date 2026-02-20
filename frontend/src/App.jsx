@@ -109,7 +109,6 @@ export default function App() {
           <Route path="/plancustomization" element={<PlanCustomization />} />
           <Route path="/contactus" element={<ContactUs />} />
           <Route path="/customize" element={<CustomBowlPage />} />
-          <Route path="/cart-page" element={<CartPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
 
           {/* Admin Panel */}
