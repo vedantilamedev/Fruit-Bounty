@@ -21,7 +21,17 @@ function Reels() {
   ];
 
   const refs = useRef([]);
+  const videoRefs = useRef([]);
   const [visible, setVisible] = useState([false, false, false]);
+
+  // Function to pause all videos except the one playing
+  const handleVideoPlay = (currentIndex) => {
+    videoRefs.current.forEach((video, index) => {
+      if (video && index !== currentIndex) {
+        video.pause();
+      }
+    });
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -83,8 +93,13 @@ function Reels() {
               className={`relative group w-[260px] md:w-[280px] transition-all duration-700 ${animationClass}`}
             >
               <video
+                ref={(el) => (videoRefs.current[index] = el)}
                 src={reel.video}
                 controls
+                loop
+                muted
+                playsInline
+                onPlay={() => handleVideoPlay(index)}
                 className="rounded-3xl shadow-xl w-full object-cover"
               />
 
