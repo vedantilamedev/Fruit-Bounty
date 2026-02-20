@@ -16,6 +16,7 @@ import LocationDrawer from "./components/LocationDrawer";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import AdminLogin from "./pages/AdminLogin";
 import ForgotPassword from "./pages/ForgotPassword";
 import Fruits from "./pages/Fruits";
 import Cart from "./pages/Cart";
@@ -28,14 +29,15 @@ import FruitShop from "./pages/FruitShop";
 import CustomBowlPage from "./pages/CustomBowlPage";
 import Dashboard from "./pages/UserDashboard/Dashboard";
 
+// ❗ Add this if you really have CartPage
+// import CartPage from "./pages/CartPage";
+
 import AdminRoutes from "./admin/routes/AdminRoutes";
 
 // ---------------- Layout Wrapper ----------------
-
 function Layout({ children }) {
   const [locationOpen, setLocationOpen] = useState(false);
   const location = useLocation();
-
   const isAdmin = location.pathname.startsWith("/admin");
 
   useEffect(() => {
@@ -50,8 +52,6 @@ function Layout({ children }) {
 
   return (
     <div className="w-full bg-[#FBF8F2] relative">
-
-      {/* Header only for user site */}
       {!isAdmin && (
         <>
           <div className="fixed top-0 left-0 w-full z-40">
@@ -66,7 +66,6 @@ function Layout({ children }) {
         </>
       )}
 
-      {/* Page Content */}
       <main
         className={`min-h-screen overflow-x-hidden ${
           !isAdmin ? "pt-[120px] lg:pt-[110px]" : ""
@@ -75,7 +74,6 @@ function Layout({ children }) {
         {children}
       </main>
 
-      {/* Footer only for user site */}
       {!isAdmin && (
         <>
           <Footer />
@@ -89,16 +87,15 @@ function Layout({ children }) {
 }
 
 // ---------------- App ----------------
-
 export default function App() {
   return (
     <Router>
       <Layout>
         <Routes>
-
-          {/* User Website Routes */}
+          {/* User Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/adminlogin" element={<AdminLogin />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/fruits" element={<Fruits />} />
           <Route path="/shop" element={<FruitShop />} />
@@ -111,9 +108,8 @@ export default function App() {
           <Route path="/customize" element={<CustomBowlPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
 
-          {/* Admin Panel */}
+          {/* Admin */}
           <Route path="/admin/*" element={<AdminRoutes />} />
-
         </Routes>
       </Layout>
     </Router>
