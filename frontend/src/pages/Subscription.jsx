@@ -1,175 +1,166 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { Users, User, ArrowRight, ShieldCheck, Zap, Star } from 'lucide-react';
+import { useEffect, useRef, useState } from "react";
+import { User, Users, Check, Sparkles } from "lucide-react";
 
-const Subscription = () => {
-  const [activePlan, setActivePlan] = useState('individual'); 
-  const [isSixMonth, setIsSixMonth] = useState(false);
-  const navigate = useNavigate();
+function Subscription() {
+  const sectionRef = useRef(null);
+  const [visible, setVisible] = useState(false);
 
-  const COLORS = {
-    darkGreen: "#2D5A27",
-    primaryGreen: "#4CAF50",
-    richBlack: "#0D1A0B",
-  };
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { threshold: 0.2 },
+    );
 
-  const planData = {
-    individual: {
-      price: isSixMonth ? 2499 : 499,
-      image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=1000', 
-      label: 'Personal Plan',
-      desc: 'Tailored for solo health enthusiasts. Enjoy a personalized selection of nature\'s best daily.'
-    },
-    corporate: {
-      price: isSixMonth ? 7999 : 1499,
-      image: 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&q=80&w=1000', 
-      label: 'Corporate Plan',
-      desc: 'Fuel your team with premium fruit arrangements. Perfect for meetings and daily office wellness.'
-    }
-  };
-
-  const handleActivate = () => {
-    // Navigates and passes data to the customization page
-    navigate('/PlanCustomization', { 
-      state: { 
-        plan: activePlan, 
-        basePrice: planData[activePlan].price,
-        duration: isSixMonth ? '6 Months' : 'Monthly',
-        image: planData[activePlan].image
-      } 
-    });
-  };
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center py-10 px-4 overflow-hidden">
-      
-      {/* BACKGROUND IMAGE */}
-      <div className="absolute inset-0 z-0">
-        <img 
-          src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&q=80&w=2000" 
-          className="w-full h-full object-cover"
-          alt="Fruits Bounty Backdrop"
-        />
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" />
-      </div>
+    <section
+      ref={sectionRef}
+      className="relative py-20 bg-[#f7f5f0] overflow-hidden"
+    >
+      <div className="max-w-5xl mx-auto px-6 text-center">
+        {/* ================= Heading ================= */}
+        <div
+          className={`transition-all duration-700 ${
+            visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
+          }`}
+        >
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-800 font-['Playfair_Display']">
+            Subscription Model
+          </h2>
 
-      <div className="relative z-10 max-w-5xl w-full">
-        {/* Header Section */}
-        <div className="text-center mb-10">
-          <motion.h1 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-6xl font-black mb-4 tracking-tighter text-white drop-shadow-xl"
-          >
-            Fruits Bounty <span style={{ color: COLORS.primaryGreen }}>Membership</span>
-          </motion.h1>
-          <p className="text-white/90 text-lg font-bold bg-black/20 inline-block px-6 py-2 rounded-full backdrop-blur-md">
-            The ultimate fresh fruit experience, curated just for you.
+          <div className="w-20 h-1 bg-gradient-to-r from-green-600 to-emerald-500 mx-auto mt-4 mb-6 rounded"></div>
+
+          <p className="text-gray-600 text-lg leading-relaxed max-w-3xl mx-auto">
+            Enjoy fresh fruit bowls delivered to you on a regular schedule. Our
+            subscription plans are designed to provide convenience, savings, and
+            consistent nutrition — whether for personal wellness or corporate
+            team benefits.
           </p>
         </div>
 
-        {/* PLAN SELECTOR */}
-        <div className="flex justify-center mb-8">
-          <div className="bg-[#0D1A0B]/80 backdrop-blur-xl p-1.5 rounded-2xl flex gap-1 shadow-2xl border border-white/10">
-            {['individual', 'corporate'].map((type) => (
-              <button
-                key={type}
-                onClick={() => setActivePlan(type)}
-                className={`px-12 py-3 rounded-xl transition-all duration-300 font-bold flex items-center gap-2 capitalize ${
-                  activePlan === type 
-                  ? 'bg-[#4CAF50] text-white shadow-lg' 
-                  : 'text-white/60 hover:text-white'
-                }`}
-              >
-                {type === 'individual' ? <User size={20} /> : <Users size={20} />}
-                {type}
-              </button>
-            ))}
+        {/* ================= Unified Subscription Card ================= */}
+        <div 
+          className={`mt-16 max-w-5xl mx-auto transition-all duration-700 ${
+            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+          }`}
+        >
+          {/* Main Container Card */}
+          <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl bg-white border border-green-100">
+            {/* Background Pattern */}
+            <div className="absolute inset-0 bg-gradient-to-br from-green-50/80 via-emerald-50/50 to-green-50/80"></div>
+            <div className="absolute top-0 right-0 w-96 h-96 bg-green-200/20 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-200/20 rounded-full blur-3xl"></div>
+
+            {/* Content Grid */}
+            <div className="relative grid md:grid-cols-2 gap-0">
+              
+              {/* ========== INDIVIDUAL PLAN ========== */}
+              <div className="group p-10 md:p-12 flex flex-col transition-all duration-500 hover:bg-white/50">
+                {/* Icon Badge */}
+                <div className="w-16 h-16 bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <User className="w-8 h-8 text-white" strokeWidth={2.5} />
+                </div>
+
+                {/* Title */}
+                <h3 className="text-3xl font-bold text-gray-900 mb-3 flex items-center gap-2">
+                  Individual Plan
+                  <Sparkles className="w-6 h-6 text-amber-500" />
+                </h3>
+
+                {/* Description */}
+                <p className="text-gray-600 text-base leading-relaxed mb-6">
+                  Perfect for daily health enthusiasts who want consistent fresh nutrition delivered to their doorstep.
+                </p>
+
+                {/* Features */}
+                <ul className="space-y-3 mb-8 flex-1">
+                  {[
+                    "Personalized fruit selection",
+                    "Daily or weekly delivery",
+                    "Flexible subscription plans",
+                    "Cancel anytime"
+                  ].map((feature, i) => (
+                    <li key={i} className="flex items-start gap-3 text-gray-700">
+                      <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
+                        <Check className="w-3 h-3 text-green-600" strokeWidth={3} />
+                      </div>
+                      <span className="text-sm">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Button */}
+                <button className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
+                  Choose Individual Plan
+                </button>
+              </div>
+
+              {/* ========== VERTICAL DIVIDER ========== */}
+              <div className="hidden md:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[80%] w-px">
+                {/* Gradient Line */}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-green-300 to-transparent"></div>
+                
+                {/* Center Ornament */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                  <div className="w-8 h-8 bg-white border-2 border-green-300 rounded-full flex items-center justify-center shadow-md">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Mobile Horizontal Divider */}
+              <div className="md:hidden h-px bg-gradient-to-r from-transparent via-green-300 to-transparent my-4 mx-10"></div>
+
+              {/* ========== CORPORATE PLAN ========== */}
+              <div className="group p-10 md:p-12 flex flex-col transition-all duration-500 hover:bg-white/50">
+                {/* Icon Badge */}
+                <div className="w-16 h-16 bg-gradient-to-br from-green-600 to-green-300-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <Users className="w-8 h-8 text-white" strokeWidth={2.5} />
+                </div>
+
+                {/* Title */}
+                <h3 className="text-3xl font-bold text-gray-900 mb-3 flex items-center gap-2">
+                  Corporate Plan
+                  <Sparkles className="w-6 h-6 text-amber-500" />
+                </h3>
+
+                {/* Description */}
+                <p className="text-gray-600 text-base leading-relaxed mb-6">
+                  Ideal for offices and teams looking to promote healthy habits and boost workplace productivity.
+                </p>
+
+                {/* Features */}
+                <ul className="space-y-3 mb-8 flex-1">
+                  {[
+                    "Bulk ordering discounts",
+                    "Office pantry delivery",
+                    "Team wellness tracking",
+                    "Dedicated account manager"
+                  ].map((feature, i) => (
+                    <li key={i} className="flex items-start gap-3 text-gray-700">
+                      <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
+                        <Check className="w-3 h-3 text-green-600" strokeWidth={3} />
+                      </div>
+                      <span className="text-sm">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Button */}
+                <button className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
+                  Choose Corporate Plan
+                </button>
+              </div>
+
+            </div>
           </div>
         </div>
-
-        {/* MAIN CARD SECTION */}
-        <div className="relative max-w-4xl mx-auto min-h-[580px]">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activePlan}
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.98 }}
-              className="bg-white rounded-[40px] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col md:flex-row w-full min-h-[580px]"
-            >
-              <div className="md:w-[45%] relative h-64 md:h-auto overflow-hidden flex-shrink-0">
-                <img src={planData[activePlan].image} className="w-full h-full object-cover" alt={planData[activePlan].label} />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0D1A0B] via-black/10 to-transparent p-10 flex flex-col justify-end">
-                  <h2 className="text-white text-4xl font-black uppercase mb-3 leading-tight drop-shadow-md">
-                    {planData[activePlan].label}
-                  </h2>
-                  <p className="text-white/90 text-sm font-medium min-h-[3rem] drop-shadow-md">
-                    {planData[activePlan].desc}
-                  </p>
-                </div>
-              </div>
-
-              <div className="md:w-[55%] p-10 md:p-14 flex flex-col justify-between bg-[#F9FBF9] flex-grow">
-                <div>
-                  <div className="flex justify-between items-center mb-10">
-                    <div className="flex flex-col">
-                      <h3 style={{ color: COLORS.richBlack }} className="text-6xl font-black tracking-tighter italic">
-                        ₹{planData[activePlan].price}
-                      </h3>
-                      <p className="text-gray-500 font-bold text-xs tracking-widest uppercase mt-2">
-                        {isSixMonth ? '6 Months Access' : 'Monthly Access'}
-                      </p>
-                    </div>
-                    
-                    <div className="flex flex-col items-center gap-2">
-                      <div 
-                        onClick={() => setIsSixMonth(!isSixMonth)}
-                        className={`w-16 h-9 rounded-full cursor-pointer transition-all duration-300 relative p-1 ${isSixMonth ? 'bg-[#4CAF50]' : 'bg-gray-300'}`}
-                      >
-                        <motion.div animate={{ x: isSixMonth ? 28 : 0 }} className="w-7 h-7 bg-white rounded-full shadow-md" />
-                      </div>
-                      <span className="text-[10px] font-black text-[#2D5A27] uppercase tracking-tighter">
-                        {isSixMonth ? '6 Months' : 'Monthly'}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-gray-100 shadow-sm h-[72px]">
-                      <Star size={20} className="text-[#4CAF50]" fill="#4CAF50" />
-                      <span className="text-[#0D1A0B] font-bold text-md">Fresh and Handpicked Fruits</span>
-                    </div>
-                    <div className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-gray-100 shadow-sm h-[72px]">
-                      <Zap size={20} className="text-[#4CAF50]" />
-                      <span className="text-[#0D1A0B] font-bold text-md">Custom Fruit Bowl Designs</span>
-                    </div>
-                    <div className="flex items-center gap-4 p-4 rounded-2xl bg-[#2D5A27]/5 border border-[#2D5A27]/10 h-[72px]">
-                      <ShieldCheck size={20} className="text-[#2D5A27]" />
-                      <span className="text-[#2D5A27] font-black text-md">Guaranteed Next-Day Delivery</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-12">
-                  <motion.button
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={handleActivate}
-                    style={{ backgroundColor: activePlan === 'individual' ? COLORS.primaryGreen : COLORS.darkGreen }}
-                    className="w-full py-5 rounded-2xl text-white font-black text-xl flex items-center justify-center gap-3 shadow-xl transition-all uppercase tracking-widest"
-                  >
-                    Activate Now <ArrowRight size={24} />
-                  </motion.button>
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
       </div>
-    </div>
+    </section>
   );
-};
+}
 
 export default Subscription;
