@@ -1,3 +1,4 @@
+import { registerUser, loginUser } from "../api/api";
 import React, { useState, useEffect } from 'react';
 import { Google, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link } from 'react-router-dom'; // Added Link import
@@ -16,6 +17,49 @@ const LoginRegister = () => {
     setAnimate(false);
     setIsRegistering(!isRegistering);
   };
+
+const [formData, setFormData] = useState({
+  name: "",
+  email: "",
+  password: ""
+});
+
+const [loginData, setLoginData] = useState({
+  email: "",
+  password: ""
+});
+
+const handleRegister = async () => {
+  try {
+    const res = await registerUser(formData);
+
+    alert("User registered successfully 🔥");
+    console.log(res.data);
+
+    // auto switch to login
+    setIsRegistering(false);
+
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    alert("Registration failed");
+  }
+};
+
+const handleLogin = async () => {
+  try {
+    const res = await loginUser(loginData);
+
+    alert("Login successful 🎉");
+    console.log(res.data);
+
+    // Example: redirect later
+    // navigate("/dashboard");
+
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    alert("Login failed");
+  }
+};
 
   const handleNumericInput = (e) => {
     e.target.value = e.target.value.replace(/[^0-9]/g, '');
@@ -140,21 +184,101 @@ const LoginRegister = () => {
         </div>
 
         {/* LEFT FORM (Signup) */}
-        <div className="form-column signup-col" style={{ ...styles.formSide, visibility: isRegistering ? 'visible' : 'hidden', padding: '0 10%' }}>
-          <h1 style={{ fontSize: '3rem', marginBottom: '30px', paddingTop: '40px' }}>Sign Up</h1>
-          <div style={{ marginBottom: '15px' }}><label>Full Name</label><input type="text" placeholder="John Doe" style={styles.input} /></div>
-          <div style={{ marginBottom: '15px' }}><label>Email</label><input type="email" placeholder="john@example.com" style={styles.input} /></div>
-          <div style={{ marginBottom: '15px' }}><label>Phone</label><input type="tel" onInput={handleNumericInput} placeholder="1234567890" style={styles.input} /></div>
-          <div style={{ marginBottom: '15px', position: 'relative' }}>
+        <div
+          className="form-column signup-col"
+          style={{
+            ...styles.formSide,
+            visibility: isRegistering ? "visible" : "hidden",
+            padding: "0 10%",
+          }}
+        >
+          <h1 style={{ fontSize: "3rem", marginBottom: "30px", paddingTop: "40px" }}>
+            Sign Up
+          </h1>
+
+          {/* NAME */}
+          <div style={{ marginBottom: "15px" }}>
+            <label>Full Name</label>
+            <input
+              type="text"
+              placeholder="John Doe"
+              style={styles.input}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
+            />
+          </div>
+
+          {/* EMAIL */}
+          <div style={{ marginBottom: "15px" }}>
+            <label>Email</label>
+            <input
+              type="email"
+              placeholder="john@example.com"
+              style={styles.input}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+            />
+          </div>
+
+          {/* PHONE (optional - backend me nahi hai) */}
+          <div style={{ marginBottom: "15px" }}>
+            <label>Phone</label>
+            <input
+              type="tel"
+              onInput={handleNumericInput}
+              placeholder="1234567890"
+              style={styles.input}
+            />
+          </div>
+
+          {/* PASSWORD */}
+          <div style={{ marginBottom: "15px", position: "relative" }}>
             <label>Password</label>
-            <input type={showPassword ? 'text' : 'password'} style={styles.input} />
-            <div style={{ position: 'absolute', right: '15px', bottom: '12px', color: '#2D5A27', cursor: 'pointer' }} onClick={() => setShowPassword(!showPassword)}>
+            <input
+              type={showPassword ? "text" : "password"}
+              style={styles.input}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+            />
+            <div
+              style={{
+                position: "absolute",
+                right: "15px",
+                bottom: "12px",
+                color: "#2D5A27",
+                cursor: "pointer",
+              }}
+              onClick={() => setShowPassword(!showPassword)}
+            >
               {showPassword ? <VisibilityOff /> : <Visibility />}
             </div>
           </div>
-          <button className="primary-btn" style={styles.primaryBtn}>Create Account</button>
-          <p style={{ textAlign: 'center', fontSize: '1rem', marginTop: '25px' }}>
-            Already a member? <span onClick={toggleMode} style={{ color: '#4CAF50', cursor: 'pointer', fontWeight: 'bold', textDecoration: 'underline' }}>Login</span>
+
+          {/* REGISTER BUTTON */}
+          <button
+            className="primary-btn"
+            style={styles.primaryBtn}
+            onClick={handleRegister}
+          >
+            Create Account
+          </button>
+
+          <p style={{ textAlign: "center", fontSize: "1rem", marginTop: "25px" }}>
+            Already a member?{" "}
+            <span
+              onClick={toggleMode}
+              style={{
+                color: "#4CAF50",
+                cursor: "pointer",
+                fontWeight: "bold",
+                textDecoration: "underline",
+              }}
+            >
+              Login
+            </span>
           </p>
         </div>
 
@@ -162,17 +286,36 @@ const LoginRegister = () => {
         <div className="form-column login-col" style={{ ...styles.formSide, visibility: !isRegistering ? 'visible' : 'hidden', padding: '0 10%' }}>
           <h1 style={{ fontSize: '3rem', marginBottom: '30px' }}>Login</h1>
           <div style={{ marginBottom: '20px' }}>
-            <label>Mobile Number</label>
-            <input type="tel" onInput={handleNumericInput} placeholder="9876543210" style={styles.input} />
+            <label>Email</label>
+           <input
+             type="email"
+             placeholder="Enter email"
+             style={styles.input}
+             onChange={(e) =>
+               setLoginData({ ...loginData, email: e.target.value })
+             }
+           />
           </div>
           <div style={{ marginBottom: '20px', position: 'relative' }}>
             <label>Password</label>
-            <input type={showPassword ? 'text' : 'password'} style={styles.input} />
+            <input
+              type={showPassword ? 'text' : 'password'}
+              style={styles.input}
+              onChange={(e) =>
+                setLoginData({ ...loginData, password: e.target.value })
+              }
+            />
             <div style={{ position: 'absolute', right: '15px', bottom: '12px', color: '#2D5A27', cursor: 'pointer' }} onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? <VisibilityOff /> : <Visibility />}
             </div>
           </div>
-          <button className="primary-btn" style={styles.primaryBtn}>Sign In</button>
+          <button
+            className="primary-btn"
+            style={styles.primaryBtn}
+            onClick={handleLogin}
+          >
+            Sign In
+          </button>
           <button className="primary-btn" style={{ width: '100%', padding: '15px', marginTop: '20px', backgroundColor: '#FFF', color: '#2D5A27', fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
             <Google style={{ color: '#EA4335' }} /> Continue with Google
           </button>
