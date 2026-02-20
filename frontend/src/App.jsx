@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Outlet, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -11,7 +16,7 @@ import LocationDrawer from "./components/LocationDrawer";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import ForgotPassword from "./pages/ForgotPassword"; // New Import
+import ForgotPassword from "./pages/ForgotPassword";
 import Fruits from "./pages/Fruits";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
@@ -24,10 +29,15 @@ import CustomBowlPage from "./pages/CustomBowlPage";
 import CartPage from "./pages/CartPage";
 import Dashboard from "./pages/UserDashboard/Dashboard";
 
-function AppContent() {
+import AdminRoutes from "./admin/routes/AdminRoutes";
+
+// ---------------- Layout Wrapper ----------------
+
+function Layout({ children }) {
   const [locationOpen, setLocationOpen] = useState(false);
   const location = useLocation();
-  const isDashboard = location.pathname === "/user-dashboard";
+
+  const isAdmin = location.pathname.startsWith("/admin");
 
   useEffect(() => {
     AOS.init({
@@ -39,70 +49,75 @@ function AppContent() {
     });
   }, []);
 
-  const MainLayout = () => (
-    <>
-      <Outlet />
-      <Footer />
-    </>
-  );
-
   return (
     <div className="w-full bg-[#FBF8F2] relative">
-      {/* ===== Fixed Header ===== */}
-      {!isDashboard && (
-        <div className="fixed top-0 left-0 w-full z-40">
-          <TopBar onOpen={() => setLocationOpen(true)} />
-          <Navbar />
-        </div>
+
+      {/* Header only for user site */}
+      {!isAdmin && (
+        <>
+          <div className="fixed top-0 left-0 w-full z-40">
+            <TopBar onOpen={() => setLocationOpen(true)} />
+            <Navbar />
+          </div>
+
+          <LocationDrawer
+            open={locationOpen}
+            onClose={() => setLocationOpen(false)}
+          />
+        </>
       )}
 
-      {/* ===== Location Drawer (Above Everything) ===== */}
-      <LocationDrawer
-        open={locationOpen}
-        onClose={() => setLocationOpen(false)}
-      />
-
-      {/* ===== Page Content ===== */}
-      <main className={`${!isDashboard ? "pt-[120px] lg:pt-[110px]" : ""} min-h-screen overflow-x-hidden`}>
-        <Routes>
-          {/* Routes with Footer */}
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/fruits" element={<Fruits />} />
-            <Route path="/shop" element={<FruitShop />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/order-success" element={<OrderSuccess />} />
-            <Route path="/subscription" element={<Subscription />} />
-            <Route path="/plancustomization" element={<PlanCustomization />} />
-            <Route path="/contactus" element={<ContactUs />} />
-            <Route path="/customize" element={<CustomBowlPage />} />
-            <Route path="/cart-page" element={<CartPage />} />
-          </Route>
-
-          {/* Dashboard without Global Footer */}
-          <Route path="/user-dashboard" element={<Dashboard />} />
-        </Routes>
+      {/* Page Content */}
+      <main
+        className={`min-h-screen overflow-x-hidden ${
+          !isAdmin ? "pt-[120px] lg:pt-[110px]" : ""
+        }`}
+      >
+        {children}
       </main>
 
-      {/* Mobile Bottom Navbar */}
-      {!isDashboard && (
-        <div className="lg:hidden">
-          <MobileNavbar />
-        </div>
+      {/* Footer only for user site */}
+      {!isAdmin && (
+        <>
+          <Footer />
+          <div className="lg:hidden">
+            <MobileNavbar />
+          </div>
+        </>
       )}
     </div>
   );
 }
 
-function App() {
+// ---------------- App ----------------
+
+export default function App() {
   return (
     <Router>
-      <AppContent />
+      <Layout>
+        <Routes>
+
+          {/* User Website Routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/fruits" element={<Fruits />} />
+          <Route path="/shop" element={<FruitShop />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order-success" element={<OrderSuccess />} />
+          <Route path="/subscription" element={<Subscription />} />
+          <Route path="/plancustomization" element={<PlanCustomization />} />
+          <Route path="/contactus" element={<ContactUs />} />
+          <Route path="/customize" element={<CustomBowlPage />} />
+          <Route path="/cart-page" element={<CartPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+
+          {/* Admin Panel */}
+          <Route path="/admin/*" element={<AdminRoutes />} />
+
+        </Routes>
+      </Layout>
     </Router>
   );
 }
-
-export default App;
