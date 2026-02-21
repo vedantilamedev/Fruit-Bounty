@@ -7,11 +7,13 @@ import Packages from '../../components/UserDashboardComponents/Packages';
 import Payments from '../../components/UserDashboardComponents/Payments';
 import HarvestCalendar from '../../components/UserDashboardComponents/HarvestCalendar';
 import Settings from '../../components/UserDashboardComponents/Settings';
-
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('overview');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    const navigate = useNavigate();
 
 
 
@@ -139,10 +141,10 @@ const Dashboard = () => {
         setIsMobileMenuOpen(false); // Close mobile menu on selection
     };
 
-    const handleLogout = () => {
-        // Add logout logic here (clear tokens, redirect)
-        alert("Logging out...");
-    };
+  const handleLogout = () => {
+      localStorage.removeItem("token");
+      navigate("/login", { replace: true });
+  };
 
     return (
         <div className="h-screen bg-[#FBF8F2] flex flex-col lg:flex-row overflow-hidden relative">
