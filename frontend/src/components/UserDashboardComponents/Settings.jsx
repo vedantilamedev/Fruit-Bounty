@@ -34,7 +34,7 @@ const InputField = ({ label, icon: Icon, type = "text", defaultValue, readOnly, 
                 defaultValue={defaultValue}
                 readOnly={readOnly}
                 placeholder={placeholder}
-                className={`w-full pl-14 pr-6 py-5 bg-white border border-[#E8E4D9] rounded-[1.75rem] focus:outline-none focus:border-[#3C7E44]/40 focus:ring-4 focus:ring-[#3C7E44]/5 text-gray-900 font-bold text-sm transition-all duration-300 placeholder:text-gray-300 hover:shadow-lg hover:shadow-black/5
+                className={`w-full pl-14 pr-6 py-5 bg-white border border-[#E8E4D9] rounded-[1rem] focus:outline-none focus:border-[#3C7E44]/40 focus:ring-4 focus:ring-[#3C7E44]/5 text-gray-900 font-bold text-sm transition-all duration-300 placeholder:text-gray-300 hover:shadow-lg hover:shadow-black/5
                     ${readOnly ? 'bg-gray-50/50 cursor-not-allowed text-gray-400 border-dashed opacity-80' : 'hover:border-[#3C7E44]/30'}
                 `}
             />
@@ -45,7 +45,7 @@ const InputField = ({ label, icon: Icon, type = "text", defaultValue, readOnly, 
 const Toggle = ({ active, onClick, label, desc }) => (
     <motion.div
         variants={containerVariants}
-        className="flex items-center justify-between p-6 bg-white border border-[#E8E4D9] rounded-[2rem] hover:shadow-xl hover:shadow-green-900/5 transition-all group"
+        className="flex items-center justify-between p-6 bg-white border border-[#E8E4D9] rounded-[1rem] hover:shadow-xl hover:shadow-green-900/5 transition-all group"
     >
         <div className="flex items-center gap-4">
             <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors ${active ? 'bg-[#3C7E44]/10 text-[#3C7E44]' : 'bg-gray-50 text-gray-400'}`}>
@@ -92,7 +92,7 @@ const Settings = ({ userData }) => {
                 return (
                     <div className="space-y-8">
                         {/* Executive Profile Header */}
-                        <div className="relative p-8 bg-gradient-to-br from-[#FBF8F2] to-white rounded-[3rem] border border-[#E8E4D9] shadow-sm overflow-hidden group/header">
+                        <div className="relative p-8 bg-gradient-to-br from-[#FBF8F2] to-white rounded-[1rem] border border-[#E8E4D9] shadow-sm overflow-hidden group/header">
                             <div className="absolute top-0 right-0 w-64 h-64 bg-[#3C7E44]/5 rounded-full blur-[100px] -mr-32 -mt-32 transition-transform duration-1000 group-hover/header:scale-150" />
                             <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
                                 <div className="relative">
@@ -200,7 +200,7 @@ const Settings = ({ userData }) => {
                                     <RefreshCw size={18} /> Update Password
                                 </motion.button>
                             </div>
-                            <div className="bg-[#FBF8F2] border border-[#E8E4D9] rounded-[3rem] p-8 flex flex-col justify-between">
+                            <div className="bg-[#FBF8F2] border border-[#E8E4D9] rounded-[1rem] p-8 flex flex-col justify-between">
                                 <div>
                                     <div className="w-12 h-12 bg-[#3C7E44] text-white rounded-xl flex items-center justify-center mb-6 shadow-xl shadow-green-900/10">
                                         <Fingerprint size={24} />
@@ -214,7 +214,7 @@ const Settings = ({ userData }) => {
                             </div>
                         </div>
 
-                        <div className="p-8 bg-rose-50 border border-rose-100 rounded-[3rem] flex items-center justify-between group">
+                        <div className="p-8 bg-rose-50 border border-rose-100 rounded-[1rem] flex items-center justify-between group">
                             <div className="flex items-center gap-6">
                                 <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-rose-500 border border-rose-100 shadow-xl shadow-rose-900/5 group-hover:scale-110 transition-transform">
                                     <Trash2 size={28} />
@@ -263,7 +263,7 @@ const Settings = ({ userData }) => {
                             whileHover={{ scale: 1.02, x: 5 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => setActiveSection(section.id)}
-                            className={`w-full text-left p-6 rounded-[2.5rem] border transition-all duration-500 group relative overflow-hidden ${activeSection === section.id
+                            className={`w-full text-left p-6 rounded-[2rem] border transition-all duration-500 group relative overflow-hidden ${activeSection === section.id
                                 ? 'bg-white border-[#3C7E44] shadow-2xl shadow-green-900/10'
                                 : 'bg-transparent border-transparent hover:bg-white hover:border-[#E8E4D9]'
                                 }`}
@@ -302,7 +302,7 @@ const Settings = ({ userData }) => {
                     ))}
                 </div>
 
-                <div className="mt-10 p-8 bg-[#1a472a] rounded-[3rem] text-white relative overflow-hidden group shadow-2xl shadow-green-900/20">
+                <div className="mt-10 p-8 bg-[#1a472a] rounded-[1rem] text-white relative overflow-hidden group shadow-2xl shadow-green-900/20">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-1000" />
                     <div className="relative z-10">
                         <Gem size={24} className="text-[#B7A261] mb-4" />
@@ -322,7 +322,7 @@ const Settings = ({ userData }) => {
             <div className="flex-1">
                 <motion.div
                     layout
-                    className="bg-white rounded-[4rem] border border-[#E8E4D9] p-10 lg:p-14 shadow-2xl shadow-green-900/5 relative overflow-hidden"
+                    className="bg-white rounded-[1rem] border border-[#E8E4D9] p-10 lg:p-14 shadow-2xl shadow-green-900/5 relative overflow-hidden"
                 >
                     {/* Ghost Icon Overlay */}
                     <div className="absolute -top-12 -right-12 opacity-[0.02] text-gray-900 group-hover:rotate-12 transition-transform duration-1000">

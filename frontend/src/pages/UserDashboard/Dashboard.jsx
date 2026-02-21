@@ -7,12 +7,13 @@ import Packages from '../../components/UserDashboardComponents/Packages';
 import Payments from '../../components/UserDashboardComponents/Payments';
 import HarvestCalendar from '../../components/UserDashboardComponents/HarvestCalendar';
 import Settings from '../../components/UserDashboardComponents/Settings';
-
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('overview');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+    const [showToast, setShowToast] = useState(false);
 
 
     // Dummy Data for Development
@@ -140,13 +141,28 @@ const Dashboard = () => {
     };
 
     const handleLogout = () => {
-        // Add logout logic here (clear tokens, redirect)
-        alert("Logging out...");
+        // Clear token logic here
+
+        toast.error("You have been logged out!", {
+            position: "top-right",
+            autoClose: 3000,
+        });
+
+        // navigate("/") if needed
     };
 
     return (
+        
         <div className="h-screen bg-[#FBF8F2] flex flex-col lg:flex-row overflow-hidden relative">
-
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                pauseOnHover
+                theme="light"
+            />
             {/* Mobile Header */}
             <div className="lg:hidden bg-white shadow-sm p-4 flex justify-between items-center shrink-0 z-30">
                 <div className="flex items-center gap-2">
@@ -191,7 +207,7 @@ const Dashboard = () => {
                             <button
                                 key={item.id}
                                 onClick={() => handleTabChange(item.id)}
-                                className={`w-full flex items-center gap-4 px-6 py-4 rounded-[1.5rem] transition-all duration-300 font-medium tracking-tight text-[15px] ${activeTab === item.id
+                                className={`w-full flex items-center gap-4 px-6 py-4 rounded-[1rem] transition-all duration-300 font-medium tracking-tight text-[15px] ${activeTab === item.id
                                     ? 'bg-[#3C7E44] text-white shadow-xl shadow-green-900/20 translate-x-1 font-normal'
                                     : 'text-black hover:bg-white hover:text-[#3C7E44] hover:translate-x-1'
                                     }`}
@@ -206,7 +222,7 @@ const Dashboard = () => {
                     <div className="p-6 border-t border-[#E8E4D9]">
                         <button
                             onClick={handleLogout}
-                            className="w-full flex items-center gap-4 px-6 py-4 text-[#A44A3F] hover:bg-[#FDF2F0] rounded-[1.5rem] transition-all duration-300 font-normal tracking-tight"
+                            className="w-full flex items-center gap-4 px-6 py-4 bg-red-300 text-[#7d0f00] hover:bg-red-500 hover:text-white rounded-[1rem] transition-all duration-300 font-normal tracking-tight"
                         >
                             <LogOut size={22} />
                             Log Out

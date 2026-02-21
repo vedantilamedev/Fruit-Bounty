@@ -49,7 +49,7 @@ const Payments = ({ payments = [] }) => {
     const StatCard = ({ title, value, icon: Icon, color, trend, label }) => (
         <motion.div
             whileHover={{ y: -5 }}
-            className="bg-white p-8 rounded-[3rem] border border-[#E8E4D9] shadow-sm relative overflow-hidden group border-b-4 border-b-[#E8E4D9]"
+            className="bg-white p-8 rounded-[1rem] border border-[#E8E4D9] shadow-sm relative overflow-hidden group border-b-4 border-b-[#E8E4D9]"
         >
             <div className={`absolute -top-12 -right-12 w-40 h-40 ${color} opacity-[0.03] rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000`} />
             <div className="relative z-10">
@@ -76,8 +76,8 @@ const Payments = ({ payments = [] }) => {
 
     if (payments.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center p-24 bg-white rounded-[4rem] border border-[#E8E4D9] shadow-2xl shadow-green-900/5 text-center transition-all animate-fadeIn">
-                <div className="bg-[#F7F5EF] p-12 rounded-[3.5rem] mb-10 shadow-inner group cursor-pointer hover:scale-110 transition-transform">
+            <div className="flex flex-col items-center justify-center p-24 bg-white rounded-[1rem] border border-[#E8E4D9] shadow-2xl shadow-green-900/5 text-center transition-all animate-fadeIn">
+                <div className="bg-[#F7F5EF] p-12 rounded-[1rem] mb-10 shadow-inner group cursor-pointer hover:scale-110 transition-transform">
                     <CreditCard size={100} className="text-[#B7A261] opacity-20 group-hover:opacity-40 transition-opacity" strokeWidth={1} />
                 </div>
                 <h3 className="text-3xl font-black text-gray-900 mb-3 tracking-tighter">Your Financial Soil is Fresh</h3>
@@ -85,7 +85,7 @@ const Payments = ({ payments = [] }) => {
                 <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-16 py-5 bg-[#3C7E44] text-white rounded-[2rem] font-bold text-xs uppercase tracking-[0.3em] shadow-2xl shadow-green-900/30"
+                    className="px-16 py-5 bg-[#3C7E44] text-white rounded-[1rem] font-bold text-xs uppercase tracking-[0.3em] shadow-2xl shadow-green-900/30"
                 >
                     Make First Payment
                 </motion.button>
@@ -124,7 +124,7 @@ const Payments = ({ payments = [] }) => {
                     />
                 </div>
 
-                <div className="bg-white rounded-[3.5rem] border border-[#E8E4D9] shadow-2xl shadow-green-900/5 overflow-hidden">
+                <div className="bg-white rounded-[1rem] border border-[#E8E4D9] shadow-2xl shadow-green-900/5 overflow-hidden">
                     <div className="p-8 lg:p-12">
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-12">
                             <div>
@@ -225,7 +225,7 @@ const Payments = ({ payments = [] }) => {
                             )}
                         </div>
 
-                        <div className="mt-12 p-10 bg-[#FBF8F2] rounded-[3rem] border border-[#E8E4D9] relative overflow-hidden group">
+                        <div className="mt-12 p-10 bg-[#FBF8F2] rounded-[1rem] border border-[#E8E4D9] relative overflow-hidden group">
                             <div className="absolute top-0 right-0 w-48 h-48 bg-[#3C7E44]/5 rounded-full blur-3xl -mr-24 -mt-24 group-hover:scale-150 transition-transform duration-1000" />
                             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
                                 <div className="flex items-center gap-6">
@@ -248,7 +248,7 @@ const Payments = ({ payments = [] }) => {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-gradient-to-br from-[#1a472a] to-[#2d5a3f] p-12 rounded-[4rem] text-white overflow-hidden relative group shadow-2xl shadow-green-900/20"
+                    className="bg-gradient-to-br from-[#1a472a] to-[#2d5a3f] p-12 rounded-[1rem] text-white overflow-hidden relative group shadow-2xl shadow-green-900/20"
                 >
                     <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full blur-3xl -mr-32 -mt-32" />
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#B7A261]/10 rounded-full blur-[100px] -ml-20 -mb-20" />
@@ -308,14 +308,14 @@ const Payments = ({ payments = [] }) => {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 30 }}
                             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                            className="relative bg-white w-full max-w-md rounded-[3.5rem] shadow-2xl border border-[#E8E4D9] overflow-hidden p-0"
+                            className="relative bg-white w-full max-w-md rounded-[1rem] shadow-2xl border border-[#E8E4D9] overflow-hidden p-0"
                         >
                             <div className="bg-[#1a472a] p-10 text-white relative flex flex-col items-center">
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl" />
                                 <motion.div
                                     initial={{ y: 20, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
-                                    className="w-20 h-20 bg-white/10 rounded-[2.5rem] border border-white/20 flex items-center justify-center mb-6 shadow-2xl backdrop-blur-2xl relative"
+                                    className="w-20 h-20 bg-white/10 rounded-[1rem] border border-white/20 flex items-center justify-center mb-6 shadow-2xl backdrop-blur-2xl relative"
                                 >
                                     <Sparkles size={36} className="text-[#B7A261]" />
                                     <div className="absolute -bottom-1 -right-1 bg-emerald-500 p-1.5 rounded-full border-[3px] border-[#1a472a]">
@@ -381,7 +381,7 @@ const Payments = ({ payments = [] }) => {
                                 <motion.button
                                     whileHover={{ scale: 1.02, y: -2 }}
                                     whileTap={{ scale: 0.98 }}
-                                    className="w-full py-5 bg-[#3C7E44] text-white rounded-[1.75rem] text-xs font-black uppercase tracking-[0.3em] shadow-2xl shadow-green-900/10 flex items-center justify-center gap-3 group/btn"
+                                    className="w-full py-5 bg-[#3C7E44] text-white rounded-[1rem] text-xs font-black uppercase tracking-[0.3em] shadow-2xl shadow-green-900/10 flex items-center justify-center gap-3 group/btn"
                                 >
                                     <Download size={18} className="group-hover/btn:-translate-y-1 transition-transform" strokeWidth={3} /> Download Receipt
                                 </motion.button>
