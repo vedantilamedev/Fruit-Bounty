@@ -1,113 +1,210 @@
-    import React, { useEffect } from 'react';
-    // eslint-disable-next-line no-unused-vars
-    import { motion } from 'framer-motion';
-    import {
-    Lock,
-    Eye,
-    FileText,
-    ShieldCheck,
-    Mail,
-    ChevronRight,
-    } from 'lucide-react';
+import React, { useEffect } from "react";
 
-    const privacySections = [
-    {
-        title: 'Information We Collect',
-        icon: <Eye size={16} />,
-        content:
-        'We may collect personal details such as name, phone number, email, address, and order preferences to fulfill purchases, provide support, and improve your experience.',
-    },
-    {
-        title: 'How We Use Information',
-        icon: <FileText size={16} />,
-        content:
-        'Your data is used for order processing, communication, service optimization, fraud prevention, and legal compliance. We process data only for legitimate business purposes.',
-    },
-    {
-        title: 'Data Security',
-        icon: <Lock size={16} />,
-        content:
-        'We implement appropriate technical and organizational measures to protect your information from unauthorized access, disclosure, alteration, or destruction.',
-    },
-    {
-        title: 'Data Sharing & Third Parties',
-        icon: <ShieldCheck size={16} />,
-        content:
-        'We may share necessary data with trusted logistics, payment, and support partners to deliver services. We do not sell your personal data to third parties.',
-    },
-    {
-        title: 'Your Rights & Contact',
-        icon: <Mail size={16} />,
-        content:
-        'You may request access, correction, or deletion of your personal information, subject to legal obligations. For privacy requests, contact our support team through official channels.',
-    },
-    ];
+const privacySections = [
+  {
+    title: "Introduction",
+    content: [
+      "Welcome to Fruit Bounty. We respect your privacy and are committed to protecting your personal data. This privacy policy explains how we collect, use, disclose, and safeguard your information when you use our service.",
+      "Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access the site or use our services.",
+    ],
+  },
+  {
+    title: "Information We Collect",
+    subsections: [
+      {
+        subtitle: "Personal Information",
+        text: "We collect information that you provide directly to us, including your name, email address, phone number, delivery address, and payment information when you create an account or place an order.",
+      },
+      {
+        subtitle: "Order and Transaction Data",
+        text: "We collect details about your purchases, order history, preferences, and payment transactions to process and fulfill your orders.",
+      },
+      {
+        subtitle: "Automatically Collected Information",
+        text: "We may automatically collect certain information about your device, including IP address, browser type, operating system, and usage patterns when you access our services.",
+      },
+    ],
+  },
+  {
+    title: "How We Use Your Information",
+    content: ["We use the information we collect to:"],
+    list: [
+      "Process and deliver your orders",
+      "Communicate with you about your orders, account, and promotional offers",
+      "Improve our services and develop new features",
+      "Provide customer support and respond to your inquiries",
+      "Detect, prevent, and address fraud and security issues",
+      "Comply with legal obligations and enforce our terms",
+    ],
+  },
+  {
+    title: "Sharing Your Information",
+    subsections: [
+      {
+        subtitle: "Service Providers",
+        text: "We may share your information with third-party service providers who perform services on our behalf, including payment processing, delivery services, marketing, and analytics.",
+      },
+      {
+        subtitle: "Business Transfers",
+        text: "If we are involved in a merger, acquisition, or sale of assets, your information may be transferred as part of that transaction.",
+      },
+      {
+        subtitle: "Legal Requirements",
+        text: "We may disclose your information if required by law or in response to valid requests by public authorities.",
+      },
+    ],
+  },
+  {
+    title: "Cookies and Tracking Technologies",
+    content: [
+      "We use cookies and similar tracking technologies to track activity on our service and hold certain information. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you do not accept cookies, you may not be able to use some portions of our service.",
+    ],
+  },
+  {
+    title: "Data Security",
+    content: [
+      "We implement appropriate technical and organizational security measures to protect your personal information against unauthorized or unlawful processing, accidental loss, destruction, or damage. However, no method of transmission over the Internet or electronic storage is 100% secure.",
+    ],
+  },
+  {
+    title: "Your Rights and Choices",
+    list: [
+      "Access and update your personal information through your account settings",
+      "Request deletion of your personal data, subject to certain legal obligations",
+      "Opt-out of marketing communications at any time",
+      "Disable cookies through your browser settings",
+      "Request a copy of the personal information we hold about you",
+    ],
+  },
+  {
+    title: "Data Retention",
+    content: [
+      "We retain your personal information for as long as necessary to fulfill the purposes outlined in this privacy policy, unless a longer retention period is required or permitted by law.",
+    ],
+  },
+  {
+    title: "Children's Privacy",
+    content: [
+      "Our service is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us.",
+    ],
+  },
+  {
+    title: "Changes to This Privacy Policy",
+    content: [
+      "We may update our privacy policy from time to time. We will notify you of any changes by posting the new privacy policy on this page and updating the 'Last Updated' date. You are advised to review this privacy policy periodically for any changes.",
+    ],
+  },
+];
 
-    const PrivacyPolicy = () => {
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
+const PrivacyPolicy = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-[#FBF8F2] via-white to-[#f6f5ef] px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div className="max-w-6xl mx-auto rounded-[2.5rem] border border-[#E8E4D9] bg-white/90 backdrop-blur-sm shadow-[0_20px_50px_-24px_rgba(0,0,0,0.20)] overflow-hidden">
-            <div className="relative px-6 sm:px-10 lg:px-14 py-12 lg:py-14 bg-gradient-to-r from-[#1f4b31] via-[#2b6840] to-[#3C7E44] text-white">
-            <div className="absolute -top-16 -right-16 w-52 h-52 rounded-full bg-white/10 blur-2xl" />
-            <div className="absolute -bottom-14 -left-10 w-40 h-40 rounded-full bg-[#B7A261]/30 blur-2xl" />
+  return (
+    <div className="min-h-screen bg-[#FBF8F2] px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border border-[#E8E4D9] p-8 sm:p-12">
+        {/* Header */}
+        <div className="mb-12 pb-8 border-b-2 border-[#E8E4D9]">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            Privacy Policy
+          </h1>
+          <p className="text-sm text-gray-500 mb-4">
+            Last Updated: February 21, 2026
+          </p>
+          <p className="text-base text-gray-600 leading-relaxed">
+            At Fruit Bounty, we are committed to protecting your privacy and
+            ensuring the security of your personal information.
+          </p>
+        </div>
 
-            <div className="relative z-10 space-y-4">
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em]">
-                <Lock size={14} /> Privacy Policy
-                </div>
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
-                Privacy Policy
-                </h1>
-                <p className="text-sm sm:text-base text-white/85 max-w-2xl font-medium">
-                How Fruit Bounty collects, uses, secures, and protects your personal information.
-                </p>
-            </div>
-            </div>
+        {/* Content Sections */}
+        <div className="space-y-10">
+          {privacySections.map((section, index) => (
+            <div key={section.title} className="scroll-mt-20">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-start gap-3">
+                <span className="text-[#B7A261]">{index + 1}.</span>
+                <span>{section.title}</span>
+              </h2>
 
-            <div className="px-6 sm:px-10 lg:px-14 py-10 lg:py-12">
-            <div className="space-y-4">
-                {privacySections.map((section, index) => (
-                <motion.div
-                    key={section.title}
-                    initial={{ opacity: 0, y: 14 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.3 }}
-                    transition={{ duration: 0.3, delay: index * 0.05 }}
-                    className="rounded-2xl border border-[#E8E4D9] bg-[#FCFBF7] p-5 sm:p-6"
-                >
-                    <div className="flex items-start gap-3">
-                    <div className="mt-0.5 w-8 h-8 rounded-lg bg-white border border-[#E8E4D9] text-[#B7A261] flex items-center justify-center">
-                        {section.icon}
-                    </div>
-                    <div className="flex-1">
-                        <h3 className="text-base sm:text-lg font-extrabold text-gray-900 tracking-tight">{section.title}</h3>
-                        <p className="text-sm text-gray-600 mt-2 leading-relaxed">{section.content}</p>
-                    </div>
-                    </div>
-                </motion.div>
+              {/* Regular content paragraphs */}
+              {section.content &&
+                section.content.map((paragraph, idx) => (
+                  <p
+                    key={idx}
+                    className="text-base text-gray-700 leading-relaxed mb-4"
+                  >
+                    {paragraph}
+                  </p>
                 ))}
-            </div>
-            </div>
 
-            <div className="px-6 sm:px-10 lg:px-14 pb-10 lg:pb-12">
-            <div className="rounded-2xl border border-[#E8E4D9] bg-white p-5 sm:p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <p className="text-sm text-gray-600 font-medium leading-relaxed">
-                Your data privacy matters to us. We keep our data practices transparent and aligned with lawful processing requirements.
-                </p>
-                <div className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-extrabold text-[#3C7E44]">
-                Effective Version
-                <ChevronRight size={14} />
-                Feb 2026
+              {/* Subsections */}
+              {section.subsections && (
+                <div className="space-y-6 ml-6">
+                  {section.subsections.map((subsection, idx) => (
+                    <div key={idx}>
+                      <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                        {subsection.subtitle}
+                      </h3>
+                      <p className="text-base text-gray-700 leading-relaxed">
+                        {subsection.text}
+                      </p>
+                    </div>
+                  ))}
                 </div>
-            </div>
-            </div>
-        </div>
-        </div>
-    );
-    };
+              )}
 
-    export default PrivacyPolicy;
+              {/* Lists */}
+              {section.list && (
+                <ul className="space-y-3 ml-6">
+                  {section.list.map((item, idx) => (
+                    <li
+                      key={idx}
+                      className="text-base text-gray-700 leading-relaxed flex items-start gap-3"
+                    >
+                      <span className="text-[#3C7E44] mt-1.5 flex-shrink-0">
+                        •
+                      </span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Footer Contact Section */}
+        <div className="mt-16 pt-8 border-t-2 border-[#E8E4D9]">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Contact Us</h3>
+          <p className="text-base text-gray-700 leading-relaxed mb-4">
+            If you have any questions about this Privacy Policy or our data
+            practices, please contact us:
+          </p>
+          <div className="space-y-2">
+            <p className="text-base text-gray-700">
+              <span className="font-semibold">Email:</span>{" "}
+              <a
+                href="mailto:privacy@fruitbounty.com"
+                className="text-[#B7A261] hover:text-[#9d8a51] transition-colors"
+              >
+                privacy@fruitbounty.com
+              </a>
+            </p>
+            <p className="text-base text-gray-700">
+              <span className="font-semibold">Support:</span>{" "}
+              <a
+                href="mailto:support@fruitbounty.com"
+                className="text-[#B7A261] hover:text-[#9d8a51] transition-colors"
+              >
+                support@fruitbounty.com
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PrivacyPolicy;
