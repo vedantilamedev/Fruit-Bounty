@@ -1,6 +1,6 @@
 import { FaInstagram, FaGlobe, FaPhoneAlt } from "react-icons/fa";
 import { useEffect, useRef, useState } from "react";
-
+import { Link } from "react-router-dom";
 function Footer() {
   const footerRef = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -84,11 +84,16 @@ function Footer() {
               <li className="hover:text-[#C9C27A] transition cursor-pointer">
                 Contact Us
               </li>
-              <li className="hover:text-[#C9C27A] transition cursor-pointer">
+              <li>
+              <Link  to="/privacy-policy" className="hover:text-[#C9C27A] transition cursor-pointer">
                 Privacy Policy
+                </Link>
               </li>
-              <li className="hover:text-[#C9C27A] transition cursor-pointer">
+              <li>
+              <Link
+                  to="/terms-and-conditions" className="hover:text-[#C9C27A] transition cursor-pointer">
                 Terms & Conditions
+                  </Link>
               </li>
             </ul>
 
