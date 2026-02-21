@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Visibility, VisibilityOff, Security } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
   const [isRegistering, setIsRegistering] = useState(false);
@@ -16,6 +18,7 @@ const AdminLogin = () => {
     setAnimate(false);
     setIsRegistering(!isRegistering);
   };
+const navigate = useNavigate();
 
   const styles = {
     pageWrapper: {
@@ -97,6 +100,57 @@ const AdminLogin = () => {
       fontSize: '1rem',
     }
   };
+const handleRegister = () => {
+  console.log("Register Data:", registerData);
+
+  if (!registerData.name || !registerData.email ||
+      !registerData.secretKey || !registerData.password) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  // API call here
+  axios.post("/api/admin/register", registerData)
+
+  alert("Request Sent Successfully!");
+};
+
+const [loginData, setLoginData] = useState({
+  email: "",
+  password: ""
+});
+
+const [registerData, setRegisterData] = useState({
+  name: "",
+  email: "",
+  secretKey: "",
+  password: ""
+});
+
+const handleLogin = async (e) => {
+  e.preventDefault();
+
+  try {
+    const res = await axios.post(
+      "http://localhost:5000/api/admin/login",
+      loginData
+    );
+
+    if (res.data.role !== "admin") {
+      alert("Access denied. Not an admin.");
+      return;
+    }
+
+    localStorage.setItem("token", res.data.token);
+    alert("Admin Login Successful");
+
+    // redirect to admin dashboard
+    navigate("/admin/dashboard");
+
+  } catch (error) {
+    alert(error.response?.data?.message || "Login Failed");
+  }
+};
 
   return (
     <div style={styles.pageWrapper}>
@@ -135,22 +189,52 @@ const AdminLogin = () => {
           <h1 style={{ marginBottom: '5px' }}>Register Admin</h1>
           <p style={{ color: '#666', marginBottom: '25px' }}>Create your management account.</p>
           
-          <div style={styles.inputGroup}><label>Full Name</label><input type="text" placeholder="Admin Name" style={styles.input} /></div>
+         <div style={styles.inputGroup}>
+           <label>Full Name</label>
+           <input
+             type="text"
+             placeholder="Admin Name"
+             style={styles.input}
+             value={registerData.name}
+             onChange={(e) => setRegisterData({ ...registerData, name: e.target.value })}
+           />
+         </div>
+
+         <div style={styles.inputGroup}>
+           <label>Email</label>
+           <input
+             type="email"
+             placeholder="admin@fruitbounty.com"
+             style={styles.input}
+             value={registerData.email}
+             onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
+           />
+         </div>
+
+         <div style={styles.inputGroup}>
+           <label>Secret Admin Key</label>
+           <input
+             type="password"
+             placeholder="Enter provided key"
+             style={{ ...styles.input, border: '1.5px solid #4CAF50' }}
+             value={registerData.secretKey}
+             onChange={(e) => setRegisterData({ ...registerData, secretKey: e.target.value })}
+           />
+         </div>
+
+         <div style={styles.inputGroup}>
+           <label>Password</label>
+           <input
+             type={showPassword ? 'text' : 'password'}
+             style={styles.input}
+             value={registerData.password}
+             onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
+           />
+         </div>
           
-          <div style={styles.inputGroup}>
-            <label>Secret Admin Key</label>
-            <input type="password" placeholder="Enter provided key" style={{ ...styles.input, border: '1.5px solid #4CAF50' }} />
-          </div>
-          
-          <div style={styles.inputGroup}>
-            <label>Password</label>
-            <input type={showPassword ? 'text' : 'password'} style={styles.input} />
-            <div style={{ position: 'absolute', right: '12px', bottom: '10px', cursor: 'pointer', display: 'flex' }} onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
-            </div>
-          </div>
-          
-          <button style={styles.primaryBtn}>Request Access</button>
+         <button style={styles.primaryBtn} onClick={handleRegister}>
+           Request Access
+         </button>
           
           <p style={{ textAlign: 'center', marginTop: '20px' }}>
             Already Admin? <span className="toggle-link" onClick={toggleMode} style={{ color: '#2D4F1E', cursor: 'pointer', fontWeight: 'bold' }}>Login</span>
@@ -158,32 +242,49 @@ const AdminLogin = () => {
         </div>
 
         {/* LOGIN FORM */}
-        <div className="form-column login-col" style={{ ...styles.formSide, visibility: !isRegistering ? 'visible' : 'hidden' }}>
+       <form
+         className="form-column login-col"
+         onSubmit={handleLogin}
+         style={{ ...styles.formSide, visibility: !isRegistering ? 'visible' : 'hidden' }}
+        >
           <h1 style={{ marginBottom: '5px' }}>Admin Login</h1>
           <p style={{ color: '#666', marginBottom: '25px' }}>Enter your credentials to continue.</p>
           
-          <div style={styles.inputGroup}><label>Admin ID</label><input type="text" placeholder="admin@fruitbounty.com" style={styles.input} /></div>
-          
-          <div style={styles.inputGroup}>
-            <label>Password</label>
-            <input type={showPassword ? 'text' : 'password'} style={styles.input} />
-            <div style={{ position: 'absolute', right: '12px', bottom: '10px', cursor: 'pointer', display: 'flex' }} onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
-            </div>
-          </div>
+        <div style={styles.inputGroup}>
+          <label>Admin ID</label>
+          <input
+            type="text"
+            placeholder="admin@fruitbounty.com"
+            style={styles.input}
+            value={loginData.email}
+            onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+          />
+        </div>
+
+        <div style={styles.inputGroup}>
+          <label>Password</label>
+          <input
+            type={showPassword ? 'text' : 'password'}
+            style={styles.input}
+            value={loginData.password}
+            onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+          />
 
           <div style={{ textAlign: 'right', marginBottom: '15px' }}>
             <Link to="/forgot-password" size="small" className="forget-link" style={{ color: '#2D4F1E', fontSize: '0.8rem', textDecoration: 'none', fontWeight: '600' }}>Forget password?</Link>
           </div>
 
-          <button style={styles.primaryBtn}>Secure Sign In</button>
+          <button type="submit" style={styles.primaryBtn}>
+            Secure Sign In
+          </button>
           
           <p style={{ textAlign: 'center', marginTop: '20px' }}>
             New Admin? <span className="toggle-link" onClick={toggleMode} style={{ color: '#2D4F1E', cursor: 'pointer', fontWeight: 'bold' }}>Register Here</span>
           </p>
-        </div>
-      </div>
-    </div>
+              </div>
+            </form>
+            </div>
+          </div>
   );
 };
 

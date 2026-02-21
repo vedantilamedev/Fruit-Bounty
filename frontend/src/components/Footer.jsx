@@ -8,7 +8,7 @@ function Footer() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => setVisible(entry.isIntersecting),
-      { threshold: 0.2 },
+      { threshold: 0.1 },
     );
 
     if (footerRef.current) observer.observe(footerRef.current);
@@ -16,55 +16,52 @@ function Footer() {
   }, []);
 
   return (
-    <footer
-      ref={footerRef}
-      className="relative bg-cover bg-center text-white overflow-hidden"
-      style={{
-        backgroundImage: "url('/images/footerbackground.png')",
-      }}
-    >
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-green-950/85 backdrop-blur-sm"></div>
-
+    <footer className="w-full">
+      {/* - Extra border hata di gayi hai taaki original image border dikhe.
+         - md:aspect-[1920/800] maintain karta hai image ke original proportions ko.
+         - items-center content ko vertically center rakhta hai.
+      */}
       <div
-        className={`relative z-10 max-w-7xl mx-auto px-6 py-20 transition-all duration-700 ${
-          visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-        }`}
+        ref={footerRef}
+        className="relative w-full overflow-hidden bg-no-repeat bg-cover bg-center md:aspect-[1920/800] min-h-[650px] md:min-h-[500px] flex items-center"
+        style={{
+          backgroundImage: "url('/public/images/footer-background.png')",
+        }}
       >
-        <div className="grid md:grid-cols-4 gap-12">
-          {/* Brand + Description */}
-          <div>
-            <img
-              src="/images/footerlogo.png"
-              alt="Fruit's Bounty"
-              className="w-28 mb-4"
-            />
+        {/* Subtle overlay to make text pop without hiding the Hawa Mahal graphic */}
+        <div className="absolute inset-0 bg-green-950/70 md:bg-green-950/50"></div>
 
-            <h2 className="text-xl font-semibold mb-4">Fruit's Bounty</h2>
-
-            <p className="text-white/80 leading-relaxed text-sm">
-              Delivering farm-fresh, premium fruit bowls crafted with seasonal
-              ingredients. Our mission is to make healthy eating convenient,
-              delicious, and accessible for everyone.
-            </p>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-6">Quick Links</h3>
-
-            <ul className="space-y-3 text-white/80">
-              {[
-                "Home",
-                "Our Bowls",
-                "Customize Bowl",
-                "Offers",
-                "About Us",
-              ].map((item, index) => (
-                <li
-                  key={index}
-                  className="hover:text-[#C9C27A] transition cursor-pointer"
+        {/* Content Wrapper */}
+        <div
+          className={`relative z-10 w-full max-w-7xl mx-auto px-6 md:px-10 py-10 transition-all duration-1000 ${
+            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+          }`}
+        >
+          {/* Main Grid Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 text-white items-start">
+            
+            {/* 1. Brand Identity */}
+            <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-4">
+              <div className="w-28 md:w-32">
+                <img
+                  src="/public/images/footerlogo.png"
+                  alt="Fruit's Bounty"
+                  className="w-full h-auto object-contain"
+                />
+              </div>
+              <div>
+                <h2 className="text-xl md:text-2xl font-bold tracking-tight text-[#C9C27A]">Fruit's Bounty</h2>
+                <p className="text-sm opacity-90 leading-relaxed max-w-[280px]">
+                  Delivering farm-fresh, premium fruit bowls crafted with seasonal ingredients.
+                </p>
+              </div>
+              
+              <div className="flex gap-4">
+                <a 
+                  href="https://www.instagram.com/fruitsbounty/" 
+                  className="w-10 h-10 rounded-full bg-[#C9C27A] text-green-900 flex items-center justify-center hover:bg-white transition shadow-lg"
                 >
+
                   {item}
                 </li>
               ))}
@@ -84,68 +81,67 @@ function Footer() {
               <li className="hover:text-[#C9C27A] transition cursor-pointer">
                 Contact Us
               </li>
-              <li>
-              <Link  to="/privacy-policy" className="hover:text-[#C9C27A] transition cursor-pointer">
-                Privacy Policy
-                </Link>
-              </li>
-              <li>
-              <Link
-                  to="/terms-and-conditions" className="hover:text-[#C9C27A] transition cursor-pointer">
-                Terms & Conditions
-                  </Link>
-              </li>
+             <li>
+               <Link
+              to="/privacy-policy"
+              className="hover:text-[#C9C27A] transition cursor-pointer"
+                  >
+               Privacy Policy
+               </Link>
+                </li>   
+                <li>
+                <Link
+                 to="/terms-and-conditions"
+              className="hover:text-[#C9C27A] transition cursor-pointer"
+                >
+               Terms & Conditions
+              </Link>
+                </li>
             </ul>
-
-            {/* Only 2 Social Icons (Same as before) */}
-            <div className="flex gap-4 mt-6">
-              <a
-                href="https://www.instagram.com/fruitsbounty/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-[#C9C27A] text-green-900 hover:scale-110 transition duration-300"
-              >
-                <FaInstagram />
-              </a>
-
-              <a
-                href="https://fruitbounty.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-[#C9C27A] text-green-900 hover:scale-110 transition duration-300"
-              >
-                <FaGlobe />
-              </a>
+                  <FaInstagram size={18} />
+                </a>
+                <a 
+                  href="https://fruitbounty.com/" 
+                  className="w-10 h-10 rounded-full bg-[#C9C27A] text-green-900 flex items-center justify-center hover:bg-white transition shadow-lg"
+                >
+                  <FaGlobe size={18} />
+                </a>
+              </div>
             </div>
+
+
+            {/* 2. Navigation */}
+            <div className="flex flex-col items-center md:items-start space-y-3">
+              <h3 className="text-lg font-bold text-[#C9C27A] uppercase tracking-wider mb-2">Explore</h3>
+              {["Home", "Our Bowls", "Customize Bowl", "Offers", "About Us"].map((link) => (
+                <a key={link} href="#" className="text-sm md:text-base font-medium hover:text-[#C9C27A] transition-colors w-fit">
+                  {link}
+                </a>
+              ))}
+            </div>
+
+            {/* 3. Customer Care & Policies */}
+            <div className="flex flex-col items-center md:items-start space-y-3">
+              <h3 className="text-lg font-bold text-[#C9C27A] uppercase tracking-wider mb-2">Customer Care</h3>
+              <a href="#" className="text-sm md:text-base font-medium hover:text-[#C9C27A] transition-colors w-fit">Contact Us</a>
+              <a href="#" className="text-sm md:text-base font-medium hover:text-[#C9C27A] transition-colors w-fit">Terms & Conditions</a>
+              <a href="#" className="text-sm md:text-base font-medium hover:text-[#C9C27A] transition-colors w-fit">Privacy Policy</a>
+              <div className="flex items-center gap-2 pt-4 text-[#C9C27A]">
+                  <FaPhoneAlt size={14} />
+                  <span className="font-bold text-white text-base md:text-lg">+91 8955276223</span>
+              </div>
+            </div>
+
+            {/* 4. Spacer Column (Keeps the Hawa Mahal graphic visible on the right) */}
+            <div className="hidden lg:block"></div>
           </div>
 
-          {/* Newsletter */}
-          <div>
-            <h3 className="text-lg font-semibold mb-6">
-              Subscribe to Newsletter
-            </h3>
-
-            <p className="text-white/80 text-sm mb-4">
-              Get updates on new bowls, offers, and seasonal specials.
+          {/* Copyright - Pure white and bold for maximum visibility */}
+          <div className="w-full text-center mt-12 md:mt-20">
+            <p className="text-[11px] md:text-sm text-[#C9C27A] tracking-[0.3em] font-bold uppercase drop-shadow-lg">
+              © 2026 FRUIT'S BOUNTY. ALL RIGHTS RESERVED.
             </p>
-
-            <div className="flex flex-col gap-4">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="px-4 py-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 focus:outline-none focus:ring-2 focus:ring-[#C9C27A] text-white placeholder-white/60"
-              />
-
-              <button className="bg-gradient-to-r from-[#C9C27A] to-[#AFA855] text-green-900 font-semibold py-3 rounded-xl hover:scale-105 transition duration-300">
-                Subscribe
-              </button>
-            </div>
           </div>
-        </div>
-
-        {/* Bottom */}
-        <div className="border-t border-white/20 mt-16 pt-6 text-center text-sm text-white/60">
-          © {new Date().getFullYear()} Fruit's Bounty. All rights reserved.
         </div>
       </div>
     </footer>

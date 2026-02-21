@@ -1,15 +1,24 @@
 import express from "express";
-import { getDashboardStats } from "../controllers/adminController.js";
+import {
+  adminLogin,
+  adminRegister,
+  getDashboardStats
+} from "../controllers/adminController.js";
 
 import authMiddleware from "../middleware/authMiddleware.js";
-import roleMiddleware from "../middleware/roleMiddleware.js";
+import adminMiddleware from "../middleware/adminMiddleware.js";
 
 const router = express.Router();
 
+// 🔥 Add these
+router.post("/login", adminLogin);
+router.post("/register", adminRegister);
+
+// Dashboard
 router.get(
   "/dashboard",
   authMiddleware,
-  roleMiddleware("admin"),
+  adminMiddleware,
   getDashboardStats
 );
 

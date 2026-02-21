@@ -16,6 +16,7 @@ import LocationDrawer from "./components/LocationDrawer";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import AdminLogin from "./pages/AdminLogin";
 import ForgotPassword from "./pages/ForgotPassword";
 import Fruits from "./pages/Fruits";
 import Cart from "./pages/Cart";
@@ -27,6 +28,7 @@ import ContactUs from "./pages/ContactUs";
 import FruitShop from "./pages/FruitShop";
 import CustomBowlPage from "./pages/CustomBowlPage";
 import Dashboard from "./pages/UserDashboard/Dashboard";
+import { Navigate } from "react-router-dom";
 
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -87,6 +89,15 @@ function Layout({ children }) {
     </div>
   );
 }
+const ProtectedRoute = ({ children }) => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+};
 
 // ---------------- App ----------------
 export default function App() {
@@ -97,6 +108,7 @@ export default function App() {
           {/* User Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/adminlogin" element={<AdminLogin />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/fruits" element={<Fruits />} />
           <Route path="/shop" element={<FruitShop />} />
@@ -106,15 +118,26 @@ export default function App() {
           <Route path="/subscription" element={<Subscription />} />
           <Route path="/plancustomization" element={<PlanCustomization />} />
           <Route path="/contactus" element={<ContactUs />} />
-          <Route path="/customize" element={<CustomBowlPage />} />
-
-          {*/Terms And Conditions and Privacy Policy */}
+           {*/Terms And Conditions and Privacy Policy */}
            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          
+          <Route path="/customize" element={<CustomBowlPage />} />
+
+
+      
           {/* Remove if not using CartPage */}
           {/* <Route path="/cart-page" element={<CartPage />} /> */}
           <Route path="/dashboard" element={<Dashboard />} />
+
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+
 
           {/* Admin */}
           <Route path="/admin/*" element={<AdminRoutes />} />

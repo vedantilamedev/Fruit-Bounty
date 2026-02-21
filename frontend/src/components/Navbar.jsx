@@ -3,9 +3,13 @@ import { useCart } from "../context/CartContext";
 
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
+    const token = localStorage.getItem("token");
   const { cart } = useCart();
+  const navigate = useNavigate();
+
 
   const [show, setShow] = useState(true);
   const [lastScroll, setLastScroll] = useState(0);
@@ -89,27 +93,48 @@ function Navbar() {
                 <User size={18} color="white" />
               </button>
 
-              {authOpen && (
-                <div className="absolute right-0 mt-3 w-48 bg-white rounded-2xl shadow-2xl border border-green-50 overflow-hidden z-50" data-aos="fade-down" data-aos-duration="300">
-                  <div className="p-2">
-                    <Link to="/login" onClick={() => setAuthOpen(false)} className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-green-50 rounded-xl transition group">
-                      <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center text-green-700 group-hover:bg-green-700 group-hover:text-white transition">
-                        <LogIn size={16} />
-                      </div>
-                      <span className="font-semibold text-gray-700">Register</span>
-                    </Link>
+             {authOpen && (
+               <div className="absolute right-0 mt-3 w-48 bg-white rounded-2xl shadow-2xl border border-green-50 overflow-hidden z-50">
 
-                    
-                  </div>
+                 {!token ? (
+                   <div className="p-2">
+                     <Link
+                       to="/login"
+                       onClick={() => setAuthOpen(false)}
+                       className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-green-50 rounded-xl transition"
+                     >
+                       <LogIn size={16} />
+                       Register / Login
+                     </Link>
+                   </div>
+                 ) : (
+                   <div className="p-2 space-y-2">
 
-                  <div className="border-t border-gray-100 p-2">
-                    <Link to="/user-dashboard" onClick={() => setAuthOpen(false)} className="w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-green-700 bg-green-50 rounded-xl hover:bg-green-100 transition">
-                      <User size={16} />
-                      Dashboard (Demo)
-                    </Link>
-                  </div>
-                </div>
-              )}
+                     <button
+                       onClick={() => {
+                         navigate("/dashboard");
+                         setAuthOpen(false);
+                       }}
+                       className="w-full flex items-center gap-3 px-4 py-3 text-sm text-green-700 hover:bg-green-50 rounded-xl transition"
+                     >
+                       <User size={16} />
+                       Dashboard
+                     </button>
+
+                     <button
+                       onClick={() => {
+                         localStorage.removeItem("token");
+                         window.location.href = "/";
+                       }}
+                       className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 rounded-xl transition"
+                     >
+                       Logout
+                     </button>
+
+                   </div>
+                 )}
+               </div>
+             )}
             </div>
           </div>
         </div>
