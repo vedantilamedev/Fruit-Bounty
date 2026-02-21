@@ -18,7 +18,7 @@ const generateToken = (id, role) => {
 //  Register User (Customer or Admin)
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, secretKey } = req.body;
 
     const userExists = await User.findOne({ email });
 
@@ -28,35 +28,42 @@ export const registerUser = async (req, res) => {
       });
     }
 
+    // 🔐 If registering as Admin → validate secret key
+    if (role === "admin") {
+      if (!secretKey || secretKey !== process.env.ADMIN_SECRET_KEY) {
+        return res.status(403).json({
+          message: "Invalid Secret Admin Key"
+        });
+      }
+    }
+
     const user = await User.create({
       name,
       email,
       password,
-      role
+      role: role || "customer" // default role
     });
 
-    if (user) {
-      //  Send Welcome Email using Brevo
-      try {
-        await sendEmail({
-          email: user.email,
-          subject: "Welcome to Fruits Bounty",
-          message: `<p>Hello ${user.name},</p>
-                    <p>Welcome to Fruits Bounty! Your account has been successfully created.</p>
-                    <p>- Fruits Bounty Team</p>`
-        });
-      } catch (err) {
-        console.log("Error sending welcome email:", err.message);
-      }
-
-      res.status(201).json({
-        _id: user._id,
-        name: user.name,
+    // Send Welcome Email
+    try {
+      await sendEmail({
         email: user.email,
-        role: user.role,
-        token: generateToken(user._id, user.role)
+        subject: "Welcome to Fruits Bounty",
+        message: `<p>Hello ${user.name},</p>
+                  <p>Your account has been successfully created.</p>
+                  <p>- Fruits Bounty Team</p>`
       });
+    } catch (err) {
+      console.log("Error sending welcome email:", err.message);
     }
+
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      token: generateToken(user._id, user.role)
+    });
 
   } catch (error) {
     console.log(error);
@@ -66,43 +73,40 @@ export const registerUser = async (req, res) => {
   }
 };
 
-//  Login User
-export const loginUser = async (req, res) => {
-  try {
-    const { email, password } = req.body;
 
+// Login User
+export const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(401).json({
-        message: "Invalid email or password"
-      });
+      return res.status(400).json({ message: "User not found" });
     }
 
     const isMatch = await user.matchPassword(password);
 
     if (!isMatch) {
-      return res.status(401).json({
-        message: "Invalid email or password"
-      });
+      return res.status(400).json({ message: "Invalid password" });
     }
 
-    res.status(200).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      token: generateToken(user._id, user.role)
+    const token = jwt.sign(
+      { id: user._id, role: user.role }, // ✅ include role
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    res.json({
+      success: true,
+      token,
+      role: user.role // send role to frontend
     });
 
   } catch (error) {
-    res.status(500).json({
-      message: "Server Error"
-    });
+    res.status(500).json({ message: error.message });
   }
 };
-
-
 export const forgotPassword = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
