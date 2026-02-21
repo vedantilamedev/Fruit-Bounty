@@ -21,6 +21,10 @@ import ContactUs from "./pages/ContactUs";
 import FruitShop from "./pages/FruitShop";
 import CustomBowlPage from "./pages/CustomBowlPage";
 import Dashboard from "./pages/UserDashboard/Dashboard";
+import { Navigate } from "react-router-dom";
+import TermsAndConditions from "./pages/TermsAndConditions";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+
 // ❗ Add this if you really have CartPage
 // import CartPage from "./pages/CartPage";
 import AdminRoutes from "./admin/routes/AdminRoutes";
@@ -71,6 +75,16 @@ function Layout({ children }) {
     </div>
   );
 }
+const ProtectedRoute = ({ children }) => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+};
+
 // ---------------- App ----------------
 export default function App() {
   return (
@@ -92,8 +106,26 @@ export default function App() {
           <Route path="/subscription" element={<Subscription />} />
           <Route path="/plancustomization" element={<PlanCustomization />} />
           <Route path="/contactus" element={<ContactUs />} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/customize" element={<CustomBowlPage />} />
+
+
+      
+          {/* Remove if not using CartPage */}
+          {/* <Route path="/cart-page" element={<CartPage />} /> */}
           <Route path="/dashboard" element={<Dashboard />} />
+
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+
+
           {/* Admin */}
           <Route path="/admin/*" element={<AdminRoutes />} />
         </Routes>

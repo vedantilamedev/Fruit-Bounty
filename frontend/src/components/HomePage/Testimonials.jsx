@@ -54,29 +54,39 @@ function Testimonials() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-20 px-6 md:px-16 lg:px-24 bg-[#FBF8F2] overflow-hidden"
+      className="relative py-8 md:py-12 px-6 md:px-16 lg:px-24 bg-[#FBF8F2] overflow-hidden"
     >
-      {/* ================= Heading ================= */}
+      {/* 1. BACKGROUND IMAGE LAYER - Reference from SaladSection.jsx */}
+      <div 
+        className="absolute inset-0 z-0 opacity-40 pointer-events-none"
+        style={{ 
+          backgroundImage: `url('/public/images/main-background.PNG')`,
+          backgroundSize: '400px',
+          backgroundRepeat: 'repeat'
+        }}
+      ></div>
+
+      {/* 2. HEADING SECTION - Shortened spacing and bold font style */}
       <div
-        className={`text-center mb-16 transition-all duration-700 ${
+        className={`relative z-10 text-center mb-10 md:mb-14 max-w-2xl mx-auto transition-all duration-700 ${
           visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
         }`}
       >
-        <h2 className="text-4xl md:text-5xl font-bold text-gray-800 font-['Playfair_Display']">
+        <h2 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tight">
           What Our Customers Say
         </h2>
 
-        <div className="w-24 h-1 bg-gradient-to-r from-green-600 to-emerald-500 mx-auto my-6 rounded-full"></div>
+        <div className="w-16 h-1 bg-[#2D5A27] mx-auto mt-3 mb-6 rounded-full"></div>
 
-        <p className="text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed">
+        <p className="text-gray-600 text-sm md:text-base font-medium leading-relaxed">
           Our customers love the freshness, customization, and premium quality
           we deliver. Here’s what fruit lovers across different cities have to
           say.
         </p>
       </div>
 
-      {/* ================= Auto Scroll Wrapper ================= */}
-      <div className="relative overflow-hidden group">
+      {/* 3. AUTO SCROLL WRAPPER */}
+      <div className="relative z-10 overflow-hidden group">
         <div className="flex gap-10 animate-scroll group-hover:[animation-play-state:paused] w-max">
           {[...testimonials, ...testimonials].map((item, index) => (
             <div

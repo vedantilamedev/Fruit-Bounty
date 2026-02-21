@@ -1,205 +1,133 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { FaLeaf, FaTruck, FaAppleAlt } from "react-icons/fa";
 
 const Hero = () => {
   const navigate = useNavigate();
 
+  // The four perimeter bowls following the background arc
+  const sideBowls = [
+    { id: 1, img: "/images/salad1.png", top: "12%", left: "55%", delay: "0s" },
+    { id: 2, img: "/images/salad2.png", top: "32%", left: "68%", delay: "0.5s" },
+    { id: 3, img: "/images/salad3.png", top: "58%", left: "68%", delay: "1s" },
+    { id: 4, img: "/images/salad4.png", top: "78%", left: "55%", delay: "1.5s" },
+  ];
+
   return (
-    <section className="w-full relative overflow-hidden">
-      {/* ================= DESKTOP ================= */}
-      <div className="hidden lg:block relative w-full min-h-[calc(100vh-120px)]">
-        {/* LEFT SIDE BACKGROUND */}
-        <div className="absolute left-0 top-0 w-1/2 h-full bg-[#f7f5ef]" />
+    <section className="relative w-full min-h-screen overflow-hidden flex flex-col items-center justify-center">
+      
+      {/* DESKTOP BACKGROUND: Original Image */}
+      <div 
+        className="hidden lg:block absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/images/hero-bg.PNG')" }}
+      />
 
-        {/* RIGHT GREEN SIDE */}
-        <div className="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-br from-[#3e7b3f] to-[#2f6131]" />
+      {/* MOBILE BACKGROUND: Golden Gradient */}
+      <div className="lg:hidden absolute inset-0 z-0 bg-gradient-to-b from-[#f7f5ef] via-[#e0cf9c] to-[#b7a261]" />
 
-        {/* LEFT TEXT */}
-        {/* LEFT TEXT - PREMIUM VERSION */}
-        <div className="absolute left-0 top-0 w-1/2 h-full flex items-center pl-28">
-          <div className="relative">
-            {/* Accent Vertical Line */}
-            <div className="absolute -left-6 top-2 w-[3px] h-40 bg-gradient-to-b from-[#c6b27a] to-transparent rounded-full opacity-70" />
+      {/* MAIN CENTER BOWL (Restored from original code) */}
+      <img
+        src="/images/hero.png"
+        alt="Main Featured Bowl"
+        className="absolute z-20 left-1/2 top-1/2 w-[350px] md:w-[450px] lg:w-[520px] 
+        -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_35px_50px_rgba(0,0,0,0.5)] 
+        animateHero pointer-events-none hidden lg:block"
+      />
 
-            {/* Small Tagline */}
-            <p className="text-sm tracking-[6px] text-gray-500 uppercase mb-6 font-['Poppins']">
-              Fresh • Organic • Healthy
-            </p>
-
-            {/* YOUR */}
-            <h1
-              className="text-[96px] font-black leading-none tracking-tight 
-      bg-gradient-to-r from-[#c6b27a] via-[#e0cf9c] to-[#b7a261] 
-      bg-clip-text text-transparent 
-      font-['Playfair_Display']
-      drop-shadow-[0_8px_25px_rgba(0,0,0,0.15)]"
-            >
-              YOUR
-            </h1>
-
-            {/* Daily Dose */}
-            <h2
-              className="text-[60px] italic mt-2 
-      bg-gradient-to-r from-[#c6b27a] to-[#b7a261]
-      bg-clip-text text-transparent
-      font-['Playfair_Display']"
-            >
-              Daily Dose
-            </h2>
-
-            {/* OF FRESHNESS */}
-            <h3
-              className="text-[44px] font-semibold mt-6 tracking-[4px] 
-      text-[#9c8a55] font-['Poppins']"
-            >
-              OF FRESHNESS
-            </h3>
-
-            {/* CTA */}
+      {/* CONTENT WRAPPER */}
+      <div className="relative z-30 w-full max-w-7xl flex flex-col lg:flex-row items-center h-full px-6 lg:px-20">
+        
+        {/* LEFT SECTION: ACTION & ICONS */}
+        <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start space-y-8 lg:space-y-0 h-full">
+          
+          {/* CTA BUTTON: Aligned with 3rd bowl level */}
+          <div className="lg:absolute lg:top-[58%] order-1">
             <button
               onClick={() => navigate("/shop")}
-              className="mt-12 px-12 py-4 
-      bg-gradient-to-r from-green-700 to-green-900 
-      text-white rounded-full text-lg font-medium 
-      shadow-[0_15px_30px_rgba(0,0,0,0.25)] 
-      hover:scale-105 hover:shadow-[0_20px_40px_rgba(0,0,0,0.35)]
-      active:scale-95
-      transition-all duration-300 ease-out"
+              className="px-14 py-4 bg-[#165c30] text-white rounded-full text-lg font-black uppercase tracking-widest
+              shadow-[0_20px_40px_rgba(0,0,0,0.3)] hover:bg-[#0d3d1f] hover:scale-110 
+              transition-all duration-300 ease-in-out active:scale-95 border-2 border-[#c6b27a]/30"
             >
               Taste Now →
             </button>
+
+            {/* ICONS: Now placed directly BELOW the button */}
+            <div className="flex gap-6 mt-10 animate-fade-in justify-center lg:justify-start">
+              {[
+                { icon: <FaLeaf />, label: "Organic" },
+                { icon: <FaAppleAlt />, label: "Fresh" },
+                { icon: <FaTruck />, label: "Fast" }
+              ].map((item, i) => (
+                <div key={i} className="flex flex-col items-center group">
+                  <div className="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center text-[#165c30] text-xl border-2 border-[#c6b27a] transition-transform group-hover:scale-110">
+                    {item.icon}
+                  </div>
+                  <span className="text-[10px] mt-2 font-bold text-[#165c30] uppercase tracking-tighter">
+                    {item.label}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* CIRCLES */}
-        <div className="absolute left-1/2 top-1/2 w-[700px] h-[700px] border border-white/20 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-        <div className="absolute left-1/2 top-1/2 w-[480px] h-[480px] border border-white/20 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+        {/* RIGHT SECTION: SIDE BOWLS */}
+        <div className="w-full lg:w-1/2 relative min-h-[400px] lg:min-h-screen order-2">
+          
+          {/* DESKTOP: Arc Layout */}
+          <div className="hidden lg:block absolute inset-0">
+            {sideBowls.map((bowl) => (
+              <div
+                key={bowl.id}
+                className="absolute cursor-pointer group"
+                style={{ 
+                  top: bowl.top, 
+                  left: bowl.left,
+                  animation: `float 5s ease-in-out infinite`,
+                  animationDelay: bowl.delay
+                }}
+              >
+                <img 
+                  src={bowl.img} 
+                  alt="Side Bowl" 
+                  className="w-48 xl:w-56 drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-all duration-500 group-hover:scale-110 group-hover:rotate-6"
+                />
+              </div>
+            ))}
+          </div>
 
-        {/* HERO IMAGE */}
-        <img
-          src="/images/hero.png"
-          alt="Hero"
-          className="absolute left-1/2 top-1/2 w-[500px] -translate-x-1/2 -translate-y-1/2 drop-shadow-2xl animateHero"
-        />
-
-        {/* FLOATING SALADS */}
-        <div className="absolute right-0 top-0 w-1/2 h-full">
-          <img
-            src="/images/salad1.png"
-            className="absolute w-[190px] top-[8%] left-[28%] 
-            float 
-            transition-all duration-300 ease-out 
-            hover:scale-110 
-            hover:-translate-y-2 
-            hover:rotate-2 
-            hover:drop-shadow-2xl 
-            cursor-pointer"
-          />
-
-          <img
-            src="/images/salad2.png"
-            className="absolute w-[190px] top-[32%] left-[42%] 
-            float 
-            transition-all duration-300 ease-out 
-            hover:scale-110 
-            hover:-translate-y-2 
-            hover:-rotate-2 
-            hover:drop-shadow-2xl 
-            cursor-pointer"
-          />
-
-          <img
-            src="/images/salad3.png"
-            className="absolute w-[190px] top-[55%] left-[35%] 
-            float 
-            transition-all duration-300 ease-out 
-            hover:scale-110 
-            hover:-translate-y-2 
-            hover:rotate-1 
-            hover:drop-shadow-2xl 
-            cursor-pointer"
-          />
-
-          <img
-            src="/images/salad4.png"
-            className="absolute w-[190px] top-[75%] left-[20%] 
-            float 
-            transition-all duration-300 ease-out 
-            hover:scale-110 
-            hover:-translate-y-2 
-            hover:-rotate-1 
-            hover:drop-shadow-2xl 
-            cursor-pointer"
-          />
+          {/* MOBILE: Floating Grid (for responsiveness) */}
+          <div className="lg:hidden grid grid-cols-2 gap-6 p-6 mt-10">
+            {sideBowls.map((bowl) => (
+              <div key={bowl.id} className="animate-float" style={{ animationDelay: bowl.delay }}>
+                <img src={bowl.img} alt="Bowl" className="w-full drop-shadow-xl" />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-
-      {/* ================= MOBILE ================= */}
-      <div className="lg:hidden relative bg-[#efefef] flex flex-col items-center text-center px-5 pt-4 pb-16 overflow-hidden">
-        <div className="absolute w-[420px] h-[420px] border border-gray-300 rounded-full opacity-30 top-[-120px]" />
-
-        <img
-          src="/images/hero.png"
-          alt="Hero"
-          className="w-[280px] mb-6 drop-shadow-2xl animate-[heroPop_.7s_ease]"
-        />
-
-        <h1 className="text-[40px] font-black text-[#b7aa6a] leading-none font-['Playfair_Display']">
-          YOUR
-        </h1>
-
-        <h2 className="text-[28px] italic text-[#b7aa6a] font-['Playfair_Display']">
-          Daily Dose
-        </h2>
-
-        <h3 className="text-[20px] font-semibold text-[#b7aa6a] mb-6 font-['Poppins']">
-          OF FRESHNESS
-        </h3>
-
-        <button
-          onClick={() => navigate("/shop")}
-          className="bg-[#165c30] text-white px-8 py-3 rounded-full shadow-lg 
-          hover:scale-105 transition-all duration-300"
-        >
-          Taste Now
-        </button>
       </div>
 
       <style>{`
         @keyframes heroEnter {
-          from {
-            transform: translate(-50%, -50%) scale(.85);
-            opacity: 0;
-          }
-          to {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-          }
+          from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+          to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
-
-        .animateHero {
-          animation: heroEnter .9s ease forwards;
-        }
-
         @keyframes float {
-          0% { transform: translateY(0px); }
-          50% { transform: translateY(-12px); }
-          100% { transform: translateY(0px); }
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-20px) rotate(2deg); }
         }
-
-        .float {
-          animation: float 5s ease-in-out infinite;
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-
-        @keyframes heroPop {
-          from {
-            opacity: 0;
-            transform: scale(.85);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
+        .animateHero {
+          animation: heroEnter 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .animate-float {
+          animation: float 4s ease-in-out infinite;
+        }
+        .animate-fade-in {
+          animation: fade-in 1.2s ease-out forwards;
         }
       `}</style>
     </section>

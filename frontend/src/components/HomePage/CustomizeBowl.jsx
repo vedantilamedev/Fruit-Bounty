@@ -27,44 +27,64 @@ function CustomizeBowl() {
   ];
 
   return (
-    <section className="relative py-16 md:py-20 px-6 md:px-16 lg:px-24 bg-[#FBF8F2] overflow-hidden">
-      {/* Soft Background Texture */}
-      <div className="absolute inset-0 opacity-40 pointer-events-none bg-[radial-gradient(circle_at_20%_30%,rgba(34,197,94,0.08),transparent_40%),radial-gradient(circle_at_80%_70%,rgba(16,185,129,0.08),transparent_40%)]"></div>
+    <section className="relative py-8 md:py-12 px-6 md:px-16 lg:px-24 overflow-hidden">
+      {/* 1. BACKGROUND IMAGE LAYER - Reference from SaladSection.jsx */}
+      <div 
+        className="absolute inset-0 z-0 opacity-40 pointer-events-none"
+        style={{ 
+          backgroundImage: `url('/public/images/main-background.PNG')`,
+          backgroundSize: '400px',
+          backgroundRepeat: 'repeat'
+        }}
+      ></div>
 
-      {/* Heading */}
-      <div className="relative text-center mb-16 max-w-3xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-bold text-gray-800 font-['Playfair_Display']">
+      {/* 2. HEADING SECTION - Shortened space and requested font style */}
+      <div className="relative z-10 text-center mb-8 md:mb-12 max-w-2xl mx-auto px-6">
+        <h2 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tight">
           Customize Your Bowl
         </h2>
-
-        <p className="text-gray-500 mt-6 text-lg leading-relaxed">
-          Build your perfect fruit bowl exactly the way you like it. From
-          selecting farm-fresh fruits to choosing delicious toppings and the
-          right portion size — enjoy a fully personalized healthy experience.
-        </p>
-
-        <div className="w-24 h-[3px] bg-gradient-to-r from-green-600 to-emerald-500 mx-auto mt-8 rounded-full"></div>
+        <div className="w-16 h-1 bg-[#2D5A27] mx-auto mt-3 mb-6 rounded-full"></div>
+        
+        {/* Expanded Professional Details */}
+        <div className="space-y-4">
+          <p className="text-gray-700 text-lg md:text-xl font-bold leading-tight">
+            Build your perfect fruit bowl exactly the way you like it.
+          </p>
+          <p className="text-gray-500 text-sm md:text-base font-medium leading-relaxed">
+            Experience the ultimate flexibility in healthy eating. At Fruit's Bounty, we believe your 
+            nutrition should be as unique as your palate. Hand-select your favorite seasonal fruits, 
+            premium toppings, and the perfect portion size for a nutritious experience tailored 
+            specifically to your taste and dietary needs.
+          </p>
+        </div>
       </div>
 
-      {/* Steps Grid */}
-      <div className="relative grid gap-10 md:gap-12 items-stretch md:grid-cols-3">
+      {/* 3. STEPS GRID */}
+      <div className="relative z-10 grid gap-10 md:gap-12 items-stretch md:grid-cols-3">
         {steps.map((step, index) => (
           <CustomizeStepCard key={index} step={step} index={index} />
         ))}
       </div>
 
-      {/* CTA */}
-      <div className="relative flex justify-center mt-16">
+      {/* 4. CTA */}
+      <div className="relative z-10 flex justify-center mt-12">
         <button
           onClick={() => navigate("/customize")}
           className="bg-gradient-to-r from-green-700 to-green-900
           hover:from-green-800 hover:to-green-950
-          text-white px-14 py-4 rounded-full font-semibold text-lg
-          shadow-xl hover:scale-105 active:scale-95 transition duration-300"
+          text-white px-14 py-4 rounded-full font-bold text-lg
+          shadow-xl hover:scale-105 active:scale-95 transition-all duration-300"
         >
           Build Your Bowl →
         </button>
       </div>
+
+      {/* Reference styling for background and base colors */}
+      <style jsx>{`
+        section {
+            background-color: #FBF8F2; /* Base cream color */
+        }
+      `}</style>
     </section>
   );
 }

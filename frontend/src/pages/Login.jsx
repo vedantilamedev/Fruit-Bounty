@@ -1,12 +1,23 @@
 import { registerUser, loginUser } from "../api/api";
 import React, { useState, useEffect } from 'react';
 import { Google, Visibility, VisibilityOff } from '@mui/icons-material';
-import { Link } from 'react-router-dom'; // Added Link import
+import { Link, useNavigate } from 'react-router-dom'; // Added Link import
 
 const LoginRegister = () => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [animate, setAnimate] = useState(false);
+
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      localStorage.setItem("token", res.data.token);
+
+      // Force refresh so Navbar re-checks token
+      window.location.href = "/";
+    }
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => setAnimate(true), 100);
@@ -17,6 +28,8 @@ const LoginRegister = () => {
     setAnimate(false);
     setIsRegistering(!isRegistering);
   };
+
+const navigate = useNavigate();
 
 const [formData, setFormData] = useState({
   name: "",
@@ -33,15 +46,24 @@ const handleRegister = async () => {
   try {
     const res = await registerUser(formData);
 
-    alert("User registered successfully 🔥");
+    alert("User registered successfully 🎉");
     console.log(res.data);
 
-    // auto switch to login
     setIsRegistering(false);
+    alert("Please login with your credentials");
 
   } catch (err) {
-    console.error(err.response?.data || err.message);
-    alert("Registration failed");
+    console.error(err);
+
+    if (err.response) {
+      // Backend responded with error
+      alert(err.response.data.message || "Registration failed ❌");
+    } else if (err.request) {
+      // Server not responding
+      alert("Server not responding. Please try again later.");
+    } else {
+      alert("Something went wrong.");
+    }
   }
 };
 
@@ -52,8 +74,11 @@ const handleLogin = async () => {
     alert("Login successful 🎉");
     console.log(res.data);
 
-    // Example: redirect later
-    // navigate("/dashboard");
+    // Optional: store token
+    localStorage.setItem("token", res.data.token);
+
+    // Redirect to home page
+   navigate("/", { replace: true });
 
   } catch (err) {
     console.error(err.response?.data || err.message);
