@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import { User, Users, Check, Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function Subscription() {
   const sectionRef = useRef(null);
   const [visible, setVisible] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -40,79 +43,126 @@ function Subscription() {
           </p>
         </div>
 
-        {/* ================= Cards ================= */}
-        <div className="flex flex-col md:flex-row justify-center gap-12 mt-16">
-          {/* Individual Plan */}
-          <div
-            className={`group relative w-[320px] h-[420px] rounded-3xl overflow-hidden shadow-xl mx-auto
-            transition-all duration-700 hover:-translate-y-4 hover:shadow-2xl
-            ${
-              visible
-                ? "opacity-100 translate-x-0"
-                : "opacity-0 -translate-x-12"
-            }`}
-          >
-            {/* Background Image */}
-            <img
-              src="/images/subscriptionbg.png"
-              alt="Individual"
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            />
+        {/* ================= Unified Subscription Card ================= */}
+        <div 
+          className={`mt-16 max-w-5xl mx-auto transition-all duration-700 ${
+            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+          }`}
+        >
+          {/* Main Container Card */}
+          <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl bg-white border border-green-100">
+            {/* Background Pattern */}
+            <div className="absolute inset-0 bg-gradient-to-br from-green-50/80 via-emerald-50/50 to-green-50/80"></div>
+            <div className="absolute top-0 right-0 w-96 h-96 bg-green-200/20 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-200/20 rounded-full blur-3xl"></div>
 
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-green-600/70 to-green-800/80 group-hover:from-green-700/80 group-hover:to-green-900/90 transition-all duration-500"></div>
+            {/* Content Grid */}
+            <div className="relative grid md:grid-cols-2 gap-0">
+              
+              {/* ========== INDIVIDUAL PLAN ========== */}
+              <div className="group p-10 md:p-12 flex flex-col transition-all duration-500 hover:bg-white/50">
+                {/* Icon Badge */}
+                <div className="w-16 h-16 bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <User className="w-8 h-8 text-white" strokeWidth={2.5} />
+                </div>
 
-            {/* Content */}
-            <div className="relative h-full flex flex-col items-center justify-end pb-12 text-white">
-              <h3 className="text-2xl font-bold mb-4">Individual Plan</h3>
-              <p className="text-sm px-6 mb-6 text-white/90 text-center">
-                Perfect for daily health enthusiasts who want consistent fresh
-                nutrition delivered to their doorstep.
-              </p>
+                {/* Title */}
+                <h3 className="text-3xl font-bold text-gray-900 mb-3 flex items-center gap-2">
+                  Individual Plan
+                  <Sparkles className="w-6 h-6 text-amber-500" />
+                </h3>
 
-              <button
-                className="bg-white text-gray-800 font-semibold px-10 py-3 rounded-xl shadow-lg
-                hover:scale-105 active:scale-95 transition duration-300"
-              >
-                Choose Plan
-              </button>
-            </div>
-          </div>
+                {/* Description */}
+                <p className="text-gray-600 text-base leading-relaxed mb-6">
+                  Perfect for daily health enthusiasts who want consistent fresh nutrition delivered to their doorstep.
+                </p>
 
-          {/* Corporate Plan */}
-          <div
-            className={`group relative w-[320px] h-[420px] rounded-3xl overflow-hidden shadow-xl mx-auto
-            transition-all duration-700 hover:-translate-y-4 hover:shadow-2xl
-            ${
-              visible
-                ? "opacity-100 translate-x-0 delay-200"
-                : "opacity-0 translate-x-12"
-            }`}
-          >
-            {/* Background Image */}
-            <img
-              src="/images/subscriptionbg.png"
-              alt="Corporate"
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            />
+                {/* Features */}
+                <ul className="space-y-3 mb-8 flex-1">
+                  {[
+                    "Personalized fruit selection",
+                    "Daily or weekly delivery",
+                    "Flexible subscription plans",
+                    "Cancel anytime"
+                  ].map((feature, i) => (
+                    <li key={i} className="flex items-start gap-3 text-gray-700">
+                      <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
+                        <Check className="w-3 h-3 text-green-600" strokeWidth={3} />
+                      </div>
+                      <span className="text-sm">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
 
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-green-600/70 to-green-800/80 group-hover:from-green-700/80 group-hover:to-green-900/90 transition-all duration-500"></div>
+                {/* Button */}
+                <button
+                  onClick={() => navigate("/subscription", { state: { plan: "individual" } })}
+                  className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+                >
+                  Choose Individual Plan
+                </button>
+              </div>
 
-            {/* Content */}
-            <div className="relative h-full flex flex-col items-center justify-end pb-12 text-white">
-              <h3 className="text-2xl font-bold mb-4">Corporate Plan</h3>
-              <p className="text-sm px-6 mb-6 text-white/90 text-center">
-                Ideal for offices and teams looking to promote healthy habits
-                and boost workplace productivity.
-              </p>
+              {/* ========== VERTICAL DIVIDER ========== */}
+              <div className="hidden md:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[80%] w-px">
+                {/* Gradient Line */}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-green-300 to-transparent"></div>
+                
+                {/* Center Ornament */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                  <div className="w-8 h-8 bg-white border-2 border-green-300 rounded-full flex items-center justify-center shadow-md">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
 
-              <button
-                className="bg-white text-gray-800 font-semibold px-10 py-3 rounded-xl shadow-lg
-                hover:scale-105 active:scale-95 transition duration-300"
-              >
-                Choose Plan
-              </button>
+              {/* Mobile Horizontal Divider */}
+              <div className="md:hidden h-px bg-gradient-to-r from-transparent via-green-300 to-transparent my-4 mx-10"></div>
+
+              {/* ========== CORPORATE PLAN ========== */}
+              <div className="group p-10 md:p-12 flex flex-col transition-all duration-500 hover:bg-white/50">
+                {/* Icon Badge */}
+                <div className="w-16 h-16 bg-gradient-to-br from-green-600 to-green-300-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <Users className="w-8 h-8 text-white" strokeWidth={2.5} />
+                </div>
+
+                {/* Title */}
+                <h3 className="text-3xl font-bold text-gray-900 mb-3 flex items-center gap-2">
+                  Corporate Plan
+                  <Sparkles className="w-6 h-6 text-amber-500" />
+                </h3>
+
+                {/* Description */}
+                <p className="text-gray-600 text-base leading-relaxed mb-6">
+                  Ideal for offices and teams looking to promote healthy habits and boost workplace productivity.
+                </p>
+
+                {/* Features */}
+                <ul className="space-y-3 mb-8 flex-1">
+                  {[
+                    "Bulk ordering discounts",
+                    "Office pantry delivery",
+                    "Team wellness tracking",
+                    "Dedicated account manager"
+                  ].map((feature, i) => (
+                    <li key={i} className="flex items-start gap-3 text-gray-700">
+                      <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
+                        <Check className="w-3 h-3 text-green-600" strokeWidth={3} />
+                      </div>
+                      <span className="text-sm">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Button */}
+                <button
+                  onClick={() => navigate("/subscription", { state: { plan: "corporate" } })}
+                  className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+                >
+                  Choose Corporate Plan
+                </button>
+              </div>
+
             </div>
           </div>
         </div>
