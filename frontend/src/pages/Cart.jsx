@@ -36,13 +36,15 @@ function CartPage() {
   };
 
   return (
-    <div className="bg-[#FBF8F2] min-h-screen pb-24 font-sans">
+    <div className="min-h-screen font-sans 
+bg-[url('/images/fruitBackground.png')] 
+bg-cover bg-center bg-no-repeat bg-fixed relative">
       {/* Centered Heading */}
       <div className="py-12 text-center px-6">
         <h1 className="text-3xl font-extrabold text-gray-800 flex items-center justify-center gap-2">
           Review Your Bowl <Sparkles className="text-yellow-500" size={24} />
         </h1>
-        <p className="text-gray-500 mt-2 font-medium italic">"Health is wealth, start with a bowl."</p>
+        <p className="text-blue-600 mt-2 font-medium italic">"Health is wealth, start with a bowl."</p>
       </div>
 
       <div className="max-w-2xl mx-auto px-4 md:px-0 space-y-6">
