@@ -28,6 +28,9 @@ import FruitShop from "./pages/FruitShop";
 import CustomBowlPage from "./pages/CustomBowlPage";
 import Dashboard from "./pages/UserDashboard/Dashboard";
 
+import TermsAndConditions from "./pages/TermsAndConditions";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+
 // ❗ Add this if you really have CartPage
 // import CartPage from "./pages/CartPage";
 
@@ -104,6 +107,11 @@ export default function App() {
           <Route path="/plancustomization" element={<PlanCustomization />} />
           <Route path="/contactus" element={<ContactUs />} />
           <Route path="/customize" element={<CustomBowlPage />} />
+
+          {*/Terms And Conditions and Privacy Policy */}
+           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          
           {/* Remove if not using CartPage */}
           {/* <Route path="/cart-page" element={<CartPage />} /> */}
           <Route path="/dashboard" element={<Dashboard />} />
