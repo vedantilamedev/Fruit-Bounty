@@ -29,7 +29,6 @@ import FruitShop from "./pages/FruitShop";
 import CustomBowlPage from "./pages/CustomBowlPage";
 import Dashboard from "./pages/UserDashboard/Dashboard";
 import { Navigate } from "react-router-dom";
-
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 
@@ -118,8 +117,7 @@ export default function App() {
           <Route path="/subscription" element={<Subscription />} />
           <Route path="/plancustomization" element={<PlanCustomization />} />
           <Route path="/contactus" element={<ContactUs />} />
-           {*/Terms And Conditions and Privacy Policy */}
-           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/customize" element={<CustomBowlPage />} />
 

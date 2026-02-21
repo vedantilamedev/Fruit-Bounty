@@ -44,31 +44,38 @@ function WhatIsFruitSalad() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-16 md:py-20 px-6 md:px-16 lg:px-24 bg-[#FBF8F2] overflow-hidden"
+      className="relative py-8 md:py-12 px-6 md:px-16 lg:px-24 overflow-hidden"
     >
-      {/* Background Texture */}
-      <div className="absolute inset-0 opacity-40 pointer-events-none bg-[radial-gradient(circle_at_20%_30%,rgba(34,197,94,0.08),transparent_40%),radial-gradient(circle_at_80%_70%,rgba(16,185,129,0.08),transparent_40%)]"></div>
+      {/* 1. BACKGROUND IMAGE LAYER - Consistent with SaladSection.jsx */}
+      <div 
+        className="absolute inset-0 z-0 opacity-40 pointer-events-none"
+        style={{ 
+          backgroundImage: `url('/public/images/main-background.PNG')`,
+          backgroundSize: '400px',
+          backgroundRepeat: 'repeat'
+        }}
+      ></div>
 
-      {/* ================= Heading ================= */}
+      {/* 2. HEADING - Specific font styles and reduced margin */}
       <div
-        className={`relative text-center max-w-3xl mx-auto mb-16 transition-all duration-700
+        className={`relative z-10 text-center max-w-2xl mx-auto mb-8 md:mb-12 transition-all duration-700
         ${visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"}`}
       >
-        <h2 className="text-4xl md:text-5xl font-bold text-gray-800 font-['Playfair_Display']">
+        <h2 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tight">
           What is Fruit Salad?
         </h2>
 
-        <div className="w-20 h-[3px] bg-gradient-to-r from-green-600 to-emerald-500 mx-auto my-6 rounded-full"></div>
+        <div className="w-16 h-1 bg-[#2D5A27] mx-auto mt-3 mb-6 rounded-full"></div>
 
-        <p className="text-gray-600 leading-relaxed text-lg">
+        <p className="text-gray-600 leading-relaxed text-sm md:text-base font-medium">
           Fruit salad is a refreshing blend of freshly cut seasonal fruits,
           carefully selected to provide a perfect balance of flavor, texture,
           and nutrition.
         </p>
       </div>
 
-      {/* ================= Cards ================= */}
-      <div className="relative grid gap-10 md:gap-12 items-stretch md:grid-cols-2 lg:grid-cols-3">
+      {/* 3. CARDS - Maintained with z-index correction */}
+      <div className="relative z-10 grid gap-10 md:gap-12 items-stretch md:grid-cols-2 lg:grid-cols-3">
         {cards.map((card, index) => (
           <div
             key={index}
@@ -108,6 +115,13 @@ function WhatIsFruitSalad() {
           </div>
         ))}
       </div>
+
+      {/* Global Style Reference */}
+      <style jsx>{`
+        section {
+            background-color: #FBF8F2; /* Base cream color */
+        }
+      `}</style>
     </section>
   );
 }
