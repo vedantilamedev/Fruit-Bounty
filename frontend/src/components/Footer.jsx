@@ -1,6 +1,6 @@
 import { FaInstagram, FaGlobe, FaPhoneAlt } from "react-icons/fa";
 import { useEffect, useRef, useState } from "react";
-
+import { Link } from "react-router-dom";
 function Footer() {
   const footerRef = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -61,6 +61,43 @@ function Footer() {
                   href="https://www.instagram.com/fruitsbounty/" 
                   className="w-10 h-10 rounded-full bg-[#C9C27A] text-green-900 flex items-center justify-center hover:bg-white transition shadow-lg"
                 >
+
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Customer Care */}
+          <div>
+            <h3 className="text-lg font-semibold mb-6">Customer Care</h3>
+
+            <ul className="space-y-3 text-white/80">
+              <li className="flex items-center gap-3">
+                <FaPhoneAlt className="text-[#C9C27A]" />
+                <span>+91 8955276223</span>
+              </li>
+
+              <li className="hover:text-[#C9C27A] transition cursor-pointer">
+                Contact Us
+              </li>
+             <li>
+               <Link
+              to="/privacy-policy"
+              className="hover:text-[#C9C27A] transition cursor-pointer"
+                  >
+               Privacy Policy
+               </Link>
+                </li>   
+                <li>
+                <Link
+                 to="/terms-and-conditions"
+              className="hover:text-[#C9C27A] transition cursor-pointer"
+                >
+               Terms & Conditions
+              </Link>
+                </li>
+            </ul>
                   <FaInstagram size={18} />
                 </a>
                 <a 
@@ -71,6 +108,7 @@ function Footer() {
                 </a>
               </div>
             </div>
+
 
             {/* 2. Navigation */}
             <div className="flex flex-col items-center md:items-start space-y-3">

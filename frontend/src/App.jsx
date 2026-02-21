@@ -30,6 +30,9 @@ import CustomBowlPage from "./pages/CustomBowlPage";
 import Dashboard from "./pages/UserDashboard/Dashboard";
 import { Navigate } from "react-router-dom";
 
+import TermsAndConditions from "./pages/TermsAndConditions";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+
 // ❗ Add this if you really have CartPage
 // import CartPage from "./pages/CartPage";
 
@@ -115,7 +118,17 @@ export default function App() {
           <Route path="/subscription" element={<Subscription />} />
           <Route path="/plancustomization" element={<PlanCustomization />} />
           <Route path="/contactus" element={<ContactUs />} />
+           {*/Terms And Conditions and Privacy Policy */}
+           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/customize" element={<CustomBowlPage />} />
+
+
+      
+          {/* Remove if not using CartPage */}
+          {/* <Route path="/cart-page" element={<CartPage />} /> */}
+          <Route path="/dashboard" element={<Dashboard />} />
+
           <Route
             path="/dashboard"
             element={
@@ -124,6 +137,7 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+
 
           {/* Admin */}
           <Route path="/admin/*" element={<AdminRoutes />} />
