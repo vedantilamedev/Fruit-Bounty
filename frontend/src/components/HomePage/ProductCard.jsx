@@ -7,110 +7,86 @@ function ProductCard({ product }) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => setVisible(entry.isIntersecting),
-      { threshold: 0.2 },
+      { threshold: 0.1 },
     );
 
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
   }, []);
 
-  const getImageSize = () => {
-    if (product.title.includes("Small")) return "w-36";
-    if (product.title.includes("Medium")) return "w-44";
-    return "w-52";
-  };
-
   return (
-    <div
-      ref={ref}
-      className={`
-        relative w-full max-w-[380px]
-        rounded-[32px]
-        bg-white/80 backdrop-blur-md
-        border border-green-100
-        shadow-[0_10px_40px_rgba(0,0,0,0.06)]
-        hover:shadow-[0_20px_60px_rgba(0,0,0,0.10)]
-        hover:-translate-y-3
-        transition-all duration-500
-        p-8
-        flex flex-col justify-between
-        ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
-      `}
-    >
-      {/* TOP SECTION */}
-      <div>
-        {/* Tag */}
-        <div className="flex justify-center mb-4">
-          <span className="text-xs tracking-wide font-semibold bg-green-100 text-green-700 px-4 py-1 rounded-full">
-            {product.tag}
-          </span>
-        </div>
+    <div className="pt-6 pb-4 px-2 snap-center"> {/* Container to prevent badge cropping */}
+      <div
+        ref={ref}
+        className={`
+          relative 
+          w-[290px] md:w-[330px] 
+          /* Optimized height for visibility */
+          min-h-[560px] md:min-h-[600px] 
+          rounded-[24px] 
+          bg-white
+          border-[3px] border-[#C9C27A] 
+          shadow-lg hover:shadow-[0_20px_50px_rgba(201,194,122,0.3)]
+          hover:-translate-y-2
+          transition-all duration-500 ease-out
+          flex flex-col overflow-hidden group
+          ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}
+        `}
+      >
+        {/* 1. TOP BADGE - Positioned inside safe padding */}
+       
 
-        {/* Title */}
-        <h3 className="text-2xl font-semibold text-gray-800 text-center">
-          {product.title}
-        </h3>
-
-        {/* Image */}
-        <div className="flex justify-center">
-          <img
-            src={product.image}
-            alt={product.title}
-            className={`${getImageSize()} my-7 transition-transform duration-500 hover:scale-105 drop-shadow-2xl`}
-          />
-        </div>
-
-        {/* Nutrition Section */}
-        <div className="space-y-3 text-sm text-gray-600">
-          <div className="flex justify-between">
-            <span>Weight</span>
-            <span className="font-medium text-gray-800">{product.weight}</span>
-          </div>
-
-          <div className="flex justify-between">
-            <span>Fruits</span>
-            <span className="font-medium text-gray-800">{product.fruits}</span>
-          </div>
-
-          <div className="flex justify-between">
-            <span>Calories</span>
-            <span className="font-medium text-gray-800">
-              {product.calories}
+        <div className="p-6 flex flex-col flex-grow items-center">
+          {/* 2. HEADER */}
+          <div className="text-center mt-2 mb-4">
+            <span className="text-[10px] font-bold text-[#C9C27A] uppercase tracking-widest mb-1 block">
+              {product.category || "Fresh & Healthy"}
             </span>
+            <h3 className="text-2xl font-black text-gray-900 leading-tight">
+              {product.title}
+            </h3>
           </div>
 
-          <div className="flex justify-between">
-            <span>Protein</span>
-            <span className="font-medium text-green-700">
-              {product.protein}
-            </span>
+          {/* 3. SQUARE IMAGE CONTAINER */}
+          <div className="w-full aspect-square max-h-48 flex items-center justify-center bg-gray-50 rounded-xl overflow-hidden mb-6 border border-gray-100 shadow-inner">
+            <img
+              src={product.image}
+              alt={product.title}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            />
+          </div>
+
+          {/* 4. SPECS (More compact) */}
+          <div className="w-full space-y-3 px-1 mb-6">
+            {[
+              { label: "Weight", value: product.weight },
+              { label: "Fruits", value: product.fruits },
+              { label: "Calories", value: product.calories }
+            ].map((item, idx) => (
+              <div key={idx} className="flex justify-between items-center border-b border-gray-100 pb-1.5">
+                <span className="text-[10px] font-bold text-gray-400 uppercase">{item.label}</span>
+                <span className="text-[11px] font-black text-gray-900">{item.value}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* 5. PRICE & ACTION */}
+          <div className="w-full text-center mt-auto">
+            <div className="text-3xl font-black text-[#C9C27A] mb-4">
+              ${product.price}
+            </div>
+            <button className="w-full bg-gradient-to-r from-green-700 to-green-900 hover:from-green-800 hover:to-green-950 text-white py-3.5 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-green-900/10">
+              Order Now
+            </button>
           </div>
         </div>
 
-        {/* Rating Pill */}
-        <div className="mt-6 flex justify-center">
-          <div className="bg-yellow-100 text-yellow-700 text-xs px-4 py-1 rounded-full font-semibold shadow-sm">
-            ★ {product.rating || "4.8"}
-          </div>
+        {/* 6. FIXED BOTTOM BAR */}
+        <div className="bg-gradient-to-r from-green-800 to-green-950 py-2.5 px-4 text-center">
+          <p className="text-[9px] text-white font-medium">
+            Orders placed today will be delivered <span className="font-bold text-[#C9C27A]">tomorrow.</span>
+          </p>
         </div>
-
-        {/* Description */}
-        <p className="text-sm text-gray-500 text-center mt-5 leading-relaxed">
-          {product.description}
-        </p>
-      </div>
-
-      {/* BOTTOM SECTION */}
-      <div className="mt-8">
-        <div className="h-[1px] bg-gradient-to-r from-transparent via-green-200 to-transparent mb-6"></div>
-
-        <div className="text-3xl font-bold text-green-800 text-center tracking-tight">
-          ₹{product.price}
-        </div>
-
-        <button className="w-full mt-5 bg-gradient-to-r from-green-700 to-green-800 hover:from-green-800 hover:to-green-900 text-white py-3 rounded-full font-semibold transition duration-300 shadow-md hover:shadow-lg">
-          Order Now
-        </button>
       </div>
     </div>
   );

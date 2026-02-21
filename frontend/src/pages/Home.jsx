@@ -16,6 +16,7 @@ function Home() {
       <Hero />
 
       {/* Products */}
+     
       <SaladSection />
 
       {/* Customize Bowl */}
