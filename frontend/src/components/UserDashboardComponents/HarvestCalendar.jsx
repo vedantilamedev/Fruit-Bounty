@@ -82,7 +82,7 @@ const HarvestCalendar = () => {
 
                 {/* Month Navigation - Center */}
                 <div className="flex justify-center">
-                <div className="flex items-center gap-1 bg-white p-1 rounded-[1.5rem] border border-[#E8E4D9] shadow-sm">
+                <div className="flex items-center gap-1 bg-white p-1 rounded-[1rem] border border-[#E8E4D9] shadow-sm">
                     <motion.button
                         whileHover={{ scale: 1.05, backgroundColor: '#FBF8F2' }}
                         whileTap={{ scale: 0.95 }}
@@ -220,7 +220,7 @@ const HarvestCalendar = () => {
         }
 
         return (
-            <div className="bg-gradient-to-br from-white via-[#FBF8F2] to-[#f6f5ef] backdrop-blur-xl p-6 lg:p-10 rounded-[2.25rem] border border-[#E8E4D9] shadow-[0_20px_50px_-24px_rgba(0,0,0,0.18)]">
+            <div className="relative bg-white/70 backdrop-blur-2xl p-8 lg:p-12 rounded-3xl border border-white/40 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.15)] before:absolute before:inset-0 before:rounded-3xl before:bg-gradient-to-br before:from-white/40 before:to-transparent before:pointer-events-none">
                 <div className="grid grid-cols-7 mb-6 gap-3 lg:gap-4 px-1">
                     {days.map(day => (
                         <div key={day} className="text-center text-[10px] font-black text-[#B7A261] uppercase tracking-[0.25em]">
@@ -244,10 +244,10 @@ const HarvestCalendar = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="w-full bg-white/90 backdrop-blur-lg rounded-[3rem] p-10 border border-[#E8E4D9] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] relative overflow-hidden"
+                    className="w-full bg-white/90 backdrop-blur-lg rounded-[1rem] p-10 border border-[#E8E4D9] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] relative overflow-hidden"
                 >
                     <div className="flex flex-col lg:flex-row gap-10 items-start">
-                        <div className="bg-gradient-to-br from-[#FBF8F2] to-white p-8 rounded-[2.5rem] min-w-[200px] text-center border border-[#E8E4D9] relative overflow-hidden group hover:scale-105 hover:rotate-1 transition-all duration-300 shadow-lg">
+                        <div className="bg-gradient-to-br from-[#FBF8F2] to-white p-8 rounded-[1rem] min-w-[200px] text-center border border-[#E8E4D9] relative overflow-hidden group hover:scale-105 hover:rotate-1 transition-all duration-300 shadow-lg">
                             <div className="absolute inset-0 bg-gradient-to-b from-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                             <span className="block text-[10px] font-extrabold text-[#B7A261] uppercase tracking-[0.3em] mb-4">Selected Date</span>
                             <span className="block text-6xl font-black bg-gradient-to-br from-[#3C7E44] to-[#B7A261] bg-clip-text text-transparent mb-2 tracking-tighter">{selectedDate.getDate()}</span>
@@ -315,7 +315,7 @@ const HarvestCalendar = () => {
                                             whileHover={{ scale: 1.02 }}
                                             whileTap={{ scale: 0.98 }}
                                             onClick={() => navigate('/customize')}
-                                            className="flex-1 py-5 bg-[#3C7E44] text-white rounded-[1.5rem] text-[11px] font-bold uppercase tracking-[0.2em] shadow-2xl shadow-green-900/30 flex items-center justify-center gap-3 group/btn"
+                                            className="flex-1 py-5 bg-[#3C7E44] text-white rounded-[1rem] hover:bg-green-600 text-[11px] font-bold uppercase tracking-[0.2em] shadow-2xl shadow-green-900/30 flex items-center justify-center gap-3 group/btn"
                                         >
                                             <ShoppingBag size={18} className="group-hover/btn:-rotate-12 transition-transform" />
                                             Order Now
@@ -323,7 +323,7 @@ const HarvestCalendar = () => {
                                         <motion.button
                                             whileHover={{ scale: 1.02 }}
                                             whileTap={{ scale: 0.98 }}
-                                            className="px-10 py-5 bg-white border border-[#E8E4D9] text-gray-900 rounded-[1.5rem] text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-gray-50 transition-all flex items-center justify-center gap-3"
+                                            className="px-10 py-5 bg-white border border-[#E8E4D9] text-gray-900 rounded-[1rem] text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-gray-50 transition-all flex items-center justify-center gap-3"
                                         >
                                             <Info size={16} className="text-[#B7A261]" /> More Info
                                         </motion.button>
@@ -379,13 +379,13 @@ const HarvestCalendar = () => {
                             initial={{ opacity: 0, scale: 0.9, y: 30 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 30 }}
-                            className="relative bg-white w-full max-w-4xl rounded-[4rem] shadow-2xl border border-[#E8E4D9] overflow-hidden"
+                            className="relative bg-white w-full max-w-4xl rounded-[1rem] shadow-2xl border border-[#E8E4D9] overflow-hidden"
                         >
                             <div className="bg-[#1a472a] p-12 text-white relative overflow-hidden">
                                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl" />
                                 <div className="relative z-10 flex justify-between items-center">
                                     <div className="flex items-center gap-6">
-                                        <div className="w-16 h-16 bg-white/10 rounded-[1.5rem] flex items-center justify-center border border-white/20">
+                                        <div className="w-16 h-16 bg-white/10 rounded-[1rem] flex items-center justify-center border border-white/20">
                                             <CalendarIcon size={32} className="text-[#B7A261]" />
                                         </div>
                                         <div>
@@ -410,7 +410,7 @@ const HarvestCalendar = () => {
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: idx * 0.1 }}
-                                        className={`p-8 rounded-[3rem] border border-[#E8E4D9]/50 ${item.bg} relative group overflow-hidden`}
+                                        className={`p-8 rounded-[1rem] border border-[#E8E4D9]/50 ${item.bg} relative group overflow-hidden`}
                                     >
                                         <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                                             <Gem size={40} className={item.color} />

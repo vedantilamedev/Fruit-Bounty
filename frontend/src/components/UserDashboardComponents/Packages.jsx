@@ -18,7 +18,7 @@ const Packages = ({ activePackage }) => {
     const StatCard = ({ title, value, icon: Icon, color, subtitle }) => (
         <motion.div
             whileHover={{ y: -5 }}
-            className="bg-white p-6 rounded-[2.5rem] border border-[#E8E4D9] shadow-sm relative overflow-hidden group"
+            className="bg-white p-6 rounded-[1rem] border border-[#E8E4D9] shadow-sm relative overflow-hidden group"
         >
             <div className={`absolute -top-4 -right-4 w-24 h-24 ${color} opacity-[0.03] rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700`} />
             <div className="relative z-10 flex justify-between items-start">
@@ -37,8 +37,8 @@ const Packages = ({ activePackage }) => {
 
     if (!activePackage) {
         return (
-            <div className="flex flex-col items-center justify-center p-20 bg-white rounded-[3rem] border-2 border-dashed border-[#E8E4D9] shadow-inner text-center animate-fadeIn">
-                <div className="bg-[#F7F5EF] p-8 rounded-[2rem] mb-6 shadow-sm">
+            <div className="flex flex-col items-center justify-center p-20 bg-white rounded-[1rem] border-2 border-dashed border-[#E8E4D9] shadow-inner text-center animate-fadeIn">
+                <div className="bg-[#F7F5EF] p-8 rounded-[1rem] mb-6 shadow-sm">
                     <Package size={64} className="text-[#B7A261] opacity-40" strokeWidth={1} />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-2 tracking-tight">No Active Harvest Plan</h3>
@@ -71,10 +71,10 @@ const Packages = ({ activePackage }) => {
             </div>
 
             {/* Main Interactive Plan Board */}
-            <div className="bg-white rounded-[3.5rem] border border-[#E8E4D9] shadow-xl shadow-green-900/5 overflow-hidden">
+            <div className="bg-white rounded-[1rem] border border-[#E8E4D9] shadow-xl shadow-green-900/5 overflow-hidden">
                 <div className="lg:flex">
                     {/* Visual Plan Hero */}
-                    <div className="lg:w-1/3 bg-gradient-to-br from-[#3C7E44] to-[#1a472a] p-10 lg:p-14 text-white relative">
+                    <div className="lg:w-1/3 bg-gradient-to-br from-[#89971e] to-[#c59e11] p-10 lg:p-14 text-white relative">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-20 -mt-20 blur-3xl animate-pulse" />
                         <div className="relative z-10 flex flex-col h-full justify-between">
                             <div>
@@ -143,7 +143,7 @@ const Packages = ({ activePackage }) => {
                                         <motion.div
                                             key={idx}
                                             whileHover={{ x: 5 }}
-                                            className="flex items-center gap-3 p-4 bg-white/60 rounded-[1.25rem] border border-white"
+                                            className="flex items-center gap-3 p-4 bg-white/60 rounded-[1rem] border border-white"
                                         >
                                             <Check size={14} className="text-[#3C7E44]" strokeWidth={3} />
                                             <span className="text-sm font-bold text-gray-700">{fruit}</span>
@@ -214,7 +214,7 @@ const Packages = ({ activePackage }) => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: idx * 0.1 }}
                             whileHover={{ y: -10 }}
-                            className="bg-white rounded-[3rem] border border-[#E8E4D9] p-10 lg:p-14 shadow-xl shadow-green-900/5 flex flex-col items-stretch relative overflow-hidden group/plan"
+                            className="bg-white rounded-[1rem] border border-[#E8E4D9] p-10 lg:p-14 shadow-xl shadow-green-900/5 flex flex-col items-stretch relative overflow-hidden group/plan"
                         >
                             <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${tier.color} opacity-[0.03] rounded-full -mr-16 -mt-16 group-hover/plan:scale-150 transition-transform duration-700`} />
 
@@ -254,9 +254,9 @@ const Packages = ({ activePackage }) => {
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                                 onClick={() => navigate('/subscription')} // Added onClick handler
-                                className={`w-full py-6 rounded-[2rem] font-bold text-xs uppercase tracking-[0.2em] shadow-xl transition-all flex items-center justify-center gap-3 group/btn
+                                className={`w-full py-6 rounded-[1rem] font-bold text-xs uppercase tracking-[0.2em] shadow-xl transition-all flex items-center justify-center gap-3 group/btn
                                     ${tier.id === 'corporate'
-                                        ? 'bg-[#3C7E44] text-white shadow-green-900/20 hover:bg-[#2f6131]'
+                                        ? 'bg-[#3C7E44] text-white shadow-green-900/20 hover:bg-[#ead537]'
                                         : 'bg-white border border-[#E8E4D9] text-[#3C7E44] hover:bg-[#FBF8F2]'
                                     }`}
                             >

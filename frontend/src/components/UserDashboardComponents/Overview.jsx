@@ -53,7 +53,7 @@ const Overview = ({ userData, orders }) => {
       <motion.div
         variants={itemVariants}
         whileHover={{ y: -5, transition: { duration: 0.2 } }}
-        className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-[#E8E4D9/60] flex flex-col justify-between hover:shadow-xl hover:shadow-green-900/5 transition-all duration-300 group h-full relative overflow-hidden"
+        className="bg-white p-6 rounded-[1rem] shadow-sm border border-[#E8E4D9/60] flex flex-col justify-between hover:shadow-xl hover:shadow-green-900/5 transition-all duration-300 group h-full relative overflow-hidden"
       >
 
         {/* Background decoration with rotation animation */}
@@ -118,7 +118,7 @@ const Overview = ({ userData, orders }) => {
         {/* Freshness Policy Banner */}
         <motion.div
           variants={itemVariants}
-          className="bg-gradient-to-br from-white to-[#FBF8F2] border border-[#E8E4D9] rounded-[3rem] p-6 lg:p-8 relative overflow-hidden group hover:shadow-lg hover:shadow-emerald-900/5 transition-all duration-500"
+          className="bg-gradient-to-br from-white to-[#ffaa00] border border-orange-400 border-[#E8E4D9] rounded-[1rem] p-6 lg:p-8 relative overflow-hidden group hover:shadow-lg hover:shadow-emerald-900/5 transition-all duration-500"
         >
           <div className="absolute top-0 right-0 w-80 h-80 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] rotate-12" />
           <motion.div
@@ -127,7 +127,7 @@ const Overview = ({ userData, orders }) => {
             className="absolute -top-24 -right-24 w-64 h-64 bg-[#3C7E44]/5 rounded-full blur-3xl"
           />
 
-          <div className="relative flex flex-col lg:flex-row items-center gap-6">
+          <div className="relative  flex flex-col lg:flex-row items-center gap-6">
             <motion.div
               whileHover={{ rotate: 10, scale: 1.05 }}
               className="bg-gradient-to-br from-[#3C7E44] to-[#2f6131] p-5 rounded-[2rem] shadow-xl shadow-green-900/20 relative overflow-hidden"
@@ -135,7 +135,7 @@ const Overview = ({ userData, orders }) => {
               <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
               <Calendar className="text-white relative z-10" size={36} strokeWidth={1.5} />
             </motion.div>
-            <div className="text-center lg:text-left flex-1 space-y-2">
+            <div className="text-center  lg:text-left flex-1 space-y-2">
               <h3 className="text-xl lg:text-2xl font-medium text-[#3C7E44] tracking-tight">Freshness First Policy</h3>
               <p className="text-gray-600 font-normal leading-relaxed max-w-2xl text-sm">
                 To guarantee maximum freshness from orchard to your bowl, <strong className="font-medium text-[#3C7E44] bg-[#3C7E44]/10 px-2 py-0.5 rounded-md">Same-day delivery is currently paused.</strong> All new fruit orders will reach you within 24 hours.
@@ -144,7 +144,7 @@ const Overview = ({ userData, orders }) => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-[#B7A261] text-white px-8 py-4 rounded-[2rem] font-medium text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-[#B7A261]/20"
+              className="bg-[#9f8846] text-white px-8 py-4 rounded-[1rem] font-medium text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-[#B7A261]/20"
             >
               Read Policy
             </motion.button>
@@ -152,7 +152,7 @@ const Overview = ({ userData, orders }) => {
         </motion.div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 items-stretch">
+        <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 items-stretch">
           <StatCard
             title="Total Orders"
             value={totalOrders}
@@ -181,7 +181,7 @@ const Overview = ({ userData, orders }) => {
           {/* Quick Actions */}
           <motion.div
             variants={itemVariants}
-            className="bg-white p-6 rounded-[3rem] border border-[#E8E4D9] shadow-sm flex flex-col justify-center h-full"
+            className="bg-white p-6 rounded-[1rem] border border-[#E8E4D9] shadow-sm flex flex-col justify-center h-full"
           >
             <h4 className="text-lg font-medium text-[#3C7E44] mb-6 flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-[#B7A261]" /> Quick Actions
@@ -195,10 +195,10 @@ const Overview = ({ userData, orders }) => {
                   key={idx}
                   whileHover={{ y: -5, borderColor: '#3C7E44' }}
                   whileTap={{ scale: 0.98 }}
-                  className="p-1 rounded-[2.5rem] bg-white border border-[#E8E4D9] transition-all duration-300 group hover:shadow-xl hover:shadow-green-900/10 relative overflow-hidden"
+                  className="p-1 rounded-[1rem] bg-white border border-[#d9dbe8] transition-all duration-300 group hover:shadow-xl hover:shadow-green-900/10 relative overflow-hidden"
                 >
                   <div className="absolute inset-x-0 bottom-0 h-1 bg-[#3C7E44] opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="p-5 flex flex-col items-center justify-center gap-3 bg-[#FBF8F2] rounded-[2.3rem] group-hover:bg-white transition-colors h-full">
+                  <div className="p-5 flex flex-col items-center justify-center gap-3 bg-[#ffffff] rounded-[2.3rem] group-hover:bg-white transition-colors h-full">
                     <div className="w-12 h-12 rounded-2xl bg-white shadow-sm group-hover:bg-[#3C7E44] flex items-center justify-center transition-colors duration-300 border border-[#E8E4D9]/50 group-hover:border-transparent">
                       <action.icon size={24} className="text-[#3C7E44] group-hover:text-white transition-colors" strokeWidth={1.5} />
                     </div>
@@ -213,7 +213,7 @@ const Overview = ({ userData, orders }) => {
           <motion.div
             variants={itemVariants}
             whileHover={{ y: -5 }}
-            className="bg-gradient-to-br from-[#3C7E44] to-[#244f2a] p-8 rounded-[3rem] text-white shadow-2xl shadow-green-900/20 relative overflow-hidden flex flex-col justify-between min-h-[320px] group"
+            className="bg-gradient-to-br from-[#3C7E44] to-[#244f2a] p-8 rounded-[1rem] text-white shadow-2xl shadow-green-900/20 relative overflow-hidden flex flex-col justify-between min-h-[320px] group"
           >
             <motion.div
               animate={{ rotate: 360 }}
@@ -238,13 +238,13 @@ const Overview = ({ userData, orders }) => {
               <div className="flex items-center gap-5 mb-8">
                 <motion.div
                   whileHover={{ scale: 1.05 }}
-                  className="w-20 h-20 bg-gradient-to-br from-white/20 to-white/5 rounded-[1.5rem] flex items-center justify-center backdrop-blur-md border border-white/10 shadow-inner"
+                  className="w-20 h-20 bg-gradient-to-br from-white/20 to-white/5  rounded-[1.5rem] flex items-center justify-center backdrop-blur-md border border-white/10 shadow-inner"
                 >
                   <ShoppingBag size={32} className="text-white drop-shadow-md" strokeWidth={1.5} />
                 </motion.div>
                 <div>
-                  <p className="text-xs text-[#B7A261] font-bold uppercase tracking-widest mb-1.5 flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#B7A261] animate-pulse" /> Arriving Tomorrow
+                  <p className="text-xs text-[#fcbd00] font-bold uppercase tracking-widest mb-1.5 flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#fff200] animate-pulse" /> Arriving Tomorrow
                   </p>
                   <p className="text-2xl font-medium leading-tight text-white/95">Premium Mixed Fruit Bowl</p>
                 </div>
@@ -254,7 +254,7 @@ const Overview = ({ userData, orders }) => {
                 whileHover={{ x: 5 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setIsTrackingOpen(true)}
-                className="w-full py-4 bg-white text-[#3C7E44] rounded-[1.5rem] font-bold text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-[#FBF8F2] transition-colors shadow-lg shadow-black/10 hover:shadow-xl group/btn"
+                className="w-full py-4 bg-white text-[#3C7E44] rounded-[1rem] font-bold text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-[#edd769]  transition-colors shadow-lg shadow-black/10 hover:shadow-xl group/btn"
               >
                 Track Order <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
               </motion.button>
