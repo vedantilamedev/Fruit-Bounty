@@ -68,8 +68,8 @@ export default function CustomizeBowl() {
       {/* HEADER */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Customize Bowl</h1>
-          <p className="text-gray-500">Manage fruit ingredients</p>
+          <h1 className="hidden md:block text-2xl sm:text-3xl font-bold">Customize Bowl</h1>
+          <p className="hidden md:block text-gray-500">Manage fruit ingredients</p>
         </div>
 
         <button
@@ -202,42 +202,6 @@ export default function CustomizeBowl() {
           </tbody>
         </table>
       </div>
-
-      {/* LIVE PRICING PREVIEW */}
-      <motion.div
-        className="mt-8 bg-gradient-to-br from-green-50 to-yellow-50 p-6 rounded-2xl border hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <h3 className="text-lg font-semibold mb-4">Live Pricing Preview</h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <p className="font-medium mb-2">Base Bowl Price: ₹299</p>
-            <p className="text-sm mb-2">Premium Additions:</p>
-
-            <div className="space-y-2">
-              {premiumFruits.map((fruit) => (
-                <div key={fruit.id} className="flex justify-between bg-white p-2 rounded-lg">
-                  <span>{fruit.name}</span>
-                  <span className="font-semibold text-yellow-700">+₹{fruit.price}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex items-center justify-center">
-            <div className="bg-white p-8 rounded-2xl shadow text-center">
-              <p className="text-sm mb-2">Sample Custom Bowl</p>
-              <p className="text-5xl font-bold text-[#427A43]">
-                ₹{299 + premiumFruits.slice(0, 2).reduce((sum, f) => sum + f.price, 0)}
-              </p>
-              <p className="text-xs mt-1 text-gray-500">Base + 2 Premium Fruits</p>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
       {/* ADD FRUIT MODAL */}
       <AnimatePresence>
         {showModal && (
