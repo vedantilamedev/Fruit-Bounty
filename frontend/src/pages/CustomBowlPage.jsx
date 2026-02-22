@@ -84,6 +84,8 @@ function CustomBowlPage() {
     () => sizes.find((size) => size.id === selectedSize),
     [selectedSize],
   );
+  const normalFruits = useMemo(() => fruits.filter((fruit) => fruit.price <= 100), []);
+  const premiumFruits = useMemo(() => fruits.filter((fruit) => fruit.price > 100), []);
 
   const toggleFruit = (id) => {
     if (!selectedSize) {
@@ -155,7 +157,7 @@ function CustomBowlPage() {
               </div>
 
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight">
-                Build Your <span className="text-[#ffe6a9] italic">Custom Bowl</span>
+                Build Your <span className="text-[#C9C27A]">Custom Bowl</span>
               </h1>
               <p className="text-white/90 text-sm md:text-lg mt-5 max-w-2xl leading-relaxed font-medium">
                 Pick a portion, hand-select fruits, add toppings, and create a bowl that matches your taste and nutrition goals.
@@ -251,46 +253,99 @@ function CustomBowlPage() {
             </div>
           )}
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 md:gap-6">
-            {fruits.map((fruit) => {
-              const active = !!selectedFruits[fruit.id];
-              return (
-                <button
-                  key={fruit.id}
-                  onClick={() => toggleFruit(fruit.id)}
-                  className={`relative text-left rounded-[1.8rem] border p-4 bg-white transition-all duration-300 ${
-                    active
-                      ? "border-green-600 shadow-[0_16px_30px_rgba(22,101,52,0.2)] -translate-y-1"
-                      : "border-[#ebe6cb] hover:border-green-300"
-                  }`}
-                >
-                  <div className="w-full aspect-square rounded-2xl bg-gradient-to-br from-[#f4faf4] to-[#fff6e8] border border-[#ece7c9] flex items-center justify-center overflow-hidden">
-                    <img src={fruit.image} alt={fruit.name} className="w-[86%] h-[86%] object-contain" />
-                  </div>
-
-                  {active && (
-                    <div className="absolute top-3 right-3 bg-green-600 text-white rounded-full w-7 h-7 flex items-center justify-center shadow-lg">
-                      <CheckCircle size={16} />
+          <div className="mb-6">
+            <h4 className="text-xl md:text-2xl font-black text-gray-900 mb-4">Normal Fruits</h4>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 md:gap-6">
+              {normalFruits.map((fruit) => {
+                const active = !!selectedFruits[fruit.id];
+                return (
+                  <button
+                    key={fruit.id}
+                    onClick={() => toggleFruit(fruit.id)}
+                    className={`relative text-left rounded-[1.8rem] border p-4 bg-white transition-all duration-300 ${
+                      active
+                        ? "border-green-600 shadow-[0_16px_30px_rgba(22,101,52,0.2)] -translate-y-1"
+                        : "border-[#ebe6cb] hover:border-green-300"
+                    }`}
+                  >
+                    <div className="w-full aspect-square rounded-2xl bg-gradient-to-br from-[#f4faf4] to-[#fff6e8] border border-[#ece7c9] flex items-center justify-center overflow-hidden">
+                      <img src={fruit.image} alt={fruit.name} className="w-[86%] h-[86%] object-contain" />
                     </div>
-                  )}
 
-                  <div className="mt-4">
-                    <p className="font-black text-gray-900 leading-tight">{fruit.name}</p>
-                    <p className="text-green-800 font-black mt-1">Rs. {fruit.price}</p>
-                    <div className="mt-2 grid grid-cols-2 gap-2">
-                      <div className="bg-gray-50 rounded-lg px-2 py-1.5 border border-gray-100">
-                        <p className="text-[9px] uppercase font-bold tracking-wider text-gray-400">Calories</p>
-                        <p className="text-[11px] font-bold text-gray-700">{fruit.calories}</p>
+                    {active && (
+                      <div className="absolute top-3 right-3 bg-green-600 text-white rounded-full w-7 h-7 flex items-center justify-center shadow-lg">
+                        <CheckCircle size={16} />
                       </div>
-                      <div className="bg-gray-50 rounded-lg px-2 py-1.5 border border-gray-100">
-                        <p className="text-[9px] uppercase font-bold tracking-wider text-gray-400">Protein</p>
-                        <p className="text-[11px] font-bold text-gray-700">{fruit.protein}g</p>
+                    )}
+
+                    <div className="mt-4">
+                      <p className="font-black text-gray-900 leading-tight">{fruit.name}</p>
+                      <p className="text-green-800 font-black mt-1">Rs. {fruit.price}</p>
+                      <div className="mt-2 grid grid-cols-2 gap-2">
+                        <div className="bg-gray-50 rounded-lg px-2 py-1.5 border border-gray-100">
+                          <p className="text-[9px] uppercase font-bold tracking-wider text-gray-400">Calories</p>
+                          <p className="text-[11px] font-bold text-gray-700">{fruit.calories}</p>
+                        </div>
+                        <div className="bg-gray-50 rounded-lg px-2 py-1.5 border border-gray-100">
+                          <p className="text-[9px] uppercase font-bold tracking-wider text-gray-400">Protein</p>
+                          <p className="text-[11px] font-bold text-gray-700">{fruit.protein}g</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </button>
-              );
-            })}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <h4 className="text-xl md:text-2xl font-black text-gray-900 mb-4">Premium Fruits</h4>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 md:gap-6">
+              {premiumFruits.map((fruit) => {
+                const active = !!selectedFruits[fruit.id];
+                return (
+                  <button
+                    key={fruit.id}
+                    onClick={() => toggleFruit(fruit.id)}
+                    className={`relative text-left rounded-[1.8rem] border p-4 bg-white transition-all duration-300 ${
+                      active
+                        ? "border-green-600 shadow-[0_16px_30px_rgba(22,101,52,0.2)] -translate-y-1"
+                        : "border-[#ebe6cb] hover:border-green-300"
+                    }`}
+                  >
+                    <div className="w-full aspect-square rounded-2xl bg-gradient-to-br from-[#fff5eb] to-[#ffeed7] border border-[#ead9b8] flex items-center justify-center overflow-hidden">
+                      <img src={fruit.image} alt={fruit.name} className="w-[86%] h-[86%] object-contain" />
+                    </div>
+
+                    {active && (
+                      <div className="absolute top-3 right-3 bg-green-600 text-white rounded-full w-7 h-7 flex items-center justify-center shadow-lg">
+                        <CheckCircle size={16} />
+                      </div>
+                    )}
+
+                    <div className="mt-4">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="font-black text-gray-900 leading-tight">{fruit.name}</p>
+                        <span className="text-[9px] uppercase tracking-wider font-bold text-[#a06e1a] bg-[#fff2de] px-2 py-1 rounded-full">
+                          Premium
+                        </span>
+                      </div>
+                      <p className="text-green-800 font-black mt-1">Rs. {fruit.price}</p>
+                      <div className="mt-2 grid grid-cols-2 gap-2">
+                        <div className="bg-gray-50 rounded-lg px-2 py-1.5 border border-gray-100">
+                          <p className="text-[9px] uppercase font-bold tracking-wider text-gray-400">Calories</p>
+                          <p className="text-[11px] font-bold text-gray-700">{fruit.calories}</p>
+                        </div>
+                        <div className="bg-gray-50 rounded-lg px-2 py-1.5 border border-gray-100">
+                          <p className="text-[9px] uppercase font-bold tracking-wider text-gray-400">Protein</p>
+                          <p className="text-[11px] font-bold text-gray-700">{fruit.protein}g</p>
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </section>
 

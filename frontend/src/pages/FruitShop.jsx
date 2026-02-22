@@ -223,7 +223,7 @@ function FruitShop() {
           Fresh | Organic | Healthy
         </span>
         <h1 className="text-5xl font-black text-gray-900 mt-3">
-          Build Your <span className="text-orange-500">Perfect Bowl</span>
+          Build Your <span className="text-[#C9C27A]">Perfect Bowl</span>
         </h1>
         <p className="text-gray-500 mt-4 text-lg">
           100% Natural Ingredients | No Preservatives | Same Day Delivery
