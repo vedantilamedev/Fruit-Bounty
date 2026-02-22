@@ -25,11 +25,11 @@ function Testimonials() {
   };
 
   const testimonials = [
-    { name: "Vaishnavi Sharma", review: "The Pink Palace Bowl is divine! Fresh fruits with a royal Jaipur essence. It's the perfect start to my busy mornings.", initials: "VS", type: "green" },
-    { name: "Garvit Jain", review: "Best fruit salads in the city! Always fresh, beautifully presented, and delivered right to my doorstep with a smile.", initials: "GJ", type: "white" },
-    { name: "Vrucha Mehta", review: "Love the customization options! I can create exactly what I want every time. The variety of toppings is truly unmatched.", initials: "VM", type: "green" },
-    { name: "Ritika Agarwal", review: "The subscription plan makes healthy eating so convenient. Highly recommended for professionals in the city!", initials: "RA", type: "white" },
-    { name: "Kunal Singh", review: "Freshness and quality are unmatched. Every bowl feels premium and worth every penny. I've tried many, this is the best.", initials: "KS", type: "green" }
+    { name: "Vaishnavi Sharma", review: "The Pink Palace Bowl is divine! Fresh fruits with a royal Jaipur essence. It's the perfect start to my busy mornings.", initials: "VS", type: "green", rating: 5 },
+    { name: "Garvit Jain", review: "Best fruit salads in the city! Always fresh, beautifully presented, and delivered right to my doorstep with a smile.", initials: "GJ", type: "white", rating: 3},
+    { name: "Vrucha Mehta", review: "Love the customization options! I can create exactly what I want every time. The variety of toppings is truly unmatched.", initials: "VM", type: "green", rating: 4},
+    { name: "Ritika Agarwal", review: "The subscription plan makes healthy eating so convenient. Highly recommended for professionals in the city!", initials: "RA", type: "white", rating: 4 },
+    { name: "Kunal Singh", review: "Freshness and quality are unmatched. Every bowl feels premium and worth every penny. I've tried many, this is the best.", initials: "KS", type: "green", rating: 5 }
   ];
 
   return (
@@ -44,7 +44,6 @@ function Testimonials() {
         }}
       ></div>
 
-      {/* SVG DEFINITION FOR SMOOTH OCTAGON [Reference: Geometric Symmetry] */}
       <svg width="0" height="0" className="absolute">
         <defs>
           <clipPath id="smoothOctagon" clipPathUnits="objectBoundingBox">
@@ -53,7 +52,6 @@ function Testimonials() {
         </defs>
       </svg>
 
-      {/* 2. HEADING SECTION - Clean & Professional Typography */}
       <div className={`relative z-10 text-center mb-20 max-w-3xl mx-auto transition-all duration-1000 ${visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"}`}>
         <h2 className="text-4xl md:text-6xl font-black text-gray-900 tracking-tight">
           What our customers say
@@ -66,7 +64,6 @@ function Testimonials() {
       </div>
 
       <div className="relative z-20 max-w-[1400px] mx-auto">
-        {/* NAVIGATION CONTROLS */}
         <button onClick={() => scroll("left")} className="absolute -left-2 top-1/2 -translate-y-1/2 z-40 p-4 rounded-full bg-white shadow-xl text-gray-900 hover:text-[#C9C27A] transition-all border border-gray-100 hidden md:block">
           <ChevronLeft size={24} />
         </button>
@@ -74,7 +71,6 @@ function Testimonials() {
           <ChevronRight size={24} />
         </button>
 
-        {/* TILTED OCTAGON SCROLL AREA */}
         <div 
           ref={scrollRef} 
           className="flex -space-x-3 md:-space-x-6 overflow-x-auto no-scrollbar py-24 px-10" 
@@ -98,31 +94,27 @@ function Testimonials() {
                     animationDelay: `${index * 0.4}s` 
                 }}
               >
-                {/* OCTAGON DROP SHADOW */}
                 <div className="w-full h-full filter drop-shadow-lg group-hover:drop-shadow-[0_20px_50px_rgba(201,194,122,0.4)] transition-all duration-300">
-                  
-                  {/* BRAND BORDER (#C9C27A) */}
                   <div className="w-full h-full p-[3px] bg-[#C9C27A]" style={{ clipPath: "url(#smoothOctagon)" }}>
-                    
-                    {/* INNER CONTENT AREA */}
                     <div 
                       className={`w-full h-full flex flex-col items-center justify-center px-12 text-center transition-all duration-300 ${isGreen ? "bg-[#2D5A27] text-white" : "bg-white text-[#2D5A27]"}`}
                       style={{ clipPath: "url(#smoothOctagon)" }}
                     >
-                      {/* QUOTE ICON */}
                       <Quote className={`mb-4 opacity-20 ${isGreen ? "text-[#C9C27A]" : "text-gray-300"}`} size={40} />
 
-                      {/* PROFILE INITIALS */}
                       <div className="w-16 h-16 rounded-full border-2 border-[#C9C27A] bg-gray-50 flex items-center justify-center font-black text-[#2D5A27] mb-4 shadow-inner transform group-hover:scale-110 transition-transform">
                         {item.initials}
                       </div>
 
-                      {/* RATINGS (#C9C27A Stars) */}
+                      {/* UPDATED DYNAMIC RATINGS */}
                       <div className="flex gap-1 mb-3 text-[#C9C27A]">
-                        {Array(5).fill("★").map((s, i) => <span key={i} className="text-xl">★</span>)}
+                        {[...Array(5)].map((_, i) => (
+                          <span key={i} className="text-xl">
+                            {i < item.rating ? "★" : "☆"}
+                          </span>
+                        ))}
                       </div>
 
-                      {/* TESTIMONIAL TEXT */}
                       <div className="max-w-[220px] md:max-w-[260px] relative">
                         <p className={`text-[11px] font-bold tracking-widest mb-2 ${isGreen ? "text-[#C9C27A]" : "text-gray-400"}`}>
                           {item.name.toUpperCase()}
@@ -134,7 +126,6 @@ function Testimonials() {
                           </p>
                         </div>
 
-                        {/* EXPAND BUTTON */}
                         {isLongText && (
                           <button 
                             onClick={(e) => {
@@ -160,19 +151,12 @@ function Testimonials() {
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .scroll-snap-align-center { scroll-snap-align: center; }
-
         @keyframes wave {
           0%, 100% { transform: translateY(0) rotate(1.5deg); }
           50% { transform: translateY(-12px) rotate(-1.5deg); }
         }
-
-        .card-wave-animation {
-          animation: wave 5s ease-in-out infinite;
-        }
-
-        .group:hover {
-          animation: none !important;
-        }
+        .card-wave-animation { animation: wave 5s ease-in-out infinite; }
+        .group:hover { animation: none !important; }
       `}</style>
     </section>
   );
