@@ -101,8 +101,23 @@ const PrivacyPolicy = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  const currentDate = new Date();
+  const monthYear = currentDate.toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+
   return (
-    <div className="min-h-screen bg-[#FBF8F2] px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <div
+      className="min-h-screen px-4 sm:px-6 lg:px-8 py-12 lg:py-20"
+      style={{
+        backgroundImage: "url('/images/main-background.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+        backgroundColor: "rgba(255, 255, 255, 0.95)",
+      }}
+    >
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border border-[#E8E4D9] p-8 sm:p-12">
         {/* Header */}
         <div className="mb-12 pb-8 border-b-2 border-[#E8E4D9]">
@@ -110,7 +125,7 @@ const PrivacyPolicy = () => {
             Privacy Policy
           </h1>
           <p className="text-sm text-gray-500 mb-4">
-            Last Updated: February 21, 2026
+            Last Updated: {monthYear}
           </p>
           <p className="text-base text-gray-600 leading-relaxed">
             At Fruit Bounty, we are committed to protecting your privacy and
