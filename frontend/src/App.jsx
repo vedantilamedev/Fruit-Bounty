@@ -33,6 +33,7 @@ function Layout({ children }) {
   const [locationOpen, setLocationOpen] = useState(false);
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");
+  const isDashboard = location.pathname.startsWith("/dashboard");
   useEffect(() => {
     AOS.init({
       duration: 900,
@@ -44,7 +45,7 @@ function Layout({ children }) {
   }, []);
   return (
     <div className="w-full bg-[#FBF8F2] relative">
-      {!isAdmin && (
+      {!isAdmin && !isDashboard && (
         <>
           <div className="fixed top-0 left-0 w-full z-40">
             <TopBar onOpen={() => setLocationOpen(true)} />
@@ -59,12 +60,12 @@ function Layout({ children }) {
       )}
       <main
         className={`min-h-screen overflow-x-hidden ${
-          !isAdmin ? "pt-[120px] lg:pt-[110px]" : ""
+          !isAdmin && !isDashboard ? "pt-[120px] lg:pt-[110px]" : ""
         }`}
       >
         {children}
       </main>
-      {!isAdmin && (
+      {!isAdmin && !isDashboard &&(
         <>
           <Footer />
           <div className="lg:hidden">
