@@ -5,7 +5,6 @@ import Overview from '../../components/UserDashboardComponents/Overview';
 import Orders from '../../components/UserDashboardComponents/Orders';
 import Packages from '../../components/UserDashboardComponents/Packages';
 import Payments from '../../components/UserDashboardComponents/Payments';
-import HarvestCalendar from '../../components/UserDashboardComponents/HarvestCalendar';
 import Settings from '../../components/UserDashboardComponents/Settings';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -107,7 +106,6 @@ const Dashboard = () => {
 
     const menuItems = [
         { id: 'overview', label: 'Dashboard', icon: Home, subtitle: "Managing your organic freshness" },
-        { id: 'calendar', label: 'Harvest Calendar', icon: CalendarIcon, subtitle: "Tracking nature's schedule" },
         { id: 'orders', label: 'My Orders', icon: ShoppingCart, subtitle: "Tracing your fresh harvest journey" },
         { id: 'packages', label: 'My Subscription', icon: Package, subtitle: "Your premium wellness plan" },
         { id: 'payments', label: 'Payments', icon: CreditCard, subtitle: "Safe & Secure Transactions" },
@@ -120,8 +118,6 @@ const Dashboard = () => {
         switch (activeTab) {
             case 'overview':
                 return <Overview userData={userData} orders={orders} onTabChange={handleTabChange} />;
-            case 'calendar':
-                return <HarvestCalendar />;
             case 'orders':
                 return <Orders orders={orders} onCancelOrder={handleCancelOrder} />;
             case 'packages':
@@ -190,7 +186,7 @@ const Dashboard = () => {
 
 
                     {/* Back to Home Button */}
-                    <div className="px-10 pt-10 pb-2">
+                    <div className="px-10 pt-5 ">
                         <Link
                             to="/"
                             className="group flex items-center gap-3 text-gray-400 hover:text-[#3C7E44] transition-all duration-300"
@@ -201,8 +197,7 @@ const Dashboard = () => {
                     </div>
 
                     {/* Menu Links */}
-                    <nav className="flex-1 px-4 py-8 space-y-3 overflow-y-auto">
-                        <p className="px-4 text-[10px] font-normal text-[#B7A261] uppercase tracking-[0.2em] mb-4">MAIN MENU</p>
+                    <nav className="flex-1  px-4 py-8 space-y-3 overflow-y-auto">
                         {menuItems.map((item) => (
                             <button
                                 key={item.id}

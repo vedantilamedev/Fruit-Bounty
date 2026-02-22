@@ -124,22 +124,25 @@ const Orders = ({ orders, onCancelOrder }) => {
                         text-xs font-bold uppercase tracking-widest transition-all"
                     />
                 </div>
+                <div className="relative w-full max-w-xs">
+                    <select
+                        value={statusFilter}
+                        onChange={(e) => setStatusFilter(e.target.value)}
+                        className="appearance-none w-full px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em]
+    rounded-[1rem] bg-white text-[#3C7E44] border border-[#E8E4D9]
+    focus:outline-none focus:ring-2 focus:ring-[#3C7E44]/30
+    shadow-sm cursor-pointer"
+                    >
+                        {['All', 'Pending', 'Confirmed', 'Delivered', 'Canceled'].map((status) => (
+                            <option key={status} value={status}>
+                                {status}
+                            </option>
+                        ))}
+                    </select>
 
-                <div className="flex gap-3 overflow-x-auto">
-                    {['All', 'Pending', 'Confirmed', 'Delivered', 'Canceled'].map(status => (
-                        <motion.button
-                            whileTap={{ scale: 0.95 }}
-                            key={status}
-                            onClick={() => setStatusFilter(status)}
-                            className={`px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] rounded-[1rem] transition-all duration-300
-                                ${statusFilter === status
-                                    ? 'bg-[#3C7E44] text-white shadow-md'
-                                    : 'bg-white text-gray-400 hover:bg-[#FBF8F2] hover:text-[#3C7E44]'
-                                }`}
-                        >
-                            {status}
-                        </motion.button>
-                    ))}
+                    <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-[#3C7E44]">
+                        ▼
+                    </div>
                 </div>
             </motion.div>
 
@@ -165,7 +168,7 @@ const Orders = ({ orders, onCancelOrder }) => {
                                 transition={{ duration: 0.3 }}
                                 className="group bg-white/70 backdrop-blur-2xl rounded-[1rem] border border-white/40 p-7 
                                 hover:shadow-[0_25px_60px_-10px_rgba(0,0,0,0.2)] transition-all cursor-pointer"
-                                onClick={() => setSelectedOrder(order)}
+                                
                             >
                                 <div className="flex flex-col md:flex-row justify-between items-center gap-8">
 
@@ -189,7 +192,14 @@ const Orders = ({ orders, onCancelOrder }) => {
                                         <p className="text-2xl font-extrabold text-[#3C7E44] tracking-tight">
                                             ₹{order.amount}
                                         </p>
-                                        <ChevronRight className="text-gray-400 group-hover:translate-x-2 transition-transform" />
+                                        <motion.div
+                                            whileTap={{ scale: 0.9 }}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setSelectedOrder(order);
+                                            }}
+                                            className="cursor-pointer"
+                                        ><ChevronRight className="text-gray-400 group-hover:translate-x-2 transition-transform" /></motion.div>
                                     </div>
 
                                 </div>
@@ -198,7 +208,52 @@ const Orders = ({ orders, onCancelOrder }) => {
                     )}
                 </AnimatePresence>
             </div>
+            <AnimatePresence>
+                {selectedOrder && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50"
+                        onClick={() => setSelectedOrder(null)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.8, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="bg-white rounded-[1.5rem] p-8 w-full max-w-md shadow-2xl"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <h3 className="text-xl font-bold text-gray-900 mb-4">
+                                Order #{selectedOrder.id}
+                            </h3>
 
+                            <p className="text-sm text-gray-400 mb-2">
+                                {formatDate(selectedOrder.date)}
+                            </p>
+
+                            <div className="mb-4">
+                                <p className="font-medium text-gray-800">
+                                    {selectedOrder.items?.[0]?.name}
+                                </p>
+                                <p className="text-[#3C7E44] font-bold text-lg mt-2">
+                                    ₹{selectedOrder.amount}
+                                </p>
+                            </div>
+
+                            <StatusBadge status={selectedOrder.status} />
+
+                            <button
+                                onClick={() => setSelectedOrder(null)}
+                                className="mt-6 w-full py-3 bg-[#3C7E44] text-white rounded-[1rem] font-semibold hover:bg-[#2e6234] transition"
+                            >
+                                Close
+                            </button>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
