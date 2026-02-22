@@ -83,7 +83,7 @@ const TermsAndConditions = () => {
           </div>
         </div>
 
-        {/* Sections */}
+        {/* Sections - Numbered Document Style */}
         <div className="space-y-8">
           {termsSections.map((section, index) => (
             <motion.div
@@ -98,12 +98,16 @@ const TermsAndConditions = () => {
                   {section.number}
                 </div>
 
-                <div>
-                  <div className="flex items-center gap-2 mb-2 text-[#3C7E44]">
-                    {section.icon}
-                    <h2 className="font-bold text-lg">{section.title}</h2>
+                <div className="flex-1 pt-1">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="text-[#3C7E44]">{section.icon}</div>
+                    <h2 className="text-xl sm:text-2xl font-black text-gray-900">
+                      {section.title}
+                    </h2>
                   </div>
-                  <p className="text-gray-700">{section.content}</p>
+                  <p className="text-base text-gray-700 leading-relaxed pl-9">
+                    {section.content}
+                  </p>
                 </div>
               </div>
             </motion.div>

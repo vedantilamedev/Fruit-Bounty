@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Truck, Clock, MapPin, Phone, X } from "lucide-react";
+import { Truck, Clock, MapPin, Phone, X, Filter, Edit2 } from "lucide-react";
 
 /* ======================
    Utility
@@ -27,6 +27,9 @@ function Badge({ className, variant = "default", ...props }) {
     default: "bg-black text-white",
     secondary: "bg-gray-100 text-gray-700",
     outline: "border text-gray-700",
+    green: "bg-green-100 text-green-700",
+    purple: "bg-purple-100 text-purple-700",
+    blue: "bg-blue-100 text-blue-700",
   };
 
   return (
@@ -64,12 +67,73 @@ function Button({ className, variant = "default", size = "default", ...props }) 
 }
 
 /* ======================
-   Data
+   Data with Bowl Details
 ====================== */
 const deliveries = [
-  { id: "DEL-001", customer: "Olivia Martin", phone: "+1 (555) 111-2222", address: "123 Oak Street, San Francisco", time: "8:00 AM", bowls: 2, type: "Subscription", status: "Scheduled" },
-  { id: "DEL-002", customer: "Tech Corp Inc.", phone: "+1 (555) 123-4567", address: "789 Business Park, San Francisco", time: "9:00 AM", bowls: 15, type: "Corporate", status: "Scheduled" },
-  { id: "DEL-003", customer: "David Lee", phone: "+1 (555) 222-3333", address: "456 Pine Avenue, San Francisco", time: "10:30 AM", bowls: 1, type: "Normal", status: "Scheduled" },
+  { 
+    id: "DEL-001", 
+    customer: "Olivia Martin", 
+    phone: "+1 (555) 111-2222", 
+    address: "123 Oak Street, San Francisco", 
+    time: "8:00 AM", 
+    type: "Subscription", 
+    status: "Scheduled",
+    bowlsDetail: [
+      { name: "Protein Power Bowl", fruits: ["Banana", "Oats", "Peanut Butter", "Dates"], toppings: ["Whey Protein", "Flax Seeds"] },
+      { name: "Berry Blast Bowl", fruits: ["Strawberry", "Raspberry", "Blueberry"], toppings: ["Mint Leaves", "Honey"] }
+    ]
+  },
+  { 
+    id: "DEL-002", 
+    customer: "Tech Corp Inc.", 
+    phone: "+1 (555) 123-4567", 
+    address: "789 Business Park, San Francisco", 
+    time: "9:00 AM", 
+    type: "Corporate", 
+    status: "Scheduled",
+    bowlsDetail: [
+      { name: "Large Bowl", fruits: ["Mixed Fruits", "Seeds", "Nuts", "Honey"], toppings: ["Cashews", "Walnuts"] },
+      { name: "Medium Bowl", fruits: ["Strawberry", "Blueberry", "Chia", "Almond"], toppings: ["Coconut Flakes", "Dark Chocolate"] }
+    ]
+  },
+  { 
+    id: "DEL-003", 
+    customer: "David Lee", 
+    phone: "+1 (555) 222-3333", 
+    address: "456 Pine Avenue, San Francisco", 
+    time: "10:30 AM", 
+    type: "Normal", 
+    status: "Scheduled",
+    bowlsDetail: [
+      { name: "Small Bowl", fruits: ["Apple", "Banana", "Granola", "Honey"], toppings: ["Chia Seeds", "Almonds"] }
+    ]
+  },
+  { 
+    id: "DEL-004", 
+    customer: "Sarah Johnson", 
+    phone: "+1 (555) 333-4444", 
+    address: "321 Maple Drive, San Francisco", 
+    time: "11:00 AM", 
+    type: "Subscription", 
+    status: "Scheduled",
+    bowlsDetail: [
+      { name: "Tropical Delight", fruits: ["Mango", "Pineapple", "Coconut"], toppings: ["Coconut Chips", "Chia Seeds"] },
+      { name: "Green Detox Bowl", fruits: ["Spinach", "Kiwi", "Apple", "Mint"], toppings: ["Sunflower Seeds", "Honey"] },
+      { name: "Chocolate Crunch Bowl", fruits: ["Banana", "Cocoa", "Oats"], toppings: ["Dark Chocolate", "Almond Butter"] }
+    ]
+  },
+  { 
+    id: "DEL-005", 
+    customer: "Mike Wilson", 
+    phone: "+1 (555) 444-5555", 
+    address: "654 Cedar Lane, San Francisco", 
+    time: "2:00 PM", 
+    type: "Normal", 
+    status: "Scheduled",
+    bowlsDetail: [
+      { name: "Classic Yogurt Bowl", fruits: ["Greek Yogurt", "Honey", "Granola"], toppings: ["Strawberry", "Blueberry"] }
+    ]
+  },
 ];
 
 /* ======================
@@ -77,15 +141,70 @@ const deliveries = [
 ====================== */
 export default function TomorrowDeliveries() {
   const [selected, setSelected] = useState(null);
+  const [filter, setFilter] = useState("all");
+  const [editingTime, setEditingTime] = useState(null);
+  const [customTime, setCustomTime] = useState("");
+  const [deliveryData, setDeliveryData] = useState(deliveries);
+
+  // Filter deliveries
+  const filteredDeliveries = deliveryData.filter((d) => {
+    if (filter === "all") return true;
+    if (filter === "subscription") return d.type === "Subscription";
+    if (filter === "corporate") return d.type === "Corporate";
+    if (filter === "normal") return d.type === "Normal";
+    return true;
+  });
+
+  // Update delivery time
+  const handleTimeUpdate = (id) => {
+    if (customTime.trim()) {
+      setDeliveryData(deliveryData.map(d => 
+        d.id === id ? { ...d, time: customTime } : d
+      ));
+    }
+    setEditingTime(null);
+    setCustomTime("");
+  };
+
+  // Get stats based on filter
+  const stats = {
+    total: filteredDeliveries.length,
+    bowls: filteredDeliveries.reduce((sum, d) => sum + d.bowlsDetail.length, 0),
+    subscription: filteredDeliveries.filter(d => d.type === "Subscription").length,
+    corporate: filteredDeliveries.filter(d => d.type === "Corporate").length,
+    normal: filteredDeliveries.filter(d => d.type === "Normal").length,
+  };
 
   return (
     <div className="p-4 sm:p-8">
 
       {/* Header */}
-      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-        <h1 className="text-3xl font-bold">Tomorrow's Deliveries</h1>
-        <p className="text-gray-500">Scheduled deliveries</p>
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-6 sm:mb-8">
+        <h1 className="hidden md:block text-2xl sm:text-3xl font-bold">Tomorrow's Deliveries</h1>
+        <p className="hidden md:block text-gray-500">Scheduled deliveries</p>
       </motion.div>
+
+      {/* Filter Dropdown */}
+      <div className="flex flex-wrap items-center gap-3 mb-6">
+        <div className="flex items-center gap-2 bg-white rounded-lg border p-2">
+          <Filter size={18} className="text-gray-500" />
+          <select 
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            className="bg-transparent text-sm font-medium outline-none cursor-pointer"
+          >
+            <option value="all">All Deliveries</option>
+            <option value="subscription">Subscription</option>
+            <option value="corporate">Corporate</option>
+            <option value="normal">Normal</option>
+          </select>
+        </div>
+        
+        <div className="flex gap-2 text-sm">
+          <span className="text-gray-500">Showing:</span>
+          <span className="font-medium">{filteredDeliveries.length} deliveries</span>
+        </div>
+      </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
@@ -94,27 +213,27 @@ export default function TomorrowDeliveries() {
             <Truck className="text-blue-600" />
             <p className="text-sm text-gray-600">Total Deliveries</p>
           </div>
-          <h3 className="text-3xl font-bold">{deliveries.length}</h3>
+          <h3 className="text-3xl font-bold">{stats.total}</h3>
         </Card>
 
         <Card className="p-6">
           <p className="text-sm text-gray-600 mb-2">Total Bowls</p>
           <h3 className="text-3xl font-bold text-green-600">
-            {deliveries.reduce((sum, d) => sum + d.bowls, 0)}
+            {deliveryData.reduce((sum, d) => sum + d.bowlsDetail.length, 0)}
           </h3>
         </Card>
 
         <Card className="p-6">
           <p className="text-sm text-gray-600 mb-2">Corporate</p>
           <h3 className="text-3xl font-bold text-purple-600">
-            {deliveries.filter((d) => d.type === "Corporate").length}
+            {deliveryData.filter((d) => d.type === "Corporate").length}
           </h3>
         </Card>
 
         <Card className="p-6">
           <p className="text-sm text-gray-600 mb-2">Subscriptions</p>
           <h3 className="text-3xl font-bold text-orange-600">
-            {deliveries.filter((d) => d.type === "Subscription").length}
+            {deliveryData.filter((d) => d.type === "Subscription").length}
           </h3>
         </Card>
       </div>
@@ -124,7 +243,7 @@ export default function TomorrowDeliveries() {
         <h3 className="text-lg font-semibold mb-6">Delivery Schedule</h3>
 
         <div className="space-y-4">
-          {deliveries.map((delivery, index) => (
+          {filteredDeliveries.map((delivery, index) => (
             <motion.div
               key={delivery.id}
               initial={{ opacity: 0, x: -20 }}
@@ -137,7 +256,44 @@ export default function TomorrowDeliveries() {
                 <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
                   <Clock className="text-green-600" />
                 </div>
-                <p className="text-sm font-semibold mt-2">{delivery.time}</p>
+                
+                {/* Time Editor */}
+                {editingTime === delivery.id ? (
+                  <div className="mt-2 flex flex-col items-center gap-1">
+                    <input
+                      type="text"
+                      value={customTime}
+                      onChange={(e) => setCustomTime(e.target.value)}
+                      placeholder="e.g. 8:15 AM"
+                      className="text-xs border-2 border-green-400 rounded px-2 py-1 w-20 text-center"
+                      autoFocus
+                    />
+                    <div className="flex gap-1">
+                      <button 
+                        onClick={() => handleTimeUpdate(delivery.id)}
+                        className="text-xs bg-green-500 text-white px-2 py-0.5 rounded hover:bg-green-600"
+                      >
+                        ✓
+                      </button>
+                      <button 
+                        onClick={() => { setEditingTime(null); setCustomTime(""); }}
+                        className="text-xs bg-gray-300 text-gray-600 px-2 py-0.5 rounded hover:bg-gray-400"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mt-2 flex items-center gap-1">
+                    <p className="text-sm font-semibold">{delivery.time}</p>
+                    <button 
+                      onClick={() => { setEditingTime(delivery.id); setCustomTime(delivery.time); }}
+                      className="p-0.5 hover:bg-gray-200 rounded"
+                    >
+                      <Edit2 size={10} />
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className="flex-1">
@@ -150,9 +306,11 @@ export default function TomorrowDeliveries() {
                   </div>
 
                   <div className="flex flex-col gap-2 items-start sm:items-end">
-                    <Badge variant="outline">{delivery.type}</Badge>
+                    <Badge variant={delivery.type === "Subscription" ? "purple" : delivery.type === "Corporate" ? "blue" : "secondary"}>
+                      {delivery.type}
+                    </Badge>
                     <Badge variant="secondary">
-                      {delivery.bowls} bowl{delivery.bowls > 1 ? "s" : ""}
+                      {delivery.bowlsDetail.length} bowl{delivery.bowlsDetail.length > 1 ? "s" : ""}
                     </Badge>
                   </div>
                 </div>
@@ -170,33 +328,133 @@ export default function TomorrowDeliveries() {
         </div>
       </Card>
 
-      {/* Drawer */}
+      {/* Drawer - Fancy Colorful View Details */}
       {selected && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+        <div 
+          className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
+          onClick={(e) => { if (e.target === e.currentTarget) setSelected(null); }}
+        >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl relative"
+            className="bg-white rounded-2xl w-full max-w-md shadow-xl relative max-h-[90vh] flex flex-col"
           >
-            <button onClick={() => setSelected(null)} className="absolute top-4 right-4">
-              <X />
-            </button>
-
-            <h2 className="text-xl font-bold mb-4">Delivery Details</h2>
-
-            <div className="grid gap-3 text-sm">
-              <Info label="Customer" value={selected.customer} />
-              <Info label="Phone" value={selected.phone} />
-              <Info label="Address" value={selected.address} />
-              <Info label="Delivery Time" value={selected.time} />
-              <Info label="Bowls" value={selected.bowls} />
-              <Info label="Type" value={selected.type} />
-              <Info label="Status" value={selected.status} />
+            {/* Colorful Header */}
+            <div className="bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 p-4 text-white flex-shrink-0">
+              <button 
+                onClick={() => setSelected(null)} 
+                className="absolute top-3 right-3 p-1.5 bg-white/20 rounded-full hover:bg-white/30"
+              >
+                <X size={18} />
+              </button>
+              
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                  <Truck size={20} />
+                </div>
+                <div>
+                  <h2 className="text-lg font-bold">Delivery Details</h2>
+                  <p className="text-white/80 text-xs">{selected.id}</p>
+                </div>
+              </div>
             </div>
 
-            <Button className="w-full mt-6" onClick={() => setSelected(null)}>
-              Close
-            </Button>
+            {/* Content - Scrollable */}
+            <div className="p-4 overflow-y-auto flex-1">
+              {/* Customer Info */}
+              <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-3 mb-3 border border-purple-100">
+                <h3 className="font-bold text-purple-800 mb-2 text-sm">👤 Customer Info</h3>
+                <div className="space-y-1.5 text-xs">
+                  <InfoRow label="Name" value={selected.customer} />
+                  <InfoRow label="Phone" value={selected.phone} />
+                  <InfoRow label="Address" value={selected.address} />
+                </div>
+              </div>
+
+              {/* Order Details */}
+              <div className="flex gap-2 mb-3">
+                <div className="flex-1 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-3 border border-blue-100">
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <Clock size={14} className="text-blue-600" />
+                    <span className="text-xs text-blue-600 font-medium">Time</span>
+                  </div>
+                  <p className="font-bold text-blue-800 text-sm">{selected.time}</p>
+                </div>
+                <div className="flex-1 bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl p-3 border border-orange-100">
+                  <span className="text-xs text-orange-600 font-medium">Type</span>
+                  <p className="font-bold text-orange-800 text-sm">{selected.type}</p>
+                </div>
+              </div>
+
+              {/* Bowls Detail - Colorful Cards */}
+              <div className="mb-3">
+                <h3 className="font-bold text-gray-800 mb-2 flex items-center gap-2 text-sm">
+                  <span>🍽️</span> Bowls & Fruits
+                  <span className="text-xs font-normal text-gray-500">
+                    ({selected.bowlsDetail.length})
+                  </span>
+                </h3>
+                
+                <div className="space-y-2">
+                  {selected.bowlsDetail.map((bowl, idx) => (
+                    <div 
+                      key={idx} 
+                      className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-3 border border-green-200"
+                    >
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <span className="text-base">🥗</span>
+                        <span className="font-bold text-green-800 text-sm">{bowl.name}</span>
+                      </div>
+                      
+                      {/* Fruits */}
+                      <div className="mb-1.5">
+                        <span className="text-xs font-medium text-green-600">🍎 Fruits:</span>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {bowl.fruits.map((fruit, fIdx) => (
+                            <span 
+                              key={fIdx} 
+                              className="bg-white text-green-700 text-xs px-2 py-0.5 rounded-full border border-green-200"
+                            >
+                              {fruit}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      {/* Toppings */}
+                      <div>
+                        <span className="text-xs font-medium text-amber-600">✨ Toppings:</span>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {bowl.toppings.map((topping, tIdx) => (
+                            <span 
+                              key={tIdx} 
+                              className="bg-white text-amber-700 text-xs px-2 py-0.5 rounded-full border border-amber-200"
+                            >
+                              {topping}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Status */}
+              <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-2 border border-green-200">
+                <div className="flex items-center justify-between">
+                  <span className="text-green-700 font-medium text-xs">Status</span>
+                  <Badge variant="green">✓ {selected.status}</Badge>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="p-3 border-t bg-gray-50 flex-shrink-0">
+              <Button className="w-full text-sm py-2" onClick={() => setSelected(null)}>
+                Close
+              </Button>
+            </div>
           </motion.div>
         </div>
       )}
@@ -208,9 +466,9 @@ export default function TomorrowDeliveries() {
 /* ======================
    Info Row
 ====================== */
-const Info = ({ label, value }) => (
-  <div className="flex justify-between bg-gray-50 p-3 rounded-lg border">
-    <span className="text-gray-600">{label}</span>
-    <span className="font-medium">{value}</span>
+const InfoRow = ({ label, value }) => (
+  <div className="flex justify-between text-sm">
+    <span className="text-gray-500">{label}:</span>
+    <span className="font-medium text-gray-800">{value}</span>
   </div>
 );
