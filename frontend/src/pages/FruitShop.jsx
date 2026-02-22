@@ -1,6 +1,18 @@
 import { useCart } from "../context/CartContext";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import {
+  Leaf,
+  HeartPulse,
+  Hand,
+  Recycle,
+  ShoppingBag,
+  Check,
+  User,
+  Users,
+  Sparkles,
+} from "lucide-react";
 
 const products = [
   {
@@ -160,8 +172,22 @@ const products = [
     image: "/images/energyBowl.png",
   },
 ];
+
+function FreshnessCard({ icon, title, desc }) {
+  return (
+    <div className="bg-[#ecfdf3] rounded-2xl p-8 text-center shadow-sm hover:shadow-md transition-shadow duration-300">
+      <div className="w-14 h-14 mx-auto flex items-center justify-center rounded-full bg-[#c9b26d] mb-5">
+        {icon}
+      </div>
+      <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+      <p className="mt-2 text-sm text-gray-500 leading-relaxed">{desc}</p>
+    </div>
+  );
+}
+
 function FruitShop() {
   const { addToCart } = useCart();
+  const navigate = useNavigate();
   const [selectedBowls, setSelectedBowls] = useState([]);
 
   const toggleSelection = (product) => {
@@ -173,302 +199,303 @@ function FruitShop() {
     }
   };
 
-  const totalSelectedPrice = selectedBowls.reduce(
-    (sum, item) => sum + item.price,
-    0
-  );
+  const totalSelectedPrice = selectedBowls.reduce((sum, item) => sum + item.price, 0);
 
   const handleBulkAddToCart = () => {
-    selectedBowls.forEach((item) =>
-      addToCart({ ...item, quantity: 1 })
-    );
-    alert(`${selectedBowls.length} items added to your cart! 🥗`);
+    selectedBowls.forEach((item) => addToCart({ ...item, quantity: 1 }));
+    alert(`${selectedBowls.length} items added to your cart!`);
     setSelectedBowls([]);
   };
 
   return (
-    <div className="min-h-screen font-sans 
-bg-[url('/images/fruitBackground.png')] 
-bg-cover bg-center bg-no-repeat bg-fixed relative">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="relative py-8 md:py-12 px-6 md:px-16 lg:px-24 overflow-hidden">
+      <div
+        className="absolute inset-0 z-0 opacity-40 pointer-events-none"
+        style={{
+          backgroundImage: "url('/images/main-background.png')",
+          backgroundSize: "400px",
+          backgroundRepeat: "repeat",
+        }}
+      ></div>
 
-        {/* HEADER */}
-        <header className="py-20 text-center">
-          <span className="text-green-700 font-bold tracking-widest uppercase text-sm">
-            Fresh • Organic • Healthy
-          </span>
+      <header className="py-20 text-center relative z-10">
+        <span className="text-green-700 font-bold tracking-widest uppercase text-sm">
+          Fresh | Organic | Healthy
+        </span>
+        <h1 className="text-5xl font-black text-gray-900 mt-3">
+          Build Your <span className="text-[#C9C27A]">Perfect Bowl</span>
+        </h1>
+        <p className="text-gray-500 mt-4 text-lg">
+          100% Natural Ingredients | No Preservatives | Same Day Delivery
+        </p>
+      </header>
 
-          <h1 className="text-5xl font-black text-gray-900 mt-3">
-            Build Your <span className="text-orange-500">Perfect Bowl</span>
-          </h1>
-
-          <p className="text-gray-500 mt-4 text-lg">
-            100% Natural Ingredients | No Preservatives | Same Day Delivery
-          </p>
-        </header>
-
-        {/* PRODUCT GRID */}
-        <section className="grid gap-10 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-
-          {products.map((product, index) => {
-            const isSelected = selectedBowls.some(
-              (item) => item.id === product.id
-            );
-
-            return (
-              <motion.div
-                key={product.id}
-                whileHover={{ y: -6 }}
-                onClick={() => toggleSelection(product)}
-                className={`rounded-3xl p-6 cursor-pointer border-2 transition-all duration-300 flex flex-col
-                ${isSelected
-                    ? "border-green-600 bg-white shadow-2xl"
-                    : "bg-white shadow-lg hover:shadow-2xl"
-                  }`}
-              >
-                {/* IMAGE */}
-                <div className="relative bg-orange-50 rounded-2xl h-52 flex items-center justify-center">
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    className="w-40 object-contain"
-                  />
-
-                  {/* Badge */}
-                  {product.rating >= 4.9 && (
-                    <div className="absolute top-3 left-3 bg-orange-500 text-white text-xs px-3 py-1 rounded-full">
-                      Best Seller
-                    </div>
-                  )}
-                </div>
-
-                {/* CONTENT */}
-                <div className="mt-5 flex flex-col flex-grow">
-
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-xl font-black">
-                      {product.title}
-                    </h3>
-                    <span className="text-green-700 text-sm font-bold">
-                      {product.weight}
-                    </span>
-                  </div>
-
-                  <p className="text-gray-500 text-sm mt-2">
-                    {product.description}
-                  </p>
-
-                  {/* Rating */}
-                  <div className="flex items-center mt-3 text-yellow-500 text-sm">
-                    ⭐ {product.rating}
-                  </div>
-
-                  {/* Nutrition */}
-                  <div className="flex gap-4 mt-3 text-xs text-gray-600">
-                    <span>🔥 {product.calories}</span>
-                    <span>💪 {product.protein}</span>
-                  </div>
-
-                  {/* Ingredients Capsules */}
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {product.ingredients.map((item, i) => (
-                      <span
-                        key={i}
-                        className="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full"
-                      >
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Price + Button */}
-                  <div className="flex justify-between items-center mt-auto pt-6">
-                    <span className="text-2xl font-black">
-                      ₹{product.price}
-                    </span>
-
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        addToCart({ ...product, quantity: 1 });
-                        alert(`${product.title} added!`);
-                      }}
-                      className="bg-green-700 hover:bg-green-800 text-white w-12 h-12 rounded-xl flex items-center justify-center shadow-lg transition"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </section>
-
-        {/* WHY CHOOSE US */}
-        <section className="mt-32 text-center">
-          <h2 className="text-4xl font-black mb-12">
-            Why Choose Us?
-          </h2>
-
-          <div className="grid md:grid-cols-3 gap-10">
-            {[
-              "Farm Fresh Ingredients 🥗",
-              "Fast 30-Min Delivery ⚡",
-              "High Protein & Nutrition ❤️",
-            ].map((item, i) => (
-              <div
-                key={i}
-                className="bg-white p-10 rounded-3xl shadow-xl"
-              >
-                <p className="font-bold text-lg">{item}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-        {/* CUSTOMER TESTIMONIALS */}
-        <section className="mt-32 text-center">
-          <h2 className="text-4xl font-black mb-12">
-            What Our Customers Say
-          </h2>
-
-          <div className="grid md:grid-cols-3 gap-10">
-            {[
-              {
-                name: "Rahul Sharma",
-                review: "Best healthy bowls I’ve ever had! Fresh and delicious.",
-              },
-              {
-                name: "Priya Mehta",
-                review: "Perfect for my gym diet. High protein and tasty!",
-              },
-              {
-                name: "Arjun Verma",
-                review: "Fast delivery and amazing quality. Highly recommend!",
-              },
-            ].map((item, i) => (
-              <div
-                key={i}
-                className="bg-white p-8 rounded-3xl shadow-xl"
-              >
-                <p className="text-yellow-500 mb-4">⭐⭐⭐⭐⭐</p>
-                <p className="text-gray-600 italic">"{item.review}"</p>
-                <p className="mt-4 font-bold text-gray-900">
-                  - {item.name}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-
-        {/* DELIVERY INFORMATION */}
-        <section className="mt-32 bg-white rounded-3xl shadow-xl p-12">
-          <div className="grid md:grid-cols-3 gap-10 text-center">
-
-            <div>
-              <div className="text-4xl mb-4">🚚</div>
-              <h3 className="font-bold text-lg">Fast Delivery</h3>
-              <p className="text-gray-500 mt-2">
-                Delivered within 30 minutes in your area.
-              </p>
-            </div>
-
-            <div>
-              <div className="text-4xl mb-4">🥗</div>
-              <h3 className="font-bold text-lg">Fresh Ingredients</h3>
-              <p className="text-gray-500 mt-2">
-                100% natural and farm-fresh ingredients.
-              </p>
-            </div>
-
-            <div>
-              <div className="text-4xl mb-4">💳</div>
-              <h3 className="font-bold text-lg">Secure Payment</h3>
-              <p className="text-gray-500 mt-2">
-                Multiple payment options available.
-              </p>
-            </div>
-
-          </div>
-        </section>
-
-
-        {/* SUBSCRIPTION OFFER */}
-        <section className="mt-32 bg-gradient-to-r from-green-700 to-orange-500 text-white rounded-3xl p-16 text-center shadow-2xl">
-          <h2 className="text-4xl font-black mb-6">
-            Subscribe & Save 20%
-          </h2>
-
-          <p className="text-lg mb-8">
-            Get weekly healthy bowls delivered to your doorstep.
-            Cancel anytime.
-          </p>
-
-          <button className="bg-white text-green-700 font-bold px-10 py-4 rounded-xl hover:bg-gray-100 transition">
-            Subscribe Now
-          </button>
-        </section>
-
-
-        {/* CONTACT / FOOTER */}
-        <footer className="mt-32 pb-20 text-center">
-          <h2 className="text-3xl font-black mb-6">
-            Get In Touch
-          </h2>
-
-          <p className="text-white mb-4">
-            📍 Mumbai, India
-          </p>
-
-          <p className="text-white mb-4">
-            📞 +91 98765 43210
-          </p>
-
-          <p className="text-white mb-8">
-            📧 support@fruitbowl.com
-          </p>
-
-          <div className="flex justify-center gap-6 text-2xl">
-            <span>📘</span>
-            <span>📸</span>
-            <span>🐦</span>
-          </div>
-
-          <p className="text-yellow-300 mt-10 text-sm">
-            © 2026 Fruit Bowl. All rights reserved.
-          </p>
-        </footer>
-
-        {/* FLOATING ORDER BAR */}
-        <AnimatePresence>
-          {selectedBowls.length > 0 && (
+      <section className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative z-10">
+        {products.map((product) => {
+          const isSelected = selectedBowls.some((item) => item.id === product.id);
+          return (
             <motion.div
-              initial={{ y: 120, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 120, opacity: 0 }}
-              className="fixed bottom-10 left-0 right-0 px-6 flex justify-center z-50"
+              key={product.id}
+              whileHover={{ y: -8 }}
+              onClick={() => toggleSelection(product)}
+              className={`group relative rounded-[28px] p-5 cursor-pointer border-2 transition-all duration-300 flex flex-col overflow-hidden ${
+                isSelected
+                  ? "border-green-700 bg-white shadow-[0_18px_45px_rgba(22,101,52,0.28)]"
+                  : "border-[#d8d2a0] bg-white shadow-lg hover:shadow-[0_20px_48px_rgba(201,194,122,0.28)]"
+              }`}
             >
-              <div className="bg-green-900 text-white px-8 py-5 rounded-3xl shadow-xl flex justify-between items-center w-full max-w-4xl">
-                <div>
-                  <p>{selectedBowls.length} items selected</p>
-                  <p className="font-bold text-xl">
-                    ₹{totalSelectedPrice}
-                  </p>
+              <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-r from-[#eef9f0] via-[#fff9ef] to-[#eef9f0] pointer-events-none"></div>
+              <div className="relative bg-gradient-to-br from-[#f8fff8] to-[#fff6e7] border border-[#ede8c4] rounded-2xl h-52 flex items-center justify-center">
+                <img
+                  src={product.image}
+                  alt={product.title}
+                  className="w-40 object-contain transition-transform duration-500 group-hover:scale-105"
+                />
+                {product.rating >= 4.9 && (
+                  <div className="absolute top-3 left-3 bg-orange-500 text-white text-xs px-3 py-1 rounded-full font-semibold">
+                    Best Seller
+                  </div>
+                )}
+                <div
+                  className={`absolute top-3 right-3 w-8 h-8 rounded-full border flex items-center justify-center ${
+                    isSelected
+                      ? "bg-green-600 border-green-600 text-white"
+                      : "bg-white/90 border-gray-300 text-transparent"
+                  }`}
+                >
+                  <Check className="w-4 h-4" />
+                </div>
+              </div>
+
+              <div className="mt-5 flex flex-col flex-grow">
+                <div className="flex justify-between items-start gap-3">
+                  <h3 className="text-xl font-black text-gray-900 leading-tight">{product.title}</h3>
+                  <span className="text-green-700 text-sm font-bold">{product.weight}</span>
                 </div>
 
-                <button
-                  onClick={handleBulkAddToCart}
-                  className="bg-orange-500 hover:bg-orange-600 px-8 py-3 rounded-xl font-bold transition"
-                >
-                  Order Now
-                </button>
+                <p className="text-gray-500 text-sm mt-2">{product.description}</p>
+
+                <div className="mt-4 grid grid-cols-2 gap-2">
+                  <div className="rounded-xl bg-[#f3f9f3] px-3 py-2 border border-green-100">
+                    <p className="text-[10px] uppercase tracking-wider text-gray-500">Calories</p>
+                    <p className="text-sm font-semibold text-gray-800">{product.calories}</p>
+                  </div>
+                  <div className="rounded-xl bg-[#f3f9f3] px-3 py-2 border border-green-100">
+                    <p className="text-[10px] uppercase tracking-wider text-gray-500">Protein</p>
+                    <p className="text-sm font-semibold text-gray-800">{product.protein}</p>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {product.ingredients.slice(0, 4).map((item, i) => (
+                    <span
+                      key={i}
+                      className="bg-green-100/80 text-green-900 text-xs px-3 py-1 rounded-full border border-green-200"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {product.toppings.slice(0, 2).map((topping, i) => (
+                    <span key={i} className="text-[11px] text-gray-600 bg-gray-100 px-2.5 py-1 rounded-full">
+                      + {topping}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex justify-between items-center mt-auto pt-6">
+                  <span className="text-2xl font-black text-[#2d5a27]">Rs. {product.price}</span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      addToCart({ ...product, quantity: 1 });
+                      alert(`${product.title} added!`);
+                    }}
+                    className="bg-gradient-to-r from-green-700 to-green-900 hover:from-green-800 hover:to-green-950 text-white px-5 h-11 rounded-xl flex items-center justify-center shadow-lg transition font-bold text-sm"
+                  >
+                    Add
+                  </button>
+                </div>
               </div>
             </motion.div>
-          )}
-        </AnimatePresence>
+          );
+        })}
+      </section>
 
-      </div>
-    </div>
+      {/* FRESHNESS PROMISE */}
+      <section className="w-full bg-[#fff7f7] py-16 px-4 mt-32 rounded-3xl relative z-10">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 relative inline-block">
+            Our Freshness Promise
+            <span className="absolute left-0 -bottom-2 w-full h-[3px] bg-green-600 rounded-full"></span>
+          </h2>
+          <p className="mt-5 text-base md:text-lg">Quality you can taste in every bite</p>
+          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <FreshnessCard icon={<Leaf size={26} className="text-white" />} title="100% Fresh" desc="Sourced daily from local farms" />
+            <FreshnessCard icon={<HeartPulse size={26} className="text-white" />} title="No Added Sugar" desc="Natural sweetness only" />
+            <FreshnessCard icon={<Hand size={26} className="text-white" />} title="Hygienic Prep" desc="Prepared in clean kitchen" />
+            <FreshnessCard icon={<Recycle size={26} className="text-white" />} title="Eco Packaging" desc="100% biodegradable materials" />
+          </div>
+        </div>
+      </section>
+
+      {/* SUBSCRIPTION OFFER */}
+      <section className="mt-32 relative z-10">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tight">
+            Subscription Model
+          </h2>
+          <div className="w-16 h-1 bg-[#2D5A27] mx-auto mt-3 mb-6 rounded-full"></div>
+          <p className="text-gray-600 text-sm md:text-base font-medium leading-relaxed max-w-3xl mx-auto">
+            Enjoy fresh fruit bowls delivered to you on a regular schedule. Our
+            subscription plans are designed to provide convenience, savings, and
+            consistent nutrition whether for personal wellness or corporate team benefits.
+          </p>
+        </div>
+
+        <div className="max-w-6xl mx-auto rounded-[2.5rem] overflow-hidden shadow-2xl bg-white border border-green-100 relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-green-50/80 via-emerald-50/50 to-green-50/80"></div>
+          <div className="absolute top-0 right-0 w-96 h-96 bg-green-200/20 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-200/20 rounded-full blur-3xl"></div>
+
+          <div className="relative grid md:grid-cols-2 gap-0">
+            <div className="p-8 md:p-10 flex flex-col">
+              <div className="w-14 h-14 bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl flex items-center justify-center mb-5 shadow-lg">
+                <User className="w-7 h-7 text-white" strokeWidth={2.5} />
+              </div>
+              <h3 className="text-3xl font-bold text-gray-900 mb-3 flex items-center gap-2">
+                Individual Plan
+                <Sparkles className="w-5 h-5 text-amber-500" />
+              </h3>
+              <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-6">
+                Perfect for daily health enthusiasts who want consistent fresh nutrition delivered to their doorstep.
+              </p>
+              <ul className="space-y-3 mb-8 flex-1">
+                {[
+                  "Personalized fruit selection",
+                  "Daily or weekly delivery",
+                  "Flexible subscription plans",
+                  "Cancel anytime",
+                ].map((feature, i) => (
+                  <li key={i} className="flex items-start gap-3 text-gray-700">
+                    <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
+                      <Check className="w-3 h-3 text-green-600" strokeWidth={3} />
+                    </div>
+                    <span className="text-sm">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <button
+                onClick={() => navigate("/subscription", { state: { plan: "individual" } })}
+                className="w-full bg-gradient-to-r from-green-700 to-green-900 hover:from-green-800 hover:to-green-950 text-white font-bold py-4 rounded-xl shadow-lg transition-all duration-300"
+              >
+                Choose Individual Plan
+              </button>
+            </div>
+
+            <div className="hidden md:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[80%] w-px">
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-green-300 to-transparent"></div>
+            </div>
+
+            <div className="md:hidden h-px bg-gradient-to-r from-transparent via-green-300 to-transparent my-2 mx-8"></div>
+
+            <div className="p-8 md:p-10 flex flex-col">
+              <div className="w-14 h-14 bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl flex items-center justify-center mb-5 shadow-lg">
+                <Users className="w-7 h-7 text-white" strokeWidth={2.5} />
+              </div>
+              <h3 className="text-3xl font-bold text-gray-900 mb-3 flex items-center gap-2">
+                Corporate Plan
+                <Sparkles className="w-5 h-5 text-amber-500" />
+              </h3>
+              <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-6">
+                Ideal for offices and teams looking to promote healthy habits and boost workplace productivity.
+              </p>
+              <ul className="space-y-3 mb-8 flex-1">
+                {[
+                  "Bulk ordering discounts",
+                  "Office pantry delivery",
+                  "Team wellness tracking",
+                  "Dedicated account manager",
+                ].map((feature, i) => (
+                  <li key={i} className="flex items-start gap-3 text-gray-700">
+                    <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
+                      <Check className="w-3 h-3 text-green-600" strokeWidth={3} />
+                    </div>
+                    <span className="text-sm">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <button
+                onClick={() => navigate("/subscription", { state: { plan: "corporate" } })}
+                className="w-full bg-gradient-to-r from-green-700 to-green-900 hover:from-green-800 hover:to-green-950 text-white font-bold py-4 rounded-xl shadow-lg transition-all duration-300"
+              >
+                Choose Corporate Plan
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FLOATING ORDER BAR */}
+      <AnimatePresence>
+        {selectedBowls.length > 0 && (
+          <motion.div
+            initial={{ y: 120, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 120, opacity: 0 }}
+            className="fixed bottom-6 left-0 right-0 px-4 flex justify-center z-50"
+          >
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden border border-gray-100">
+              <div className="h-1 bg-gray-100">
+                <div
+                  className="h-full bg-green-600 transition-all duration-300"
+                  style={{ width: `${Math.min((selectedBowls.length / 5) * 100, 100)}%` }}
+                ></div>
+              </div>
+              <div className="p-4 flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className="bg-green-100 p-2 rounded-xl">
+                    <ShoppingBag className="w-5 h-5 text-green-700" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-600 truncate">
+                      {selectedBowls.length} {selectedBowls.length === 1 ? "item" : "items"} selected
+                    </p>
+                    <div className="flex items-center gap-1 mt-1">
+                      {selectedBowls.slice(0, 3).map((item) => (
+                        <img
+                          key={item.id}
+                          src={item.image}
+                          alt={item.title}
+                          className="w-6 h-6 rounded-full object-cover border-2 border-white"
+                        />
+                      ))}
+                      {selectedBowls.length > 3 && (
+                        <span className="text-xs text-gray-500 ml-1">+{selectedBowls.length - 3}</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="text-right">
+                    <p className="text-xs text-gray-500">Total</p>
+                    <p className="text-xl font-black text-gray-900">Rs. {totalSelectedPrice}</p>
+                  </div>
+                  <button
+                    onClick={handleBulkAddToCart}
+                    className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-bold transition shadow-lg hover:shadow-xl flex items-center gap-2"
+                  >
+                    Order Now
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </section>
   );
 }
 

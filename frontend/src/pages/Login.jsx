@@ -12,12 +12,9 @@ const LoginRegister = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      localStorage.setItem("token", res.data.token);
-
-      // Force refresh so Navbar re-checks token
-      window.location.href = "/";
+      navigate("/", { replace: true });
     }
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     const timer = setTimeout(() => setAnimate(true), 100);
