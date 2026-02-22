@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import {
   FileCheck,
@@ -55,9 +54,18 @@ const TermsAndConditions = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <div
+      className="min-h-screen px-4 sm:px-6 lg:px-8 py-12 lg:py-20"
+      style={{
+        backgroundImage: "url('/images/main-background.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+        backgroundColor: "rgba(255, 255, 255, 0.95)",
+      }}
+    >
       <div className="max-w-4xl mx-auto">
-        {/* Header Section - Clean Document Style */}
+        {/* Header */}
         <div className="mb-12 pb-8 border-b-2 border-[#3C7E44]">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-12 h-12 rounded-xl bg-[#3C7E44] flex items-center justify-center">
@@ -67,14 +75,16 @@ const TermsAndConditions = () => {
               Legal Document
             </div>
           </div>
+
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 mb-4">
             Terms & Conditions
           </h1>
+
           <p className="text-base text-gray-600 leading-relaxed">
             Please read these terms carefully before using Fruit Bounty
-            services. These terms govern your access to and use of our platform,
-            products, and services.
+            services.
           </p>
+
           <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-[#FBF8F2] rounded-lg border border-[#E8E4D9]">
             <CheckCircle2 size={16} className="text-[#3C7E44]" />
             <span className="text-xs font-bold text-gray-700">
@@ -90,13 +100,11 @@ const TermsAndConditions = () => {
               key={section.number}
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.1 }}
-              className="relative"
             >
-              {/* Number Badge */}
               <div className="flex items-start gap-6">
-                <div className="flex-shrink-0 w-14 h-14 rounded-full bg-gradient-to-br from-[#3C7E44] to-[#2d5a3f] flex items-center justify-center text-white font-black text-xl shadow-lg">
+                <div className="w-14 h-14 rounded-full bg-[#3C7E44] text-white flex items-center justify-center font-bold">
                   {section.number}
                 </div>
 
@@ -116,25 +124,15 @@ const TermsAndConditions = () => {
           ))}
         </div>
 
-        {/* Footer Notice */}
-        <div className="mt-16 pt-8 border-t border-gray-200">
-          <div className="bg-gradient-to-r from-[#FBF8F2] to-white rounded-2xl p-6 sm:p-8 border border-[#E8E4D9]">
-            <div className="flex items-start gap-4">
-              <AlertCircle
-                size={24}
-                className="text-[#3C7E44] flex-shrink-0 mt-1"
-              />
-              <div>
-                <h3 className="font-bold text-gray-900 mb-2">
-                  Important Notice
-                </h3>
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  By continuing to use Fruit Bounty, you acknowledge that you
-                  have read, understood, and agree to be bound by these Terms &
-                  Conditions. For questions or clarifications, please contact
-                  our support team.
-                </p>
-              </div>
+        {/* Footer */}
+        <div className="mt-16 pt-8 border-t">
+          <div className="bg-[#FBF8F2] rounded-xl p-6 border">
+            <div className="flex gap-4">
+              <AlertCircle className="text-[#3C7E44]" />
+              <p className="text-sm text-gray-600">
+                By continuing to use Fruit Bounty, you agree to these Terms &
+                Conditions.
+              </p>
             </div>
           </div>
         </div>
