@@ -3,35 +3,56 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
 
-// Routes
+// ===============================
+// Load ENV Variables
+// ===============================
+dotenv.config();
+
+// ===============================
+// Connect Database
+// ===============================
+connectDB();
+
+// ===============================
+// Initialize App
+// ===============================
+const app = express();
+
+// ===============================
+// Middlewares
+// ===============================
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// ===============================
+// Routes Import
+// ===============================
 import authRoutes from "./routes/authRoutes.js";
 import fruitRoutes from "./routes/fruitRoutes.js";
 import packageRoutes from "./routes/packageRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import contactRoutes from "./routes/contactRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js";
+import customBowlRoutes from "./routes/customBowlRoutes.js";
+import deliveryRoutes from "./routes/deliveryRoutes.js"; //  Added Delivery
 
-// Load environment variables
-dotenv.config();
-
-// Connect to MongoDB
-connectDB();
-
-const app = express();
-
-
-// ✅ Middlewares
-app.use(cors());
-app.use(express.json());
-
-
-// ✅ Base Route
+// ===============================
+// Base Route
+// ===============================
 app.get("/", (req, res) => {
-  res.send("FruitsBounty API is running...");
+  res.status(200).json({
+    success: true,
+    message: "FruitsBounty API is running 🚀",
+  });
 });
 
-
-// ✅ Routes
+// ===============================
+// API Routes
+// ===============================
 app.use("/api/auth", authRoutes);
 app.use("/api/fruits", fruitRoutes);
 app.use("/api/packages", packageRoutes);
@@ -39,25 +60,38 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/admin", adminRoutes);
 
+// Customer Routes
+app.use("/api/user", userRoutes);
+app.use("/api/contact", contactRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/custom-bowls", customBowlRoutes);
+app.use("/api/delivery", deliveryRoutes); //  Delivery route added
 
-// ✅ 404 Handler
+// ===============================
+// 404 Route Not Found
+// ===============================
 app.use((req, res) => {
   res.status(404).json({
     success: false,
-    message: "Route not found"
+    message: "Route Not Found ",
   });
 });
 
-
-// ✅ Global Error Handler (Recommended)
+// ===============================
+// Global Error Handler
+// ===============================
 app.use((err, req, res, next) => {
-  res.status(500).json({
+  console.error("Error:", err.message);
+
+  res.status(err.statusCode || 500).json({
     success: false,
-    message: err.message
+    message: err.message || "Internal Server Error",
   });
 });
 
-
+// ===============================
+// Start Server
+// ===============================
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

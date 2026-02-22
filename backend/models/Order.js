@@ -5,53 +5,77 @@ const orderSchema = new mongoose.Schema(
     user_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true
+      required: true,
     },
 
     package_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Package"
+      ref: "Package",
+      required: true,
     },
+
+    bowl_type: {
+      type: String,
+      enum: ["regular", "custom"],
+      default: "regular",
+    },
+
+    fruits: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Fruit",
+      },
+    ],
 
     total_amount: {
       type: Number,
-      required: true
+      required: true,
     },
 
-    order_date: {
+    start_date: {
       type: Date,
-      default: Date.now
+      required: true,
     },
 
-    delivery_date: {
+    end_date: {
       type: Date,
-      required: true
+      required: true,
+    },
+
+    delivery_schedule: {
+      type: String,
+      enum: ["daily", "weekly"],
+      default: "daily",
+    },
+
+    subscription_type: {
+      type: String,
+      enum: ["weekly", "monthly", "one-time"],
+      default: "one-time",
     },
 
     next_delivery_date: {
-      type: Date
+      type: Date,
     },
 
     isRecurring: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     order_status: {
       type: String,
-      enum: ["Pending", "Confirmed", "Delivered"],
-      default: "Pending"
+      enum: ["pending", "active", "paused", "completed", "cancelled"],
+      default: "pending",
     },
 
     payment_status: {
       type: String,
-      enum: ["Paid", "Pending", "Failed"],
-      default: "Pending"
-    }
+      enum: ["pending", "paid", "failed"],
+      default: "pending",
+    },
   },
   { timestamps: true }
 );
 
-const Order = mongoose.model("Order", orderSchema);
-
-export default Order
+export default mongoose.model("Order", orderSchema);
