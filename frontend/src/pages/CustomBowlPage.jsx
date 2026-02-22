@@ -189,7 +189,7 @@ function CustomBowlPage() {
               </div>
               <div className="rounded-[2rem] bg-white/15 border border-white/20 p-5 md:p-6">
                 <img
-                  src="/images/hero.png"
+                  src="/images/custom.png"
                   alt="Custom Bowl Preview"
                   className="w-full object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.35)]"
                 />

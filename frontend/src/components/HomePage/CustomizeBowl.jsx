@@ -27,8 +27,8 @@ function CustomizeBowl() {
   ];
 
   return (
-    <section className="relative py-8 md:py-12 px-6 md:px-16 lg:px-24 overflow-hidden">
-      {/* 1. BACKGROUND IMAGE LAYER - Reference from SaladSection.jsx */}
+    <section className="relative py-8 md:py-12 px-6 md:px-16 lg:px-24 overflow-hidden bg-[#FBF8F2]">
+      {/* 1. BACKGROUND IMAGE LAYER */}
       <div 
         className="absolute inset-0 z-0 opacity-40 pointer-events-none"
         style={{ 
@@ -38,35 +38,35 @@ function CustomizeBowl() {
         }}
       ></div>
 
-      {/* 2. HEADING SECTION - Shortened space and requested font style */}
+      {/* 2. HEADING SECTION */}
       <div className="relative z-10 text-center mb-8 md:mb-12 max-w-2xl mx-auto px-6">
         <h2 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tight">
           Customize Your Bowl
         </h2>
         <div className="w-16 h-1 bg-[#2D5A27] mx-auto mt-3 mb-6 rounded-full"></div>
         
-        {/* Expanded Professional Details */}
         <div className="space-y-4">
           <p className="text-gray-700 text-lg md:text-xl font-bold leading-tight">
             Build your perfect fruit bowl exactly the way you like it.
           </p>
-          <p className="text-gray-500 text-sm md:text-base font-medium leading-relaxed">
+          <p className="text-gray-500 text-sm md:text-base font-medium leading-relaxed max-w-xl mx-auto">
             Experience the ultimate flexibility in healthy eating. At Fruit's Bounty, we believe your 
             nutrition should be as unique as your palate. Hand-select your favorite seasonal fruits, 
-            premium toppings, and the perfect portion size for a nutritious experience tailored 
-            specifically to your taste and dietary needs.
+            premium toppings, and the perfect portion size.
           </p>
         </div>
       </div>
 
-      {/* 3. STEPS GRID */}
-      <div className="relative z-10 grid gap-10 md:gap-12 items-stretch md:grid-cols-3">
+      {/* 3. STEPS GRID - Centered Alignment */}
+      <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12 max-w-6xl mx-auto justify-items-center items-stretch">
         {steps.map((step, index) => (
-          <CustomizeStepCard key={index} step={step} index={index} />
+          <div key={index} className="w-full flex justify-center">
+            <CustomizeStepCard step={step} index={index} />
+          </div>
         ))}
       </div>
 
-      {/* 4. CTA */}
+      {/* 4. CTA - Centered Alignment */}
       <div className="relative z-10 flex justify-center mt-12">
         <button
           onClick={() => navigate("/customize")}
@@ -79,10 +79,9 @@ function CustomizeBowl() {
         </button>
       </div>
 
-      {/* Reference styling for background and base colors */}
-      <style jsx>{`
+      <style>{`
         section {
-            background-color: #FBF8F2; /* Base cream color */
+            background-color: #FBF8F2;
         }
       `}</style>
     </section>

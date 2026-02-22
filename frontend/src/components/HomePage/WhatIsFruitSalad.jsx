@@ -21,7 +21,8 @@ function WhatIsFruitSalad() {
   ];
 
   return (
-    <section ref={sectionRef} className="relative py-12 md:py-24 px-4 overflow-hidden bg-[#FBF8F2]">
+    /* Reduced bottom padding: changed from py-12 md:py-24 to pt-12 pb-6 md:pt-24 md:pb-12 */
+    <section ref={sectionRef} className="relative pt-12 pb-6 md:pt-24 md:pb-12 px-4 overflow-hidden bg-[#FBF8F2]">
       {/* Background Pattern */}
       <div className="absolute inset-0 z-0 opacity-20 pointer-events-none" style={{ backgroundImage: `url('/public/images/main-background.PNG')`, backgroundSize: '400px' }}></div>
 
@@ -30,7 +31,8 @@ function WhatIsFruitSalad() {
         <div className="w-16 h-1 bg-[#2D5A27] mx-auto mt-3 rounded-full"></div>
       </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto min-h-[450px] md:min-h-[600px] flex items-center justify-center">
+      {/* Reduced min-height from 450px/600px to 350px/500px to tighten the layout */}
+      <div className="relative z-10 max-w-5xl mx-auto min-h-[350px] md:min-h-[500px] flex items-center justify-center">
         
         {/* Center Image - Heartbeat */}
         <div className={`relative z-10 transition-all duration-1000 ${visible ? "scale-100 opacity-100" : "scale-75 opacity-0"}`}>
@@ -59,7 +61,7 @@ function WhatIsFruitSalad() {
           >
             <div 
               className="
-                bg-white/95 backdrop-blur-lg rounded-full lg:rounded-[2.5rem] shadow-xl border border-white/80
+                bg-white/50 backdrop-blur-lg rounded-full lg:rounded-[2.5rem] shadow-xl border border-white/80
                 p-2.5 lg:p-5
                 hover:shadow-[0_15px_30px_rgba(201,194,122,0.4)] 
                 hover:border-[#C9C27A] hover:-translate-y-2 
@@ -96,7 +98,7 @@ function WhatIsFruitSalad() {
           50% { transform: translateY(-10px); }
         }
         
-        /* Mobile Circular Orbit with Increased Radius (140px) */
+        /* Mobile Circular Orbit with Radius (140px) */
         @keyframes orbit {
           from { transform: rotate(0deg) translateX(140px) rotate(0deg); }
           to { transform: rotate(360deg) translateX(140px) rotate(-360deg); }
