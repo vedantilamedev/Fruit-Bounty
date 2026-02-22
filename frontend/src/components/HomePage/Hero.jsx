@@ -111,7 +111,7 @@ const Hero = () => {
                       className="absolute top-[50%] left-[90%] w-[60px] rotate-10 animate-float z-0 drop-shadow-[0_30px_40px_rgba(0,0,0,0.4)]"
                     />
 
-{/*           Pista */}
+            {/*           Pista */}
           <img
             src="/images/hero-pista.png"
             alt="Pista"

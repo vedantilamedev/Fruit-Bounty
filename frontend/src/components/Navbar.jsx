@@ -45,17 +45,17 @@ function Navbar() {
       <nav className="w-full bg-gradient-to-r from-[#5a8c4f] via-[#4d8a43] to-[#8eb58a]">
         {/* Restored max-w-6xl and px-6 for original side padding */}
         <div className="max-w-6xl mx-auto flex justify-between items-center px-6 py-4">
-          
+
           {/* LEFT: Logo & Nav Links */}
           <div className="flex items-center gap-10">
             <Link to="/">
               <img src="/images/footerlogo.png" alt="Logo" className="h-8 object-contain cursor-pointer" />
             </Link>
-            
+
             <div className="flex gap-8 text-white font-medium">
               <div className="relative py-1">
-                <Link 
-                  to="/" 
+                <Link
+                  to="/"
                   className="transition-colors duration-200 hover:text-[#C9C27A]"
                   style={{ color: location.pathname === "/" ? "#C9C27A" : "white" }}
                 >
@@ -67,8 +67,8 @@ function Navbar() {
               </div>
 
               <div className="relative py-1">
-                <Link 
-                  to="/customize" 
+                <Link
+                  to="/customize"
                   className="transition-colors duration-200 hover:text-[#C9C27A]"
                   style={{ color: location.pathname === "/customize" ? "#C9C27A" : "white" }}
                 >
@@ -101,8 +101,8 @@ function Navbar() {
             </Link>
 
             <div className="relative" ref={authDropdownRef}>
-              <button 
-                onClick={() => setAuthOpen(!authOpen)} 
+              <button
+                onClick={() => setAuthOpen(!authOpen)}
                 className="w-10 h-10 bg-green-900 rounded-full flex items-center justify-center transition-colors duration-300 hover:bg-[#C9C27A] group focus:outline-none"
               >
                 <User size={18} className="text-white group-hover:text-green-900 transition-colors" />
@@ -133,6 +133,7 @@ function Navbar() {
         </div>
       </nav>
     </header>
+
   );
 }
 
