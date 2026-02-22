@@ -1,125 +1,117 @@
 import { useEffect, useRef, useState } from "react";
-import { Sprout, HeartPulse, Salad } from "lucide-react";
+import { Sprout, HeartPulse, Salad, Leaf, ShieldCheck, Zap } from "lucide-react";
 
 function WhatIsFruitSalad() {
   const sectionRef = useRef(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setVisible(entry.isIntersecting);
-      },
-      { threshold: 0.2 },
-    );
-
+    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0.1 });
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
 
-  const cards = [
-    {
-      icon: <Sprout size={30} strokeWidth={2.2} />,
-      title: "100% Natural",
-      desc1:
-        "Made using only fresh, preservative-free fruits sourced from trusted farms.",
-      desc2:
-        "No artificial colors or added sugars — just pure, clean nutrition.",
-    },
-    {
-      icon: <HeartPulse size={30} strokeWidth={2.2} />,
-      title: "Vitamin Rich",
-      desc1:
-        "Packed with essential vitamins, fiber and antioxidants for overall wellness.",
-      desc2: "Supports immunity, digestion and natural daily energy levels.",
-    },
-    {
-      icon: <Salad size={30} strokeWidth={2.2} />,
-      title: "Freshly Prepared",
-      desc1: "Cut and mixed daily to maintain maximum freshness and flavor.",
-      desc2: "Delivered fresh so you experience peak taste every time.",
-    },
+  const features = [
+    { pos: "lg:top-[-10%] lg:left-[10%]", orbit: "orbit-1", icon: <Sprout size={20} />, title: "100% Natural", desc: "Preservative-free fruits." },
+    { pos: "lg:top-[25%] lg:left-[-5%]", orbit: "orbit-2", icon: <HeartPulse size={20} />, title: "Vitamin Rich", desc: "Essential antioxidants." },
+    { pos: "lg:bottom-[5%] lg:left-[8%]", orbit: "orbit-3", icon: <ShieldCheck size={20} />, title: "Pure Nutrition", desc: "No artificial sugars." },
+    { pos: "lg:top-[-5%] lg:right-[10%]", orbit: "orbit-4", icon: <Leaf size={20} />, title: "Freshly Prepared", desc: "Cut and mixed daily." },
+    { pos: "lg:top-[30%] lg:right-[-5%]", orbit: "orbit-5", icon: <Zap size={20} />, title: "Daily Energy", desc: "Supports immunity." },
+    { pos: "lg:bottom-[10%] lg:right-[10%]", orbit: "orbit-6", icon: <Salad size={20} />, title: "Peak Taste", desc: "Peak flavor delivery." },
   ];
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative py-8 md:py-12 px-6 md:px-16 lg:px-24 overflow-hidden"
-    >
-      {/* 1. BACKGROUND IMAGE LAYER - Consistent with SaladSection.jsx */}
-      <div 
-        className="absolute inset-0 z-0 opacity-40 pointer-events-none"
-        style={{ 
-          backgroundImage: `url('/public/images/main-background.PNG')`,
-          backgroundSize: '400px',
-          backgroundRepeat: 'repeat'
-        }}
-      ></div>
+    <section ref={sectionRef} className="relative py-12 md:py-24 px-4 overflow-hidden bg-[#FBF8F2]">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none" style={{ backgroundImage: `url('/public/images/main-background.PNG')`, backgroundSize: '400px' }}></div>
 
-      {/* 2. HEADING - Specific font styles and reduced margin */}
-      <div
-        className={`relative z-10 text-center max-w-2xl mx-auto mb-8 md:mb-12 transition-all duration-700
-        ${visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"}`}
-      >
-        <h2 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tight">
-          What is Fruit Salad?
-        </h2>
-
-        <div className="w-16 h-1 bg-[#2D5A27] mx-auto mt-3 mb-6 rounded-full"></div>
-
-        <p className="text-gray-600 leading-relaxed text-sm md:text-base font-medium">
-          Fruit salad is a refreshing blend of freshly cut seasonal fruits,
-          carefully selected to provide a perfect balance of flavor, texture,
-          and nutrition.
-        </p>
+      <div className={`relative z-10 text-center max-w-2xl mx-auto mb-10 md:mb-20 transition-all duration-1000 ${visible ? "opacity-100" : "opacity-0"}`}>
+        <h2 className="text-3xl md:text-6xl font-black text-gray-900 tracking-tight">Why is it so Delicious?</h2>
+        <div className="w-16 h-1 bg-[#2D5A27] mx-auto mt-3 rounded-full"></div>
       </div>
 
-      {/* 3. CARDS - Maintained with z-index correction */}
-      <div className="relative z-10 grid gap-10 md:gap-12 items-stretch md:grid-cols-2 lg:grid-cols-3">
-        {cards.map((card, index) => (
-          <div
-            key={index}
-            className={`relative rounded-3xl p-[1px]
-            bg-gradient-to-br from-green-400/40 via-emerald-300/40 to-green-600/40
-            transition-all duration-700 ease-[cubic-bezier(.22,1,.36,1)]
-            ${
-              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-            }`}
-            style={{
-              transitionDelay: visible ? `${index * 200}ms` : "0ms",
-            }}
-          >
-            {/* Inner Card */}
-            <div className="bg-white rounded-3xl p-8 shadow-md hover:-translate-y-3 hover:shadow-2xl transition-all duration-500 flex flex-col h-full group">
-              {/* Icon */}
-              <div className="relative mb-6 flex justify-center">
-                <div className="absolute w-20 h-20 rounded-full bg-green-300 blur-xl opacity-30 group-hover:opacity-50 transition"></div>
+      <div className="relative z-10 max-w-5xl mx-auto min-h-[450px] md:min-h-[600px] flex items-center justify-center">
+        
+        {/* Center Image - Heartbeat */}
+        <div className={`relative z-10 transition-all duration-1000 ${visible ? "scale-100 opacity-100" : "scale-75 opacity-0"}`}>
+          <div className="absolute inset-0 bg-[#C9C27A]/20 blur-[50px] md:blur-[120px] rounded-full scale-110 animate-pulse"></div>
+          
+          <div className="relative w-44 h-44 md:w-80 md:h-80 lg:w-[480px] lg:h-[480px] flex items-center justify-center animate-heartbeat">
+            <img 
+              src="/public/images/—Pngtree—mixed-fruits.png" 
+              alt="Fresh Salad" 
+              className="w-full h-full object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.1)]" 
+            />
+          </div>
+        </div>
 
-                <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center text-green-700 relative z-10 group-hover:scale-110 transition duration-300">
-                  {card.icon}
+        {/* Features: Orbiting on Mobile | Floating on Desktop */}
+        {features.map((item, i) => (
+          <div 
+            key={i} 
+            className={`
+              absolute ${item.pos} 
+              flex flex-col items-center 
+              transition-all duration-1000 
+              ${visible ? "opacity-100" : "opacity-0"}
+              ${item.orbit}
+            `}
+          >
+            <div 
+              className="
+                bg-white/95 backdrop-blur-lg rounded-full lg:rounded-[2.5rem] shadow-xl border border-white/80
+                p-2.5 lg:p-5
+                hover:shadow-[0_15px_30px_rgba(201,194,122,0.4)] 
+                hover:border-[#C9C27A] hover:-translate-y-2 
+                transition-all duration-500 cursor-pointer
+                lg:animate-float group relative z-20
+              "
+              style={{ animationDelay: `${i * 0.5}s` }}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#C9C27A] flex items-center justify-center text-white shadow-sm group-hover:scale-110 transition-transform">
+                  <div className="scale-75 md:scale-100">{item.icon}</div>
+                </div>
+                
+                {/* Text only visible on Desktop */}
+                <div className="hidden lg:block">
+                  <span className="text-[11px] font-black text-gray-900 uppercase tracking-widest block">{item.title}</span>
+                  <p className="text-gray-500 text-[10px] font-semibold leading-tight max-w-[140px]">
+                    {item.desc}
+                  </p>
                 </div>
               </div>
-
-              <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">
-                {card.title}
-              </h3>
-
-              <p className="text-gray-600 text-sm leading-relaxed text-center">
-                {card.desc1}
-              </p>
-
-              <p className="text-gray-500 text-sm mt-3 text-center">
-                {card.desc2}
-              </p>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Global Style Reference */}
       <style jsx>{`
-        section {
-            background-color: #FBF8F2; /* Base cream color */
+        @keyframes heartbeat {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.06); }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+        
+        /* Mobile Circular Orbit with Increased Radius (140px) */
+        @keyframes orbit {
+          from { transform: rotate(0deg) translateX(140px) rotate(0deg); }
+          to { transform: rotate(360deg) translateX(140px) rotate(-360deg); }
+        }
+
+        .animate-heartbeat { animation: heartbeat 4s ease-in-out infinite; }
+        .lg\\:animate-float { animation: float 5s ease-in-out infinite; }
+
+        @media (max-width: 1023px) {
+          .orbit-1 { animation: orbit 18s linear infinite; animation-delay: 0s; }
+          .orbit-2 { animation: orbit 18s linear infinite; animation-delay: -3s; }
+          .orbit-3 { animation: orbit 18s linear infinite; animation-delay: -6s; }
+          .orbit-4 { animation: orbit 18s linear infinite; animation-delay: -9s; }
+          .orbit-5 { animation: orbit 18s linear infinite; animation-delay: -12s; }
+          .orbit-6 { animation: orbit 18s linear infinite; animation-delay: -15s; }
         }
       `}</style>
     </section>

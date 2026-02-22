@@ -33,11 +33,8 @@ function ProductCard({ product }) {
           ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}
         `}
       >
-        {/* 1. TOP BADGE - Positioned inside safe padding */}
-       
-
         <div className="p-6 flex flex-col flex-grow items-center">
-          {/* 2. HEADER */}
+          {/* 1. HEADER */}
           <div className="text-center mt-2 mb-4">
             <span className="text-[10px] font-bold text-[#C9C27A] uppercase tracking-widest mb-1 block">
               {product.category || "Fresh & Healthy"}
@@ -47,7 +44,7 @@ function ProductCard({ product }) {
             </h3>
           </div>
 
-          {/* 3. SQUARE IMAGE CONTAINER */}
+          {/* 2. SQUARE IMAGE CONTAINER */}
           <div className="w-full aspect-square max-h-48 flex items-center justify-center bg-gray-50 rounded-xl overflow-hidden mb-6 border border-gray-100 shadow-inner">
             <img
               src={product.image}
@@ -56,7 +53,7 @@ function ProductCard({ product }) {
             />
           </div>
 
-          {/* 4. SPECS (More compact) */}
+          {/* 3. SPECS */}
           <div className="w-full space-y-3 px-1 mb-6">
             {[
               { label: "Weight", value: product.weight },
@@ -70,10 +67,10 @@ function ProductCard({ product }) {
             ))}
           </div>
 
-          {/* 5. PRICE & ACTION */}
+          {/* 4. PRICE & ACTION - Updated to ₹ */}
           <div className="w-full text-center mt-auto">
             <div className="text-3xl font-black text-[#C9C27A] mb-4">
-              ${product.price}
+              ₹{product.price}
             </div>
             <button className="w-full bg-gradient-to-r from-green-700 to-green-900 hover:from-green-800 hover:to-green-950 text-white py-3.5 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-green-900/10">
               Order Now
@@ -81,7 +78,7 @@ function ProductCard({ product }) {
           </div>
         </div>
 
-        {/* 6. FIXED BOTTOM BAR */}
+        {/* 5. FIXED BOTTOM BAR */}
         <div className="bg-gradient-to-r from-green-800 to-green-950 py-2.5 px-4 text-center">
           <p className="text-[9px] text-white font-medium">
             Orders placed today will be delivered <span className="font-bold text-[#C9C27A]">tomorrow.</span>
