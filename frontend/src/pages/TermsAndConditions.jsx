@@ -53,6 +53,12 @@ const TermsAndConditions = () => {
     window.scrollTo(0, 0);
   }, []);
 
+   const currentDate = new Date();
+  const monthYear = currentDate.toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+
   return (
     <div
       className="min-h-screen px-4 sm:px-6 lg:px-8 py-12 lg:py-20"
@@ -88,7 +94,7 @@ const TermsAndConditions = () => {
           <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-[#FBF8F2] rounded-lg border border-[#E8E4D9]">
             <CheckCircle2 size={16} className="text-[#3C7E44]" />
             <span className="text-xs font-bold text-gray-700">
-              Effective Date: February 2026
+              Effective Date: {monthYear}
             </span>
           </div>
         </div>
@@ -142,3 +148,4 @@ const TermsAndConditions = () => {
 };
 
 export default TermsAndConditions;
+
