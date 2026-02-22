@@ -238,11 +238,11 @@ const Payments = ({ payments = [] }) => {
                                         <Sparkles size={32} />
                                     </div>
                                     <div>
-                                        <h5 className="text-xl font-black text-gray-900 tracking-tight">Need Payment History?</h5>
+                                        <h5 className="text-xl font-black text-green-800 tracking-tight">Need Payment History?</h5>
                                         <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mt-1">Download your annual harvest financial summary</p>
                                     </div>
                                 </div>
-                                <button className="px-10 py-5 bg-gray-900 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest hover:bg-black transition-colors shadow-2xl shadow-black/20 flex items-center gap-3">
+                                <button className="px-10 py-5 bg-green-700 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest hover:bg-green-900 transition-colors shadow-2xl shadow-black/20 flex items-center gap-3">
                                     <Download size={18} /> Export FY 2025-26
                                 </button>
                             </div>
@@ -253,7 +253,7 @@ const Payments = ({ payments = [] }) => {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-gradient-to-br from-[#1a472a] to-[#2d5a3f] p-12 rounded-[1rem] text-white overflow-hidden relative group shadow-2xl shadow-green-900/20"
+                    className="bg-gradient-to-br from-[#0e4722] via-[#0c7235] to-[#0e4722] p-12 rounded-[1rem] text-white overflow-hidden relative group shadow-2xl shadow-green-900/20"
                 >
                     <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full blur-3xl -mr-32 -mt-32" />
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#B7A261]/10 rounded-full blur-[100px] -ml-20 -mb-20" />

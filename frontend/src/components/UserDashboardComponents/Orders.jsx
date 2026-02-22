@@ -57,7 +57,7 @@ const Orders = ({ orders, onCancelOrder }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             whileHover={{ y: -6 }}
-            className="bg-white/70 backdrop-blur-2xl p-7 rounded-[1rem] border border-white/40 
+            className="bg-white/70 backdrop-blur-2xl p-7 rounded-[1rem] border border-[#d5b975]
             shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] 
             hover:shadow-[0_30px_80px_-15px_rgba(60,126,68,0.25)] 
             transition-all duration-500"
@@ -109,11 +109,11 @@ const Orders = ({ orders, onCancelOrder }) => {
             <motion.div
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white/70 backdrop-blur-2xl p-4 rounded-[1rem] border border-white/40 
+                className="bg-white/70 backdrop-blur-2xl p-4 rounded-[1rem] border border-[#d5b975]
                 shadow-lg flex flex-col lg:flex-row gap-5 items-center justify-between"
             >
-                <div className="relative w-full lg:flex-1">
-                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[#B7A261]" size={16} />
+                <div className="relative w-full  lg:flex-1">
+                    <Search className="absolute left-5 top-1/2  -translate-y-1/2 text-[#B7A261]" size={16} />
                     <input
                         type="text"
                         placeholder="Search by ID or item..."
@@ -121,7 +121,7 @@ const Orders = ({ orders, onCancelOrder }) => {
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full pl-12 pr-5 py-3 bg-[#FBF8F2] rounded-[1rem] 
                         focus:outline-none focus:ring-2 focus:ring-[#3C7E44]/30 
-                        text-xs font-bold uppercase tracking-widest transition-all"
+                        text-xs font-bold uppercase tracking-widest transition-all "
                     />
                 </div>
                 <div className="relative w-full max-w-xs">
@@ -129,7 +129,7 @@ const Orders = ({ orders, onCancelOrder }) => {
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
                         className="appearance-none w-full px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em]
-    rounded-[1rem] bg-white text-[#3C7E44] border border-[#E8E4D9]
+    rounded-[1rem] bg-white text-[#3C7E44] border border-[#d5b975]
     focus:outline-none focus:ring-2 focus:ring-[#3C7E44]/30
     shadow-sm cursor-pointer"
                     >
@@ -153,7 +153,7 @@ const Orders = ({ orders, onCancelOrder }) => {
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="bg-white/70 backdrop-blur-2xl rounded-[1rem] border border-white/40 p-20 text-center shadow-lg"
+                            className="bg-white/70 backdrop-blur-2xl rounded-[1rem] border border-[#d5b975] p-20 text-center shadow-lg"
                         >
                             <ShoppingBag className="text-[#B7A261]/40 mx-auto mb-6" size={44} />
                             <h3 className="text-xl font-semibold text-gray-900 mb-2">No Orders Found</h3>
@@ -166,7 +166,7 @@ const Orders = ({ orders, onCancelOrder }) => {
                                 layout
                                 whileHover={{ y: -6 }}
                                 transition={{ duration: 0.3 }}
-                                className="group bg-white/70 backdrop-blur-2xl rounded-[1rem] border border-white/40 p-7 
+                                className="group bg-white/70 backdrop-blur-2xl rounded-[1rem] border border-[#d5b975] p-7 
                                 hover:shadow-[0_25px_60px_-10px_rgba(0,0,0,0.2)] transition-all cursor-pointer"
                                 
                             >
