@@ -10,15 +10,19 @@ const generateToken = (id, role) => {
     process.env.JWT_SECRET,
     { expiresIn: "7d" }
   );
-
-
-  
 };
 
 //  Register User (Customer or Admin)
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password, role, secretKey } = req.body;
+    const { name, email, password, role, adminKey } = req.body; // added adminKey
+
+    // ✅ Check admin secret key if role is admin
+    if (role === "admin") {
+      if (!adminKey || adminKey !== process.env.ADMIN_SECRET_KEY) {
+        return res.status(403).json({ message: "Invalid admin secret key" });
+      }
+    }
 
     const userExists = await User.findOne({ email });
 
@@ -28,42 +32,35 @@ export const registerUser = async (req, res) => {
       });
     }
 
-    // 🔐 If registering as Admin → validate secret key
-    if (role === "admin") {
-      if (!secretKey || secretKey !== process.env.ADMIN_SECRET_KEY) {
-        return res.status(403).json({
-          message: "Invalid Secret Admin Key"
-        });
-      }
-    }
-
     const user = await User.create({
       name,
       email,
       password,
-      role: role || "customer" // default role
+      role
     });
 
-    // Send Welcome Email
-    try {
-      await sendEmail({
+    if (user) {
+      //  Send Welcome Email using Brevo
+      try {
+        await sendEmail({
+          email: user.email,
+          subject: "Welcome to Fruits Bounty",
+          message: `<p>Hello ${user.name},</p>
+                    <p>Welcome to Fruits Bounty! Your account has been successfully created.</p>
+                    <p>- Fruits Bounty Team</p>`
+        });
+      } catch (err) {
+        console.log("Error sending welcome email:", err.message);
+      }
+
+      res.status(201).json({
+        _id: user._id,
+        name: user.name,
         email: user.email,
-        subject: "Welcome to Fruits Bounty",
-        message: `<p>Hello ${user.name},</p>
-                  <p>Your account has been successfully created.</p>
-                  <p>- Fruits Bounty Team</p>`
+        role: user.role,
+        token: generateToken(user._id, user.role)
       });
-    } catch (err) {
-      console.log("Error sending welcome email:", err.message);
     }
-
-    res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      token: generateToken(user._id, user.role)
-    });
 
   } catch (error) {
     console.log(error);
@@ -73,40 +70,43 @@ export const registerUser = async (req, res) => {
   }
 };
 
-
-// Login User
+//  Login User
 export const loginUser = async (req, res) => {
-  const { email, password } = req.body;
-
   try {
+    const { email, password } = req.body;
+
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({ message: "User not found" });
+      return res.status(401).json({
+        message: "Invalid email or password"
+      });
     }
 
     const isMatch = await user.matchPassword(password);
 
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid password" });
+      return res.status(401).json({
+        message: "Invalid email or password"
+      });
     }
 
-    const token = jwt.sign(
-      { id: user._id, role: user.role }, // ✅ include role
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
-    );
-
-    res.json({
-      success: true,
-      token,
-      role: user.role // send role to frontend
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      token: generateToken(user._id, user.role)
     });
 
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: "Server Error"
+    });
   }
 };
+
+// Forgot Password
 export const forgotPassword = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
@@ -117,12 +117,10 @@ export const forgotPassword = async (req, res) => {
       });
     }
 
-    // Use model method
     const resetToken = user.getResetPasswordToken();
-
     await user.save({ validateBeforeSave: false });
 
-    const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
+    const resetUrl = 'http://localhost:3000/reset-password/${resetToken}';
 
     await sendEmail({
       email: user.email,
@@ -144,6 +142,7 @@ export const forgotPassword = async (req, res) => {
     });
   }
 };
+
 // Reset Password
 export const resetPassword = async (req, res) => {
   try {
@@ -163,16 +162,13 @@ export const resetPassword = async (req, res) => {
       });
     }
 
-    // Set new password (auto-hash from model)
     user.password = req.body.password;
-
-    // Clear reset fields
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
 
     await user.save();
 
-    // 🔹 Send Password Reset Confirmation Email
+    // Send Password Reset Confirmation Email
     try {
       await sendEmail({
         email: user.email,

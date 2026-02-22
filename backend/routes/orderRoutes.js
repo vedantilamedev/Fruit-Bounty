@@ -2,7 +2,8 @@ import express from "express";
 import {
   createOrder,
   getAllOrders,
-  updateOrderStatus
+  updateOrderStatus,
+    getMyOrders
 } from "../controllers/orderController.js";
 
 import authMiddleware from "../middleware/authMiddleware.js";
@@ -13,10 +14,10 @@ const router = express.Router();
 // Customer creates order
 router.post("/", authMiddleware, createOrder);
 
-// Admin views all orders
+router.get("/my", authMiddleware, getMyOrders);   // 👈 NEW
+
 router.get("/", authMiddleware, roleMiddleware("admin"), getAllOrders);
 
-// Admin updates order status
 router.put("/:id", authMiddleware, roleMiddleware("admin"), updateOrderStatus);
 
 export default router;

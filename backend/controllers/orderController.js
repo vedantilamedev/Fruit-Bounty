@@ -34,6 +34,23 @@ export const getAllOrders = async (req, res) => {
   }
 };
 
+//  Get Logged-in User Orders
+export const getMyOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ user_id: req.user._id })
+      .sort({ createdAt: -1 })
+      .populate("package_id");
+
+    res.status(200).json({
+      success: true,
+      data: orders
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 //  Update Order Status
 export const updateOrderStatus = async (req, res) => {

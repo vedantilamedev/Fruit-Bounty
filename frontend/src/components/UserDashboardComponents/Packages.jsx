@@ -74,7 +74,7 @@ const Packages = ({ activePackage }) => {
             <div className="bg-white rounded-[1rem] border border-[#E8E4D9] shadow-xl shadow-green-900/5 overflow-hidden">
                 <div className="lg:flex">
                     {/* Visual Plan Hero */}
-                    <div className="lg:w-1/3 bg-gradient-to-br from-[#89971e] to-[#c59e11] p-10 lg:p-14 text-white relative">
+                    <div className="lg:w-1/3 bg-gradient-to-br from-[#0a4402] via-green-600 to-[#044304] p-10 lg:p-14 text-white relative">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-20 -mt-20 blur-3xl animate-pulse" />
                         <div className="relative z-10 flex flex-col h-full justify-between">
                             <div>
@@ -106,12 +106,12 @@ const Packages = ({ activePackage }) => {
 
                     {/* Detailed Ecosystem Content */}
                     <div className="lg:w-2/3 p-10 lg:p-14 bg-[#FBF8F2]/30">
-                        <div className="flex flex-col lg:flex-row gap-10">
+                        <div className="flex flex-col lg:flex-col gap-10">
                             {/* Capabilities */}
-                            <div className="flex-1 space-y-6">
+                            <div className="flex-1  space-y-6">
                                 <h4 className="text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.2em] mb-6">Plan Benefits</h4>
-                                <div className="grid grid-cols-1 gap-4">
-                                    <div className="flex items-center gap-5 p-6 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                                <div className="grid lg:flex  grid-cols-1 gap-4">
+                                    <div className="flex items-center gap-5 p-6 bg-white rounded-3xl border border-[#cfc5aa] shadow-sm">
                                         <div className="w-12 h-12 bg-[#3C7E44]/5 rounded-2xl flex items-center justify-center text-[#3C7E44]">
                                             <Users size={24} strokeWidth={1.5} />
                                         </div>
@@ -120,7 +120,7 @@ const Packages = ({ activePackage }) => {
                                             <p className="text-xs text-gray-400 font-medium mt-1">Perfect for {activePackage.peopleCount} People</p>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-5 p-6 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                                    <div className="flex items-center gap-5 p-6 bg-white rounded-3xl border border-[#cfc5aa] shadow-sm">
                                         <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-[#B7A261]">
                                             <ShieldCheck size={24} strokeWidth={1.5} />
                                         </div>
@@ -138,14 +138,13 @@ const Packages = ({ activePackage }) => {
                                     <h4 className="text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.2em]">Box Contents</h4>
                                     <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{activePackage.fruits.length} Items</span>
                                 </div>
-                                <div className="grid grid-cols-1 gap-2.5">
+                                <div className="flex flex-wrap gap-2.5">
                                     {activePackage.fruits.map((fruit, idx) => (
                                         <motion.div
                                             key={idx}
                                             whileHover={{ x: 5 }}
-                                            className="flex items-center gap-3 p-4 bg-white/60 rounded-[1rem] border border-white"
+                                            className="flex items-center gap-3  bg-white/60 rounded-[1rem] border border-white"
                                         >
-                                            <Check size={14} className="text-[#3C7E44]" strokeWidth={3} />
                                             <span className="text-sm font-bold text-gray-700">{fruit}</span>
                                         </motion.div>
                                     ))}
@@ -154,7 +153,7 @@ const Packages = ({ activePackage }) => {
                         </div>
 
                         {/* Status Bar */}
-                        <div className="mt-12 pt-8 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-6">
+                        <div className="mt-12 bottom-44 pt-8 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-6">
                             <div className="flex items-center gap-4">
                                 <div className="flex -space-x-3">
                                     {[1, 2, 3].map(i => (
@@ -168,9 +167,12 @@ const Packages = ({ activePackage }) => {
                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Shared within your tribe</p>
                             </div>
                             <div className="flex items-center gap-3">
-                                <button className="px-8 py-3 bg-white border border-[#E8E4D9] text-gray-600 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-all shadow-sm">Manage Billing</button>
-                                <button className="text-[#A44A3F] font-bold text-[10px] uppercase tracking-widest px-4 hover:underline">Exit Plan</button>
-                            </div>
+                                <button className="px-8 py-3 bg-white border  text-gray-600 rounded-2xl border-[#cfc5aa] text-[10px] font-bold uppercase tracking-widest hover:bg-[#b8b09b] transition-all shadow-sm">Manage Billing</button>
+                                <button
+                                    className="px-5 py-2.5 rounded-[0.8rem]  bg-red-50 text-red-600 border border-red-200 font-semibold text-xs uppercase tracking-widest  hover:bg-red-600 hover:text-white hover:border-red-600 active:scale-95 transition-all duration-300"
+                                >
+                                    Exit Plan
+                                </button>                            </div>
                         </div>
                     </div>
                 </div>
@@ -185,85 +187,124 @@ const Packages = ({ activePackage }) => {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-10 max-w-2xl mx-auto px-4 lg:px-0">
-                    {[
-                        {
-                            id: 'individual',
-                            name: "Personal Plan",
-                            price: isSixMonth ? 2499 : 499,
-                            description: "Tailored for solo health enthusiasts. Enjoy a personalized selection of nature's best daily.",
-                            features: ["Fresh and Handpicked Fruits", "Custom Fruit Bowl Designs", "Guaranteed Next-Day Delivery", "Personal Wellness Dashboard"],
-                            color: "from-[#3C7E44] to-[#2d5a3f]",
-                            tag: "INDIVIDUAL",
-                            icon: User
-                        },
-                        {
-                            id: 'corporate',
-                            name: "Corporate Plan",
-                            price: isSixMonth ? 7999 : 1499,
-                            description: "Fuel your team with premium fruit arrangements. Perfect for meetings and office wellness.",
-                            features: ["Bulk Team Arrangements", "Meeting-Ready Displays", "Priority Support", "Custom Branding Options"],
-                            color: "from-[#B7A261] to-[#8c7a42]",
-                            tag: "TEAM BOUNTY",
-                            icon: Users
-                        }
-                    ].filter(tier => tier.id !== activePackage.type.toLowerCase()).map((tier, idx) => (
-                        <motion.div
-                            key={tier.id}
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: idx * 0.1 }}
-                            whileHover={{ y: -10 }}
-                            className="bg-white rounded-[1rem] border border-[#E8E4D9] p-10 lg:p-14 shadow-xl shadow-green-900/5 flex flex-col items-stretch relative overflow-hidden group/plan"
-                        >
-                            <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${tier.color} opacity-[0.03] rounded-full -mr-16 -mt-16 group-hover/plan:scale-150 transition-transform duration-700`} />
+                <div className="w-full flex justify-center items-center px-4 lg:px-0">
+                    <div className="flex  flex-col lg:flex-row gap-8 max-w-6xl w-full">
+                        {[
+                            {
+                                id: 'individual',
+                                name: "Personal Plan",
+                                price: isSixMonth ? 2499 : 499,
+                                description: "Tailored for solo health enthusiasts. Enjoy a personalized selection of nature's best daily.",
+                                features: ["Fresh and Handpicked Fruits", "Custom Fruit Bowl Designs", "Guaranteed Next-Day Delivery", "Personal Wellness Dashboard"],
+                                color: "from-[#3C7E44] to-[#2d5a3f]",
+                                tag: "INDIVIDUAL",
+                                icon: User
+                            },
+                            {
+                                id: 'corporate',
+                                name: "Corporate Plan",
+                                price: isSixMonth ? 7999 : 1499,
+                                description: "Fuel your team with premium fruit arrangements. Perfect for meetings and office wellness.",
+                                features: ["Bulk Team Arrangements", "Meeting-Ready Displays", "Priority Support", "Custom Branding Options"],
+                                color: "from-[#B7A261] to-[#8c7a42]",
+                                tag: "TEAM BOUNTY",
+                                icon: Users
+                            }
+                        ]
+                            .filter(tier => tier.id !== activePackage.type.toLowerCase())
+                            .map((tier, idx) => (
+                                <motion.div
+                                    key={tier.id}
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: idx * 0.15 }}
+                                    whileHover={{ y: -8 }}
+                                    className="relative flex-1 bg-gradient-to-br from-[#745605] via-[#dbc171] to-[#6b4e07] rounded-[1.75rem] border border-[#E8E4D9] p-8 lg:p-10 shadow-[0_10px_40px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] transition-all duration-500  flex-col overflow-hidden"
+                                >
+                                    <div className='lg:flex'>
+                                        <div>
+                                    {/* Soft Premium Glow */}
+                                    <div className={`absolute -top-20 -right-20 w-60 h-60 bg-gradient-to-br ${tier.color} opacity-[0.04] rounded-full`} />
 
-                            <div className="mb-8">
-                                <span className="bg-[#3C7E44]/5 text-[#3C7E44] px-4 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest mb-6 inline-block">
-                                    {tier.tag}
-                                </span>
-                                <div className="flex items-center gap-4 mb-4">
-                                    <div className={`w-14 h-14 bg-gradient-to-br ${tier.color} rounded-2xl flex items-center justify-center text-white shadow-lg`}>
-                                        <tier.icon size={28} strokeWidth={1.5} />
-                                    </div>
-                                    <h5 className="text-3xl font-bold text-gray-900 tracking-tight">{tier.name}</h5>
-                                </div>
-                                <p className="text-gray-400 text-sm font-medium leading-relaxed">{tier.description}</p>
-                            </div>
+                                    {/* Header */}
+                                    <div className="mb-8 relative z-10">
+                                        <span className="bg-[#3C7E44]/5 text-yellow-400 px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.3em] inline-block mb-5">
+                                            {tier.tag}
+                                        </span>
 
-                            <div className="mb-10 pb-8 border-b border-gray-100">
-                                <div className="flex items-baseline gap-1">
-                                    <span className="text-5xl font-black text-gray-900 tracking-tighter">₹{tier.price}</span>
-                                    <span className="text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em] ml-2">/ {isSixMonth ? '6 Months' : 'Month'}</span>
-                                </div>
-                                {isSixMonth && <p className="text-emerald-600 text-[10px] font-black uppercase tracking-widest mt-2">Save up to 20% on bi-annual plans</p>}
-                            </div>
-
-                            <div className="space-y-4 mb-12 flex-1">
-                                {tier.features.map((feature, fIdx) => (
-                                    <div key={fIdx} className="flex items-center gap-4">
-                                        <div className="w-6 h-6 bg-emerald-50 rounded-lg flex items-center justify-center shrink-0">
-                                            <Check size={14} className="text-[#3C7E44]" strokeWidth={4} />
+                                        <div className="flex items-center gap-4 mb-4">
+                                            <div className={`w-14 h-14 bg-gradient-to-br ${tier.color} rounded-2xl flex items-center justify-center text-white shadow-lg`}>
+                                                <tier.icon size={26} strokeWidth={1.5} />
+                                            </div>
+                                            <h5 className="text-3xl font-bold text-gray-900 tracking-tight">
+                                                {tier.name}
+                                            </h5>
                                         </div>
-                                        <span className="text-sm font-bold text-gray-700">{feature}</span>
-                                    </div>
-                                ))}
-                            </div>
 
-                            <motion.button
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                onClick={() => navigate('/subscription')} // Added onClick handler
-                                className={`w-full py-6 rounded-[1rem] font-bold text-xs uppercase tracking-[0.2em] shadow-xl transition-all flex items-center justify-center gap-3 group/btn
-                                    ${tier.id === 'corporate'
-                                        ? 'bg-[#3C7E44] text-white shadow-green-900/20 hover:bg-[#ead537]'
-                                        : 'bg-white border border-[#E8E4D9] text-[#3C7E44] hover:bg-[#FBF8F2]'
-                                    }`}
-                            >
-                                Activate Plan <ArrowRight size={18} className="group-hover/btn:translate-x-2 transition-transform" />
-                            </motion.button>
-                        </motion.div>
-                    ))}
+                                        <p className="text-gray-900 text-sm leading-relaxed max-w-md">
+                                            {tier.description}
+                                        </p>
+                                    </div>
+
+                                    {/* Price Section */}
+                                    <div className="mb-8 pb-6 border-b border-[#ECE7DA]">
+                                        <div className="flex items-end gap-2">
+                                            <span className="text-4xl font-extrabold text-gray-900 tracking-tight">
+                                                ₹{tier.price}
+                                            </span>
+                                            <span className="text-gray-900 text-xs font-bold uppercase tracking-[0.25em] mb-1">
+                                                / {isSixMonth ? '6 Months' : 'Month'}
+                                            </span>
+                                        </div>
+
+                                        {isSixMonth && (
+                                            <p className="text-emerald-600 text-xs font-bold uppercase tracking-widest mt-2">
+                                                Save up to 20% on bi-annual plans
+                                            </p>
+                                        )}
+                                    </div>
+                                        </div>
+
+                                    {/* Features */}
+                                    <div className="space-y-4 mb-10 mt-8 justify-center items-center flex-1">
+                                        {tier.features.map((feature, fIdx) => (
+                                            
+                                            <div key={fIdx} className="flex items-center p-2 justify-start gap-3">
+                                                <div className="w-6 h-6 bg-emerald-50 rounded-lg flex items-center justify-center shrink-0">
+                                                    <Check size={14} className="text-[#3C7E44]" strokeWidth={3} />
+                                                </div>
+                                                <span className="text-sm font-semibold text-gray-700">
+                                                    {feature}
+                                                </span>
+                                                
+                                                
+                                            </div>
+                                                
+                                        ))}
+                                        
+                                    </div>
+                                    
+                                    </div>
+
+
+                                    {/* Button */}
+                                    <motion.button
+                                        whileHover={{ scale: 1.03 }}
+                                        whileTap={{ scale: 0.97 }}
+                                        onClick={() => navigate('/subscription')}
+                                        className={`w-full py-4 rounded-full font-bold text-xs uppercase tracking-[0.25em] shadow-lg transition-all duration-300 flex items-center justify-center gap-2
+              ${tier.id === 'corporate'
+                                                ? 'bg-gradient-to-r from-[#65510f] via-[#d4cb89] to-[#92730f] text-[#383837] hover:shadow-xl'
+                                                : 'bg-white border border-[#E8E4D9] text-[#3C7E44] hover:bg-[#F6F2E8]'
+                                            }
+            `}
+                                    >
+                                        Upgrade Now
+                                        <ArrowRight size={16} />
+                                    </motion.button>
+                                </motion.div>
+                            ))}
+                    </div>
                 </div>
             </div>
         </div>

@@ -133,26 +133,31 @@ const Payments = ({ payments = [] }) => {
                             </div>
 
                             <div className="flex flex-wrap items-center gap-4">
-                                <div className="relative group">
+                                {/* Search Input */}
+                                <div className="relative w-full md:w-64">
                                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-[#3C7E44] transition-colors" size={18} />
                                     <input
                                         type="text"
                                         placeholder="Search by ID or Method..."
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
-                                        className="pl-12 pr-6 py-4 bg-[#FBF8F2] border border-[#E8E4D9] rounded-2xl text-xs font-bold focus:ring-2 focus:ring-[#3C7E44]/20 outline-none w-full md:w-64 transition-all"
+                                        className="pl-12 pr-4 py-3 bg-[#FBF8F2] border border-[#E8E4D9] rounded-2xl text-xs font-bold focus:ring-2 focus:ring-[#3C7E44]/20 outline-none w-full transition-all"
                                     />
                                 </div>
-                                <div className="flex bg-[#FBF8F2] p-1.5 rounded-2xl border border-[#E8E4D9]">
-                                    {['All', 'Success', 'Pending', 'Failed'].map((status) => (
-                                        <button
-                                            key={status}
-                                            onClick={() => setFilterStatus(status)}
-                                            className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${filterStatus === status ? 'bg-[#3C7E44] text-white shadow-lg' : 'text-gray-400 hover:text-gray-600'}`}
-                                        >
-                                            {status}
-                                        </button>
-                                    ))}
+
+                                {/* Filter Dropdown */}
+                                <div className="w-40">
+                                    <select
+                                        value={filterStatus}
+                                        onChange={(e) => setFilterStatus(e.target.value)}
+                                        className="w-full p-3 bg-[#FBF8F2] border border-[#E8E4D9] rounded-2xl text-xs font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#3C7E44]/20"
+                                    >
+                                        {['All', 'Success', 'Pending', 'Failed', 'Canceled'].map((status) => (
+                                            <option key={status} value={status}>
+                                                {status}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -233,11 +238,11 @@ const Payments = ({ payments = [] }) => {
                                         <Sparkles size={32} />
                                     </div>
                                     <div>
-                                        <h5 className="text-xl font-black text-gray-900 tracking-tight">Need Payment History?</h5>
+                                        <h5 className="text-xl font-black text-green-800 tracking-tight">Need Payment History?</h5>
                                         <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mt-1">Download your annual harvest financial summary</p>
                                     </div>
                                 </div>
-                                <button className="px-10 py-5 bg-gray-900 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest hover:bg-black transition-colors shadow-2xl shadow-black/20 flex items-center gap-3">
+                                <button className="px-10 py-5 bg-green-700 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest hover:bg-green-900 transition-colors shadow-2xl shadow-black/20 flex items-center gap-3">
                                     <Download size={18} /> Export FY 2025-26
                                 </button>
                             </div>
@@ -248,7 +253,7 @@ const Payments = ({ payments = [] }) => {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-gradient-to-br from-[#1a472a] to-[#2d5a3f] p-12 rounded-[1rem] text-white overflow-hidden relative group shadow-2xl shadow-green-900/20"
+                    className="bg-gradient-to-br from-[#0e4722] via-[#0c7235] to-[#0e4722] p-12 rounded-[1rem] text-white overflow-hidden relative group shadow-2xl shadow-green-900/20"
                 >
                     <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full blur-3xl -mr-32 -mt-32" />
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#B7A261]/10 rounded-full blur-[100px] -ml-20 -mb-20" />
@@ -295,96 +300,83 @@ const Payments = ({ payments = [] }) => {
             {/* Receipt Modal - Advanced Breakdown */}
             <AnimatePresence>
                 {selectedPayment && (
-                    <div className="fixed top-0 left-0 w-full h-full z-[100] flex items-center justify-center p-4">
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
+                        {/* Backdrop */}
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setSelectedPayment(null)}
-                            className="absolute inset-0 bg-[#1a472a]/40 z-[-1]"
+                            className="absolute inset-0"
                         />
+
+                        {/* Modal */}
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.9, y: 30 }}
-                            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                            className="relative bg-white w-full max-w-md rounded-[1rem] shadow-2xl border border-[#E8E4D9] overflow-hidden p-0"
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            transition={{ type: "spring", damping: 20, stiffness: 250 }}
+                            className="relative bg-white w-full max-w-md rounded-xl border border-gray-200 overflow-hidden"
                         >
-                            <div className="bg-[#1a472a] p-10 text-white relative flex flex-col items-center">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl" />
-                                <motion.div
-                                    initial={{ y: 20, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    className="w-20 h-20 bg-white/10 rounded-[1rem] border border-white/20 flex items-center justify-center mb-6 shadow-2xl backdrop-blur-2xl relative"
-                                >
-                                    <Sparkles size={36} className="text-[#B7A261]" />
-                                    <div className="absolute -bottom-1 -right-1 bg-emerald-500 p-1.5 rounded-full border-[3px] border-[#1a472a]">
-                                        <CheckCircle size={12} />
-                                    </div>
-                                </motion.div>
-                                <h3 className="text-3xl font-black tracking-tighter mb-1">Payment Verified</h3>
-                                <p className="text-[#B7A261] text-[9px] font-black uppercase tracking-[0.4em]">Official Payment Receipt</p>
+                            {/* Header */}
+                            <div className="bg-green-700 text-white p-6 flex flex-col items-center relative">
+                                <Sparkles size={36} className="mb-2 text-yellow-400" />
+                                <h3 className="text-2xl font-bold">Payment Verified</h3>
+                                <p className="text-xs uppercase tracking-widest mt-1">Official Payment Receipt</p>
                                 <button
                                     onClick={() => setSelectedPayment(null)}
-                                    className="absolute top-8 right-8 p-3 bg-white/5 hover:bg-white/10 rounded-full transition-colors group"
+                                    className="absolute top-4 right-4 text-white font-bold text-xl"
                                 >
-                                    <X size={20} className="group-hover:rotate-90 transition-transform" />
+                                    ×
                                 </button>
                             </div>
 
-                            <div className="p-10 space-y-8 bg-[#FBF8F2]/30">
-                                <div className="grid grid-cols-2 gap-8">
-                                    <div className="space-y-1">
-                                        <p className="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">Reference ID</p>
-                                        <p className="text-sm font-black text-gray-900 tracking-tight">#{selectedPayment.id}</p>
+                            {/* Payment Details */}
+                            <div className="p-6 space-y-4">
+                                <div className="grid grid-cols-2 gap-4 text-sm font-bold text-gray-800">
+                                    <div>
+                                        <p className="text-gray-500 text-xs uppercase">Reference ID</p>
+                                        <p>#{selectedPayment.id}</p>
                                     </div>
-                                    <div className="space-y-1 text-right">
-                                        <p className="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">Channel</p>
-                                        <p className="text-sm font-black text-gray-900 tracking-tight">{selectedPayment.method}</p>
+                                    <div className="text-right">
+                                        <p className="text-gray-500 text-xs uppercase">Channel</p>
+                                        <p>{selectedPayment.method}</p>
                                     </div>
-                                    <div className="space-y-1">
-                                        <p className="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">Verification Date</p>
-                                        <p className="text-sm font-black text-gray-900 tracking-tight">{selectedPayment.date}</p>
+                                    <div>
+                                        <p className="text-gray-500 text-xs uppercase">Verification Date</p>
+                                        <p>{selectedPayment.date}</p>
                                     </div>
-                                    <div className="space-y-1 text-right">
-                                        <p className="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">Current Status</p>
-                                        <p className={`text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full border inline-block ${statusStyles[selectedPayment.status]}`}>
+                                    <div className="text-right">
+                                        <p className="text-gray-500 text-xs uppercase">Status</p>
+                                        <p className={`inline-block px-2 py-1 rounded-full text-white text-xs ${statusStyles[selectedPayment.status]}`}>
                                             {selectedPayment.status}
                                         </p>
                                     </div>
                                 </div>
 
-                                <div className="h-px w-full border-t-2 border-dashed border-gray-200 relative">
-                                    <div className="absolute -left-16 -top-3 w-6 h-6 bg-white rounded-full border border-gray-100" />
-                                    <div className="absolute -right-16 -top-3 w-6 h-6 bg-white rounded-full border border-gray-100" />
-                                </div>
-
-                                <div className="space-y-4">
-                                    <p className="text-[10px] font-extrabold text-[#B7A261] uppercase tracking-[0.2em] mb-4">Payment Breakdown</p>
-                                    <div className="flex justify-between items-center text-xs font-bold text-gray-600">
+                                {/* Payment Breakdown */}
+                                <div className="space-y-2 text-sm text-gray-700">
+                                    <p className="font-bold uppercase text-xs text-green-700">Payment Breakdown</p>
+                                    <div className="flex justify-between">
                                         <span>Base Price</span>
                                         <span>₹{(selectedPayment.amount * 0.82).toFixed(2)}</span>
                                     </div>
-                                    <div className="flex justify-between items-center text-xs font-bold text-gray-600">
+                                    <div className="flex justify-between">
                                         <span>Tax (GST 18%)</span>
                                         <span>₹{(selectedPayment.amount * 0.18).toFixed(2)}</span>
                                     </div>
-                                    <div className="pt-4 flex justify-between items-end border-t border-gray-100">
-                                        <div>
-                                            <p className="text-[10px] font-black text-gray-900 uppercase tracking-widest mb-1">Net Investment</p>
-                                            <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Tax Inclusive</p>
-                                        </div>
-                                        <p className="text-4xl font-black text-[#3C7E44] tracking-tighter">₹{selectedPayment.amount.toLocaleString()}</p>
+                                    <div className="flex justify-between border-t border-gray-200 pt-2 items-end">
+                                        <span className="text-xs font-bold uppercase">Net Investment</span>
+                                        <span className="text-lg font-black text-green-700">₹{selectedPayment.amount.toLocaleString()}</span>
                                     </div>
                                 </div>
 
-                                <motion.button
-                                    whileHover={{ scale: 1.02, y: -2 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    className="w-full py-5 bg-[#3C7E44] text-white rounded-[1rem] text-xs font-black uppercase tracking-[0.3em] shadow-2xl shadow-green-900/10 flex items-center justify-center gap-3 group/btn"
+                                {/* Download Button */}
+                                <button
+                                    className="w-full py-3 bg-green-700 text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2"
                                 >
-                                    <Download size={18} className="group-hover/btn:-translate-y-1 transition-transform" strokeWidth={3} /> Download Receipt
-                                </motion.button>
+                                    <Download size={18} /> Download Receipt
+                                </button>
                             </div>
                         </motion.div>
                     </div>
