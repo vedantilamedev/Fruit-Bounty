@@ -1,3 +1,5 @@
+import axios from "axios";
+import { useEffect } from "react";
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Home, Package, ShoppingCart, CreditCard, LogOut, Menu, X, Calendar as CalendarIcon, Settings as SettingsIcon, ArrowLeft } from 'lucide-react';
@@ -5,7 +7,6 @@ import Overview from '../../components/UserDashboardComponents/Overview';
 import Orders from '../../components/UserDashboardComponents/Orders';
 import Packages from '../../components/UserDashboardComponents/Packages';
 import Payments from '../../components/UserDashboardComponents/Payments';
-import HarvestCalendar from '../../components/UserDashboardComponents/HarvestCalendar';
 import Settings from '../../components/UserDashboardComponents/Settings';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -107,7 +108,6 @@ const Dashboard = () => {
 
     const menuItems = [
         { id: 'overview', label: 'Dashboard', icon: Home, subtitle: "Managing your organic freshness" },
-        { id: 'calendar', label: 'Harvest Calendar', icon: CalendarIcon, subtitle: "Tracking nature's schedule" },
         { id: 'orders', label: 'My Orders', icon: ShoppingCart, subtitle: "Tracing your fresh harvest journey" },
         { id: 'packages', label: 'My Subscription', icon: Package, subtitle: "Your premium wellness plan" },
         { id: 'payments', label: 'Payments', icon: CreditCard, subtitle: "Safe & Secure Transactions" },
@@ -120,8 +120,6 @@ const Dashboard = () => {
         switch (activeTab) {
             case 'overview':
                 return <Overview userData={userData} orders={orders} onTabChange={handleTabChange} />;
-            case 'calendar':
-                return <HarvestCalendar />;
             case 'orders':
                 return <Orders orders={orders} onCancelOrder={handleCancelOrder} />;
             case 'packages':
@@ -163,18 +161,23 @@ const Dashboard = () => {
                 pauseOnHover
                 theme="light"
             />
+            
             {/* Mobile Header */}
-            <div className="lg:hidden bg-white shadow-sm p-4 flex justify-between items-center shrink-0 z-30">
-                <div className="flex items-center gap-2">
-                    <Link to="/" className="p-2 text-[#3C7E44] flex items-center gap-2">
-                        <ArrowLeft size={20} />
-                        <span className="text-[10px] font-black uppercase tracking-widest mt-0.5">Back to Home</span>
-                    </Link>
+            <div className="lg:hidden bg-white shadow-sm flex justify-between items-center shrink-0 z-30">
+                
+                
+                <div className=" p-4 flex items-center justify-center bg-transparent">
+                    <img
+                        src="/images/footerlogo.png"
+                        alt="Fruit Bounty Logo"
+                        className="w-10 h-auto object-contain transition-transform duration-300 hover:scale-105"
+                    />
                 </div>
                 <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 text-gray-600">
                     {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
             </div>
+            
 
             {/* Sidebar Navigation */}
             <aside className={`
@@ -185,24 +188,19 @@ const Dashboard = () => {
             `}>
                 <div className="h-full flex flex-col bg-[#F7F5EF]/50">
 
-
-
-
-
-                    {/* Back to Home Button */}
-                    <div className="px-10 pt-10 pb-2">
-                        <Link
-                            to="/"
-                            className="group flex items-center gap-3 text-gray-400 hover:text-[#3C7E44] transition-all duration-300"
-                        >
-                            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-                            <span className="text-[11px] font-black uppercase tracking-[0.2em]">Back to Home</span>
-                        </Link>
+                    {/* Logo Section */}
+                    <div className="py-3 border-b border-[#E8E4D9] flex items-center justify-center bg-white">
+                        <img
+                            src="/images/footerlogo.png"
+                            alt="Fruit Bounty Logo"
+                            className="w-24 h-auto object-contain transition-transform duration-300 hover:scale-105"
+                        />
                     </div>
 
+                 
+
                     {/* Menu Links */}
-                    <nav className="flex-1 px-4 py-8 space-y-3 overflow-y-auto">
-                        <p className="px-4 text-[10px] font-normal text-[#B7A261] uppercase tracking-[0.2em] mb-4">MAIN MENU</p>
+                    <nav className="flex-1  px-4 py-8 space-y-3 overflow-y-auto">
                         {menuItems.map((item) => (
                             <button
                                 key={item.id}
@@ -219,14 +217,25 @@ const Dashboard = () => {
                     </nav>
 
                     {/* Logout Button */}
-                    <div className="p-6 border-t border-[#E8E4D9]">
+                    <div className="px-6 py-4 border-t border-white/20 flex flex-col gap-2">
+                        <Link to="/">
+                            <button className="w-full px-3 py-2 rounded-lg bg-green-400 text-[#000000] font-semibold hover:bg-green-700 hover:text-white transition">
+                                Go to Home
+                            </button>
+                        </Link>
+
                         <button
                             onClick={handleLogout}
-                            className="w-full flex items-center gap-4 px-6 py-4 bg-red-300 text-[#7d0f00] hover:bg-red-500 hover:text-white rounded-[1rem] transition-all duration-300 font-normal tracking-tight"
+                            className="w-full px-3 py-2 rounded-lg bg-red-400 text-red-900 font-semibold hover:bg-red-700 hover:text-white transition"
                         >
-                            <LogOut size={22} />
-                            Log Out
+                            Logout
                         </button>
+
+                        <p className="mt-4 text-xs text-gray-600 text-center">
+                            © Graphura India Pvt. Ltd.
+                            <br />
+                            All rights reserved
+                        </p>
                     </div>
                 </div>
             </aside>

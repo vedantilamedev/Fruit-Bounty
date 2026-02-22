@@ -87,8 +87,10 @@ const TermsAndConditions = () => {
           </h1>
 
           <p className="text-base text-gray-600 leading-relaxed">
+
             Please read these terms carefully before using Fruit Bounty
             services.
+
           </p>
 
           <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-[#FBF8F2] rounded-lg border border-[#E8E4D9]">
@@ -147,5 +149,7 @@ const TermsAndConditions = () => {
   );
 };
 
+
 export default TermsAndConditions;
+
 
