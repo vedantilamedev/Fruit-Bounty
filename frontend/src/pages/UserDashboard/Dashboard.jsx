@@ -168,7 +168,7 @@ const Dashboard = () => {
                     <img
                         src="/images/footerlogo.png"
                         alt="Fruit Bounty Logo"
-                        className="w-10 h-auto object-contain transition-transform duration-300 hover:scale-105"
+                        className="w-10 h-auto object-contain  transition-transform duration-300 hover:scale-105"
                     />
                 </div>
                 <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 text-gray-600">
@@ -187,7 +187,7 @@ const Dashboard = () => {
                 <div className="h-full flex flex-col bg-[#F7F5EF]/50">
 
                     {/* Logo Section */}
-                    <div className="py-3 border-b border-[#E8E4D9] flex items-center justify-center bg-white">
+                    <div className="py-3 border-b border-[#aa8d3c] flex items-center justify-center bg-[#c8c178]">
                         <img
                             src="/images/footerlogo.png"
                             alt="Fruit Bounty Logo"
@@ -198,14 +198,14 @@ const Dashboard = () => {
                  
 
                     {/* Menu Links */}
-                    <nav className="flex-1  px-4 py-8 space-y-3 overflow-y-auto">
+                    <nav className="flex-1 bg-[#c8c178]  px-4 py-8 space-y-3 overflow-y-auto">
                         {menuItems.map((item) => (
                             <button
                                 key={item.id}
                                 onClick={() => handleTabChange(item.id)}
                                 className={`w-full flex items-center gap-4 px-6 py-4 rounded-[1rem] transition-all duration-300 font-medium tracking-tight text-[15px] ${activeTab === item.id
-                                    ? 'bg-[#3C7E44] text-white shadow-xl shadow-green-900/20 translate-x-1 font-normal'
-                                    : 'text-black hover:bg-white hover:text-[#3C7E44] hover:translate-x-1'
+                                    ? 'bg-[#9f8846] text-white shadow-xl shadow-gray-900 translate-x-1 font-normal'
+                                    : 'text-black  hover:text-white hover:translate-x-1'
                                     }`}
                             >
                                 <item.icon size={22} strokeWidth={activeTab === item.id ? 2.5 : 2} />
@@ -215,16 +215,16 @@ const Dashboard = () => {
                     </nav>
 
                     {/* Logout Button */}
-                    <div className="px-6 py-4 border-t border-white/20 flex flex-col gap-2">
+                    <div className="px-6 py-4 border-t bg-[#c8c178] border-[#afa63f] flex flex-col gap-2">
                         <Link to="/">
-                            <button className="w-full px-3 py-2 rounded-lg bg-green-400 text-[#000000] font-semibold hover:bg-green-700 hover:text-white transition">
+                            <button className="w-full px-3 py-2 rounded-lg bg-[#9f8846]  shadow-xl hover:shadow-gray-900 translate-x-1  text-white font-semibold hover:bg-[#67572b] transition">
                                 Go to Home
                             </button>
                         </Link>
 
                         <button
                             onClick={handleLogout}
-                            className="w-full px-3 py-2 rounded-lg bg-red-400 text-red-900 font-semibold hover:bg-red-700 hover:text-white transition"
+                            className="w-full px-3 py-2 rounded-lg bg-red-700  text-white font-semibold shadow-xl hover:shadow-gray-900 translate-x-1 hover:bg-red-700 hover:text-white transition"
                         >
                             Logout
                         </button>

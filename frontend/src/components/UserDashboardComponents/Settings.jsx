@@ -19,7 +19,7 @@ const Button = ({ className, variant, children, ...props }) => (
             "px-4 py-2 rounded-lg font-medium transition",
             variant === "outline"
                 ? "border border-slate-300 hover:bg-slate-100"
-                : "bg-green-500 hover:bg-green-600 text-white",
+                : "bg-green-700 hover:bg-green-900 text-white",
             className
         )}
     >
@@ -31,7 +31,7 @@ const Input = ({ className, ...props }) => (
     <input
         {...props}
         className={cn(
-            "w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-green-500 outline-none",
+            "w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-green-700 outline-none",
             className
         )}
     />
@@ -46,7 +46,7 @@ const Switch = ({ checked, onChange }) => (
         onClick={() => onChange(!checked)}
         className={cn(
             "relative w-12 h-6 rounded-full transition-all duration-300",
-            checked ? "bg-green-500" : "bg-slate-300"
+            checked ? "bg-green-700" : "bg-slate-300"
         )}
     >
         <span
@@ -98,7 +98,7 @@ export default function Settings({ userData }) {
                         className={cn(
                             "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition",
                             tab === item.id
-                                ? "bg-white shadow text-green-600"
+                                ? "bg-white shadow text-green-700"
                                 : "text-slate-600 hover:bg-white/70"
                         )}
                     >
@@ -200,12 +200,16 @@ export default function Settings({ userData }) {
                     <div className="space-y-4">
                         <div>
                             <Label>Current Password</Label>
-                            <Input type="password" className="mt-2" />
+                            <Input type="currentpassword" className="mt-2" />
                         </div>
 
                         <div>
                             <Label>New Password</Label>
-                            <Input type="password" className="mt-2" />
+                            <Input type="newpassword" className="mt-2" />
+                        </div>
+                        <div>
+                            <Label>confirm password</Label>
+                            <Input type="confirmpassword" className="mt-2" />
                         </div>
 
                         <Button>Update Password</Button>
