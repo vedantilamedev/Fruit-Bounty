@@ -1,39 +1,34 @@
 import User from "../models/User.js";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import Order from "../models/Order.js";
 import Package from "../models/Package.js";
 import Fruit from "../models/Fruit.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
-
-// =============================
-// 🔐 ADMIN REGISTER
-// =============================
+// ===============================
+// ADMIN REGISTER
+// ===============================
 export const adminRegister = async (req, res) => {
-  const { name, email, password, secretKey } = req.body;
-
   try {
-    // Optional: Secret key protection
-    if (secretKey !== process.env.ADMIN_SECRET_KEY) {
-      return res.status(400).json({ message: "Invalid Admin Secret Key" });
-    }
+    const { name, email, password } = req.body;
 
     const existingAdmin = await User.findOne({ email });
-
     if (existingAdmin) {
       return res.status(400).json({ message: "Admin already exists" });
     }
 
-    const admin = await User.create({
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await User.create({
       name,
       email,
-      password,
-      role: "admin" // 🔥 important
+      password: hashedPassword,
+      role: "admin",
     });
 
     res.status(201).json({
       success: true,
-      message: "Admin registered successfully"
+      message: "Admin registered successfully",
     });
 
   } catch (error) {
@@ -41,36 +36,33 @@ export const adminRegister = async (req, res) => {
   }
 };
 
-
-// =============================
-// 🔐 ADMIN LOGIN
-// =============================
+// ===============================
+// ADMIN LOGIN
+// ===============================
 export const adminLogin = async (req, res) => {
-  const { email, password } = req.body;
-
   try {
-    const admin = await User.findOne({ email, role: "admin" });
+    const { email, password } = req.body;
 
+    const admin = await User.findOne({ email, role: "admin" });
     if (!admin) {
-      return res.status(400).json({ message: "Admin not found" });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const isMatch = await admin.matchPassword(password);
-
+    const isMatch = await bcrypt.compare(password, admin.password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid password" });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
     const token = jwt.sign(
       { id: admin._id, role: admin.role },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "7d" }
     );
 
     res.status(200).json({
       success: true,
-      message: "Login successful",
-      token
+      token,
+      admin,
     });
 
   } catch (error) {
@@ -78,10 +70,9 @@ export const adminLogin = async (req, res) => {
   }
 };
 
-
-// =============================
-// 📊 ADMIN DASHBOARD
-// =============================
+// ===============================
+// DASHBOARD STATS
+// ===============================
 export const getDashboardStats = async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
@@ -95,8 +86,8 @@ export const getDashboardStats = async (req, res) => {
         totalUsers,
         totalOrders,
         totalPackages,
-        totalFruits
-      }
+        totalFruits,
+      },
     });
 
   } catch (error) {

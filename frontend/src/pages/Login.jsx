@@ -175,10 +175,10 @@ const handleLogin = async () => {
   return (
     <div style={styles.pageWrapper}>
       <style>{`
-        body, html { 
-            margin: 0 !important; 
-            padding: 0 !important; 
-            overflow: hidden !important; 
+        body, html {
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
             width: 100%;
             height: 100%;
         }

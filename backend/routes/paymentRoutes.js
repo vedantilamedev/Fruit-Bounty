@@ -10,7 +10,7 @@ import roleMiddleware from "../middleware/roleMiddleware.js";
 const router = express.Router();
 
 
-// ✅ Create Razorpay Order (Customer)
+//  Create Razorpay Order (Customer)
 router.post(
   "/create-order",
   authMiddleware,
@@ -18,7 +18,7 @@ router.post(
 );
 
 
-// ✅ Verify Payment (Customer after payment)
+//  Verify Payment (Customer after payment)
 router.post(
   "/verify",
   authMiddleware,
@@ -26,7 +26,7 @@ router.post(
 );
 
 
-// ✅ Admin: View all payments (optional if needed later)
+//  Admin: View all payments (optional if needed later)
 // You can move this to adminController if preferred
 router.get(
   "/all",

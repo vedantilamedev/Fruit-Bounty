@@ -19,7 +19,7 @@ import User from "../models/User.js";
         return res.status(401).json({ message: "User not found" });
       }
 
-    req.user._id
+      req.user = user;
       next();
     } else {
       return res.status(401).json({ message: "No token provided" });
