@@ -233,7 +233,7 @@ function FruitShop() {
   };
 
   return (
-    <section className="relative py-6 md:py-12 px-4 sm:px-5 md:px-16 lg:px-24 overflow-hidden">
+    <section className="relative pt-0 pb-4 md:pt-2 md:pb-8 px-4 sm:px-5 md:px-16 lg:px-24 overflow-hidden">
       <div
         className="absolute inset-0 z-0 opacity-40 pointer-events-none"
         style={{
@@ -243,17 +243,88 @@ function FruitShop() {
         }}
       ></div>
 
-      <header className="py-10 md:py-20 text-center relative z-10">
-        <span className="text-green-700 font-bold tracking-widest uppercase text-sm">
-          Fresh | Organic | Healthy
-        </span>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mt-3 leading-tight">
-          Build Your <span className="text-[#C9C27A]">Perfect Bowl</span>
-        </h1>
-        <p className="text-gray-500 mt-3 md:mt-4 text-sm sm:text-base md:text-lg">
-          100% Natural Ingredients | No Preservatives | Same Day Delivery
+      <section className="relative z-10 py-2 md:py-6 overflow-hidden">
+        <div className="relative max-w-7xl mx-auto rounded-[1.8rem] md:rounded-[2.5rem] border border-[#d8d2a0] overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.18)]">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#184f2f] via-[#1f6b37] to-[#b7862c]"></div>
+          <div className="absolute -top-24 -left-16 w-72 h-72 bg-white/10 rounded-full blur-2xl"></div>
+          <div className="absolute -bottom-24 -right-16 w-96 h-96 bg-yellow-200/20 rounded-full blur-3xl"></div>
+
+          <div className="relative z-10 grid lg:grid-cols-[1.1fr_0.9fr] gap-4 md:gap-6 items-center px-4 sm:px-6 py-6 md:px-10 md:py-10 lg:px-14">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65 }}
+              className="text-center lg:text-left"
+            >
+              <div className="flex flex-wrap justify-center lg:justify-start gap-2.5 mb-4">
+                <span className="bg-white/20 text-white px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.22em] flex items-center gap-2">
+                  <Leaf size={12} /> Farm Fresh Daily
+                </span>
+                <span className="bg-white/20 text-white px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.22em] flex items-center gap-2">
+                  <Sparkles size={12} /> Chef Curated
+                </span>
+                <span className="bg-white/20 text-white px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.22em] flex items-center gap-2">
+                  <Check size={12} /> Premium Quality
+                </span>
+              </div>
+
+              <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight max-w-3xl mx-auto lg:mx-0">
+                Pick Your <span className="text-[#C9C27A]">Perfect Bowl</span>
+              </h1>
+              <p className="text-white/90 text-sm md:text-lg mt-3 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-medium">
+                Discover handcrafted fruit bowls made with seasonal ingredients, balanced nutrition, and flavors you will love every day.
+              </p>
+
+              <div className="mt-4 md:mt-6 grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3 max-w-3xl mx-auto lg:mx-0">
+                {[
+                  { label: "Bowl Variants", value: `${products.length}+` },
+                  { label: "Avg. Rating", value: "4.8" },
+                  { label: "No Preservatives", value: "100%" },
+                  { label: "Delivery", value: "Same Day" },
+                ].map((item) => (
+                  <div key={item.label} className="bg-white/15 rounded-2xl px-3 py-4 border border-white/20">
+                    <p className="text-xl md:text-2xl font-black text-white">{item.value}</p>
+                    <p className="text-[11px] uppercase tracking-wider text-white/80 font-bold">{item.label}</p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.35 }}
+              transition={{ duration: 0.7, delay: 0.15 }}
+              className="relative w-full max-w-[220px] sm:max-w-sm md:max-w-md mx-auto flex justify-center"
+            >
+              <div className="absolute top-2 right-2 bg-[#ffe6a9] text-[#1b4f2f] px-2.5 py-1 rounded-full text-[9px] sm:text-[10px] uppercase tracking-wider font-black shadow-lg z-20 whitespace-nowrap">
+                Signature Bowl
+              </div>
+              <div className="rounded-[2rem] bg-white/15 border border-white/20 p-4 md:p-5">
+                <img
+                  src="/images/hero.webp"
+                  alt="Featured Bowl"
+                  className="w-full h-[170px] sm:h-[220px] md:h-[260px] object-contain mx-auto drop-shadow-[0_20px_35px_rgba(0,0,0,0.35)]"
+                />
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative z-10 mt-1 md:mt-2 mb-5 md:mb-7 text-center">
+        <div className="inline-flex items-center gap-2 bg-[#f2f8f2] border border-green-100 text-green-800 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em]">
+          <Sparkles size={12} />
+          Explore Collection
+        </div>
+        <h2 className="mt-4 text-2xl md:text-4xl font-black text-gray-900 tracking-tight">
+          Choose Your Bowl
+        </h2>
+        <p className="mt-2 text-sm md:text-base text-gray-500">
+          Freshly curated bowls starting below
         </p>
-      </header>
+        <div className="w-24 h-1 bg-gradient-to-r from-green-700 to-[#C9C27A] rounded-full mx-auto mt-4"></div>
+      </section>
 
       <section className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative z-10">
         {paginatedProducts.map((product) => {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router,Routes,Route,useLocation,} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import TopBar from "./components/TopBar";
@@ -21,19 +21,17 @@ import ContactUs from "./pages/ContactUs";
 import FruitShop from "./pages/FruitShop";
 import CustomBowlPage from "./pages/CustomBowlPage";
 import Dashboard from "./pages/UserDashboard/Dashboard";
-import { Navigate } from "react-router-dom";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
-
-// ❗ Add this if you really have CartPage
-// import CartPage from "./pages/CartPage";
 import AdminRoutes from "./admin/routes/AdminRoutes";
+
 // ---------------- Layout Wrapper ----------------
 function Layout({ children }) {
   const [locationOpen, setLocationOpen] = useState(false);
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");
   const isDashboard = location.pathname.startsWith("/dashboard");
+
   useEffect(() => {
     AOS.init({
       duration: 900,
@@ -43,6 +41,7 @@ function Layout({ children }) {
       offset: 100,
     });
   }, []);
+
   return (
     <div className="w-full bg-[#FBF8F2] relative">
       {!isAdmin && !isDashboard && (
@@ -60,12 +59,14 @@ function Layout({ children }) {
       )}
       <main
         className={`min-h-screen overflow-x-hidden ${
-          !isAdmin && !isDashboard ? "pt-[64px] lg:pt-[110px]" : ""
+          !isAdmin && !isDashboard 
+            ? "pt-[60px] lg:pt-[110px] pb-24 lg:pb-0" 
+            : ""
         }`}
       >
         {children}
       </main>
-      {!isAdmin && !isDashboard &&(
+      {!isAdmin && !isDashboard && (
         <>
           <Footer />
           <div className="lg:hidden">
@@ -76,22 +77,19 @@ function Layout({ children }) {
     </div>
   );
 }
+
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
-
   if (!token) {
     return <Navigate to="/login" replace />;
   }
-
   return children;
 };
 
 // ---------------- App ----------------
 export default function App() {
   return (
-    
     <Router>
-      
       <Layout>
         <Routes>
           {/* User Routes */}
@@ -111,12 +109,7 @@ export default function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/customize" element={<CustomBowlPage />} />
 
-
-      
-          {/* Remove if not using CartPage */}
-          {/* <Route path="/cart-page" element={<CartPage />} /> */}
-          <Route path="/dashboard" element={<Dashboard />} />
-
+          {/* Protected Dashboard Route */}
           <Route
             path="/dashboard"
             element={
@@ -125,7 +118,6 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-
 
           {/* Admin */}
           <Route path="/admin/*" element={<AdminRoutes />} />

@@ -1,13 +1,25 @@
 import { registerUser, loginUser } from "../api/api";
 import React, { useState, useEffect } from 'react';
 import { Google, Visibility, VisibilityOff } from '@mui/icons-material';
-import { Link, useNavigate } from 'react-router-dom'; // Added Link import
+import { Link, useNavigate } from 'react-router-dom';
 
-const LoginRegister = () => {
+const Login = () => {
+  // Logic: Moved to top to ensure availability for useEffect
+  const navigate = useNavigate(); 
   const [isRegistering, setIsRegistering] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [animate, setAnimate] = useState(false);
 
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: ""
+  });
+
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: ""
+  });
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -26,62 +38,33 @@ const LoginRegister = () => {
     setIsRegistering(!isRegistering);
   };
 
-const navigate = useNavigate();
-
-const [formData, setFormData] = useState({
-  name: "",
-  email: "",
-  password: ""
-});
-
-const [loginData, setLoginData] = useState({
-  email: "",
-  password: ""
-});
-
-const handleRegister = async () => {
-  try {
-    const res = await registerUser(formData);
-
-    alert("User registered successfully 🎉");
-    console.log(res.data);
-
-    setIsRegistering(false);
-    alert("Please login with your credentials");
-
-  } catch (err) {
-    console.error(err);
-
-    if (err.response) {
-      // Backend responded with error
-      alert(err.response.data.message || "Registration failed ❌");
-    } else if (err.request) {
-      // Server not responding
-      alert("Server not responding. Please try again later.");
-    } else {
-      alert("Something went wrong.");
+  const handleRegister = async () => {
+    try {
+      const res = await registerUser(formData);
+      alert("User registered successfully 🎉");
+      setIsRegistering(false);
+      alert("Please login with your credentials");
+    } catch (err) {
+      console.error(err);
+      if (err.response) {
+        alert(err.response.data.message || "Registration failed ❌");
+      } else {
+        alert("Something went wrong.");
+      }
     }
-  }
-};
+  };
 
-const handleLogin = async () => {
-  try {
-    const res = await loginUser(loginData);
-
-    alert("Login successful 🎉");
-    console.log(res.data);
-
-    // Optional: store token
-    localStorage.setItem("token", res.data.token);
-
-    // Redirect to home page
-   navigate("/", { replace: true });
-
-  } catch (err) {
-    console.error(err.response?.data || err.message);
-    alert("Login failed");
-  }
-};
+  const handleLogin = async () => {
+    try {
+      const res = await loginUser(loginData);
+      alert("Login successful 🎉");
+      localStorage.setItem("token", res.data.token);
+      navigate("/", { replace: true });
+    } catch (err) {
+      console.error(err.response?.data || err.message);
+      alert("Login failed");
+    }
+  };
 
   const handleNumericInput = (e) => {
     e.target.value = e.target.value.replace(/[^0-9]/g, '');
@@ -175,13 +158,7 @@ const handleLogin = async () => {
   return (
     <div style={styles.pageWrapper}>
       <style>{`
-        body, html {
-            margin: 0 !important;
-            padding: 0 !important;
-            overflow: hidden !important;
-            width: 100%;
-            height: 100%;
-        }
+        body, html { margin: 0 !important; padding: 0 !important; overflow: hidden !important; width: 100%; height: 100%; }
         .form-column { display: flex !important; }
         @media (max-width: 900px) {
           .sliding-overlay { display: none !important; }
@@ -190,8 +167,6 @@ const handleLogin = async () => {
           .login-col { display: ${!isRegistering ? 'flex' : 'none'} !important; }
         }
         .primary-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
-        .form-column::-webkit-scrollbar { width: 6px; }
-        .form-column::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
       `}</style>
 
       <div style={styles.mainBox}>
@@ -205,155 +180,58 @@ const handleLogin = async () => {
           </div>
         </div>
 
-        {/* LEFT FORM (Signup) */}
-        <div
-          className="form-column signup-col"
-          style={{
-            ...styles.formSide,
-            visibility: isRegistering ? "visible" : "hidden",
-            padding: "0 10%",
-          }}
-        >
-          <h1 style={{ fontSize: "3rem", marginBottom: "30px", paddingTop: "40px" }}>
-            Sign Up
-          </h1>
-
-          {/* NAME */}
+        {/* SIGN UP FORM */}
+        <div className="form-column signup-col" style={{ ...styles.formSide, visibility: isRegistering ? "visible" : "hidden", padding: "0 10%" }}>
+          <h1 style={{ fontSize: "3rem", marginBottom: "30px", paddingTop: "40px" }}>Sign Up</h1>
           <div style={{ marginBottom: "15px" }}>
             <label>Full Name</label>
-            <input
-              type="text"
-              placeholder="John Doe"
-              style={styles.input}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-            />
+            <input type="text" placeholder="John Doe" style={styles.input} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
           </div>
-
-          {/* EMAIL */}
           <div style={{ marginBottom: "15px" }}>
             <label>Email</label>
-            <input
-              type="email"
-              placeholder="john@example.com"
-              style={styles.input}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-            />
+            <input type="email" placeholder="john@example.com" style={styles.input} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
           </div>
-
-          {/* PHONE (optional - backend me nahi hai) */}
           <div style={{ marginBottom: "15px" }}>
             <label>Phone</label>
-            <input
-              type="tel"
-              onInput={handleNumericInput}
-              placeholder="1234567890"
-              style={styles.input}
-            />
+            <input type="tel" onInput={handleNumericInput} placeholder="1234567890" style={styles.input} />
           </div>
-
-          {/* PASSWORD */}
           <div style={{ marginBottom: "15px", position: "relative" }}>
             <label>Password</label>
-            <input
-              type={showPassword ? "text" : "password"}
-              style={styles.input}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-            />
-            <div
-              style={{
-                position: "absolute",
-                right: "15px",
-                bottom: "12px",
-                color: "#2D5A27",
-                cursor: "pointer",
-              }}
-              onClick={() => setShowPassword(!showPassword)}
-            >
+            <input type={showPassword ? "text" : "password"} style={styles.input} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
+            <div style={{ position: "absolute", right: "15px", bottom: "12px", color: "#2D5A27", cursor: "pointer" }} onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? <VisibilityOff /> : <Visibility />}
             </div>
           </div>
-
-          {/* REGISTER BUTTON */}
-          <button
-            className="primary-btn"
-            style={styles.primaryBtn}
-            onClick={handleRegister}
-          >
-            Create Account
-          </button>
-
-          <p style={{ textAlign: "center", fontSize: "1rem", marginTop: "25px" }}>
-            Already a member?{" "}
-            <span
-              onClick={toggleMode}
-              style={{
-                color: "#4CAF50",
-                cursor: "pointer",
-                fontWeight: "bold",
-                textDecoration: "underline",
-              }}
-            >
-              Login
-            </span>
-          </p>
+          <button className="primary-btn" style={styles.primaryBtn} onClick={handleRegister}>Create Account</button>
+          <p style={{ textAlign: "center", fontSize: "1rem", marginTop: "25px" }}>Already a member? <span onClick={toggleMode} style={{ color: "#4CAF50", cursor: "pointer", fontWeight: "bold", textDecoration: "underline" }}>Login</span></p>
         </div>
 
-        {/* RIGHT FORM (Login) */}
+        {/* LOGIN FORM */}
         <div className="form-column login-col" style={{ ...styles.formSide, visibility: !isRegistering ? 'visible' : 'hidden', padding: '0 10%' }}>
           <h1 style={{ fontSize: '3rem', marginBottom: '30px' }}>Login</h1>
           <div style={{ marginBottom: '20px' }}>
             <label>Email</label>
-           <input
-             type="email"
-             placeholder="Enter email"
-             style={styles.input}
-             onChange={(e) =>
-               setLoginData({ ...loginData, email: e.target.value })
-             }
-           />
+            <input type="email" placeholder="Enter email" style={styles.input} onChange={(e) => setLoginData({ ...loginData, email: e.target.value })} />
           </div>
           <div style={{ marginBottom: '20px', position: 'relative' }}>
             <label>Password</label>
-            <input
-              type={showPassword ? 'text' : 'password'}
-              style={styles.input}
-              onChange={(e) =>
-                setLoginData({ ...loginData, password: e.target.value })
-              }
-            />
+            <input type={showPassword ? 'text' : 'password'} style={styles.input} onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} />
             <div style={{ position: 'absolute', right: '15px', bottom: '12px', color: '#2D5A27', cursor: 'pointer' }} onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? <VisibilityOff /> : <Visibility />}
             </div>
           </div>
-          <button
-            className="primary-btn"
-            style={styles.primaryBtn}
-            onClick={handleLogin}
-          >
-            Sign In
-          </button>
+          <button className="primary-btn" style={styles.primaryBtn} onClick={handleLogin}>Sign In</button>
           <button className="primary-btn" style={{ width: '100%', padding: '15px', marginTop: '20px', backgroundColor: '#FFF', color: '#2D5A27', fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
             <Google style={{ color: '#EA4335' }} /> Continue with Google
           </button>
-
           <p style={{ textAlign: 'center', marginTop: '20px' }}>
-            {/* Updated to use Link */}
             <Link to="/forgot-password" style={{ color: '#4CAF50', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '500', textDecoration: 'none' }}>Forget password?</Link>
           </p>
-
-          <p style={{ textAlign: 'center', fontSize: '1rem', marginTop: '10px' }}>
-            Don't have an account? <span onClick={toggleMode} style={{ color: '#4CAF50', cursor: 'pointer', fontWeight: 'bold', textDecoration: 'underline' }}>Register</span>
-          </p>
+          <p style={{ textAlign: 'center', fontSize: '1rem', marginTop: '10px' }}>Don't have an account? <span onClick={toggleMode} style={{ color: '#4CAF50', cursor: 'pointer', fontWeight: 'bold', textDecoration: 'underline' }}>Register</span></p>
         </div>
       </div>
     </div>
   );
 };
 
-export default LoginRegister;
+export default Login;
