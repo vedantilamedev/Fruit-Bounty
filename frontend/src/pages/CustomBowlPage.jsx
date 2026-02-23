@@ -35,10 +35,10 @@ const fruits = [
 ];
 
 const toppings = [
-  { id: 1, name: "Nuts", price: 30 },
-  { id: 2, name: "Honey", price: 20 },
-  { id: 3, name: "Dry Fruits", price: 40 },
-  { id: 4, name: "Yogurt", price: 50 },
+  { id: 1, name: "Nuts", price: 30, image: "/images/crunch.png" },
+  { id: 2, name: "Honey", price: 20, image: "/images/honey.png" },
+  { id: 3, name: "Dry Fruits", price: 40, image: "/images/dryfruits.png" },
+  { id: 4, name: "Yogurt", price: 50, image: "/images/yoghurt.png" },
 ];
 
 const sizes = [
@@ -356,20 +356,33 @@ function CustomBowlPage() {
             desc="Finish your bowl with texture and flavor boosters."
           />
 
-          <div className="flex flex-wrap gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6">
             {toppings.map((topping) => {
               const active = !!selectedToppings[topping.id];
               return (
                 <button
                   key={topping.id}
                   onClick={() => toggleTopping(topping.id)}
-                  className={`px-6 md:px-8 py-3.5 rounded-full text-sm font-black transition-all border-2 ${
+                  className={`relative text-left rounded-[1.8rem] border p-4 bg-white transition-all duration-300 ${
                     active
-                      ? "bg-green-700 border-green-700 text-white shadow-xl"
-                      : "bg-white border-[#e8e2c4] text-gray-600 hover:border-green-400"
+                      ? "border-green-600 shadow-[0_16px_30px_rgba(22,101,52,0.2)] -translate-y-1"
+                      : "border-[#ebe6cb] hover:border-green-300"
                   }`}
                 >
-                  {topping.name} (+Rs. {topping.price})
+                  <div className="w-full aspect-square rounded-2xl bg-gradient-to-br from-[#f4faf4] to-[#fff6e8] border border-[#ece7c9] flex items-center justify-center overflow-hidden">
+                    <img src={topping.image} alt={topping.name} className="w-[84%] h-[84%] object-contain" />
+                  </div>
+
+                  {active && (
+                    <div className="absolute top-3 right-3 bg-green-600 text-white rounded-full w-7 h-7 flex items-center justify-center shadow-lg">
+                      <CheckCircle size={16} />
+                    </div>
+                  )}
+
+                  <div className="mt-4">
+                    <p className="font-black text-gray-900 leading-tight">{topping.name}</p>
+                    <p className="text-green-800 font-black mt-1">+Rs. {topping.price}</p>
+                  </div>
                 </button>
               );
             })}

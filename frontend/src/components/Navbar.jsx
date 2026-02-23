@@ -1,4 +1,4 @@
-import { ShoppingBag, ShoppingCart, User, LogIn } from "lucide-react";
+import { Store, ShoppingCart, User, LogIn } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -85,7 +85,7 @@ function Navbar() {
           <div className="flex items-center gap-3">
             <Link to="/shop">
               <button className="w-10 h-10 bg-green-900 rounded-full flex items-center justify-center transition-colors duration-300 hover:bg-[#C9C27A] group">
-                <ShoppingBag size={18} className="text-white group-hover:text-green-900 transition-colors" />
+                <Store size={18} className="text-white group-hover:text-green-900 transition-colors" />
               </button>
             </Link>
 

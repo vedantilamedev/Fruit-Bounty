@@ -157,7 +157,7 @@ const PlanCustomization = () => {
                         {currentStep === 1 && (
                             <motion.div key="s1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6 md:space-y-8">
                                 <div className="flex justify-between items-center">
-                                  <h4 className="text-[10px] font-black uppercase text-gray-400 tracking-widest">01. Choose Your Base Product</h4>
+                                  <h4 className="text-[10px] font-black uppercase text-gray-800 tracking-widest">01. Choose Your Base Product</h4>
                                   <div className="flex gap-2">
                                     <button onClick={() => scroll('left')} className="p-2 rounded-full bg-gray-100 hover:bg-[#C9C27A] hover:text-white transition-colors"><ChevronLeft size={16}/></button>
                                     <button onClick={() => scroll('right')} className="p-2 rounded-full bg-gray-100 hover:bg-[#C9C27A] hover:text-white transition-colors"><ChevronRight size={16}/></button>
@@ -180,7 +180,7 @@ const PlanCustomization = () => {
                         {currentStep === 2 && (
                             <motion.div key="s2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8 md:space-y-10">
                                 <div>
-                                    <h4 className="text-[10px] font-black uppercase text-gray-400 tracking-widest mb-6">02. Seasonal Essentials</h4>
+                                    <h4 className="text-[10px] font-black uppercase text-gray-800 tracking-widest mb-6">02. Seasonal Essentials</h4>
                                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-6">
                                         {FREE_FRUITS.map(f => (
                                             <div key={f.name} onClick={() => toggleSelection('fruits', f.name)} className={`relative p-3 md:p-4 rounded-3xl border-2 transition-all text-center cursor-pointer active:scale-95 ${selections.fruits.includes(f.name) ? 'border-[#C9C27A] bg-[#C9C27A]/5 shadow-inner' : 'border-gray-100 bg-white hover:border-gray-200'}`}>
@@ -195,7 +195,7 @@ const PlanCustomization = () => {
                                 </div>
 
                                 <div className="pt-6 border-t border-gray-100">
-                                    <h4 className="text-[10px] font-black uppercase text-gray-400 tracking-widest mb-6 flex items-center gap-2">Premium Selection <Gem size={12} className="text-[#C9C27A]"/></h4>
+                                    <h4 className="text-[10px] font-black uppercase text-gray-800 tracking-widest mb-6 flex items-center gap-2">Premium Selection <Gem size={12} className="text-[#C9C27A]"/></h4>
                                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-6">
                                         {PREMIUM_FRUITS.map(f => (
                                             <div key={f.name} onClick={() => toggleSelection('fruits', f.name)} className={`relative p-3 md:p-4 rounded-3xl border-2 border-dashed transition-all text-center cursor-pointer active:scale-95 ${selections.fruits.includes(f.name) ? 'border-[#C9C27A] bg-[#C9C27A]/5' : 'border-gray-200 bg-white'}`}>
@@ -217,21 +217,21 @@ const PlanCustomization = () => {
                         {currentStep === 3 && (
                             <motion.div key="s3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-10 md:space-y-12">
                                 <div>
-                                    <h4 className="text-[10px] font-black uppercase text-gray-400 tracking-widest mb-6 flex items-center gap-2"><Soup size={14}/> 03. Select Bowl Size</h4>
+                                    <h4 className="text-[10px] font-black uppercase text-gray-800 tracking-widest mb-6 flex items-center gap-2"><Soup size={14} /> 03. Select Bowl Size</h4>
                                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
                                         {SIZES.map(s => (
-                                            <button key={s.label} onClick={() => setSelections({...selections, size: s.label})} className={`p-5 md:p-6 rounded-2xl border-2 text-left transition-all active:scale-[0.98] ${selections.size === s.label ? 'bg-[#C9C27A] border-[#C9C27A] text-white shadow-lg' : 'bg-white border-gray-100 text-gray-400'}`}>
+                                            <button key={s.label} onClick={() => setSelections({...selections, size: s.label})} className={`p-5 md:p-6 rounded-2xl border-2 text-left transition-all active:scale-[0.98] ${selections.size === s.label ? 'bg-[#C9C27A] border-[#C9C27A] text-white shadow-lg' : 'bg-white border-gray-100 text-gray-800'}`}>
                                                 <p className="font-black text-[10px] md:text-[11px] uppercase tracking-widest">{s.label}</p>
-                                                <p className={`text-[9px] font-bold mt-1 ${selections.size === s.label ? 'text-white/80' : 'text-gray-400'}`}>{s.qty}</p>
+                                                <p className={`text-[9px] font-bold mt-1 ${selections.size === s.label ? 'text-white/80' : 'text-gray-800'}`}>{s.qty}</p>
                                             </button>
                                         ))}
                                     </div>
                                 </div>
                                 <div>
-                                    <h4 className="text-[10px] font-black uppercase text-gray-400 tracking-widest mb-6 flex items-center gap-2"><Utensils size={14}/> Toppings</h4>
+                                    <h4 className="text-[10px] font-black uppercase text-gray-800 tracking-widest mb-6 flex items-center gap-2"><Utensils size={14}/> Toppings</h4>
                                     <div className="flex flex-wrap gap-2 md:gap-3">
                                         {TOPPINGS.map(t => (
-                                            <button key={t} onClick={() => toggleSelection('toppings', t)} className={`px-4 md:px-6 py-2.5 md:py-3 rounded-xl border-2 font-bold text-[9px] md:text-[10px] uppercase transition-all ${selections.toppings.includes(t) ? 'border-[#C9C27A] bg-[#C9C27A]/10 text-[#C9C27A]' : 'border-gray-100 text-gray-400'}`}>
+                                            <button key={t} onClick={() => toggleSelection('toppings', t)} className={`px-4 md:px-6 py-2.5 md:py-3 rounded-xl border-2 font-bold text-[9px] md:text-[10px] uppercase transition-all ${selections.toppings.includes(t) ? 'border-[#C9C27A] bg-[#C9C27A]/10 text-[#C9C27A]' : 'border-gray-100 text-gray-800'}`}>
                                                 {t}
                                             </button>
                                         ))}

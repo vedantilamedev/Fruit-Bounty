@@ -150,7 +150,7 @@ const OrderSuccess = () => {
 
           <motion.p 
             variants={itemVariants}
-            className="mt-12 text-[8px] font-black text-gray-300 uppercase tracking-[0.4em]"
+            className="mt-12 text-[9px] font-black text-gray-800 uppercase tracking-[0.4em]"
           >
             Thank you for choosing Harvest
           </motion.p>

@@ -1,134 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Visibility, VisibilityOff, Security } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [animate, setAnimate] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setAnimate(true), 100);
-    return () => clearTimeout(timer);
-  }, [isRegistering]);
-
-  const toggleMode = () => {
-    setAnimate(false);
-    setIsRegistering(!isRegistering);
-  };
   const navigate = useNavigate();
-
-  const styles = {
-    pageWrapper: {
-      minHeight: "100vh",
-      width: "100%",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      background:
-        "radial-gradient(circle at 20% 10%, #ffffff 0%, #F2ECDD 42%, #EAF1E7 100%)",
-      fontFamily: "'Poppins', sans-serif",
-      padding: "24px",
-      boxSizing: "border-box",
-      position: "relative",
-      overflow: "hidden",
-    },
-    mainBox: {
-      position: "relative",
-      width: "min(1100px, 100%)",
-      minHeight: "min(720px, calc(100vh - 48px))",
-      display: "flex",
-      overflow: "hidden",
-      backgroundColor: "rgba(255,255,255,0.72)",
-      borderRadius: "24px",
-      border: "1px solid #E7E1D4",
-      boxShadow: "0 26px 64px rgba(28, 43, 21, 0.16)",
-      backdropFilter: "blur(8px)",
-    },
-    overlaySection: {
-      position: "absolute",
-      top: 0,
-      left: isRegistering ? "50%" : "0%",
-      width: "50%",
-      height: "100%",
-      background: "linear-gradient(165deg, #2D4F1E 0%, #3C7E44 100%)",
-      zIndex: 10,
-      transition: "all 0.8s cubic-bezier(0.65, 0, 0.35, 1)",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      padding: "44px",
-      color: "#FFFFFF",
-      textAlign: "center",
-    },
-    formSide: {
-      width: "50%",
-      height: "100%",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      backgroundColor: "#FAF8F3",
-      color: "#2D4F1E",
-      padding: "32px clamp(20px, 4vw, 48px)",
-      transition: "opacity 0.5s ease, transform 0.5s ease",
-      opacity: animate ? 1 : 0,
-      transform: animate ? "scale(1)" : "scale(0.95)",
-      boxSizing: "border-box",
-    },
-    inputGroup: {
-      marginBottom: "14px",
-      position: "relative",
-      width: "100%",
-    },
-    input: {
-      width: "100%",
-      padding: "13px 14px",
-      borderRadius: "10px",
-      border: "1.5px solid #DED8CB",
-      marginTop: "6px",
-      fontSize: "0.96rem",
-      outline: "none",
-      boxSizing: "border-box",
-      backgroundColor: "#FFFFFF",
-      transition: "border-color .2s ease, box-shadow .2s ease",
-    },
-    primaryBtn: {
-      width: "100%",
-      padding: "14px",
-      borderRadius: "10px",
-      border: "none",
-      background: "linear-gradient(135deg, #2F5321 0%, #3C7E44 100%)",
-      color: "#FFF",
-      fontWeight: "700",
-      cursor: "pointer",
-      marginTop: "10px",
-      fontSize: "0.97rem",
-      letterSpacing: "0.01em",
-      boxShadow: "0 8px 18px rgba(45, 79, 30, 0.24)",
-      transition: "transform .2s ease, box-shadow .2s ease",
-    },
-  };
-  const handleRegister = () => {
-    console.log("Register Data:", registerData);
-
-    if (
-      !registerData.name ||
-      !registerData.email ||
-      !registerData.secretKey ||
-      !registerData.password
-    ) {
-      alert("Please fill all fields");
-      return;
-    }
-
-    // API call here
-    axios.post("/api/admin/register", registerData);
-
-    alert("Request Sent Successfully!");
-  };
 
   const [loginData, setLoginData] = useState({
     email: "",
@@ -141,6 +19,26 @@ const AdminLogin = () => {
     secretKey: "",
     password: "",
   });
+
+  const handleRegister = async () => {
+    if (
+      !registerData.name ||
+      !registerData.email ||
+      !registerData.secretKey ||
+      !registerData.password
+    ) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    try {
+      await axios.post("/api/admin/register", registerData);
+      alert("Request sent successfully");
+      setIsRegistering(false);
+    } catch (error) {
+      alert(error.response?.data?.message || "Registration request failed");
+    }
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -157,387 +55,587 @@ const AdminLogin = () => {
       }
 
       localStorage.setItem("token", res.data.token);
-      alert("Admin Login Successful");
-
-      // redirect to admin dashboard
+      alert("Admin login successful");
       navigate("/admin/dashboard");
     } catch (error) {
-      alert(error.response?.data?.message || "Login Failed");
+      alert(error.response?.data?.message || "Login failed");
     }
   };
 
   return (
-    <div style={styles.pageWrapper}>
+    <div className="min-h-screen bg-[#f8f6ef] relative overflow-hidden">
       <div
+        className="absolute inset-0 opacity-40 pointer-events-none"
         style={{
-          position: "absolute",
-          width: 250,
-          height: 250,
-          borderRadius: "50%",
-          top: -90,
-          left: -80,
-          background:
-            "radial-gradient(circle, rgba(60,126,68,0.2), rgba(60,126,68,0))",
-          pointerEvents: "none",
-          filter: "blur(8px)",
+          backgroundImage: "url('/images/main-background.png')",
+          backgroundSize: "420px",
+          backgroundRepeat: "repeat",
         }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          width: 220,
-          height: 220,
-          borderRadius: "50%",
-          bottom: -70,
-          right: -70,
-          background:
-            "radial-gradient(circle, rgba(183,162,97,0.24), rgba(183,162,97,0))",
-          pointerEvents: "none",
-          filter: "blur(8px)",
-        }}
-      />
+      ></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-[#edf6eb]/80 via-transparent to-[#f8f6ef]"></div>
 
       <style>{`
-        .auth-shell { isolation: isolate; }
-        .admin-panel {
-          background: rgba(255,255,255,0.88);
-          border: 1px solid #E8E2D6;
-          border-radius: 16px;
-          padding: 22px;
-          box-shadow: 0 12px 30px rgba(32, 49, 23, 0.1);
-          backdrop-filter: blur(8px);
+        .admin-auth-shell {
           position: relative;
+          z-index: 10;
+          min-height: 100vh;
+          display: grid;
+          place-items: center;
+          padding: 24px;
+        }
+        .admin-auth-card {
+          width: min(1100px, 100%);
+          min-height: min(720px, calc(100vh - 48px));
+          background: rgba(255, 255, 255, 0.82);
+          border: 1px solid #e9e2cf;
+          border-radius: 28px;
+          overflow: hidden;
+          box-shadow: 0 28px 70px rgba(28, 43, 21, 0.16);
+          backdrop-filter: blur(8px);
+          display: grid;
+          grid-template-columns: 0.95fr 1.05fr;
+        }
+        .admin-left {
+          background: linear-gradient(155deg, #143d26 0%, #1c5b32 45%, #2a6f3c 72%, #b79654 150%);
+          padding: 38px 34px;
+          color: #fff;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
           overflow: hidden;
         }
-        .admin-panel::after {
-          content: '';
+        .admin-left::before {
+          content: "";
           position: absolute;
-          width: 150px;
-          height: 150px;
-          right: -68px;
-          top: -68px;
+          width: 250px;
+          height: 250px;
+          top: -110px;
+          right: -70px;
           border-radius: 999px;
-          background: radial-gradient(circle, rgba(183,162,97,.2), transparent 70%);
+          background: radial-gradient(circle, rgba(255,255,255,.22), rgba(255,255,255,0));
+        }
+        .admin-left::after {
+          content: "";
+          position: absolute;
+          width: 220px;
+          height: 220px;
+          bottom: -100px;
+          left: -70px;
+          border-radius: 999px;
+          background: radial-gradient(circle, rgba(255,255,255,.18), rgba(255,255,255,0));
+        }
+        .admin-pattern {
+          position: absolute;
+          inset: 0;
+          opacity: .14;
+          background-image: linear-gradient(rgba(255,255,255,.22) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.22) 1px, transparent 1px);
+          background-size: 22px 22px;
           pointer-events: none;
         }
+        .admin-ring {
+          position: absolute;
+          width: 320px;
+          height: 320px;
+          border-radius: 999px;
+          border: 1px solid rgba(255,255,255,.22);
+          right: -150px;
+          bottom: -130px;
+          pointer-events: none;
+        }
+        .admin-brand {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-weight: 900;
+          letter-spacing: .08em;
+          text-transform: uppercase;
+          font-size: .86rem;
+          color: #f6e7bc;
+        }
         .admin-title {
-          margin: 0 0 6px 0;
-          font-size: clamp(1.65rem, 2vw, 1.95rem);
-          font-weight: 800;
-          color: #1E3520;
+          margin-top: 20px;
+          font-size: clamp(2rem, 3.4vw, 2.8rem);
+          line-height: 1.15;
+          font-weight: 900;
           letter-spacing: -0.02em;
         }
-        .admin-subtitle {
-          margin: 0 0 20px 0;
-          color: #6A7468;
-          font-size: 0.93rem;
+        .admin-copy {
+          margin-top: 14px;
+          opacity: .92;
+          max-width: 34ch;
+          font-size: .94rem;
+          line-height: 1.6;
         }
-        .admin-label {
-          font-size: .78rem;
-          color: #3A5B39;
-          letter-spacing: .04em;
-          text-transform: uppercase;
-          font-weight: 700;
-        }
-        .admin-input:focus {
-          border-color: #3C7E44 !important;
-          box-shadow: 0 0 0 3px rgba(60,126,68,.14);
-        }
-        .admin-input::placeholder { color: #98A195; }
-        .admin-btn:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 12px 22px rgba(45, 79, 30, 0.30);
-        }
-        .admin-btn:active {
-          transform: scale(0.995);
-        }
-        .admin-helper {
-          text-align: center;
+        .admin-highlight {
           margin-top: 18px;
-          font-size: .92rem;
-          color: #5D675A;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          border: 1px solid rgba(255,255,255,.28);
+          background: rgba(255,255,255,.14);
+          border-radius: 999px;
+          padding: 8px 13px;
+          font-size: .72rem;
+          text-transform: uppercase;
+          font-weight: 800;
+          letter-spacing: .08em;
+          width: fit-content;
         }
-        .overlay-icon {
-          width: 82px;
-          height: 82px;
-          border-radius: 20px;
-          background: rgba(255,255,255,0.16);
-          border: 1px solid rgba(255,255,255,0.22);
+        .admin-points {
+          margin-top: 20px;
+          display: grid;
+          gap: 11px;
+        }
+        .admin-point {
+          background: linear-gradient(135deg, rgba(255,255,255,.16), rgba(255,255,255,.08));
+          border: 1px solid rgba(255,255,255,.24);
+          border-radius: 13px;
+          padding: 11px 12px;
+          font-size: .75rem;
+          font-weight: 800;
+          letter-spacing: .05em;
+          text-transform: uppercase;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .admin-point-dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 999px;
+          background: #f6e7bc;
+          box-shadow: 0 0 0 4px rgba(246,231,188,.18);
+          flex-shrink: 0;
+        }
+        .admin-stats {
+          margin-top: 20px;
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 8px;
+        }
+        .admin-stat {
+          border: 1px solid rgba(255,255,255,.2);
+          background: rgba(255,255,255,.1);
+          border-radius: 11px;
+          padding: 10px 8px;
+          text-align: center;
+        }
+        .admin-stat b {
+          display: block;
+          font-size: .95rem;
+          color: #f6e7bc;
+          letter-spacing: .02em;
+        }
+        .admin-stat span {
+          font-size: .62rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: .08em;
+          opacity: .9;
+        }
+        .admin-left-footer {
+          margin-top: 22px;
+          font-size: .72rem;
+          font-weight: 700;
+          opacity: .86;
+          letter-spacing: .1em;
+          text-transform: uppercase;
+        }
+        .admin-right {
+          padding: clamp(20px, 4vw, 42px);
           display: flex;
           align-items: center;
           justify-content: center;
+          background: #faf8f2;
+        }
+        .admin-form-wrap {
+          width: min(460px, 100%);
+          background: #fff;
+          border: 1px solid #ece4d0;
+          border-radius: 18px;
+          box-shadow: 0 12px 32px rgba(34, 50, 25, 0.08);
+          padding: clamp(18px, 2.6vw, 28px);
+        }
+        .admin-tabs {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 8px;
+          background: #f6f2e7;
+          border: 1px solid #eadfbe;
+          border-radius: 12px;
+          padding: 5px;
           margin-bottom: 18px;
-          box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
         }
-        .overlay-title {
-          font-size: 2.15rem;
-          font-weight: 800;
-          line-height: 1.2;
-          margin: 0;
-        }
-        .overlay-subtitle {
-          margin-top: 10px;
-          opacity: .9;
-          font-size: .95rem;
-          max-width: 320px;
-          line-height: 1.6;
-        }
-        .overlay-chip {
-          margin-top: 18px;
-          padding: 6px 12px;
-          border-radius: 999px;
-          border: 1px solid rgba(255,255,255,0.24);
-          background: rgba(255,255,255,0.14);
-          font-size: .72rem;
-          font-weight: 700;
-          letter-spacing: .04em;
+        .admin-tab-btn {
+          height: 38px;
+          border: 0;
+          border-radius: 9px;
+          font-size: .74rem;
+          font-weight: 900;
+          letter-spacing: .08em;
           text-transform: uppercase;
+          cursor: pointer;
+          background: transparent;
+          color: #6f7a68;
+          transition: all .18s ease;
         }
-        @media (max-width: 850px) {
-          .sliding-overlay { display: none !important; }
-          .form-column { 
-            width: 100% !important; 
-            background-color: #FAF8F3 !important; 
-            color: #1E3520 !important;
-            padding: 22px 16px !important;
-          }
-          .auth-shell {
-            min-height: auto !important;
-            border-radius: 18px !important;
-          }
-          .admin-panel {
-            border-radius: 14px !important;
-            padding: 18px !important;
-            box-shadow: 0 8px 20px rgba(32,49,23,.07) !important;
-          }
-          .signup-col { display: ${isRegistering ? "flex" : "none"} !important; }
-          .login-col { display: ${!isRegistering ? "flex" : "none"} !important; }
-          .toggle-link { color: #3C7E44 !important; }
-          .forget-link { color: #3C7E44 !important; }
+        .admin-tab-btn.active {
+          background: linear-gradient(135deg, #2e5725, #3d7b42);
+          color: #fff;
+          box-shadow: 0 8px 16px rgba(46, 87, 37, 0.22);
         }
-        @media (max-width: 480px) {
-          .auth-shell { border-radius: 14px !important; }
-          .admin-title { font-size: 1.45rem !important; }
+        .admin-heading {
+          margin: 0;
+          font-size: clamp(1.4rem, 2vw, 1.8rem);
+          font-weight: 900;
+          color: #1f3521;
+          letter-spacing: -0.02em;
+        }
+        .admin-sub {
+          margin: 6px 0 18px;
+          color: #6c7766;
+          font-size: .92rem;
+        }
+        .admin-group { margin-bottom: 13px; }
+        .admin-label {
+          display: block;
+          font-size: .72rem;
+          color: #4b5f49;
+          letter-spacing: .07em;
+          text-transform: uppercase;
+          font-weight: 800;
+          margin-bottom: 6px;
+        }
+        .admin-input-wrap { position: relative; }
+        .admin-input {
+          width: 100%;
+          height: 45px;
+          border-radius: 11px;
+          border: 1.5px solid #ddd6c5;
+          padding: 0 13px;
+          font-size: .94rem;
+          color: #1f2a1f;
+          background: #fff;
+          outline: none;
+          transition: border-color .2s ease, box-shadow .2s ease;
+          box-sizing: border-box;
+        }
+        .admin-input::placeholder { color: #9aa498; }
+        .admin-input:focus {
+          border-color: #3c7e44;
+          box-shadow: 0 0 0 3px rgba(60,126,68,.14);
+        }
+        .admin-eye-btn {
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          border: 0;
+          background: transparent;
+          color: #6f7a68;
+          cursor: pointer;
+          display: grid;
+          place-items: center;
+          width: 28px;
+          height: 28px;
+          border-radius: 7px;
+        }
+        .admin-eye-btn:hover { background: #f4f7f2; }
+        .admin-forgot {
+          display: inline-block;
+          font-size: .82rem;
+          color: #2f5f2a;
+          font-weight: 700;
+          text-decoration: none;
+        }
+        .admin-forgot:hover { color: #23481f; }
+        .admin-submit {
+          width: 100%;
+          height: 46px;
+          border: 0;
+          border-radius: 11px;
+          background: linear-gradient(135deg, #2e5725, #3d7b42);
+          color: #fff;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: .08em;
+          cursor: pointer;
+          margin-top: 10px;
+          box-shadow: 0 10px 22px rgba(46, 87, 37, 0.26);
+          transition: transform .18s ease, box-shadow .18s ease;
+        }
+        .admin-submit:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 14px 24px rgba(46, 87, 37, 0.31);
+        }
+        .admin-submit:active { transform: scale(.995); }
+        .admin-mini {
+          margin-top: 14px;
+          text-align: center;
+          color: #6c7766;
+          font-size: .88rem;
+        }
+        .admin-mini button {
+          border: 0;
+          background: transparent;
+          color: #2f5f2a;
+          font-weight: 800;
+          cursor: pointer;
+          padding: 0;
+        }
+        @media (max-width: 950px) {
+          .admin-auth-card {
+            grid-template-columns: 1fr;
+            min-height: auto;
+            border-radius: 20px;
+          }
+          .admin-left {
+            padding: 26px 20px;
+            min-height: 220px;
+          }
+          .admin-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+          .admin-right {
+            padding: 16px;
+          }
+          .admin-form-wrap {
+            border-radius: 14px;
+          }
         }
       `}</style>
 
-      <div className="auth-shell" style={styles.mainBox}>
-        {/* SLIDING OVERLAY (HIDDEN ON MOBILE) */}
-        <div className="sliding-overlay" style={styles.overlaySection}>
-          <div className="overlay-icon">
-            <Security style={{ fontSize: "44px" }} />
-          </div>
-          <h2 className="overlay-title">
-            {isRegistering ? "Secure Access" : "Admin Portal"}
-          </h2>
-          <p className="overlay-subtitle">
-            {isRegistering
-              ? "Request administrative credentials"
-              : "Welcome back to Fruit Bounty HQ"}
-          </p>
-          <div className="overlay-chip">Fruit Bounty Admin</div>
-        </div>
+      <div className="admin-auth-shell">
+        <div className="admin-auth-card">
+          <section className="admin-left">
+            <div className="admin-pattern"></div>
+            <div className="admin-ring"></div>
+            <div>
+              <div className="admin-brand">
+                <Security fontSize="small" />
+                Fruit Bounty Admin
+              </div>
+              <h1 className="admin-title">
+                {isRegistering ? "Request Admin Access" : "Secure Admin Login"}
+              </h1>
+              <p className="admin-copy">
+                Manage inventory, orders, deliveries, and analytics from one
+                protected control panel.
+              </p>
 
-        {/* REGISTRATION FORM */}
-        <div
-          className="form-column signup-col admin-panel"
-          style={{
-            ...styles.formSide,
-            visibility: isRegistering ? "visible" : "hidden",
-          }}
-        >
-          <h1 className="admin-title">Register Admin</h1>
-          <p className="admin-subtitle">Create your management account.</p>
+              <div className="admin-highlight">Internal Ops Console</div>
 
-          <div style={styles.inputGroup}>
-            <label className="admin-label">Full Name</label>
-            <input
-              className="admin-input"
-              type="text"
-              placeholder="Admin Name"
-              style={styles.input}
-              value={registerData.name}
-              onChange={(e) =>
-                setRegisterData({ ...registerData, name: e.target.value })
-              }
-            />
-          </div>
+              <div className="admin-points">
+                <div className="admin-point">
+                  <span className="admin-point-dot"></span>
+                  Role-based access control
+                </div>
+                <div className="admin-point">
+                  <span className="admin-point-dot"></span>
+                  Encrypted authentication
+                </div>
+                <div className="admin-point">
+                  <span className="admin-point-dot"></span>
+                  Live operations dashboard
+                </div>
+              </div>
 
-          <div style={styles.inputGroup}>
-            <label className="admin-label">Email</label>
-            <input
-              className="admin-input"
-              type="email"
-              placeholder="admin@fruitbounty.com"
-              style={styles.input}
-              value={registerData.email}
-              onChange={(e) =>
-                setRegisterData({ ...registerData, email: e.target.value })
-              }
-            />
-          </div>
+              <div className="admin-stats">
+                <div className="admin-stat">
+                  <b>24x7</b>
+                  <span>Monitoring</span>
+                </div>
+                <div className="admin-stat">
+                  <b>SSL</b>
+                  <span>Secure Login</span>
+                </div>
+                <div className="admin-stat">
+                  <b>1 Panel</b>
+                  <span>All Control</span>
+                </div>
+              </div>
+            </div>
+            <div className="admin-left-footer">Authorized Personnel Only</div>
+          </section>
 
-          <div style={styles.inputGroup}>
-            <label className="admin-label">Secret Admin Key</label>
-            <input
-              className="admin-input"
-              type="password"
-              placeholder="Enter provided key"
-              style={styles.input}
-              value={registerData.secretKey}
-              onChange={(e) =>
-                setRegisterData({ ...registerData, secretKey: e.target.value })
-              }
-            />
-          </div>
+          <section className="admin-right">
+            <div className="admin-form-wrap">
+              <div className="admin-tabs">
+                <button
+                  type="button"
+                  className={`admin-tab-btn ${!isRegistering ? "active" : ""}`}
+                  onClick={() => setIsRegistering(false)}
+                >
+                  Login
+                </button>
+                <button
+                  type="button"
+                  className={`admin-tab-btn ${isRegistering ? "active" : ""}`}
+                  onClick={() => setIsRegistering(true)}
+                >
+                  Register
+                </button>
+              </div>
 
-          <div style={styles.inputGroup}>
-            <label className="admin-label">Password</label>
-            <input
-              className="admin-input"
-              type={showPassword ? "text" : "password"}
-              style={styles.input}
-              value={registerData.password}
-              onChange={(e) =>
-                setRegisterData({ ...registerData, password: e.target.value })
-              }
-            />
-            <div
-              style={{
-                position: "absolute",
-                right: "12px",
-                bottom: "11px",
-                cursor: "pointer",
-                color: "#6D756A",
-                display: "flex",
-                alignItems: "center",
-              }}
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? (
-                <VisibilityOff fontSize="small" />
+              {isRegistering ? (
+                <>
+                  <h2 className="admin-heading">Register Admin</h2>
+                  <p className="admin-sub">Create your management account.</p>
+
+                  <div className="admin-group">
+                    <label className="admin-label">Full Name</label>
+                    <input
+                      className="admin-input"
+                      type="text"
+                      placeholder="Admin name"
+                      value={registerData.name}
+                      onChange={(e) =>
+                        setRegisterData({ ...registerData, name: e.target.value })
+                      }
+                    />
+                  </div>
+
+                  <div className="admin-group">
+                    <label className="admin-label">Email</label>
+                    <input
+                      className="admin-input"
+                      type="email"
+                      placeholder="admin@fruitbounty.com"
+                      value={registerData.email}
+                      onChange={(e) =>
+                        setRegisterData({ ...registerData, email: e.target.value })
+                      }
+                    />
+                  </div>
+
+                  <div className="admin-group">
+                    <label className="admin-label">Secret Admin Key</label>
+                    <input
+                      className="admin-input"
+                      type="password"
+                      placeholder="Enter provided key"
+                      value={registerData.secretKey}
+                      onChange={(e) =>
+                        setRegisterData({
+                          ...registerData,
+                          secretKey: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+
+                  <div className="admin-group">
+                    <label className="admin-label">Password</label>
+                    <div className="admin-input-wrap">
+                      <input
+                        className="admin-input"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Create secure password"
+                        value={registerData.password}
+                        onChange={(e) =>
+                          setRegisterData({
+                            ...registerData,
+                            password: e.target.value,
+                          })
+                        }
+                      />
+                      <button
+                        type="button"
+                        className="admin-eye-btn"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        aria-label="Toggle password visibility"
+                      >
+                        {showPassword ? (
+                          <VisibilityOff fontSize="small" />
+                        ) : (
+                          <Visibility fontSize="small" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="admin-submit"
+                    onClick={handleRegister}
+                  >
+                    Request Access
+                  </button>
+
+                  <p className="admin-mini">
+                    Already admin?{" "}
+                    <button type="button" onClick={() => setIsRegistering(false)}>
+                      Sign in
+                    </button>
+                  </p>
+                </>
               ) : (
-                <Visibility fontSize="small" />
+                <form onSubmit={handleLogin}>
+                  <h2 className="admin-heading">Admin Login</h2>
+                  <p className="admin-sub">
+                    Enter your credentials to continue.
+                  </p>
+
+                  <div className="admin-group">
+                    <label className="admin-label">Admin Email</label>
+                    <input
+                      className="admin-input"
+                      type="email"
+                      placeholder="admin@fruitbounty.com"
+                      value={loginData.email}
+                      onChange={(e) =>
+                        setLoginData({ ...loginData, email: e.target.value })
+                      }
+                    />
+                  </div>
+
+                  <div className="admin-group">
+                    <label className="admin-label">Password</label>
+                    <div className="admin-input-wrap">
+                      <input
+                        className="admin-input"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter your password"
+                        value={loginData.password}
+                        onChange={(e) =>
+                          setLoginData({ ...loginData, password: e.target.value })
+                        }
+                      />
+                      <button
+                        type="button"
+                        className="admin-eye-btn"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        aria-label="Toggle password visibility"
+                      >
+                        {showPassword ? (
+                          <VisibilityOff fontSize="small" />
+                        ) : (
+                          <Visibility fontSize="small" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div style={{ textAlign: "right" }}>
+                    <Link to="/forgot-password" className="admin-forgot">
+                      Forgot password?
+                    </Link>
+                  </div>
+
+                  <button type="submit" className="admin-submit">
+                    Secure Sign In
+                  </button>
+
+                  <p className="admin-mini">
+                    New admin?{" "}
+                    <button type="button" onClick={() => setIsRegistering(true)}>
+                      Register here
+                    </button>
+                  </p>
+                </form>
               )}
             </div>
-          </div>
-
-          <button
-            className="admin-btn"
-            style={styles.primaryBtn}
-            onClick={handleRegister}
-          >
-            Request Access
-          </button>
-
-          <p className="admin-helper">
-            Already Admin?{" "}
-            <span
-              className="toggle-link"
-              onClick={toggleMode}
-              style={{
-                color: "#2D4F1E",
-                cursor: "pointer",
-                fontWeight: "bold",
-              }}
-            >
-              Login
-            </span>
-          </p>
+          </section>
         </div>
-
-        {/* LOGIN FORM */}
-        <form
-          className="form-column login-col admin-panel"
-          onSubmit={handleLogin}
-          style={{
-            ...styles.formSide,
-            visibility: !isRegistering ? "visible" : "hidden",
-          }}
-        >
-          <h1 className="admin-title">Admin Login</h1>
-          <p className="admin-subtitle">Enter your credentials to continue.</p>
-
-          <div style={styles.inputGroup}>
-            <label className="admin-label">Admin ID</label>
-            <input
-              className="admin-input"
-              type="text"
-              placeholder="admin@fruitbounty.com"
-              style={styles.input}
-              value={loginData.email}
-              onChange={(e) =>
-                setLoginData({ ...loginData, email: e.target.value })
-              }
-            />
-          </div>
-
-          <div style={styles.inputGroup}>
-            <label className="admin-label">Password</label>
-            <input
-              className="admin-input"
-              type={showPassword ? "text" : "password"}
-              style={styles.input}
-              value={loginData.password}
-              onChange={(e) =>
-                setLoginData({ ...loginData, password: e.target.value })
-              }
-            />
-            <div
-              style={{
-                position: "absolute",
-                right: "12px",
-                bottom: "11px",
-                cursor: "pointer",
-                color: "#6D756A",
-                display: "flex",
-                alignItems: "center",
-              }}
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? (
-                <VisibilityOff fontSize="small" />
-              ) : (
-                <Visibility fontSize="small" />
-              )}
-            </div>
-          </div>
-
-          <div style={{ textAlign: "right", marginBottom: "15px" }}>
-            <Link
-              to="/forgot-password"
-              size="small"
-              className="forget-link"
-              style={{
-                color: "#2D4F1E",
-                fontSize: "0.82rem",
-                textDecoration: "none",
-                fontWeight: "600",
-              }}
-            >
-              Forget password?
-            </Link>
-          </div>
-
-          <button className="admin-btn" type="submit" style={styles.primaryBtn}>
-            Secure Sign In
-          </button>
-
-          <p className="admin-helper">
-            New Admin?{" "}
-            <span
-              className="toggle-link"
-              onClick={toggleMode}
-              style={{
-                color: "#2D4F1E",
-                cursor: "pointer",
-                fontWeight: "bold",
-              }}
-            >
-              Register Here
-            </span>
-          </p>
-        </form>
       </div>
     </div>
   );
