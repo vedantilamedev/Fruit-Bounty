@@ -41,7 +41,7 @@ const OrderSuccess = () => {
       <div 
         className="absolute inset-0 opacity-[0.6] pointer-events-none"
         style={{
-          backgroundImage: `url('/images/main-background.PNG')`,
+          backgroundImage: `url('/images/main-background.webp')`,
           backgroundSize: '400px',
           backgroundRepeat: 'repeat',
           backgroundAttachment: 'fixed'

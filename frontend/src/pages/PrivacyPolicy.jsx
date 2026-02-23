@@ -111,7 +111,7 @@ const PrivacyPolicy = () => {
     <div
       className="min-h-screen px-4 sm:px-6 lg:px-8 py-12 lg:py-20"
       style={{
-        backgroundImage: "url('/public/images/main-background.png')",
+        backgroundImage: "url('/public/images/main-background.webp')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",

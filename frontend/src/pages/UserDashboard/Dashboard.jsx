@@ -168,7 +168,7 @@ const Dashboard = () => {
                 
                 <div className=" p-4 flex items-center justify-center bg-transparent">
                     <img
-                        src="/images/footerlogo.png"
+                        src="/images/footerlogo.webp"
                         alt="Fruit Bounty Logo"
                         className="w-10 h-auto object-contain  transition-transform duration-300 hover:scale-105"
                     />
@@ -191,7 +191,7 @@ const Dashboard = () => {
                     {/* Logo Section */}
                     <div className="py-3 border-b border-[#aa8d3c] flex items-center justify-center bg-[#c8c178]">
                         <img
-                            src="/images/footerlogo.png"
+                            src="/images/footerlogo.webp"
                             alt="Fruit Bounty Logo"
                             className="w-24 h-auto object-contain transition-transform duration-300 hover:scale-105"
                         />

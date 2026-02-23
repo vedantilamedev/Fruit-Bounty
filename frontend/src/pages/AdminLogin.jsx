@@ -67,7 +67,7 @@ const AdminLogin = () => {
       <div
         className="absolute inset-0 opacity-40 pointer-events-none"
         style={{
-          backgroundImage: "url('/images/main-background.png')",
+          backgroundImage: "url('/images/main-background.webp')",
           backgroundSize: "420px",
           backgroundRepeat: "repeat",
         }}

@@ -6,10 +6,10 @@ const Hero = () => {
   const navigate = useNavigate();
 
   const sideBowls = [
-    { id: 1, img: "/images/salad1.png", top: "12%", left: "55%", delay: "0s" },
-    { id: 2, img: "/images/salad2.png", top: "32%", left: "68%", delay: "0.5s" },
-    { id: 3, img: "/images/salad3.png", top: "58%", left: "68%", delay: "1s" },
-    { id: 4, img: "/images/salad4.png", top: "78%", left: "55%", delay: "1.5s" },
+    { id: 1, img: "/images/salad1.webp", top: "12%", left: "55%", delay: "0s" },
+    { id: 2, img: "/images/salad2.webp", top: "32%", left: "68%", delay: "0.5s" },
+    { id: 3, img: "/images/salad3.webp", top: "58%", left: "68%", delay: "1s" },
+    { id: 4, img: "/images/salad4.webp", top: "78%", left: "55%", delay: "1.5s" },
   ];
 
   return (
@@ -18,7 +18,7 @@ const Hero = () => {
       {/* DESKTOP BACKGROUND */}
       <div
         className="hidden lg:block absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/images/hero-bg.PNG')" }}
+        style={{ backgroundImage: "url('/images/hero-bg.webp')" }}
       />
 
       {/* MOBILE BACKGROUND */}
@@ -26,7 +26,7 @@ const Hero = () => {
 
       {/* MAIN DESKTOP BOWL */}
       <img
-        src="/images/hero.png"
+        src="/images/hero.webp"
         alt="Main Featured Bowl"
         className="absolute z-20 left-1/2 top-1/2 w-[520px] -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_35px_50px_rgba(0,0,0,0.5)] animateHero pointer-events-none hidden lg:block"
       />
@@ -84,14 +84,14 @@ const Hero = () => {
           <div className="lg:hidden relative w-full overflow-visible h-[55vh] flex justify-center -mt-6">
             <div className="relative w-full">
 
-              <img src="/images/hero-mint.png" className="absolute top-[9%] left-[5%] w-[95px] rotate-7 animate-float drop-shadow-[0_25px_35px_rgba(0,0,0,0.35)]" />
-              <img src="/images/hero-walnut.png" className="absolute top-[84%] left-[75%] w-[90px] rotate-10 animate-float drop-shadow-[0_30px_40px_rgba(0,0,0,0.4)]" />
-              <img src="/images/hero-pista.png" className="absolute top-[75%] left-[6%] w-[75px] rotate-10 animate-float drop-shadow-[0_35px_45px_rgba(0,0,0,0.6)]" />
-              <img src="/images/hero-staw.png" className="absolute top-[16%] left-[70%] w-[80px] rotate-10 animate-float drop-shadow-[0_20px_30px_rgba(0,0,0,0.8)]" />
+              <img src="/images/hero-mint.webp" className="absolute top-[9%] left-[5%] w-[95px] rotate-7 animate-float drop-shadow-[0_25px_35px_rgba(0,0,0,0.35)]" />
+              <img src="/images/hero-walnut.webp" className="absolute top-[84%] left-[75%] w-[90px] rotate-10 animate-float drop-shadow-[0_30px_40px_rgba(0,0,0,0.4)]" />
+              <img src="/images/hero-pista.webp" className="absolute top-[75%] left-[6%] w-[75px] rotate-10 animate-float drop-shadow-[0_35px_45px_rgba(0,0,0,0.6)]" />
+              <img src="/images/hero-staw.webp" className="absolute top-[16%] left-[70%] w-[80px] rotate-10 animate-float drop-shadow-[0_20px_30px_rgba(0,0,0,0.8)]" />
 
               {/* MAIN SALAD */}
               <img
-                src="/images/home-salad.png"
+                src="/images/home-salad.webp"
                 alt="Fruit Salad Hero"
                 className="w-[79%] mx-auto object-cover -translate-y-16 animate-float z-10 drop-shadow-[0_40px_60px_rgba(0,0,0,0.7)]"
               />

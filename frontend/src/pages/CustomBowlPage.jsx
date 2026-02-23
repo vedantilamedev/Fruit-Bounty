@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useCart } from "../context/CartContext";
 import {
   CheckCircle,
@@ -12,33 +12,33 @@ import {
 import { motion } from "framer-motion";
 
 const fruits = [
-  { id: 1, name: "Berries", price: 40, calories: 50, protein: 1, image: "/images/berries.png" },
-  { id: 2, name: "Banana", price: 30, calories: 105, protein: 1.3, image: "/images/banana.png" },
-  { id: 3, name: "Grapes", price: 120, calories: 62, protein: 0.6, image: "/images/grapes.png" },
-  { id: 4, name: "Pineapple", price: 60, calories: 82, protein: 0.9, image: "/images/pinapple.png" },
-  { id: 5, name: "Watermelon", price: 150, calories: 46, protein: 0.9, image: "/images/watermelon.png" },
-  { id: 6, name: "Strawberries", price: 100, calories: 49, protein: 1, image: "/images/strawberries.png" },
-  { id: 7, name: "Mango", price: 80, calories: 99, protein: 1.4, image: "/images/mango.png" },
-  { id: 8, name: "Papaya", price: 50, calories: 59, protein: 0.9, image: "/images/papaya.png" },
-  { id: 9, name: "Kiwi", price: 140, calories: 42, protein: 0.8, image: "/images/kiwi.png" },
-  { id: 10, name: "Orange", price: 60, calories: 62, protein: 1.2, image: "/images/oranges.png" },
-  { id: 11, name: "Blueberries", price: 200, calories: 84, protein: 1.1, image: "/images/blueberries.png" },
-  { id: 12, name: "Pomegranate", price: 90, calories: 83, protein: 1.7, image: "/images/pomegranate.png" },
-  { id: 13, name: "Guava", price: 40, calories: 68, protein: 2.6, image: "/images/guava.png" },
-  { id: 14, name: "Dragon Fruit", price: 180, calories: 60, protein: 1.2, image: "/images/dragonfruit.png" },
-  { id: 15, name: "Pear", price: 70, calories: 96, protein: 0.6, image: "/images/pear.png" },
-  { id: 16, name: "Cherries", price: 220, calories: 87, protein: 1.4, image: "/images/cherries.png" },
-  { id: 17, name: "Lychee", price: 160, calories: 66, protein: 0.8, image: "/images/lychee.png" },
-  { id: 18, name: "Plum", price: 90, calories: 30, protein: 0.5, image: "/images/plum.png" },
-  { id: 19, name: "Apricot", price: 130, calories: 48, protein: 1.4, image: "/images/apricot.png" },
-  { id: 20, name: "Blackberries", price: 210, calories: 43, protein: 1.4, image: "/images/blackberries.png" },
+  { id: 1, name: "Berries", price: 40, calories: 50, protein: 1, image: "/images/berries.webp" },
+  { id: 2, name: "Banana", price: 30, calories: 105, protein: 1.3, image: "/images/banana.webp" },
+  { id: 3, name: "Grapes", price: 120, calories: 62, protein: 0.6, image: "/images/grapes.webp" },
+  { id: 4, name: "Pineapple", price: 60, calories: 82, protein: 0.9, image: "/images/pinapple.webp" },
+  { id: 5, name: "Watermelon", price: 150, calories: 46, protein: 0.9, image: "/images/watermelon.webp" },
+  { id: 6, name: "Strawberries", price: 100, calories: 49, protein: 1, image: "/images/strawberries.webp" },
+  { id: 7, name: "Mango", price: 80, calories: 99, protein: 1.4, image: "/images/mango.webp" },
+  { id: 8, name: "Papaya", price: 50, calories: 59, protein: 0.9, image: "/images/papaya.webp" },
+  { id: 9, name: "Kiwi", price: 140, calories: 42, protein: 0.8, image: "/images/kiwi.webp" },
+  { id: 10, name: "Orange", price: 60, calories: 62, protein: 1.2, image: "/images/oranges.webp" },
+  { id: 11, name: "Blueberries", price: 200, calories: 84, protein: 1.1, image: "/images/blueberries.webp" },
+  { id: 12, name: "Pomegranate", price: 90, calories: 83, protein: 1.7, image: "/images/pomegranate.webp" },
+  { id: 13, name: "Guava", price: 40, calories: 68, protein: 2.6, image: "/images/guava.webp" },
+  { id: 14, name: "Dragon Fruit", price: 180, calories: 60, protein: 1.2, image: "/images/dragonfruit.webp" },
+  { id: 15, name: "Pear", price: 70, calories: 96, protein: 0.6, image: "/images/pear.webp" },
+  { id: 16, name: "Cherries", price: 220, calories: 87, protein: 1.4, image: "/images/cherries.webp" },
+  { id: 17, name: "Lychee", price: 160, calories: 66, protein: 0.8, image: "/images/lychee.webp" },
+  { id: 18, name: "Plum", price: 90, calories: 30, protein: 0.5, image: "/images/plum.webp" },
+  { id: 19, name: "Apricot", price: 130, calories: 48, protein: 1.4, image: "/images/apricot.webp" },
+  { id: 20, name: "Blackberries", price: 210, calories: 43, protein: 1.4, image: "/images/blackberries.webp" },
 ];
 
 const toppings = [
-  { id: 1, name: "Nuts", price: 30, image: "/images/crunch.png" },
-  { id: 2, name: "Honey", price: 20, image: "/images/honey.png" },
-  { id: 3, name: "Dry Fruits", price: 40, image: "/images/dryfruits.png" },
-  { id: 4, name: "Yogurt", price: 50, image: "/images/yoghurt.png" },
+  { id: 1, name: "Nuts", price: 30, image: "/images/crunch.webp" },
+  { id: 2, name: "Honey", price: 20, image: "/images/honey.webp" },
+  { id: 3, name: "Dry Fruits", price: 40, image: "/images/dryfruits.webp" },
+  { id: 4, name: "Yogurt", price: 50, image: "/images/yoghurt.webp" },
 ];
 
 const sizes = [
@@ -57,27 +57,35 @@ const portionHighlights = {
 
 function SectionHeading({ step, title, desc }) {
   return (
-    <div className="mb-8 md:mb-10">
+    <div className="mb-7 md:mb-10">
       <div className="flex items-center gap-3 mb-3">
         <span className="text-green-800 font-black text-[10px] bg-green-100 px-4 py-1.5 rounded-full uppercase tracking-[0.2em]">
           {step}
         </span>
         <div className="h-px flex-1 bg-gradient-to-r from-green-300/60 to-transparent"></div>
       </div>
-      <h3 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight">{title}</h3>
+      <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 tracking-tight">{title}</h3>
       {desc && <p className="text-gray-500 mt-2 text-sm md:text-base max-w-3xl">{desc}</p>}
     </div>
   );
 }
 
 function CustomBowlPage() {
-  const { addToCart } = useCart();
+  const { cart, addToCart } = useCart();
   const [selectedFruits, setSelectedFruits] = useState({});
   const [selectedToppings, setSelectedToppings] = useState({});
   const [selectedSize, setSelectedSize] = useState(null);
+  const [toast, setToast] = useState({ show: false, message: "", type: "success" });
+  const toastTimeoutRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    };
   }, []);
 
   const selectedSizeInfo = useMemo(
@@ -89,7 +97,7 @@ function CustomBowlPage() {
 
   const toggleFruit = (id) => {
     if (!selectedSize) {
-      alert("Please select a Bowl Size first to start building your bowl.");
+      showToast("Please select a Bowl Size first to start building your bowl.", "error");
       return;
     }
     setSelectedFruits((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -97,7 +105,7 @@ function CustomBowlPage() {
 
   const toggleTopping = (id) => {
     if (!selectedSize) {
-      alert("Please select a Bowl Size first to add toppings.");
+      showToast("Please select a Bowl Size first to add toppings.", "error");
       return;
     }
     setSelectedToppings((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -122,13 +130,50 @@ function CustomBowlPage() {
     };
   }, [selectedFruits, selectedToppings, selectedSize, selectedSizeInfo]);
 
+  const selectedFruitIds = useMemo(
+    () =>
+      Object.keys(selectedFruits)
+        .filter((id) => selectedFruits[id])
+        .sort((a, b) => Number(a) - Number(b)),
+    [selectedFruits],
+  );
+
+  const selectedToppingIds = useMemo(
+    () =>
+      Object.keys(selectedToppings)
+        .filter((id) => selectedToppings[id])
+        .sort((a, b) => Number(a) - Number(b)),
+    [selectedToppings],
+  );
+
+  const currentBowlId = useMemo(() => {
+    if (!selectedSize) return null;
+    const fruitPart = selectedFruitIds.length ? selectedFruitIds.join("-") : "none";
+    const toppingPart = selectedToppingIds.length ? selectedToppingIds.join("-") : "none";
+    return `custom-bowl-${selectedSize}-${fruitPart}-${toppingPart}`;
+  }, [selectedSize, selectedFruitIds, selectedToppingIds]);
+
+  const currentBowlQty = useMemo(() => {
+    if (!currentBowlId) return 0;
+    const inCart = cart.find((item) => item.id === currentBowlId);
+    return inCart?.quantity || 0;
+  }, [cart, currentBowlId]);
+
+  const showToast = (message, type = "success") => {
+    if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    setToast({ show: true, message, type });
+    toastTimeoutRef.current = setTimeout(() => {
+      setToast({ show: false, message: "", type: "success" });
+    }, 2200);
+  };
+
   return (
     <div className="relative bg-[#FBF8F2] min-h-screen overflow-x-hidden">
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div
           className="absolute inset-0 opacity-35"
           style={{
-            backgroundImage: "url('/images/main-background.png')",
+            backgroundImage: "url('/images/main-background.webp')",
             backgroundSize: "400px",
             backgroundRepeat: "repeat",
           }}
@@ -136,15 +181,15 @@ function CustomBowlPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#eef7ef]/80 via-transparent to-[#fbf8f2]"></div>
       </div>
 
-      <section className="relative z-10 py-16 md:py-20 px-6 md:px-12 lg:px-24 overflow-hidden">
+      <section className="relative z-10 py-10 md:py-20 px-4 md:px-12 lg:px-24 overflow-hidden">
         <div className="relative max-w-7xl mx-auto rounded-[2.5rem] border border-[#d8d2a0] overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.18)]">
           <div className="absolute inset-0 bg-gradient-to-r from-[#184f2f] via-[#1f6b37] to-[#b7862c]"></div>
           <div className="absolute -top-24 -left-16 w-72 h-72 bg-white/10 rounded-full blur-2xl"></div>
           <div className="absolute -bottom-24 -right-16 w-96 h-96 bg-yellow-200/20 rounded-full blur-3xl"></div>
 
-          <div className="relative z-10 grid lg:grid-cols-[1.1fr_0.9fr] gap-8 items-center px-6 py-12 md:px-10 md:py-14 lg:px-14">
+          <div className="relative z-10 grid lg:grid-cols-[1.1fr_0.9fr] gap-6 md:gap-8 items-center px-4 py-8 md:px-10 md:py-14 lg:px-14">
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65 }}>
-              <div className="flex flex-wrap gap-3 mb-6">
+              <div className="flex flex-wrap gap-2.5 mb-5">
                 <span className="bg-white/20 text-white px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.22em] flex items-center gap-2">
                   <Leaf size={12} /> Farm Fresh Daily
                 </span>
@@ -156,10 +201,10 @@ function CustomBowlPage() {
                 </span>
               </div>
 
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight">
                 Build Your <span className="text-[#C9C27A]">Custom Bowl</span>
               </h1>
-              <p className="text-white/90 text-sm md:text-lg mt-5 max-w-2xl leading-relaxed font-medium">
+              <p className="text-white/90 text-sm md:text-lg mt-4 md:mt-5 max-w-2xl leading-relaxed font-medium">
                 Pick a portion, hand-select fruits, add toppings, and create a bowl that matches your taste and nutrition goals.
               </p>
 
@@ -189,7 +234,7 @@ function CustomBowlPage() {
               </div>
               <div className="rounded-[2rem] bg-white/15 border border-white/20 p-5 md:p-6">
                 <img
-                  src="/images/custom.png"
+                  src="/images/custom.webp"
                   alt="Custom Bowl Preview"
                   className="w-full object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.35)]"
                 />
@@ -199,7 +244,7 @@ function CustomBowlPage() {
         </div>
       </section>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-24 pb-24">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-12 lg:px-24 pb-28 md:pb-24">
         <section className="mb-20">
           <SectionHeading
             step="Step 01"
@@ -207,14 +252,14 @@ function CustomBowlPage() {
             desc="Select a bowl size first. Prices and nutrition automatically adjust based on this size."
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {sizes.map((size) => {
               const active = selectedSize === size.id;
               return (
                 <button
                   key={size.id}
                   onClick={() => setSelectedSize(size.id)}
-                  className={`text-left rounded-[2rem] border-2 p-6 transition-all duration-300 bg-white h-full ${
+                    className={`text-left rounded-[1.4rem] md:rounded-[2rem] border-2 p-4 md:p-6 transition-all duration-300 bg-white h-full ${
                     active
                       ? "border-green-700 shadow-[0_18px_40px_rgba(22,101,52,0.25)] ring-4 ring-green-100"
                       : "border-[#ebe6cb] hover:border-green-300 hover:-translate-y-1"
@@ -229,7 +274,7 @@ function CustomBowlPage() {
                     </div>
                     {active && <CheckCircle size={22} className="text-green-600" />}
                   </div>
-                  <p className="text-sm text-gray-500 mt-4 leading-relaxed">{size.desc}</p>
+                  <p className="text-xs md:text-sm text-gray-500 mt-3 md:mt-4 leading-relaxed">{size.desc}</p>
                   <div className="mt-5 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-green-800 bg-green-50 px-3 py-1.5 rounded-full">
                     {portionHighlights[size.id]}
                   </div>
@@ -255,14 +300,14 @@ function CustomBowlPage() {
 
           <div className="mb-6">
             <h4 className="text-xl md:text-2xl font-black text-gray-900 mb-4">Normal Fruits</h4>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 md:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5 md:gap-6">
               {normalFruits.map((fruit) => {
                 const active = !!selectedFruits[fruit.id];
                 return (
                   <button
                     key={fruit.id}
                     onClick={() => toggleFruit(fruit.id)}
-                    className={`relative text-left rounded-[1.8rem] border p-4 bg-white transition-all duration-300 ${
+                    className={`relative text-left rounded-[1.2rem] md:rounded-[1.8rem] border p-3 md:p-4 bg-white transition-all duration-300 ${
                       active
                         ? "border-green-600 shadow-[0_16px_30px_rgba(22,101,52,0.2)] -translate-y-1"
                         : "border-[#ebe6cb] hover:border-green-300"
@@ -281,13 +326,13 @@ function CustomBowlPage() {
                     <div className="mt-4">
                       <p className="font-black text-gray-900 leading-tight">{fruit.name}</p>
                       <p className="text-green-800 font-black mt-1">Rs. {fruit.price}</p>
-                      <div className="mt-2 grid grid-cols-2 gap-2">
+                      <div className="mt-2 grid grid-cols-2 gap-1.5 md:gap-2">
                         <div className="bg-gray-50 rounded-lg px-2 py-1.5 border border-gray-100">
-                          <p className="text-[9px] uppercase font-bold tracking-wider text-gray-400">Calories</p>
+                          <p className="text-[8px] md:text-[9px] uppercase font-bold tracking-wider text-gray-400">Calories</p>
                           <p className="text-[11px] font-bold text-gray-700">{fruit.calories}</p>
                         </div>
                         <div className="bg-gray-50 rounded-lg px-2 py-1.5 border border-gray-100">
-                          <p className="text-[9px] uppercase font-bold tracking-wider text-gray-400">Protein</p>
+                          <p className="text-[8px] md:text-[9px] uppercase font-bold tracking-wider text-gray-400">Protein</p>
                           <p className="text-[11px] font-bold text-gray-700">{fruit.protein}g</p>
                         </div>
                       </div>
@@ -300,14 +345,14 @@ function CustomBowlPage() {
 
           <div>
             <h4 className="text-xl md:text-2xl font-black text-gray-900 mb-4">Premium Fruits</h4>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 md:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5 md:gap-6">
               {premiumFruits.map((fruit) => {
                 const active = !!selectedFruits[fruit.id];
                 return (
                   <button
                     key={fruit.id}
                     onClick={() => toggleFruit(fruit.id)}
-                    className={`relative text-left rounded-[1.8rem] border p-4 bg-white transition-all duration-300 ${
+                    className={`relative text-left rounded-[1.2rem] md:rounded-[1.8rem] border p-3 md:p-4 bg-white transition-all duration-300 ${
                       active
                         ? "border-green-600 shadow-[0_16px_30px_rgba(22,101,52,0.2)] -translate-y-1"
                         : "border-[#ebe6cb] hover:border-green-300"
@@ -331,13 +376,13 @@ function CustomBowlPage() {
                         </span>
                       </div>
                       <p className="text-green-800 font-black mt-1">Rs. {fruit.price}</p>
-                      <div className="mt-2 grid grid-cols-2 gap-2">
+                      <div className="mt-2 grid grid-cols-2 gap-1.5 md:gap-2">
                         <div className="bg-gray-50 rounded-lg px-2 py-1.5 border border-gray-100">
-                          <p className="text-[9px] uppercase font-bold tracking-wider text-gray-400">Calories</p>
+                          <p className="text-[8px] md:text-[9px] uppercase font-bold tracking-wider text-gray-400">Calories</p>
                           <p className="text-[11px] font-bold text-gray-700">{fruit.calories}</p>
                         </div>
                         <div className="bg-gray-50 rounded-lg px-2 py-1.5 border border-gray-100">
-                          <p className="text-[9px] uppercase font-bold tracking-wider text-gray-400">Protein</p>
+                          <p className="text-[8px] md:text-[9px] uppercase font-bold tracking-wider text-gray-400">Protein</p>
                           <p className="text-[11px] font-bold text-gray-700">{fruit.protein}g</p>
                         </div>
                       </div>
@@ -356,14 +401,14 @@ function CustomBowlPage() {
             desc="Finish your bowl with texture and flavor boosters."
           />
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 md:gap-6">
             {toppings.map((topping) => {
               const active = !!selectedToppings[topping.id];
               return (
                 <button
                   key={topping.id}
                   onClick={() => toggleTopping(topping.id)}
-                  className={`relative text-left rounded-[1.8rem] border p-4 bg-white transition-all duration-300 ${
+                  className={`relative text-left rounded-[1.2rem] md:rounded-[1.8rem] border p-3 md:p-4 bg-white transition-all duration-300 ${
                     active
                       ? "border-green-600 shadow-[0_16px_30px_rgba(22,101,52,0.2)] -translate-y-1"
                       : "border-[#ebe6cb] hover:border-green-300"
@@ -390,7 +435,7 @@ function CustomBowlPage() {
         </section>
 
         {selectedSize && (
-          <div className="sticky bottom-24 md:bottom-10 z-30 w-full pointer-events-none">
+          <div className="sticky bottom-20 md:bottom-10 z-30 w-full pointer-events-none">
             <div className="pointer-events-auto">
               <motion.div
                 layout
@@ -398,8 +443,8 @@ function CustomBowlPage() {
                 animate={{ y: 0, opacity: 1 }}
                 className="rounded-[2rem] border border-green-100 bg-white/95 backdrop-blur-xl p-5 md:p-6 shadow-[0_25px_55px_rgba(0,0,0,0.2)]"
               >
-                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
-                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 flex-1">
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 md:gap-5">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 md:gap-4 flex-1">
                     <div className="rounded-xl bg-[#f5faf5] border border-green-100 px-3 py-2.5">
                       <p className="text-[9px] uppercase font-black tracking-wider text-gray-400">Size</p>
                       <p className="text-sm md:text-base font-black text-gray-900 capitalize">{selectedSize}</p>
@@ -425,7 +470,7 @@ function CustomBowlPage() {
                   <button
                     onClick={() => {
                       if (stats.fruitCount === 0) {
-                        alert("Select at least one fruit to complete your bowl.");
+                        showToast("Select at least one fruit to complete your bowl.", "error");
                         return;
                       }
 
@@ -440,21 +485,28 @@ function CustomBowlPage() {
                         .join(", ");
 
                       addToCart({
+                        id: currentBowlId,
                         name: `Custom Bowl (${selectedSize})`,
                         price: stats.total,
                         quantity: 1,
-                        image: "/images/custom-bowl.png",
+                        image: "/images/custom-bowl.webp",
                         description: `Fruits: ${selectedFruitNames || "None"} | Toppings: ${selectedToppingNames || "None"}`,
                         calories: `${stats.calories} kcal`,
                         protein: `${stats.protein}g Protein`,
                       });
 
-                      alert("Custom bowl added to cart!");
+                      const nextQty = currentBowlQty + 1;
+                      showToast(`Custom bowl added to cart. Qty: ${nextQty}`);
                     }}
-                    className="w-full lg:w-auto bg-gradient-to-r from-green-700 to-green-900 hover:from-green-800 hover:to-green-950 text-white px-8 md:px-12 py-4 rounded-2xl font-black text-base md:text-lg flex items-center justify-center gap-2.5 shadow-xl transition-all active:scale-95"
+                    className="w-full lg:w-auto bg-gradient-to-r from-green-700 to-green-900 hover:from-green-800 hover:to-green-950 text-white px-5 sm:px-8 md:px-12 py-3.5 md:py-4 rounded-2xl font-black text-sm sm:text-base md:text-lg flex items-center justify-center gap-2.5 shadow-xl transition-all active:scale-95"
                   >
                     <Salad size={20} />
                     Add Bowl to Cart
+                    {currentBowlQty > 0 && (
+                      <span className="text-[11px] md:text-xs bg-white/20 px-2.5 py-1 rounded-full border border-white/30">
+                        Qty: {currentBowlQty}
+                      </span>
+                    )}
                     <ChevronRight size={20} />
                   </button>
                 </div>
@@ -463,6 +515,18 @@ function CustomBowlPage() {
           </div>
         )}
       </div>
+
+      {toast.show && (
+        <div
+          className={`fixed top-20 left-3 right-3 sm:left-auto sm:right-6 sm:max-w-sm z-50 px-4 py-3 rounded-xl shadow-2xl border ${
+            toast.type === "error"
+              ? "bg-red-900 text-white border-red-700"
+              : "bg-green-900 text-white border-green-700"
+          }`}
+        >
+          <p className="text-xs md:text-sm font-bold">{toast.message}</p>
+        </div>
+      )}
     </div>
   );
 }

@@ -40,7 +40,7 @@ const Sidebar = ({ onLinkClick }) => {
         {/* Logo */}
         <div className="flex items-center justify-center px-6 py-3 border-b border-white/20">
           <img
-            src="/images/footerlogo.png"
+            src="/images/footerlogo.webp"
             alt="Logo"
             className="w-28 object-contain"
           />

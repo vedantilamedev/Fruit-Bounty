@@ -50,7 +50,7 @@ function Subscription() {
       <div 
         className="absolute inset-0 z-0 opacity-30 pointer-events-none"
         style={{ 
-          backgroundImage: `url('/public/images/main-background.PNG')`,
+          backgroundImage: `url('/public/images/main-background.webp')`,
           backgroundSize: '400px',
           backgroundRepeat: 'repeat'
         }}

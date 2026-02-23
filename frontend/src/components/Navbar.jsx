@@ -49,7 +49,7 @@ function Navbar() {
           {/* LEFT: Logo & Nav Links */}
           <div className="flex items-center gap-10">
             <Link to="/">
-              <img src="/images/footerlogo.png" alt="Logo" className="h-8 object-contain cursor-pointer" />
+              <img src="/images/footerlogo.webp" alt="Logo" className="h-8 object-contain cursor-pointer" />
             </Link>
 
             <div className="flex gap-8 text-white font-medium">

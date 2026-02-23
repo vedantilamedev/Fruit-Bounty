@@ -22,21 +22,21 @@ const PlanCustomization = () => {
   const [activeDayIndex, setActiveDayIndex] = useState(0); 
 
   const PRODUCTS = [
-    { id: 'custom', name: "Customize Your Own Bowl", price: 0, cals: "Varies", img: "/images/custom-bowl.png", isCustom: true },
+    { id: 'custom', name: "Customize Your Own Bowl", price: 0, cals: "Varies", img: "/images/custom-bowl.webp", isCustom: true },
     { id: 'p1', name: "Exotic Mango Bowl", price: 299, cals: "220 kcal", img: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=800" },
     { id: 'p2', name: "Antioxidant Berry", price: 349, cals: "180 kcal", img: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=400" },
     { id: 'p3', name: "Citrus Vitamin C", price: 250, cals: "150 kcal", img: "https://images.unsplash.com/photo-1557800636-894a64c1696f?w=400" },
   ];
 
   const FREE_FRUITS = [
-    { name: "Watermelon", img: "/images/watermelon.png" },
-    { name: "Mango", img: "/images/mango.png" },
-    { name: "Orange", img: "/images/oranges.png" },
-    { name: "Berries", img: "/images/berries.png" },
-    { name: "Strawberries", img: "/images/strawberries.png" },
-    { name: "Pineapple", img: "/images/pinapple.png" },
-    { name: "Kiwi", img: "/images/kiwi.png" },
-    { name: "Grapes", img: "/images/grapes.png" }
+    { name: "Watermelon", img: "/images/watermelon.webp" },
+    { name: "Mango", img: "/images/mango.webp" },
+    { name: "Orange", img: "/images/oranges.webp" },
+    { name: "Berries", img: "/images/berries.webp" },
+    { name: "Strawberries", img: "/images/strawberries.webp" },
+    { name: "Pineapple", img: "/images/pinapple.webp" },
+    { name: "Kiwi", img: "/images/kiwi.webp" },
+    { name: "Grapes", img: "/images/grapes.webp" }
   ];
 
   const PREMIUM_FRUITS = [
@@ -115,7 +115,7 @@ const PlanCustomization = () => {
       <div 
         className="absolute inset-0 opacity-[0.6] pointer-events-none"
         style={{
-          backgroundImage: `url('/public/images/main-background.PNG')`,
+          backgroundImage: `url('/public/images/main-background.webp')`,
           backgroundSize: '400px',
           backgroundRepeat: 'repeat',
           backgroundAttachment: 'fixed'

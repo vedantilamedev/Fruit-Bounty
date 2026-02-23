@@ -1,5 +1,5 @@
 import { useCart } from "../context/CartContext";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import {
@@ -26,7 +26,7 @@ const products = [
     ingredients: ["Apple", "Banana", "Granola", "Honey"],
     toppings: ["Chia Seeds", "Almonds", "Pumpkin Seeds"],
     description: "Perfect for a light and healthy snack.",
-    image: "/images/smallBowl.png",
+    image: "/images/smallBowl.webp",
   },
   {
     id: 2,
@@ -39,7 +39,7 @@ const products = [
     ingredients: ["Strawberry", "Blueberry", "Chia", "Almond"],
     toppings: ["Coconut Flakes", "Dark Chocolate", "Peanut Butter"],
     description: "Balanced nutrition with great taste.",
-    image: "/images/mediumBowl.png",
+    image: "/images/mediumBowl.webp",
   },
   {
     id: 3,
@@ -52,7 +52,7 @@ const products = [
     ingredients: ["Mixed Fruits", "Seeds", "Nuts", "Honey"],
     toppings: ["Cashews", "Walnuts", "Honey Drizzle"],
     description: "Ideal for sharing with friends and family.",
-    image: "/images/largeBowl.png",
+    image: "/images/largeBowl.webp",
   },
   {
     id: 4,
@@ -65,7 +65,7 @@ const products = [
     ingredients: ["Banana", "Oats", "Peanut Butter", "Dates"],
     toppings: ["Whey Protein", "Flax Seeds", "Choco Chips"],
     description: "High protein bowl for gym lovers.",
-    image: "/images/proteinBowl.png",
+    image: "/images/proteinBowl.webp",
   },
   {
     id: 5,
@@ -78,7 +78,7 @@ const products = [
     ingredients: ["Strawberry", "Raspberry", "Blueberry"],
     toppings: ["Mint Leaves", "Honey", "Granola"],
     description: "Loaded with antioxidants and freshness.",
-    image: "/images/berryBowl.png",
+    image: "/images/berryBowl.webp",
   },
   {
     id: 6,
@@ -91,7 +91,7 @@ const products = [
     ingredients: ["Mango", "Pineapple", "Coconut"],
     toppings: ["Coconut Chips", "Chia Seeds", "Cashew Crumble"],
     description: "A tropical escape in every bite.",
-    image: "/images/tropicalBowl.png",
+    image: "/images/tropicalBowl.webp",
   },
   {
     id: 7,
@@ -104,7 +104,7 @@ const products = [
     ingredients: ["Spinach", "Kiwi", "Apple", "Mint"],
     toppings: ["Sunflower Seeds", "Honey", "Granola"],
     description: "Clean and refreshing detox bowl.",
-    image: "/images/greenBowl.png",
+    image: "/images/greenBowl.webp",
   },
   {
     id: 8,
@@ -117,7 +117,7 @@ const products = [
     ingredients: ["Banana", "Cocoa", "Oats"],
     toppings: ["Dark Chocolate", "Almond Butter", "Choco Chips"],
     description: "For chocolate lovers with healthy twist.",
-    image: "/images/chocoBowl.png",
+    image: "/images/chocoBowl.webp",
   },
   {
     id: 9,
@@ -130,7 +130,7 @@ const products = [
     ingredients: ["Greek Yogurt", "Honey", "Granola"],
     toppings: ["Strawberry", "Blueberry", "Pumpkin Seeds"],
     description: "Simple, creamy and delicious.",
-    image: "/images/yogurtBowl.png",
+    image: "/images/yogurtBowl.webp",
   },
   {
     id: 10,
@@ -143,7 +143,7 @@ const products = [
     ingredients: ["Banana", "Peanut Butter", "Dates"],
     toppings: ["Walnuts", "Almonds", "Chia Seeds"],
     description: "Crunchy and protein rich bowl.",
-    image: "/images/nuttyBowl.png",
+    image: "/images/nuttyBowl.webp",
   },
   {
     id: 11,
@@ -156,7 +156,7 @@ const products = [
     ingredients: ["Watermelon", "Mango", "Mint"],
     toppings: ["Coconut Flakes", "Honey", "Chia Seeds"],
     description: "Refreshing summer fruit combo.",
-    image: "/images/summerBowl.png",
+    image: "/images/summerBowl.webp",
   },
   {
     id: 12,
@@ -169,7 +169,7 @@ const products = [
     ingredients: ["Oats", "Banana", "Dates", "Almond Milk"],
     toppings: ["Peanut Butter", "Cashews", "Dark Chocolate"],
     description: "Power packed bowl for busy days.",
-    image: "/images/energyBowl.png",
+    image: "/images/energyBowl.webp",
   },
 ];
 
@@ -189,6 +189,16 @@ function FruitShop() {
   const { addToCart } = useCart();
   const navigate = useNavigate();
   const [selectedBowls, setSelectedBowls] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [toast, setToast] = useState({ show: false, message: "", type: "success" });
+  const toastTimeoutRef = useRef(null);
+  const itemsPerPage = 6;
+
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    };
+  }, []);
 
   const toggleSelection = (product) => {
     const exists = selectedBowls.find((item) => item.id === product.id);
@@ -200,56 +210,71 @@ function FruitShop() {
   };
 
   const totalSelectedPrice = selectedBowls.reduce((sum, item) => sum + item.price, 0);
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedProducts = products.slice(startIndex, startIndex + itemsPerPage);
+
+  const showToast = (message, type = "success") => {
+    if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    setToast({ show: true, message, type });
+    toastTimeoutRef.current = setTimeout(() => {
+      setToast({ show: false, message: "", type: "success" });
+    }, 2200);
+  };
 
   const handleBulkAddToCart = () => {
+    if (selectedBowls.length === 0) {
+      showToast("Please select at least one bowl first.", "error");
+      return;
+    }
     selectedBowls.forEach((item) => addToCart({ ...item, quantity: 1 }));
-    alert(`${selectedBowls.length} items added to your cart!`);
+    showToast(`${selectedBowls.length} items added to your cart.`);
     setSelectedBowls([]);
   };
 
   return (
-    <section className="relative py-8 md:py-12 px-6 md:px-16 lg:px-24 overflow-hidden">
+    <section className="relative py-6 md:py-12 px-4 sm:px-5 md:px-16 lg:px-24 overflow-hidden">
       <div
         className="absolute inset-0 z-0 opacity-40 pointer-events-none"
         style={{
-          backgroundImage: "url('/images/main-background.png')",
+          backgroundImage: "url('/images/main-background.webp')",
           backgroundSize: "400px",
           backgroundRepeat: "repeat",
         }}
       ></div>
 
-      <header className="py-20 text-center relative z-10">
+      <header className="py-10 md:py-20 text-center relative z-10">
         <span className="text-green-700 font-bold tracking-widest uppercase text-sm">
           Fresh | Organic | Healthy
         </span>
-        <h1 className="text-5xl font-black text-gray-900 mt-3">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mt-3 leading-tight">
           Build Your <span className="text-[#C9C27A]">Perfect Bowl</span>
         </h1>
-        <p className="text-gray-500 mt-4 text-lg">
+        <p className="text-gray-500 mt-3 md:mt-4 text-sm sm:text-base md:text-lg">
           100% Natural Ingredients | No Preservatives | Same Day Delivery
         </p>
       </header>
 
       <section className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative z-10">
-        {products.map((product) => {
+        {paginatedProducts.map((product) => {
           const isSelected = selectedBowls.some((item) => item.id === product.id);
           return (
             <motion.div
               key={product.id}
               whileHover={{ y: -8 }}
               onClick={() => toggleSelection(product)}
-              className={`group relative rounded-[28px] p-5 cursor-pointer border-2 transition-all duration-300 flex flex-col overflow-hidden ${
+              className={`group relative rounded-[22px] md:rounded-[28px] p-4 md:p-5 cursor-pointer border-2 transition-all duration-300 flex flex-col overflow-hidden ${
                 isSelected
                   ? "border-green-700 bg-white shadow-[0_18px_45px_rgba(22,101,52,0.28)]"
                   : "border-[#d8d2a0] bg-white shadow-lg hover:shadow-[0_20px_48px_rgba(201,194,122,0.28)]"
               }`}
             >
               <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-r from-[#eef9f0] via-[#fff9ef] to-[#eef9f0] pointer-events-none"></div>
-              <div className="relative bg-gradient-to-br from-[#f8fff8] to-[#fff6e7] border border-[#ede8c4] rounded-2xl h-52 flex items-center justify-center">
+              <div className="relative bg-gradient-to-br from-[#f8fff8] to-[#fff6e7] border border-[#ede8c4] rounded-2xl h-44 sm:h-48 md:h-52 flex items-center justify-center">
                 <img
                   src={product.image}
                   alt={product.title}
-                  className="w-40 object-contain transition-transform duration-500 group-hover:scale-105"
+                  className="w-32 sm:w-36 md:w-40 object-contain transition-transform duration-500 group-hover:scale-105"
                 />
                 {product.rating >= 4.9 && (
                   <div className="absolute top-3 left-3 bg-orange-500 text-white text-xs px-3 py-1 rounded-full font-semibold">
@@ -267,13 +292,13 @@ function FruitShop() {
                 </div>
               </div>
 
-              <div className="mt-5 flex flex-col flex-grow">
+                <div className="mt-4 md:mt-5 flex flex-col flex-grow">
                 <div className="flex justify-between items-start gap-3">
-                  <h3 className="text-xl font-black text-gray-900 leading-tight">{product.title}</h3>
+                  <h3 className="text-lg sm:text-xl font-black text-gray-900 leading-tight">{product.title}</h3>
                   <span className="text-green-700 text-sm font-bold">{product.weight}</span>
                 </div>
 
-                <p className="text-gray-500 text-sm mt-2">{product.description}</p>
+                <p className="text-gray-500 text-sm mt-2 leading-relaxed">{product.description}</p>
 
                 <div className="mt-4 grid grid-cols-2 gap-2">
                   <div className="rounded-xl bg-[#f3f9f3] px-3 py-2 border border-green-100">
@@ -305,15 +330,15 @@ function FruitShop() {
                   ))}
                 </div>
 
-                <div className="flex justify-between items-center mt-auto pt-6">
-                  <span className="text-2xl font-black text-[#2d5a27]">Rs. {product.price}</span>
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-auto pt-5 gap-3">
+                  <span className="text-xl sm:text-2xl font-black text-[#2d5a27]">Rs. {product.price}</span>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       addToCart({ ...product, quantity: 1 });
-                      alert(`${product.title} added!`);
+                      showToast(`${product.title} added to cart.`);
                     }}
-                    className="bg-gradient-to-r from-green-700 to-green-900 hover:from-green-800 hover:to-green-950 text-white px-5 h-11 rounded-xl flex items-center justify-center shadow-lg transition font-bold text-sm"
+                    className="w-full sm:w-auto bg-gradient-to-r from-green-700 to-green-900 hover:from-green-800 hover:to-green-950 text-white px-5 h-11 rounded-xl flex items-center justify-center shadow-lg transition font-bold text-sm"
                   >
                     Add
                   </button>
@@ -324,10 +349,44 @@ function FruitShop() {
         })}
       </section>
 
+      {totalPages > 1 && (
+        <div className="relative z-10 mt-12 flex flex-wrap items-center justify-center gap-2">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="px-4 py-2 rounded-xl border border-[#d8d2a0] bg-white text-sm font-bold text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed hover:border-green-400"
+          >
+            Previous
+          </button>
+
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              className={`w-10 h-10 rounded-xl text-sm font-black border transition-all ${
+                currentPage === page
+                  ? "bg-green-800 text-white border-green-800"
+                  : "bg-white text-gray-700 border-[#d8d2a0] hover:border-green-400"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+
+          <button
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 rounded-xl border border-[#d8d2a0] bg-white text-sm font-bold text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed hover:border-green-400"
+          >
+            Next
+          </button>
+        </div>
+      )}
+
       {/* FRESHNESS PROMISE */}
-      <section className="w-full bg-[#fff7f7] py-16 px-4 mt-32 rounded-3xl relative z-10">
+      <section className="w-full bg-[#fff7f7] py-12 md:py-16 px-4 mt-20 md:mt-32 rounded-3xl relative z-10">
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 relative inline-block">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 relative inline-block">
             Our Freshness Promise
             <span className="absolute left-0 -bottom-2 w-full h-[3px] bg-green-600 rounded-full"></span>
           </h2>
@@ -342,9 +401,9 @@ function FruitShop() {
       </section>
 
       {/* SUBSCRIPTION OFFER */}
-      <section className="mt-32 relative z-10">
+      <section className="mt-20 md:mt-32 relative z-10">
         <div className="text-center mb-10">
-          <h2 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-black text-gray-900 tracking-tight">
             Subscription Model
           </h2>
           <div className="w-16 h-1 bg-[#2D5A27] mx-auto mt-3 mb-6 rounded-full"></div>
@@ -445,7 +504,7 @@ function FruitShop() {
             initial={{ y: 120, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 120, opacity: 0 }}
-            className="fixed bottom-6 left-0 right-0 px-4 flex justify-center z-50"
+            className="fixed bottom-24 md:bottom-6 left-0 right-0 px-3 sm:px-4 flex justify-center z-50"
           >
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden border border-gray-100">
               <div className="h-1 bg-gray-100">
@@ -454,7 +513,7 @@ function FruitShop() {
                   style={{ width: `${Math.min((selectedBowls.length / 5) * 100, 100)}%` }}
                 ></div>
               </div>
-              <div className="p-4 flex items-center justify-between gap-4">
+              <div className="p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
                 <div className="flex items-center gap-3 flex-1 min-w-0">
                   <div className="bg-green-100 p-2 rounded-xl">
                     <ShoppingBag className="w-5 h-5 text-green-700" />
@@ -478,14 +537,14 @@ function FruitShop() {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className="text-right">
+                <div className="w-full sm:w-auto flex items-center justify-between sm:justify-end gap-4">
+                  <div className="text-left sm:text-right">
                     <p className="text-xs text-gray-500">Total</p>
-                    <p className="text-xl font-black text-gray-900">Rs. {totalSelectedPrice}</p>
+                    <p className="text-lg sm:text-xl font-black text-gray-900">Rs. {totalSelectedPrice}</p>
                   </div>
                   <button
                     onClick={handleBulkAddToCart}
-                    className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-bold transition shadow-lg hover:shadow-xl flex items-center gap-2"
+                    className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl font-bold transition shadow-lg hover:shadow-xl flex items-center gap-2 text-sm sm:text-base"
                   >
                     Order Now
                   </button>
@@ -495,6 +554,18 @@ function FruitShop() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {toast.show && (
+        <div
+          className={`fixed top-20 lg:top-[130px] left-3 right-3 sm:left-auto sm:right-6 sm:max-w-sm z-50 px-4 py-3 rounded-xl shadow-2xl border ${
+            toast.type === "error"
+              ? "bg-red-900 text-white border-red-700"
+              : "bg-green-900 text-white border-green-700"
+          }`}
+        >
+          <p className="text-xs md:text-sm font-bold">{toast.message}</p>
+        </div>
+      )}
     </section>
   );
 }

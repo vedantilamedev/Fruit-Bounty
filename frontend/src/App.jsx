@@ -60,7 +60,7 @@ function Layout({ children }) {
       )}
       <main
         className={`min-h-screen overflow-x-hidden ${
-          !isAdmin && !isDashboard ? "pt-[120px] lg:pt-[110px]" : ""
+          !isAdmin && !isDashboard ? "pt-[64px] lg:pt-[110px]" : ""
         }`}
       >
         {children}

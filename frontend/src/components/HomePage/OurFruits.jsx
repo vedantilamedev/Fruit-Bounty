@@ -2,12 +2,12 @@ import FruitCard from "./FruitCard";
 
 function OurFruits() {
   const fruits = [
-    { name: "Strawberries", desc: "Sweet & Juicy", image: "/images/strawberries.png" },
-    { name: "Pineapple", desc: "Tropical Twist", image: "/images/pinapple.png" },
-    { name: "Grapes", desc: "Crisp & Sweet", image: "/images/grapes.png" },
-    { name: "Watermelon", desc: "Hydrating & Fresh", image: "/images/watermelon.png" },
-    { name: "Kiwi", desc: "Tangy Boost", image: "/images/kiwi.png" },
-    { name: "Mango", desc: "Seasonal Delight", image: "/images/mango.png" },
+    { name: "Strawberries", desc: "Sweet & Juicy", image: "/images/strawberries.webp" },
+    { name: "Pineapple", desc: "Tropical Twist", image: "/images/pinapple.webp" },
+    { name: "Grapes", desc: "Crisp & Sweet", image: "/images/grapes.webp" },
+    { name: "Watermelon", desc: "Hydrating & Fresh", image: "/images/watermelon.webp" },
+    { name: "Kiwi", desc: "Tangy Boost", image: "/images/kiwi.webp" },
+    { name: "Mango", desc: "Seasonal Delight", image: "/images/mango.webp" },
   ];
 
   return (
@@ -16,7 +16,7 @@ function OurFruits() {
       <div 
         className="absolute inset-0 z-0 opacity-30 pointer-events-none"
         style={{ 
-          backgroundImage: `url('/public/images/main-background.PNG')`,
+          backgroundImage: `url('/public/images/main-background.webp')`,
           backgroundSize: '400px'
         }}
       ></div>

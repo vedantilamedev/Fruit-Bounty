@@ -33,11 +33,8 @@ function CartPage() {
 
   const handleDecrease = (item) => {
     const targetId = item.id || item._id;
-    if ((item.quantity || 1) > 1) {
-      updateQty(targetId, (item.quantity || 1) - 1);
-    } else {
-      removeFromCart(targetId);
-    }
+    if ((item.quantity || 1) <= 1) return;
+    updateQty(targetId, (item.quantity || 1) - 1);
   };
 
   const formatPrice = (value) => `Rs. ${value}`;
@@ -61,7 +58,7 @@ function CartPage() {
         <div
           className="absolute inset-0 opacity-[0.6]"
           style={{
-            backgroundImage: "url('/images/main-background.png')",
+            backgroundImage: "url('/images/main-background.webp')",
             backgroundSize: "400px",
             backgroundRepeat: "repeat",
             backgroundAttachment: "fixed",
@@ -124,7 +121,7 @@ function CartPage() {
                     <div className="flex items-start gap-4 md:gap-5">
                       <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-[#faf9f6] overflow-hidden border border-gray-100 flex-shrink-0">
                         <img
-                          src={item.image || "/images/custom.png"}
+                          src={item.image || "/images/custom.webp"}
                           alt={item.name}
                           className="w-full h-full object-cover"
                         />
@@ -219,7 +216,7 @@ function CartPage() {
                               className="w-8 h-8 rounded-lg bg-white border border-gray-100 text-gray-600 hover:text-red-500 flex items-center justify-center"
                               aria-label={`Decrease ${item.name}`}
                             >
-                              {quantity > 1 ? <Minus size={15} /> : <Trash2 size={15} />}
+                              <Minus size={15} />
                             </button>
                             <span className="w-10 text-center font-black text-sm">{quantity}</span>
                             <button

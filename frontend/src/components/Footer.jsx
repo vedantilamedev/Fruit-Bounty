@@ -21,7 +21,7 @@ function Footer() {
       <div
         ref={footerRef}
         className="relative w-full overflow-hidden bg-no-repeat bg-cover bg-center border-t-[3px] border-[#C9C27A] flex items-center min-h-[400px] py-12 md:py-16"
-        style={{ backgroundImage: "url('/images/footer-background.png')" }}
+        style={{ backgroundImage: "url('/images/footer-background.webp')" }}
       >
         {/* Overlay */}
         <div className="absolute inset-0 bg-green-950/90 md:bg-green-950/80"></div>
@@ -38,7 +38,7 @@ function Footer() {
             <div className="flex flex-col items-start space-y-4">
               <div className="w-28 md:w-32">
                 <img
-                  src="/images/footerlogo.png"
+                  src="/images/footerlogo.webp"
                   alt="Fruit's Bounty"
                   className="w-full object-contain brightness-125"
                 />
