@@ -295,17 +295,19 @@ function FruitShop() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.35 }}
               transition={{ duration: 0.7, delay: 0.15 }}
-              className="relative w-full max-w-[220px] sm:max-w-sm md:max-w-md mx-auto flex justify-center"
+              className="w-full max-w-[220px] sm:max-w-sm md:max-w-md mx-auto flex justify-center"
             >
-              <div className="absolute top-2 right-2 bg-[#ffe6a9] text-[#1b4f2f] px-2.5 py-1 rounded-full text-[9px] sm:text-[10px] uppercase tracking-wider font-black shadow-lg z-20 whitespace-nowrap">
-                Signature Bowl
-              </div>
-              <div className="rounded-[2rem] bg-white/15 border border-white/20 p-4 md:p-5">
-                <img
-                  src="/images/hero.webp"
-                  alt="Featured Bowl"
-                  className="w-full h-[170px] sm:h-[220px] md:h-[260px] object-contain mx-auto drop-shadow-[0_20px_35px_rgba(0,0,0,0.35)]"
-                />
+              <div className="relative">
+                <div className="absolute top-3 right-3 md:top-4 md:right-4 bg-[#ffe6a9] text-[#1b4f2f] px-2.5 py-1 rounded-full text-[9px] sm:text-[10px] uppercase tracking-wider font-black shadow-lg z-20 whitespace-nowrap">
+                  Signature Bowl
+                </div>
+                <div className="rounded-[2rem] bg-white/15 border border-white/20 p-4 md:p-5">
+                  <img
+                    src="/images/hero.webp"
+                    alt="Featured Bowl"
+                    className="w-full h-[170px] sm:h-[220px] md:h-[260px] object-contain mx-auto drop-shadow-[0_20px_35px_rgba(0,0,0,0.35)]"
+                  />
+                </div>
               </div>
             </motion.div>
           </div>
