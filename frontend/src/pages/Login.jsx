@@ -1,25 +1,14 @@
 import { registerUser, loginUser } from "../api/api";
 import React, { useState, useEffect } from 'react';
 import { Google, Visibility, VisibilityOff } from '@mui/icons-material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Added Link import
 
-const Login = () => {
-  // Logic: Moved to top to ensure availability for useEffect
-  const navigate = useNavigate(); 
+const LoginRegister = () => {
+    const navigate = useNavigate();
   const [isRegistering, setIsRegistering] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [animate, setAnimate] = useState(false);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: ""
-  });
-
-  const [loginData, setLoginData] = useState({
-    email: "",
-    password: ""
-  });
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -38,33 +27,51 @@ const Login = () => {
     setIsRegistering(!isRegistering);
   };
 
-  const handleRegister = async () => {
-    try {
-      const res = await registerUser(formData);
-      alert("User registered successfully 🎉");
-      setIsRegistering(false);
-      alert("Please login with your credentials");
-    } catch (err) {
-      console.error(err);
-      if (err.response) {
-        alert(err.response.data.message || "Registration failed ❌");
-      } else {
-        alert("Something went wrong.");
-      }
-    }
-  };
 
-  const handleLogin = async () => {
-    try {
-      const res = await loginUser(loginData);
-      alert("Login successful 🎉");
-      localStorage.setItem("token", res.data.token);
-      navigate("/", { replace: true });
-    } catch (err) {
-      console.error(err.response?.data || err.message);
-      alert("Login failed");
-    }
-  };
+
+const [formData, setFormData] = useState({
+  name: "",
+  email: "",
+  password: ""
+});
+
+const [loginData, setLoginData] = useState({
+  email: "",
+  password: ""
+});
+
+const handleRegister = async () => {
+  try {
+    console.log("Sending register:", formData);
+
+    const res = await registerUser(formData);
+
+    console.log("Register response:", res.data);
+    alert("User registered successfully 🎉");
+
+    setIsRegistering(false);
+  } catch (err) {
+    console.error("Register error:", err);
+    alert(err.response?.data?.message || "Registration failed");
+  }
+};
+
+const handleLogin = async () => {
+  try {
+    console.log("Sending login:", loginData);
+
+    const res = await loginUser(loginData);
+
+    console.log("Login response:", res.data);
+
+    localStorage.setItem("token", res.data.token);
+    navigate("/", { replace: true });
+
+  } catch (err) {
+    console.error("Login error:", err);
+    alert(err.response?.data?.message || "Login failed");
+  }
+};
 
   const handleNumericInput = (e) => {
     e.target.value = e.target.value.replace(/[^0-9]/g, '');
@@ -101,7 +108,7 @@ const Login = () => {
       left: isRegistering ? '50%' : '0%',
       width: '50%',
       height: '100%',
-      backgroundImage: "url('/images/login-illustration.webp')",
+      backgroundImage: "url('/images/login-illustration.png')",
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       zIndex: 10,
@@ -158,7 +165,13 @@ const Login = () => {
   return (
     <div style={styles.pageWrapper}>
       <style>{`
-        body, html { margin: 0 !important; padding: 0 !important; overflow: hidden !important; width: 100%; height: 100%; }
+        body, html {
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            width: 100%;
+            height: 100%;
+        }
         .form-column { display: flex !important; }
         @media (max-width: 900px) {
           .sliding-overlay { display: none !important; }
@@ -167,12 +180,14 @@ const Login = () => {
           .login-col { display: ${!isRegistering ? 'flex' : 'none'} !important; }
         }
         .primary-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        .form-column::-webkit-scrollbar { width: 6px; }
+        .form-column::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
       `}</style>
 
       <div style={styles.mainBox}>
         <div className="sliding-overlay" style={styles.overlaySection}>
           <div style={styles.topHeader}>
-            <img src="/images/footerlogo.webp" alt="Logo" style={{ height: '50px' }} />
+            <img src="/images/footerlogo.png" alt="Logo" style={{ height: '50px' }} />
             <div style={{ background: 'rgba(255,255,255,0.95)', padding: '15px 20px', borderRadius: '0px', textAlign: 'right', backdropFilter: 'blur(10px)' }}>
               <h3 style={{ color: '#2D5A27', margin: 0, fontSize: '1.2rem' }}>{isRegistering ? 'Fresh Starts' : 'Welcome Back'}</h3>
               <p style={{ color: '#666', fontSize: '0.85rem', margin: '5px 0 0 0' }}>Best fruit bowls in the city.</p>
@@ -180,58 +195,155 @@ const Login = () => {
           </div>
         </div>
 
-        {/* SIGN UP FORM */}
-        <div className="form-column signup-col" style={{ ...styles.formSide, visibility: isRegistering ? "visible" : "hidden", padding: "0 10%" }}>
-          <h1 style={{ fontSize: "3rem", marginBottom: "30px", paddingTop: "40px" }}>Sign Up</h1>
+        {/* LEFT FORM (Signup) */}
+        <div
+          className="form-column signup-col"
+          style={{
+            ...styles.formSide,
+            visibility: isRegistering ? "visible" : "hidden",
+            padding: "0 10%",
+          }}
+        >
+          <h1 style={{ fontSize: "3rem", marginBottom: "30px", paddingTop: "40px" }}>
+            Sign Up
+          </h1>
+
+          {/* NAME */}
           <div style={{ marginBottom: "15px" }}>
             <label>Full Name</label>
-            <input type="text" placeholder="John Doe" style={styles.input} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+            <input
+              type="text"
+              placeholder="John Doe"
+              style={styles.input}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
+            />
           </div>
+
+          {/* EMAIL */}
           <div style={{ marginBottom: "15px" }}>
             <label>Email</label>
-            <input type="email" placeholder="john@example.com" style={styles.input} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+            <input
+              type="email"
+              placeholder="john@example.com"
+              style={styles.input}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+            />
           </div>
+
+          {/* PHONE (optional - backend me nahi hai) */}
           <div style={{ marginBottom: "15px" }}>
             <label>Phone</label>
-            <input type="tel" onInput={handleNumericInput} placeholder="1234567890" style={styles.input} />
+            <input
+              type="tel"
+              onInput={handleNumericInput}
+              placeholder="1234567890"
+              style={styles.input}
+            />
           </div>
+
+          {/* PASSWORD */}
           <div style={{ marginBottom: "15px", position: "relative" }}>
             <label>Password</label>
-            <input type={showPassword ? "text" : "password"} style={styles.input} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
-            <div style={{ position: "absolute", right: "15px", bottom: "12px", color: "#2D5A27", cursor: "pointer" }} onClick={() => setShowPassword(!showPassword)}>
+            <input
+              type={showPassword ? "text" : "password"}
+              style={styles.input}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+            />
+            <div
+              style={{
+                position: "absolute",
+                right: "15px",
+                bottom: "12px",
+                color: "#2D5A27",
+                cursor: "pointer",
+              }}
+              onClick={() => setShowPassword(!showPassword)}
+            >
               {showPassword ? <VisibilityOff /> : <Visibility />}
             </div>
           </div>
-          <button className="primary-btn" style={styles.primaryBtn} onClick={handleRegister}>Create Account</button>
-          <p style={{ textAlign: "center", fontSize: "1rem", marginTop: "25px" }}>Already a member? <span onClick={toggleMode} style={{ color: "#4CAF50", cursor: "pointer", fontWeight: "bold", textDecoration: "underline" }}>Login</span></p>
+
+          {/* REGISTER BUTTON */}
+          <button
+            className="primary-btn"
+            style={styles.primaryBtn}
+            onClick={handleRegister}
+          >
+            Create Account
+          </button>
+
+          <p style={{ textAlign: "center", fontSize: "1rem", marginTop: "25px" }}>
+            Already a member?{" "}
+            <span
+              onClick={toggleMode}
+              style={{
+                color: "#4CAF50",
+                cursor: "pointer",
+                fontWeight: "bold",
+                textDecoration: "underline",
+              }}
+            >
+              Login
+            </span>
+          </p>
         </div>
 
-        {/* LOGIN FORM */}
+        {/* RIGHT FORM (Login) */}
         <div className="form-column login-col" style={{ ...styles.formSide, visibility: !isRegistering ? 'visible' : 'hidden', padding: '0 10%' }}>
           <h1 style={{ fontSize: '3rem', marginBottom: '30px' }}>Login</h1>
           <div style={{ marginBottom: '20px' }}>
             <label>Email</label>
-            <input type="email" placeholder="Enter email" style={styles.input} onChange={(e) => setLoginData({ ...loginData, email: e.target.value })} />
+           <input
+             type="email"
+             placeholder="Enter email"
+             style={styles.input}
+             onChange={(e) =>
+               setLoginData({ ...loginData, email: e.target.value })
+             }
+           />
           </div>
           <div style={{ marginBottom: '20px', position: 'relative' }}>
             <label>Password</label>
-            <input type={showPassword ? 'text' : 'password'} style={styles.input} onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} />
+            <input
+              type={showPassword ? 'text' : 'password'}
+              style={styles.input}
+              onChange={(e) =>
+                setLoginData({ ...loginData, password: e.target.value })
+              }
+            />
             <div style={{ position: 'absolute', right: '15px', bottom: '12px', color: '#2D5A27', cursor: 'pointer' }} onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? <VisibilityOff /> : <Visibility />}
             </div>
           </div>
-          <button className="primary-btn" style={styles.primaryBtn} onClick={handleLogin}>Sign In</button>
+          <button
+            className="primary-btn"
+            style={styles.primaryBtn}
+            onClick={handleLogin}
+          >
+            Sign In
+          </button>
           <button className="primary-btn" style={{ width: '100%', padding: '15px', marginTop: '20px', backgroundColor: '#FFF', color: '#2D5A27', fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
             <Google style={{ color: '#EA4335' }} /> Continue with Google
           </button>
+
           <p style={{ textAlign: 'center', marginTop: '20px' }}>
+            {/* Updated to use Link */}
             <Link to="/forgot-password" style={{ color: '#4CAF50', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '500', textDecoration: 'none' }}>Forget password?</Link>
           </p>
-          <p style={{ textAlign: 'center', fontSize: '1rem', marginTop: '10px' }}>Don't have an account? <span onClick={toggleMode} style={{ color: '#4CAF50', cursor: 'pointer', fontWeight: 'bold', textDecoration: 'underline' }}>Register</span></p>
+
+          <p style={{ textAlign: 'center', fontSize: '1rem', marginTop: '10px' }}>
+            Don't have an account? <span onClick={toggleMode} style={{ color: '#4CAF50', cursor: 'pointer', fontWeight: 'bold', textDecoration: 'underline' }}>Register</span>
+          </p>
         </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default LoginRegister;

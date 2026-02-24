@@ -9,8 +9,8 @@ function SaladSection() {
       weight: "250g",
       fruits: "5 Types",
       calories: "120 kcal",
-      price: 6.99,
-      image: "/images/smallBowl.webp",
+      price: 199,
+      image: "/images/smallBowl.png",
     },
     {
       id: 2,
@@ -19,8 +19,8 @@ function SaladSection() {
       weight: "400g",
       fruits: "7 Types",
       calories: "190 kcal",
-      price: 9.99,
-      image: "/images/mediumBowl.webp",
+      price: 299,
+      image: "/images/mediumBowl.png",
       badge: "BESTSELLER",
     },
     {
@@ -30,8 +30,8 @@ function SaladSection() {
       weight: "900g",
       fruits: "9 Types",
       calories: "280 kcal",
-      price: 13.99,
-      image: "/images/largeBowl.webp",
+      price: 449,
+      image: "/images/largeBowl.png",
     },
   ];
 
@@ -42,7 +42,7 @@ function SaladSection() {
       <div
         className="absolute inset-0 z-0 opacity-40 pointer-events-none"
         style={{
-          backgroundImage: `url('/images/main-background.webp')`,
+          backgroundImage: `url('/images/main-background.png')`,
           backgroundSize: "400px",
           backgroundRepeat: "repeat",
         }}
