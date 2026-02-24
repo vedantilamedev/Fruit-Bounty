@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import {
-    ShoppingBag, Eye, X, Calendar, Package, CreditCard,
-    Truck, CheckCircle, Clock, Search, Filter, ArrowRight,
-    Download, RefreshCcw, MapPin, ChevronRight, AlertCircle, Ban
+    ShoppingBag, Package, CreditCard,
+    Truck, CheckCircle, Clock, Search,
+    ChevronRight, AlertCircle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -13,241 +13,226 @@ const Orders = ({ orders, onCancelOrder }) => {
 
     const filteredOrders = orders.filter(order => {
         const matchesStatus = statusFilter === 'All' || order.status === statusFilter;
-        const matchesSearch = order.id.toString().includes(searchQuery) ||
-            order.items?.some(item => item.name.toLowerCase().includes(searchQuery.toLowerCase()));
+        const matchesSearch =
+            order.id.toString().includes(searchQuery) ||
+            order.items?.some(item =>
+                item.name.toLowerCase().includes(searchQuery.toLowerCase())
+            );
         return matchesStatus && matchesSearch;
     });
 
-    const calculateDeliveryDate = (orderDate) => {
-        const date = new Date(orderDate);
-        date.setDate(date.getDate() + 1);
-        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-    };
-
     const formatDate = (dateString) => {
         const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+        return date.toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
     };
 
     const StatusBadge = ({ status }) => {
         const config = {
-            'Pending': { icon: Clock, bg: 'bg-amber-50', text: 'text-amber-600', border: 'border-amber-200/60', dot: 'bg-amber-400' },
-            'Confirmed': { icon: Truck, bg: 'bg-blue-50', text: 'text-blue-600', border: 'border-blue-200/60', dot: 'bg-blue-400' },
-            'Delivered': { icon: CheckCircle, bg: 'bg-emerald-50', text: 'text-emerald-600', border: 'border-emerald-200/60', dot: 'bg-emerald-400' },
-            'Canceled': { icon: AlertCircle, bg: 'bg-rose-50', text: 'text-rose-600', border: 'border-rose-200/60', dot: 'bg-rose-400' }
-        }[status] || { icon: Package, bg: 'bg-gray-50', text: 'text-gray-600', border: 'border-gray-200/60', dot: 'bg-gray-400' };
+            Pending: { icon: Clock, color: 'bg-yellow-400/20 text-yellow-300 border-yellow-400/30' },
+            Confirmed: { icon: Truck, color: 'bg-blue-400/20 text-blue-300 border-blue-400/30' },
+            Delivered: { icon: CheckCircle, color: 'bg-emerald-400/20 text-emerald-300 border-emerald-400/30' },
+            Canceled: { icon: AlertCircle, color: 'bg-red-400/20 text-red-300 border-red-400/30' }
+        }[status] || { icon: Package, color: 'bg-white/10 text-white border-white/20' };
 
         const Icon = config.icon;
 
         return (
-            <motion.div
-                whileHover={{ scale: 1.05 }}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-[1rem] border backdrop-blur-md ${config.bg} ${config.text} ${config.border} shadow-sm transition-all`}
-            >
-                <span className={`w-2 h-2 rounded-full ${config.dot} animate-pulse`} />
-                <Icon size={14} strokeWidth={2.5} />
-                <span className="text-[10px] font-bold uppercase tracking-wider">{status}</span>
-            </motion.div>
+            <div className={`flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-semibold ${config.color}`}>
+                <Icon size={14} />
+                {status}
+            </div>
         );
     };
 
-    const StatCard = ({ title, value, icon: Icon, color, trend }) => (
-        <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            whileHover={{ y: -6 }}
-            className="bg-white/70 backdrop-blur-2xl p-7 rounded-[1rem] border border-[#d5b975]
-            shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] 
-            hover:shadow-[0_30px_80px_-15px_rgba(60,126,68,0.25)] 
-            transition-all duration-500"
-        >
-            <div className="flex justify-between items-start">
+    const StatCard = ({ title, value, icon: Icon }) => (
+        <div className="bg-gradient-to-br from-green-800/60 to-green-900/60 
+                    border border-[#c6a84b]
+                    backdrop-blur-xl
+                    rounded-2xl p-6 shadow-lg">
+            <div className="flex justify-between items-center">
                 <div>
-                    <p className="text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.3em] mb-3">{title}</p>
-                    <h3 className="text-3xl font-extrabold text-gray-900 tracking-tight">{value}</h3>
-                    {trend && <p className="text-[10px] mt-3 text-emerald-600 font-bold uppercase tracking-widest">{trend}</p>}
+                    <p className="text-xs uppercase tracking-widest text-green-300/70 mb-2">
+                        {title}
+                    </p>
+                    <h3 className="text-3xl font-bold text-white">{value}</h3>
                 </div>
-                <div className={`w-14 h-14 rounded-[1rem] ${color} bg-opacity-10 flex items-center justify-center shadow-inner`}>
-                    <Icon size={24} className={color.replace('bg-', 'text-')} strokeWidth={1.5} />
+                <div className="w-12 h-12 rounded-xl bg-green-700/40 
+                        flex items-center justify-center">
+                    <Icon size={22} className="text-green-300" />
                 </div>
             </div>
-        </motion.div>
+        </div>
     );
 
     return (
-        <div className="relative space-y-10 pb-12">
+        <div className="p-8 space-y-10 text-white">
 
-            {/* Luxury Soft Background */}
-            <div className="fixed inset-0 -z-10 bg-gradient-to-br from-[#FDFCF9] via-white to-[#F7F5EF]" />
-            <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_20%_30%,rgba(60,126,68,0.06),transparent_40%),radial-gradient(circle_at_80%_70%,rgba(183,162,97,0.06),transparent_40%)]" />
-
-            {/* Header Stats */}
+            {/* Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <StatCard
                     title="Active Orders"
                     value={orders.filter(o => ['Pending', 'Confirmed'].includes(o.status)).length}
                     icon={Package}
-                    color="bg-[#3C7E44]"
-                    trend="2 Items arriving soon"
                 />
                 <StatCard
                     title="Completed"
                     value={orders.filter(o => o.status === 'Delivered').length}
                     icon={CheckCircle}
-                    color="bg-[#B7A261]"
                 />
                 <StatCard
                     title="Invested in Freshness"
                     value={`₹${orders.reduce((sum, o) => sum + o.amount, 0)}`}
                     icon={CreditCard}
-                    color="bg-[#3C7E44]"
                 />
             </div>
 
             {/* Toolbar */}
-            <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-white/70 backdrop-blur-2xl p-4 rounded-[1rem] border border-[#d5b975]
-                shadow-lg flex flex-col lg:flex-row gap-5 items-center justify-between"
-            >
-                <div className="relative w-full  lg:flex-1">
-                    <Search className="absolute left-5 top-1/2  -translate-y-1/2 text-[#B7A261]" size={16} />
+            <div className="flex flex-col lg:flex-row gap-4 items-center justify-between
+                      bg-green-900/40 backdrop-blur-xl
+                      border border-[#c6a84b]
+                      rounded-2xl p-4">
+
+                <div className="relative w-full lg:flex-1">
+                    <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-green-300" />
                     <input
                         type="text"
                         placeholder="Search by ID or item..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-12 pr-5 py-3 bg-[#FBF8F2] rounded-[1rem] 
-                        focus:outline-none focus:ring-2 focus:ring-[#3C7E44]/30 
-                        text-xs font-bold uppercase tracking-widest transition-all "
+                        className="w-full pl-10 pr-4 py-3
+                       bg-green-950/60
+                       border border-green-[#c6a84b]
+                       rounded-xl
+                       text-sm text-white
+                       focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                 </div>
-                <div className="relative w-full max-w-xs">
-                    <select
-                        value={statusFilter}
-                        onChange={(e) => setStatusFilter(e.target.value)}
-                        className="appearance-none w-full px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em]
-    rounded-[1rem] bg-white text-[#3C7E44] border border-[#d5b975]
-    focus:outline-none focus:ring-2 focus:ring-[#3C7E44]/30
-    shadow-sm cursor-pointer"
-                    >
-                        {['All', 'Pending', 'Confirmed', 'Delivered', 'Canceled'].map((status) => (
-                            <option key={status} value={status}>
-                                {status}
-                            </option>
-                        ))}
-                    </select>
 
-                    <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-[#3C7E44]">
-                        ▼
-                    </div>
-                </div>
-            </motion.div>
+                <select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                    className="px-4 py-3 bg-green-950/60
+                     border border-[#c6a84b]
+                     rounded-xl text-sm text-white
+                     focus:outline-none focus:ring-2 focus:ring-green-500">
+                    {['All', 'Pending', 'Confirmed', 'Delivered', 'Canceled'].map((status) => (
+                        <option key={status} value={status}>
+                            {status}
+                        </option>
+                    ))}
+                </select>
+            </div>
 
-            {/* Orders List */}
-            <div className="space-y-5">
-                <AnimatePresence mode="popLayout">
+            {/* Orders */}
+            <div className="space-y-4">
+                <AnimatePresence>
                     {filteredOrders.length === 0 ? (
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="bg-white/70 backdrop-blur-2xl rounded-[1rem] border border-[#d5b975] p-20 text-center shadow-lg"
-                        >
-                            <ShoppingBag className="text-[#B7A261]/40 mx-auto mb-6" size={44} />
-                            <h3 className="text-xl font-semibold text-gray-900 mb-2">No Orders Found</h3>
-                            <p className="text-gray-400 text-sm">Try adjusting filters.</p>
-                        </motion.div>
+                        <div className="text-center py-16 bg-green-900/40 rounded-2xl border border-[#c6a84b]0">
+                            <ShoppingBag size={40} className="mx-auto text-green-400/50 mb-4" />
+                            <p className="text-green-200">No Orders Found</p>
+                        </div>
                     ) : (
                         filteredOrders.map(order => (
                             <motion.div
                                 key={order.id}
-                                layout
-                                whileHover={{ y: -6 }}
-                                transition={{ duration: 0.3 }}
-                                className="group bg-white/70 backdrop-blur-2xl rounded-[1rem] border border-[#d5b975] p-7 
-                                hover:shadow-[0_25px_60px_-10px_rgba(0,0,0,0.2)] transition-all cursor-pointer"
-                                
-                            >
-                                <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+                                whileHover={{ scale: 1.02 }}
+                                className="bg-green-900/40 
+                           border border-[#c6a84b]
+                           backdrop-blur-xl
+                           rounded-2xl p-6
+                           flex flex-col md:flex-row
+                           justify-between items-center
+                           cursor-pointer transition">
 
-                                    <div className="flex items-center gap-6">
-                                        <div className="w-16 h-16 bg-[#FBF8F2] rounded-[1rem] flex items-center justify-center shadow-inner">
-                                            <Package className="text-[#3C7E44]" size={28} />
-                                        </div>
-                                        <div>
-                                            <p className="text-xs font-bold text-[#B7A261] uppercase tracking-widest">
-                                                Order #{order.id}
-                                            </p>
-                                            <p className="text-sm text-gray-400">{formatDate(order.date)}</p>
-                                            <h4 className="font-semibold text-gray-900 mt-1">
-                                                {order.items?.[0]?.name}
-                                            </h4>
-                                        </div>
+                                <div className="flex items-center gap-5">
+                                    <div className="w-14 h-14 bg-green-800/60 rounded-xl flex items-center justify-center">
+                                        <Package className="text-green-300" size={24} />
                                     </div>
-
-                                    <div className="flex items-center gap-8">
-                                        <StatusBadge status={order.status} />
-                                        <p className="text-2xl font-extrabold text-[#3C7E44] tracking-tight">
-                                            ₹{order.amount}
+                                    <div>
+                                        <p className="text-sm text-green-300">
+                                            Order #{order.id}
                                         </p>
-                                        <motion.div
-                                            whileTap={{ scale: 0.9 }}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setSelectedOrder(order);
-                                            }}
-                                            className="cursor-pointer"
-                                        ><ChevronRight className="text-gray-400 group-hover:translate-x-2 transition-transform" /></motion.div>
+                                        <p className="text-xs text-green-400/70">
+                                            {formatDate(order.date)}
+                                        </p>
+                                        <p className="font-semibold text-white mt-1">
+                                            {order.items?.[0]?.name}
+                                        </p>
                                     </div>
+                                </div>
 
+                                <div className="flex items-center gap-6 mt-4 md:mt-0">
+                                    <StatusBadge status={order.status} />
+                                    <p className="text-xl font-bold text-green-300">
+                                        ₹{order.amount}
+                                    </p>
+                                    <ChevronRight
+                                        className="text-green-400 hover:translate-x-1 transition"
+                                        onClick={() => setSelectedOrder(order)}
+                                    />
                                 </div>
                             </motion.div>
                         ))
                     )}
                 </AnimatePresence>
             </div>
+
+            {/* Modal */}
             <AnimatePresence>
                 {selectedOrder && (
                     <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50"
-                        onClick={() => setSelectedOrder(null)}
-                    >
+                        className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+                        onClick={() => setSelectedOrder(null)}>
+
                         <motion.div
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.8, opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="bg-white rounded-[1.5rem] p-8 w-full max-w-md shadow-2xl"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <h3 className="text-xl font-bold text-gray-900 mb-4">
+                            className="bg-green-950 border border-[#c6a84b]
+                         rounded-2xl p-8 w-full max-w-md text-white"
+                            onClick={(e) => e.stopPropagation()}>
+
+                            <h3 className="text-xl font-bold mb-2">
                                 Order #{selectedOrder.id}
                             </h3>
-
-                            <p className="text-sm text-gray-400 mb-2">
+                            <p className="text-sm text-green-400 mb-4">
                                 {formatDate(selectedOrder.date)}
                             </p>
 
-                            <div className="mb-4">
-                                <p className="font-medium text-gray-800">
-                                    {selectedOrder.items?.[0]?.name}
-                                </p>
-                                <p className="text-[#3C7E44] font-bold text-lg mt-2">
-                                    ₹{selectedOrder.amount}
-                                </p>
+                            <p className="font-medium">
+                                {selectedOrder.items?.[0]?.name}
+                            </p>
+
+                            <p className="text-green-300 font-bold text-lg mt-2">
+                                ₹{selectedOrder.amount}
+                            </p>
+
+                            <div className="mt-4">
+                                <StatusBadge status={selectedOrder.status} />
                             </div>
 
-                            <StatusBadge status={selectedOrder.status} />
+                            {/* Show Cancel Button only if Pending */}
+                            {selectedOrder.status === "Pending" && (
+                                <button
+                                    onClick={() => {
+                                        onCancelOrder(selectedOrder.id);
+                                        setSelectedOrder(null);
+                                    }}
+                                    className="mt-6 w-full py-3 bg-red-600 hover:bg-red-500
+        rounded-xl font-semibold transition">
+                                    Cancel Order
+                                </button>
+                            )}
 
                             <button
                                 onClick={() => setSelectedOrder(null)}
-                                className="mt-6 w-full py-3 bg-[#3C7E44] text-white rounded-[1rem] font-semibold hover:bg-[#2e6234] transition"
-                            >
+                                className="mt-4 w-full py-3 bg-green-700 hover:bg-green-600
+    rounded-xl font-semibold transition">
                                 Close
                             </button>
                         </motion.div>

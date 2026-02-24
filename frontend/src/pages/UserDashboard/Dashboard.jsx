@@ -151,7 +151,7 @@ const Dashboard = () => {
 
     return (
         
-        <div className="h-screen bg-[#FBF8F2] flex flex-col lg:flex-row overflow-hidden relative">
+        <div className="h-screen bg-[url('/images/main-background.webp')] flex flex-col lg:flex-row overflow-hidden relative">
             <ToastContainer
                 position="top-right"
                 autoClose={3000}
@@ -180,58 +180,68 @@ const Dashboard = () => {
             
 
             {/* Sidebar Navigation */}
-            <aside className={`
-                fixed inset-y-0 left-0 z-50 w-72 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out 
-                lg:static lg:translate-x-0 lg:shadow-none border-r border-[#E8E4D9] shrink-0
-                ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
-                lg:h-full lg:overflow-y-auto
-            `}>
-                <div className="h-full flex flex-col bg-[#F7F5EF]/50">
+            {/* Sidebar Navigation */}
+            <aside
+                className={`
+    fixed inset-y-0 left-0 z-50 w-72
+    bg-gradient-to-b from-[#2f5e2f] to-[#1f3d1f]
+    shadow-[8px_0_30px_rgba(0,0,0,0.6)] transform transition-transform duration-300 ease-in-out
+    lg:static lg:translate-x-0 
+    shrink-0
+    ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
+    lg:h-full lg:overflow-y-auto
+  `}
+            >
+                <div className="h-full flex flex-col">
 
                     {/* Logo Section */}
-                    <div className="py-3 border-b border-[#aa8d3c] flex items-center justify-center bg-[#c8c178]">
+                    <div className="py-5 flex items-center justify-center border-b border-[#c6a84b]/40">
                         <img
                             src="/images/footerlogo.webp"
                             alt="Fruit Bounty Logo"
-                            className="w-24 h-auto object-contain transition-transform duration-300 hover:scale-105"
+                            className="w-24 h-auto object-contain"
                         />
                     </div>
 
-                 
-
                     {/* Menu Links */}
-                    <nav className="flex-1 bg-[#c8c178]  px-4 py-8 space-y-3 overflow-y-auto">
+                    <nav className="flex-1 px-6 py-8 space-y-4 overflow-y-auto">
                         {menuItems.map((item) => (
                             <button
                                 key={item.id}
                                 onClick={() => handleTabChange(item.id)}
-                                className={`w-full flex items-center gap-4 px-6 py-4 rounded-[1rem] transition-all duration-300 font-medium tracking-tight text-[15px] ${activeTab === item.id
-                                    ? 'bg-[#9f8846] text-white shadow-xl shadow-gray-900 translate-x-1 font-normal'
-                                    : 'text-black  hover:text-white hover:translate-x-1'
-                                    }`}
+                                className={`
+            w-full flex items-center gap-4 px-5 py-3
+            rounded-xl transition-all duration-300
+            text-[15px] font-medium
+            ${activeTab === item.id
+                                    ? "bg-[#3f7c3f] text-white shadow-[0_9px_14px_rgba(0,0,0,1),inset_0_1px_2px_rgba(255,255,255,0.15)] border border-[#c6a84b]"
+                                        : "text-[#f5e6b3] hover:bg-[#346639]/60 hover:text-white"
+                                    }
+          `}
                             >
-                                <item.icon size={22} strokeWidth={activeTab === item.id ? 2.5 : 2} />
+                                <item.icon size={20} strokeWidth={2} />
                                 {item.label}
                             </button>
                         ))}
                     </nav>
 
-                    {/* Logout Button */}
-                    <div className="px-6 py-4 border-t bg-[#c8c178] border-[#afa63f] flex flex-col gap-2">
+                    {/* Bottom Section */}
+                    <div className="px-6 py-6 border-t border-[#c6a84b]/30 space-y-3">
+
                         <Link to="/">
-                            <button className="w-full px-3 py-2 rounded-lg bg-[#9f8846]  shadow-xl hover:shadow-gray-900 translate-x-1  text-white font-semibold hover:bg-[#67572b] transition">
+                            <button className="w-full py-3 rounded-lg border border-[#c6a84b] hover:shadow-[0_9px_14px_rgba(0,0,0,1),inset_0_1px_2px_rgba(255,255,255,0.15)] text-[#f5e6b3] hover:bg-[#c6a84b] hover:text-[#1f3d1f] transition font-semibold">
                                 Go to Home
                             </button>
                         </Link>
 
                         <button
                             onClick={handleLogout}
-                            className="w-full px-3 py-2 rounded-lg bg-red-700  text-white font-semibold shadow-xl hover:shadow-gray-900 translate-x-1 hover:bg-red-700 hover:text-white transition"
+                            className="w-full py-3 rounded-lg bg-red-600 text-white hover:bg-red-800 font-semibold hover:shadow-[0_9px_14px_rgba(0,0,0,1),inset_0_1px_2px_rgba(255,255,255,0.15)]"
                         >
                             Logout
                         </button>
 
-                        <p className="mt-4 text-xs text-gray-600 text-center">
+                        <p className="mt-6 text-xs text-[#d6c27a]/70 text-center">
                             © Graphura India Pvt. Ltd.
                             <br />
                             All rights reserved
@@ -249,7 +259,7 @@ const Dashboard = () => {
             )}
 
             {/* Main Content Area */}
-            <main className="flex-1 overflow-y-auto bg-[#FBF8F2] scroll-smooth-container h-full">
+            <main className="flex-1 overflow-y-auto bg-[#2c442c] scroll-smooth-container h-full">
                 <div className="p-4 lg:p-12 min-h-full flex flex-col">
                     <div className="max-w-7xl mx-auto w-full flex-1">
 
