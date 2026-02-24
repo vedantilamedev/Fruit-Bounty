@@ -124,7 +124,7 @@ const Overview = ({ userData, orders }) => {
   hover:shadow-lg hover:shadow-yellow-900/20 
   transition-all duration-500"
         >
-          <div className="absolute top-0 right-0 w-80 h-80 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] rotate-12" />
+          <div className="absolute top-0 right-0 w-80 h-80 bg-[url('https://www.transparenttextures.com/patterns/cubes.webp')] opacity-[0.03] rotate-12" />
           <motion.div
             animate={{ scale: [1, 1.2, 1], rotate: [0, 5, 0] }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
@@ -136,7 +136,7 @@ const Overview = ({ userData, orders }) => {
               whileHover={{ rotate: 10, scale: 1.05 }}
               className="bg-gradient-to-br from-[#2e6034] to-[#1b361b]  p-5 rounded-[1rem] shadow-xl shadow-green-900/20 relative overflow-hidden"
             >
-              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
+              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.webp')] opacity-10" />
               <Calendar className="text-white relative z-10" size={36} strokeWidth={1.5} />
             </motion.div>
             <div className="text-center  lg:text-left flex-1 space-y-2">

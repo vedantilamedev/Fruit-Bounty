@@ -10,7 +10,7 @@ function SaladSection() {
       fruits: "5 Types",
       calories: "120 kcal",
       price: 199,
-      image: "/images/smallBowl.png",
+      image: "/images/smallBowl.webp",
     },
     {
       id: 2,
@@ -20,7 +20,7 @@ function SaladSection() {
       fruits: "7 Types",
       calories: "190 kcal",
       price: 299,
-      image: "/images/mediumBowl.png",
+      image: "/images/mediumBowl.webp",
       badge: "BESTSELLER",
     },
     {
@@ -31,7 +31,7 @@ function SaladSection() {
       fruits: "9 Types",
       calories: "280 kcal",
       price: 449,
-      image: "/images/largeBowl.png",
+      image: "/images/largeBowl.webp",
     },
   ];
 
@@ -42,7 +42,7 @@ function SaladSection() {
       <div
         className="absolute inset-0 z-0 opacity-40 pointer-events-none"
         style={{
-          backgroundImage: `url('/images/main-background.png')`,
+          backgroundImage: `url('/images/main-background.webp')`,
           backgroundSize: "400px",
           backgroundRepeat: "repeat",
         }}
