@@ -10,6 +10,7 @@ import {
   Salad,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const fruits = [
   { id: 1, name: "Berries", price: 40, calories: 50, protein: 1, image: "/images/berries.webp" },
@@ -72,6 +73,7 @@ function SectionHeading({ step, title, desc }) {
 
 function CustomBowlPage() {
   const { cart, addToCart } = useCart();
+  const navigate = useNavigate();
   const [selectedFruits, setSelectedFruits] = useState({});
   const [selectedToppings, setSelectedToppings] = useState({});
   const [selectedSize, setSelectedSize] = useState(null);
@@ -244,7 +246,7 @@ function CustomBowlPage() {
         </div>
       </section>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-12 lg:px-24 pb-28 md:pb-24">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-12 lg:px-24 pb-6 md:pb-24">
         <section className="mb-20">
           <SectionHeading
             step="Step 01"
@@ -252,14 +254,14 @@ function CustomBowlPage() {
             desc="Select a bowl size first. Prices and nutrition automatically adjust based on this size."
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
             {sizes.map((size) => {
               const active = selectedSize === size.id;
               return (
                 <button
                   key={size.id}
                   onClick={() => setSelectedSize(size.id)}
-                    className={`text-left rounded-[1.4rem] md:rounded-[2rem] border-2 p-4 md:p-6 transition-all duration-300 bg-white h-full ${
+                    className={`text-left rounded-[1.2rem] md:rounded-[2rem] border-2 p-3 md:p-6 transition-all duration-300 bg-white ${
                     active
                       ? "border-green-700 shadow-[0_18px_40px_rgba(22,101,52,0.25)] ring-4 ring-green-100"
                       : "border-[#ebe6cb] hover:border-green-300 hover:-translate-y-1"
@@ -268,14 +270,14 @@ function CustomBowlPage() {
                   <div className="flex justify-between items-start gap-2">
                     <div>
                       <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#b79654]">Portion</p>
-                      <h4 className={`text-2xl font-black mt-1 ${active ? "text-green-800" : "text-gray-900"}`}>
+                      <h4 className={`text-lg md:text-2xl font-black mt-1 ${active ? "text-green-800" : "text-gray-900"}`}>
                         {size.name}
                       </h4>
                     </div>
                     {active && <CheckCircle size={22} className="text-green-600" />}
                   </div>
-                  <p className="text-xs md:text-sm text-gray-500 mt-3 md:mt-4 leading-relaxed">{size.desc}</p>
-                  <div className="mt-5 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-green-800 bg-green-50 px-3 py-1.5 rounded-full">
+                  <p className="hidden sm:block text-xs md:text-sm text-gray-500 mt-3 md:mt-4 leading-relaxed">{size.desc}</p>
+                  <div className="mt-3 md:mt-5 inline-flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-wider text-green-800 bg-green-50 px-2.5 md:px-3 py-1.5 rounded-full">
                     {portionHighlights[size.id]}
                   </div>
                 </button>
@@ -300,20 +302,20 @@ function CustomBowlPage() {
 
           <div className="mb-6">
             <h4 className="text-xl md:text-2xl font-black text-gray-900 mb-4">Normal Fruits</h4>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5 md:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 md:gap-6">
               {normalFruits.map((fruit) => {
                 const active = !!selectedFruits[fruit.id];
                 return (
                   <button
                     key={fruit.id}
                     onClick={() => toggleFruit(fruit.id)}
-                    className={`relative text-left rounded-[1.2rem] md:rounded-[1.8rem] border p-3 md:p-4 bg-white transition-all duration-300 ${
+                    className={`relative text-left rounded-[1rem] md:rounded-[1.8rem] border p-2.5 md:p-4 bg-white transition-all duration-300 ${
                       active
                         ? "border-green-600 shadow-[0_16px_30px_rgba(22,101,52,0.2)] -translate-y-1"
                         : "border-[#ebe6cb] hover:border-green-300"
                     }`}
                   >
-                    <div className="w-full aspect-square rounded-2xl bg-gradient-to-br from-[#f4faf4] to-[#fff6e8] border border-[#ece7c9] flex items-center justify-center overflow-hidden">
+                    <div className="w-full aspect-square rounded-xl md:rounded-2xl bg-gradient-to-br from-[#f4faf4] to-[#fff6e8] border border-[#ece7c9] flex items-center justify-center overflow-hidden">
                       <img src={fruit.image} alt={fruit.name} className="w-[86%] h-[86%] object-contain" />
                     </div>
 
@@ -323,10 +325,10 @@ function CustomBowlPage() {
                       </div>
                     )}
 
-                    <div className="mt-4">
-                      <p className="font-black text-gray-900 leading-tight">{fruit.name}</p>
-                      <p className="text-green-800 font-black mt-1">Rs. {fruit.price}</p>
-                      <div className="mt-2 grid grid-cols-2 gap-1.5 md:gap-2">
+                    <div className="mt-2.5 md:mt-4">
+                      <p className="font-black text-[13px] md:text-base text-gray-900 leading-tight">{fruit.name}</p>
+                      <p className="text-green-800 font-black mt-0.5 md:mt-1 text-sm md:text-base">Rs. {fruit.price}</p>
+                      <div className="mt-1.5 md:mt-2 grid grid-cols-2 gap-1 md:gap-2">
                         <div className="bg-gray-50 rounded-lg px-2 py-1.5 border border-gray-100">
                           <p className="text-[8px] md:text-[9px] uppercase font-bold tracking-wider text-gray-400">Calories</p>
                           <p className="text-[11px] font-bold text-gray-700">{fruit.calories}</p>
@@ -345,20 +347,23 @@ function CustomBowlPage() {
 
           <div>
             <h4 className="text-xl md:text-2xl font-black text-gray-900 mb-4">Premium Fruits</h4>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5 md:gap-6">
-              {premiumFruits.map((fruit) => {
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5 md:gap-6">
+              {premiumFruits.map((fruit, index) => {
                 const active = !!selectedFruits[fruit.id];
+                const isLastOddMobileCard = premiumFruits.length % 2 === 1 && index === premiumFruits.length - 1;
                 return (
                   <button
                     key={fruit.id}
                     onClick={() => toggleFruit(fruit.id)}
-                    className={`relative text-left rounded-[1.2rem] md:rounded-[1.8rem] border p-3 md:p-4 bg-white transition-all duration-300 ${
+                    className={`relative text-left rounded-[1rem] md:rounded-[1.8rem] border p-2.5 md:p-4 bg-white transition-all duration-300 ${
+                      isLastOddMobileCard ? "col-span-2 sm:col-span-1 max-w-[220px] justify-self-center w-full" : ""
+                    } ${
                       active
                         ? "border-green-600 shadow-[0_16px_30px_rgba(22,101,52,0.2)] -translate-y-1"
                         : "border-[#ebe6cb] hover:border-green-300"
                     }`}
                   >
-                    <div className="w-full aspect-square rounded-2xl bg-gradient-to-br from-[#fff5eb] to-[#ffeed7] border border-[#ead9b8] flex items-center justify-center overflow-hidden">
+                    <div className="w-full aspect-square rounded-xl md:rounded-2xl bg-gradient-to-br from-[#fff5eb] to-[#ffeed7] border border-[#ead9b8] flex items-center justify-center overflow-hidden">
                       <img src={fruit.image} alt={fruit.name} className="w-[86%] h-[86%] object-contain" />
                     </div>
 
@@ -368,15 +373,15 @@ function CustomBowlPage() {
                       </div>
                     )}
 
-                    <div className="mt-4">
+                    <div className="mt-2.5 md:mt-4">
                       <div className="flex items-center justify-between gap-2">
-                        <p className="font-black text-gray-900 leading-tight">{fruit.name}</p>
+                        <p className="font-black text-[13px] md:text-base text-gray-900 leading-tight">{fruit.name}</p>
                         <span className="text-[9px] uppercase tracking-wider font-bold text-[#a06e1a] bg-[#fff2de] px-2 py-1 rounded-full">
                           Premium
                         </span>
                       </div>
-                      <p className="text-green-800 font-black mt-1">Rs. {fruit.price}</p>
-                      <div className="mt-2 grid grid-cols-2 gap-1.5 md:gap-2">
+                      <p className="text-green-800 font-black mt-0.5 md:mt-1 text-sm md:text-base">Rs. {fruit.price}</p>
+                      <div className="mt-1.5 md:mt-2 grid grid-cols-2 gap-1 md:gap-2">
                         <div className="bg-gray-50 rounded-lg px-2 py-1.5 border border-gray-100">
                           <p className="text-[8px] md:text-[9px] uppercase font-bold tracking-wider text-gray-400">Calories</p>
                           <p className="text-[11px] font-bold text-gray-700">{fruit.calories}</p>
@@ -394,27 +399,27 @@ function CustomBowlPage() {
           </div>
         </section>
 
-        <section className="mb-24">
+        <section className="mb-8 md:mb-24">
           <SectionHeading
             step="Step 03"
             title="Add Premium Toppings"
             desc="Finish your bowl with texture and flavor boosters."
           />
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 md:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 md:gap-6">
             {toppings.map((topping) => {
               const active = !!selectedToppings[topping.id];
               return (
                 <button
                   key={topping.id}
                   onClick={() => toggleTopping(topping.id)}
-                  className={`relative text-left rounded-[1.2rem] md:rounded-[1.8rem] border p-3 md:p-4 bg-white transition-all duration-300 ${
+                  className={`relative text-left rounded-[1rem] md:rounded-[1.8rem] border p-2.5 md:p-4 bg-white transition-all duration-300 ${
                     active
                       ? "border-green-600 shadow-[0_16px_30px_rgba(22,101,52,0.2)] -translate-y-1"
                       : "border-[#ebe6cb] hover:border-green-300"
                   }`}
                 >
-                  <div className="w-full aspect-square rounded-2xl bg-gradient-to-br from-[#f4faf4] to-[#fff6e8] border border-[#ece7c9] flex items-center justify-center overflow-hidden">
+                  <div className="w-full aspect-square rounded-xl md:rounded-2xl bg-gradient-to-br from-[#f4faf4] to-[#fff6e8] border border-[#ece7c9] flex items-center justify-center overflow-hidden">
                     <img src={topping.image} alt={topping.name} className="w-[84%] h-[84%] object-contain" />
                   </div>
 
@@ -424,9 +429,9 @@ function CustomBowlPage() {
                     </div>
                   )}
 
-                  <div className="mt-4">
-                    <p className="font-black text-gray-900 leading-tight">{topping.name}</p>
-                    <p className="text-green-800 font-black mt-1">+Rs. {topping.price}</p>
+                  <div className="mt-2.5 md:mt-4">
+                    <p className="font-black text-[13px] md:text-base text-gray-900 leading-tight">{topping.name}</p>
+                    <p className="text-green-800 font-black mt-0.5 md:mt-1 text-sm md:text-base">+Rs. {topping.price}</p>
                   </div>
                 </button>
               );
@@ -435,7 +440,7 @@ function CustomBowlPage() {
         </section>
 
         {selectedSize && (
-          <div className="sticky bottom-20 md:bottom-10 z-30 w-full pointer-events-none">
+          <div className="sticky bottom-2 md:bottom-10 z-30 w-full pointer-events-none">
             <div className="pointer-events-auto">
               <motion.div
                 layout
@@ -497,6 +502,7 @@ function CustomBowlPage() {
 
                       const nextQty = currentBowlQty + 1;
                       showToast(`Custom bowl added to cart. Qty: ${nextQty}`);
+                      navigate("/cart");
                     }}
                     className="w-full lg:w-auto bg-gradient-to-r from-green-700 to-green-900 hover:from-green-800 hover:to-green-950 text-white px-5 sm:px-8 md:px-12 py-3.5 md:py-4 rounded-2xl font-black text-sm sm:text-base md:text-lg flex items-center justify-center gap-2.5 shadow-xl transition-all active:scale-95"
                   >

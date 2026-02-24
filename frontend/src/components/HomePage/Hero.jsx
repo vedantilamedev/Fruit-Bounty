@@ -6,10 +6,10 @@ const Hero = () => {
   const navigate = useNavigate();
 
   const sideBowls = [
-    { id: 1, img: "/images/salad1.webp", top: "12%", left: "55%", delay: "0s" },
-    { id: 2, img: "/images/salad2.webp", top: "32%", left: "68%", delay: "0.5s" },
-    { id: 3, img: "/images/salad3.webp", top: "58%", left: "68%", delay: "1s" },
-    { id: 4, img: "/images/salad4.webp", top: "78%", left: "55%", delay: "1.5s" },
+    { id: 1, img: "/images/salad1.webp", top: "14%", left: "54%", delay: "0s" },
+    { id: 2, img: "/images/salad2.webp", top: "35%", left: "64%", delay: "0.5s" },
+    { id: 3, img: "/images/salad3.webp", top: "56%", left: "64%", delay: "1s" },
+    { id: 4, img: "/images/salad4.webp", top: "74%", left: "52%", delay: "1.5s" },
   ];
 
   return (

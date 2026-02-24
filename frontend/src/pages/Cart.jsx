@@ -105,8 +105,8 @@ function CartPage() {
             </Link>
           </div>
         ) : (
-          <div className="grid lg:grid-cols-12 gap-6 md:gap-8">
-            <section className="lg:col-span-7 space-y-4">
+          <div className="grid lg:grid-cols-12 items-start gap-6 md:gap-8 lg:h-[calc(100vh-190px)] lg:overflow-hidden">
+            <section className="lg:col-span-7 space-y-4 lg:h-full lg:overflow-y-auto lg:pr-2">
               {cart.map((item, index) => {
                 const quantity = item.quantity || 1;
                 const lineTotal = item.price * quantity;
@@ -244,62 +244,65 @@ function CartPage() {
               })}
             </section>
 
-            <aside className="lg:col-span-5">
-              <div className="bg-green-950 rounded-[2.5rem] p-7 md:p-8 shadow-2xl border-[3px] border-[#C9C27A] sticky top-8">
-                <div className="flex items-center gap-2 pb-5 border-b border-white/10">
-                  <ReceiptText size={19} className="text-[#C9C27A]" />
-                  <h2 className="text-white font-black uppercase tracking-widest text-sm">
-                    Order Summary
-                  </h2>
-                </div>
-
-                <div className="mt-5 space-y-3 text-[11px] font-black uppercase tracking-widest">
-                  <div className="flex justify-between text-white/60">
-                    <span>Item Total</span>
-                    <span className="text-white">{formatPrice(total)}</span>
+            {/* RIGHT SIDE - STICKY ORDER SUMMARY */}
+            <aside className="lg:col-span-5 lg:h-full">
+              <div className="h-fit">
+                <div className="bg-green-950 rounded-[2.5rem] p-7 md:p-8 shadow-2xl border-[3px] border-[#C9C27A] h-fit">
+                  <div className="flex items-center gap-2 pb-5 border-b border-white/10">
+                    <ReceiptText size={19} className="text-[#C9C27A]" />
+                    <h2 className="text-white font-black uppercase tracking-widest text-sm">
+                      Order Summary
+                    </h2>
                   </div>
-                  <div className="flex justify-between text-white/60">
-                    <span>Delivery</span>
-                    <span className="text-white">{formatPrice(deliveryFee)}</span>
-                  </div>
-                  <div className="flex justify-between text-white/60">
-                    <span>Platform Fee</span>
-                    <span className="text-white">{formatPrice(platformFee)}</span>
-                  </div>
-                </div>
 
-                <div className="pt-6 mt-6 border-t-2 border-dashed border-white/20 flex justify-between items-center">
-                  <span className="font-black text-[#C9C27A] text-lg uppercase tracking-tight">
-                    Grand Total
-                  </span>
-                  <span className="font-black text-white text-3xl tracking-tight">
-                    {formatPrice(grandTotal)}
-                  </span>
-                </div>
+                  <div className="mt-5 space-y-3 text-[11px] font-black uppercase tracking-widest">
+                    <div className="flex justify-between text-white/60">
+                      <span>Item Total</span>
+                      <span className="text-white">{formatPrice(total)}</span>
+                    </div>
+                    <div className="flex justify-between text-white/60">
+                      <span>Delivery</span>
+                      <span className="text-white">{formatPrice(deliveryFee)}</span>
+                    </div>
+                    <div className="flex justify-between text-white/60">
+                      <span>Platform Fee</span>
+                      <span className="text-white">{formatPrice(platformFee)}</span>
+                    </div>
+                  </div>
 
-                <button
-                  onClick={() => navigate("/checkout")}
-                  className="mt-6 w-full bg-[#C9C27A] text-green-950 flex justify-between items-center p-5 rounded-[1.6rem] shadow-xl hover:scale-[1.01] active:scale-95 transition-all group"
-                >
-                  <div className="text-left">
-                    <p className="text-[9px] uppercase font-black tracking-[0.2em] opacity-70">
-                      Confirm & Pay
+                  <div className="pt-6 mt-6 border-t-2 border-dashed border-white/20 flex justify-between items-center">
+                    <span className="font-black text-[#C9C27A] text-lg uppercase tracking-tight">
+                      Grand Total
+                    </span>
+                    <span className="font-black text-white text-3xl tracking-tight">
+                      {formatPrice(grandTotal)}
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={() => navigate("/checkout")}
+                    className="mt-6 w-full bg-[#C9C27A] text-green-950 flex justify-between items-center p-5 rounded-[1.6rem] shadow-xl hover:scale-[1.01] active:scale-95 transition-all group"
+                  >
+                    <div className="text-left">
+                      <p className="text-[9px] uppercase font-black tracking-[0.2em] opacity-70">
+                        Confirm & Pay
+                      </p>
+                      <p className="text-lg md:text-xl font-black uppercase tracking-tight">
+                        Checkout
+                      </p>
+                    </div>
+                    <ChevronRight
+                      size={22}
+                      className="group-hover:translate-x-1 transition-transform"
+                    />
+                  </button>
+
+                  <div className="mt-5 rounded-xl bg-white/5 border border-white/10 p-3 flex items-start gap-2">
+                    <ShieldCheck size={16} className="text-[#C9C27A] mt-0.5" />
+                    <p className="text-[10px] font-bold text-white/75 uppercase tracking-wide leading-relaxed">
+                      Secure checkout and fresh delivery scheduling.
                     </p>
-                    <p className="text-lg md:text-xl font-black uppercase tracking-tight">
-                      Checkout
-                    </p>
                   </div>
-                  <ChevronRight
-                    size={22}
-                    className="group-hover:translate-x-1 transition-transform"
-                  />
-                </button>
-
-                <div className="mt-5 rounded-xl bg-white/5 border border-white/10 p-3 flex items-start gap-2">
-                  <ShieldCheck size={16} className="text-[#C9C27A] mt-0.5" />
-                  <p className="text-[10px] font-bold text-white/75 uppercase tracking-wide leading-relaxed">
-                    Secure checkout and fresh delivery scheduling.
-                  </p>
                 </div>
               </div>
             </aside>
