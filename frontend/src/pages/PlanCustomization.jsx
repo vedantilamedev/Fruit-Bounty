@@ -44,7 +44,12 @@ const PlanCustomization = () => {
     { name: "Avocado", img: "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=200" }
   ];
 
-  const TOPPINGS = ["Nutties", "Honey", "Chia Seeds", "Granola", "Coconut Flakes"];
+  const TOPPINGS = [
+    { name: "Nuts", img: "/images/crunch.webp" },
+    { name: "Honey", img: "/images/honey.webp" },
+    { name: "Dry Fruits", img: "/images/dryfruits.webp" },
+    { name: "Yogurt", img: "/images/yoghurt.webp" },
+  ];
   const SIZES = [
     { label: "Small", qty: "300g Portion" },
     { label: "Medium", qty: "450g Portion" },
@@ -166,7 +171,15 @@ const PlanCustomization = () => {
                                 
                                 <div ref={scrollRef} className="flex gap-4 md:gap-6 overflow-x-auto pb-6 snap-x snap-mandatory no-scrollbar scroll-smooth items-stretch">
                                     {PRODUCTS.map(p => (
-                                        <div key={p.id} onClick={() => setSelectedBase(p)} className={`flex-shrink-0 snap-center transition-all p-1.5 md:p-2 rounded-[28px] flex h-auto ${selectedBase?.id === p.id ? 'bg-[#C9C27A]/10 ring-2 md:ring-4 ring-[#C9C27A]' : ''}`}>
+                                        <div
+                                          key={p.id}
+                                          onClick={() => setSelectedBase(p)}
+                                          className={`flex-shrink-0 snap-center transition-all rounded-[30px] border-2 overflow-hidden flex h-auto ${
+                                            selectedBase?.id === p.id
+                                              ? 'border-[#C9C27A] bg-[#C9C27A]/10 shadow-[0_14px_30px_rgba(201,194,122,0.35)]'
+                                              : 'border-transparent'
+                                          }`}
+                                        >
                                             <div className="w-[230px] md:w-[260px] flex">
                                               <PremiumCard product={{ title: p.name, calories: p.cals, image: p.img, weight: "450g", fruits: "Customizable", category: p.isCustom ? "Builder" : "Premium" }} />
                                             </div>
@@ -229,10 +242,24 @@ const PlanCustomization = () => {
                                 </div>
                                 <div>
                                     <h4 className="text-[10px] font-black uppercase text-gray-800 tracking-widest mb-6 flex items-center gap-2"><Utensils size={14}/> Toppings</h4>
-                                    <div className="flex flex-wrap gap-2 md:gap-3">
-                                        {TOPPINGS.map(t => (
-                                            <button key={t} onClick={() => toggleSelection('toppings', t)} className={`px-4 md:px-6 py-2.5 md:py-3 rounded-xl border-2 font-bold text-[9px] md:text-[10px] uppercase transition-all ${selections.toppings.includes(t) ? 'border-[#C9C27A] bg-[#C9C27A]/10 text-[#C9C27A]' : 'border-gray-100 text-gray-800'}`}>
-                                                {t}
+                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
+                                        {TOPPINGS.map((t) => (
+                                            <button
+                                              key={t.name}
+                                              onClick={() => toggleSelection('toppings', t.name)}
+                                              className={`relative p-3 md:p-4 rounded-2xl border-2 bg-white transition-all text-center active:scale-[0.98] ${
+                                                selections.toppings.includes(t.name)
+                                                  ? 'border-[#C9C27A] bg-[#C9C27A]/10 shadow-inner'
+                                                  : 'border-gray-100 hover:border-gray-200'
+                                              }`}
+                                            >
+                                                <div className="w-12 h-12 md:w-14 md:h-14 mx-auto mb-2 overflow-hidden">
+                                                  <img src={t.img} alt={t.name} className="w-full h-full object-contain" />
+                                                </div>
+                                                <span className="text-[9px] md:text-[10px] font-black uppercase block truncate">{t.name}</span>
+                                                {selections.toppings.includes(t.name) && (
+                                                  <CheckCircle size={14} className="absolute top-2 right-2 text-[#C9C27A]" />
+                                                )}
                                             </button>
                                         ))}
                                     </div>

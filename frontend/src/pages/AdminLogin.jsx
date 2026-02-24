@@ -390,6 +390,8 @@ const AdminLogin = () => {
             min-height: auto;
             border-radius: 20px;
           }
+          .admin-right { order: 1; }
+          .admin-left { display: none; }
           .admin-left {
             padding: 26px 20px;
             min-height: 220px;

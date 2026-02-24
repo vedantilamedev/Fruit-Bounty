@@ -605,6 +605,9 @@ function FruitShop() {
                     <p className="text-sm font-medium text-gray-600 truncate">
                       {selectedBowls.length} {selectedBowls.length === 1 ? "item" : "items"} selected
                     </p>
+                    <p className="text-xs text-gray-500 truncate mt-0.5">
+                      {selectedBowls.map((item) => item.title).join(", ")}
+                    </p>
                     <div className="flex items-center gap-1 mt-1">
                       {selectedBowls.slice(0, 3).map((item) => (
                         <img
