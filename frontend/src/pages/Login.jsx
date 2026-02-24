@@ -108,7 +108,7 @@ const handleLogin = async () => {
       left: isRegistering ? '50%' : '0%',
       width: '50%',
       height: '100%',
-      backgroundImage: "url('/images/login-illustration.png')",
+      backgroundImage: "url('/images/login-illustration.webp')",
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       zIndex: 10,
@@ -187,7 +187,7 @@ const handleLogin = async () => {
       <div style={styles.mainBox}>
         <div className="sliding-overlay" style={styles.overlaySection}>
           <div style={styles.topHeader}>
-            <img src="/images/footerlogo.png" alt="Logo" style={{ height: '50px' }} />
+            <img src="/images/footerlogo.webp" alt="Logo" style={{ height: '50px' }} />
             <div style={{ background: 'rgba(255,255,255,0.95)', padding: '15px 20px', borderRadius: '0px', textAlign: 'right', backdropFilter: 'blur(10px)' }}>
               <h3 style={{ color: '#2D5A27', margin: 0, fontSize: '1.2rem' }}>{isRegistering ? 'Fresh Starts' : 'Welcome Back'}</h3>
               <p style={{ color: '#666', fontSize: '0.85rem', margin: '5px 0 0 0' }}>Best fruit bowls in the city.</p>
