@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -5,7 +6,7 @@ import {
   ShieldCheck, 
   MapPin, 
   CreditCard, 
-  ChevronRight, 
+  ChevronRight,
   ArrowLeft, 
   Calendar, 
   Truck,
@@ -23,11 +24,86 @@ const Checkout = () => {
   const today = new Date();
   const deliveryDate = new Date();
   deliveryDate.setDate(today.getDate() + 1);
+  const [address, setAddress] = useState({
+    fullName: "",
+    house: "",
+    pincode: "",
+    contact: "",
+  });
 
   // Consistency with Cart pricing
   const deliveryFee = cart.length > 0 ? 40 : 0;
   const platformFee = cart.length > 0 ? 5 : 0;
   const grandTotal = total + deliveryFee + platformFee;
+
+  const loadRazorpay = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+const handlePayment = async () => {
+  if (!address.fullName || !address.house || !address.pincode || !address.contact) {
+    alert("Please fill delivery address");
+    return;
+  }
+
+  const loaded = await loadRazorpay();
+  if (!loaded) {
+    alert("Razorpay SDK failed to load");
+    return;
+  }
+
+  // 1️⃣ Create order on backend
+  const orderRes = await fetch("http://localhost:5000/api/payment/create-order", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ amount: grandTotal }),
+  });
+
+  const order = await orderRes.json();
+
+  // 2️⃣ Open Razorpay
+  const options = {
+    key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+    amount: order.amount,
+    currency: "INR",
+    name: "Fruit Bounty",
+    description: "Fresh Fruits Order",
+    order_id: order.id,
+
+    handler: async function (response) {
+      // 3️⃣ Verify + Save order
+      const verify = await fetch("http://localhost:5000/api/payment/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...response,
+          cartItems: cart,
+          totalAmount: grandTotal,
+          deliveryAddress: address,
+        }),
+      });
+
+      const data = await verify.json();
+
+      if (data.success) {
+        localStorage.removeItem("cart");
+        navigate("/order-success", { state: { order: data.order } });
+      } else {
+        alert("Payment verification failed");
+      }
+    },
+
+    theme: { color: "#C9C27A" },
+  };
+
+  const paymentObject = new window.Razorpay(options);
+  paymentObject.open();
+};
 
   return (
     <div className="min-h-screen font-sans bg-[#faf9f6] text-gray-900 relative selection:bg-[#C9C27A]/30">
@@ -71,27 +147,43 @@ const Checkout = () => {
               </div>
               
               <div className="space-y-4">
-                <input 
-                  type="text" 
-                  placeholder="FULL NAME" 
-                  className="w-full bg-[#faf9f6] border-2 border-gray-100 rounded-xl px-4 py-3 text-xs font-bold uppercase tracking-widest focus:border-[#C9C27A] outline-none transition-all"
-                />
-                <input 
-                  type="text" 
-                  placeholder="FLAT / HOUSE NO. / BUILDING" 
-                  className="w-full bg-[#faf9f6] border-2 border-gray-100 rounded-xl px-4 py-3 text-xs font-bold uppercase tracking-widest focus:border-[#C9C27A] outline-none transition-all"
-                />
+               <input
+                 type="text"
+                 placeholder="FULL NAME"
+                 value={address.fullName}
+                 onChange={(e) =>
+                   setAddress({ ...address, fullName: e.target.value })
+                 }
+                 className="..."
+               />
+               <input
+                 type="text"
+                 placeholder="FLAT / HOUSE NO. / BUILDING"
+                 value={address.house}
+                 onChange={(e) =>
+                   setAddress({ ...address, house: e.target.value })
+                 }
+                 className="..."
+               />
                 <div className="grid grid-cols-2 gap-4">
-                    <input 
-                      type="text" 
-                      placeholder="PINCODE" 
-                      className="w-full bg-[#faf9f6] border-2 border-gray-100 rounded-xl px-4 py-3 text-xs font-bold uppercase tracking-widest focus:border-[#C9C27A] outline-none transition-all"
+                    <input
+                      type="text"
+                      placeholder="PINCODE"
+                      value={address.pincode}
+                      onChange={(e) =>
+                        setAddress({ ...address, pincode: e.target.value })
+                      }
+                      className="..."
                     />
-                    <input 
-                      type="text" 
-                      placeholder="CONTACT NO." 
-                      className="w-full bg-[#faf9f6] border-2 border-gray-100 rounded-xl px-4 py-3 text-xs font-bold uppercase tracking-widest focus:border-[#C9C27A] outline-none transition-all"
-                    />
+                   <input
+                     type="text"
+                     placeholder="CONTACT NO."
+                     value={address.contact}
+                     onChange={(e) =>
+                       setAddress({ ...address, contact: e.target.value })
+                     }
+                     className="..."
+                   />
                 </div>
               </div>
             </div>
@@ -155,7 +247,7 @@ const Checkout = () => {
                 </div>
 
                 <button 
-                  onClick={() => navigate("/order-success")}
+                  onClick={handlePayment}
                   className="w-full bg-[#C9C27A] text-green-950 flex justify-between items-center p-6 rounded-[2rem] shadow-xl hover:scale-[1.02] active:scale-95 transition-all group"
                 >
                   <div className="text-left">
