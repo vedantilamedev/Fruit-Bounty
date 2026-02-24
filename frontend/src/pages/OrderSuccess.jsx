@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import { motion } from 'framer-motion';
 import { 
   CheckCircle, 
@@ -13,13 +14,35 @@ import {
 
 const OrderSuccess = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const order = location.state?.order;
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
 
-  const deliveryDate = new Date();
-  deliveryDate.setDate(deliveryDate.getDate() + 1);
+//  Login protection
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  // Prevent crash on refresh / direct visit
+  if (!order) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500 font-bold text-lg">
+          Loading order...
+        </p>
+      </div>
+    );
+  }
+
+    // Realistic delivery date
+    const deliveryDate = new Date(order.createdAt || Date.now());
+    deliveryDate.setDate(deliveryDate.getDate() + 1);
 
   // Animation variants for staggered entrance
   const containerVariants = {
