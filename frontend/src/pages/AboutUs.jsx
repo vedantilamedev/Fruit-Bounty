@@ -36,7 +36,7 @@
   
   const AboutUs = () => {
     useEffect(() => {
-      window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     }, []);
   
     return (
@@ -44,7 +44,7 @@
         className="min-h-screen px-4 sm:px-6 lg:px-8 py-12 lg:py-20"
         style={{
           backgroundImage: "url('/images/main-background.webp')",
-          backgroundSize: "cover",
+          backgroundSize: "cotain",
           backgroundPosition: "center",
           backgroundAttachment: "fixed",
           backgroundColor: "rgba(255, 255, 255, 0.95)",
