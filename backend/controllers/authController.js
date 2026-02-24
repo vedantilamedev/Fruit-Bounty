@@ -10,19 +10,15 @@ const generateToken = (id, role) => {
     process.env.JWT_SECRET,
     { expiresIn: "7d" }
   );
+
+
+  
 };
 
 //  Register User (Customer or Admin)
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password, role, adminKey } = req.body; // added adminKey
-
-    // ✅ Check admin secret key if role is admin
-    if (role === "admin") {
-      if (!adminKey || adminKey !== process.env.ADMIN_SECRET_KEY) {
-        return res.status(403).json({ message: "Invalid admin secret key" });
-      }
-    }
+    const { name, email, password, role } = req.body;
 
     const userExists = await User.findOne({ email });
 
@@ -106,7 +102,7 @@ export const loginUser = async (req, res) => {
   }
 };
 
-// Forgot Password
+
 export const forgotPassword = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
@@ -117,10 +113,12 @@ export const forgotPassword = async (req, res) => {
       });
     }
 
+    // Use model method
     const resetToken = user.getResetPasswordToken();
+
     await user.save({ validateBeforeSave: false });
 
-    const resetUrl = 'http://localhost:3000/reset-password/${resetToken}';
+    const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
 
     await sendEmail({
       email: user.email,
@@ -142,7 +140,6 @@ export const forgotPassword = async (req, res) => {
     });
   }
 };
-
 // Reset Password
 export const resetPassword = async (req, res) => {
   try {
@@ -162,13 +159,16 @@ export const resetPassword = async (req, res) => {
       });
     }
 
+    // Set new password (auto-hash from model)
     user.password = req.body.password;
+
+    // Clear reset fields
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
 
     await user.save();
 
-    // Send Password Reset Confirmation Email
+    // 🔹 Send Password Reset Confirmation Email
     try {
       await sendEmail({
         email: user.email,

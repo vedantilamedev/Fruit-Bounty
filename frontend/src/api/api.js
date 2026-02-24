@@ -1,9 +1,11 @@
 import axios from "axios";
 
+// base URL (local + production)
 const API = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: `${import.meta.env.VITE_API_URL}/api`,
 });
 
+//  APIs
 export const registerUser = (data) => API.post("/auth/register", data);
 export const loginUser = (data) => API.post("/auth/login", data);
 

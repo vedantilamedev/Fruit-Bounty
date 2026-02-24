@@ -10,7 +10,7 @@ function SaladSection() {
       fruits: "5 Types",
       calories: "120 kcal",
       price: 6.99,
-      image: "/images/smallBowl.png",
+      image: "/images/smallBowl.webp",
     },
     {
       id: 2,
@@ -20,8 +20,8 @@ function SaladSection() {
       fruits: "7 Types",
       calories: "190 kcal",
       price: 9.99,
-      image: "/images/mediumBowl.png",
-      badge: "BESTSELLER"
+      image: "/images/mediumBowl.webp",
+      badge: "BESTSELLER",
     },
     {
       id: 3,
@@ -31,23 +31,24 @@ function SaladSection() {
       fruits: "9 Types",
       calories: "280 kcal",
       price: 13.99,
-      image: "/images/largeBowl.png",
+      image: "/images/largeBowl.webp",
     },
   ];
 
   return (
-    <section className="relative py-12 md:py-16 overflow-hidden">
-      {/* 1. BACKGROUND IMAGE LAYER */}
-      <div 
+    <section className="relative py-12 md:py-16 overflow-hidden bg-[#FBF8F2]">
+
+      {/* BACKGROUND IMAGE */}
+      <div
         className="absolute inset-0 z-0 opacity-40 pointer-events-none"
-        style={{ 
-          backgroundImage: `url('/public/images/main-background.PNG')`,
-          backgroundSize: '400px',
-          backgroundRepeat: 'repeat'
+        style={{
+          backgroundImage: `url('/images/main-background.webp')`,
+          backgroundSize: "400px",
+          backgroundRepeat: "repeat",
         }}
       ></div>
 
-      {/* 2. HEADING - Reduced Margin */}
+      {/* HEADING */}
       <div className="relative z-10 text-center mb-8 md:mb-12 max-w-2xl mx-auto px-6">
         <h2 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tight">
           Our Salad Bowls
@@ -58,11 +59,11 @@ function SaladSection() {
         </p>
       </div>
 
-      {/* 3. CARDS CONTAINER - Enhanced Mobile View */}
-      <div className="relative z-10 flex overflow-x-auto snap-x snap-mandatory gap-2 md:gap-8 px-4 pb-10 hide-scrollbar md:grid md:grid-cols-3 md:px-10 lg:px-20 max-w-7xl mx-auto">
+      {/* CARDS CONTAINER */}
+      <div className="relative z-10 flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-8 px-4 pb-10 hide-scrollbar md:grid md:grid-cols-3 md:px-10 lg:px-20 max-w-7xl mx-auto">
         {products.map((product) => (
-          <div 
-            key={product.id} 
+          <div
+            key={product.id}
             className="snap-center flex-shrink-0 first:ml-4 last:mr-4 md:ml-0 md:mr-0"
           >
             <ProductCard product={product} />
@@ -70,7 +71,16 @@ function SaladSection() {
         ))}
       </div>
 
-      {/* CSS for scrollbar and background texture */}
+      {/* RIGHT FADE SHADOW (MOBILE ONLY) */}
+      <div className="absolute right-0 top-[55%] -translate-y-1/2 w-20 h-[65%] bg-gradient-to-l from-[#FBF8F2] to-transparent pointer-events-none md:hidden"></div>
+
+      {/* SWIPE INDICATOR */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 text-xs text-gray-500 md:hidden animate-pulse">
+        <span>Swipe</span>
+        <span>→</span>
+      </div>
+
+      {/* HIDE SCROLLBAR */}
       <style jsx>{`
         .hide-scrollbar::-webkit-scrollbar {
           display: none;
@@ -78,9 +88,6 @@ function SaladSection() {
         .hide-scrollbar {
           -ms-overflow-style: none;
           scrollbar-width: none;
-        }
-        section {
-            background-color: #FBF8F2; /* Base cream color */
         }
       `}</style>
     </section>

@@ -50,7 +50,7 @@ function Subscription() {
       <div 
         className="absolute inset-0 z-0 opacity-30 pointer-events-none"
         style={{ 
-          backgroundImage: `url('/public/images/main-background.PNG')`,
+          backgroundImage: `url('/public/images/main-background.webp')`,
           backgroundSize: '400px',
           backgroundRepeat: 'repeat'
         }}
@@ -134,8 +134,8 @@ function Subscription() {
         >
           {/* ADJACENT SHADE (Teal/Blue-Green) HOVER */}
           <div className="absolute inset-0 bg-[#255169] translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
-          <span className="relative flex items-center gap-3 text-white font-black text-xl tracking-tighter uppercase">
-            Explore All Plans <Sparkles size={24} className="text-[#C9C27A]" />
+          <span className="relative flex items-center gap-3 text-white font-black text-xl uppercase">
+            Explore  All  Plans <Sparkles size={24} className="text-[#C9C27A]" />
           </span>
         </button>
       </div>
