@@ -25,6 +25,7 @@ import { Navigate } from "react-router-dom";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import AdminRoutes from "./admin/routes/AdminRoutes";
+import AboutUs from "./pages/AboutUs";
 
 // ---------------- Layout Wrapper ----------------
 function Layout({ children }) {
@@ -109,6 +110,7 @@ export default function App() {
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />          
           <Route path="/customize" element={<CustomBowlPage />} />
+          <Route path="/about-us" element={<AboutUs />} />
 
           {/* Protected Dashboard Route */}
           <Route
