@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { 
-  ShieldCheck, 
-  MapPin, 
-  CreditCard, 
+import {
+  ShieldCheck,
+  MapPin,
+  CreditCard,
   ChevronRight,
-  ArrowLeft, 
-  Calendar, 
+  ArrowLeft,
+  Calendar,
   Truck,
   Sparkles
 } from "lucide-react";
@@ -17,6 +16,7 @@ const Checkout = () => {
   const { cart, total } = useCart();
   const navigate = useNavigate();
 
+  // Scroll to top on load
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
@@ -24,6 +24,7 @@ const Checkout = () => {
   const today = new Date();
   const deliveryDate = new Date();
   deliveryDate.setDate(today.getDate() + 1);
+
   const [address, setAddress] = useState({
     fullName: "",
     house: "",
@@ -31,11 +32,12 @@ const Checkout = () => {
     contact: "",
   });
 
-  // Consistency with Cart pricing
+  // Fees
   const deliveryFee = cart.length > 0 ? 40 : 0;
   const platformFee = cart.length > 0 ? 5 : 0;
   const grandTotal = total + deliveryFee + platformFee;
 
+  // Load Razorpay SDK dynamically
   const loadRazorpay = () => {
     return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -45,65 +47,73 @@ const Checkout = () => {
       document.body.appendChild(script);
     });
   };
-const handlePayment = async () => {
-  if (!address.fullName || !address.house || !address.pincode || !address.contact) {
-    alert("Please fill delivery address");
-    return;
-  }
 
-  const loaded = await loadRazorpay();
-  if (!loaded) {
-    alert("Razorpay SDK failed to load");
-    return;
-  }
+  const handlePayment = async () => {
+    // ✅ Validate address
+    if (!address.fullName || !address.house || !address.pincode || !address.contact) {
+      alert("Please fill delivery address");
+      return;
+    }
 
-  // 1️⃣ Create order on backend
-  const orderRes = await fetch("http://localhost:5000/api/payment/create-order", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ amount: grandTotal }),
-  });
+    // ✅ Load Razorpay SDK
+    const loaded = await loadRazorpay();
+    if (!loaded) {
+      alert("Razorpay SDK failed to load");
+      return;
+    }
 
-  const order = await orderRes.json();
-
-  // 2️⃣ Open Razorpay
-  const options = {
-    key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-    amount: order.amount,
-    currency: "INR",
-    name: "Fruit Bounty",
-    description: "Fresh Fruits Order",
-    order_id: order.id,
-
-    handler: async function (response) {
-      // 3️⃣ Verify + Save order
-      const verify = await fetch("http://localhost:5000/api/payment/verify", {
+    try {
+      // 1️⃣ Create order on backend
+      const orderRes = await fetch("http://localhost:5000/api/payment/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...response,
-          cartItems: cart,
-          totalAmount: grandTotal,
-          deliveryAddress: address,
-        }),
+        body: JSON.stringify({ amount: grandTotal }),
       });
+      const order = await orderRes.json();
 
-      const data = await verify.json();
+      // 2️⃣ Razorpay payment options
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: order.amount,
+        currency: "INR",
+        name: "Fruit Bounty",
+        description: "Fresh Fruits Order",
+        order_id: order.id,
 
-      if (data.success) {
-        localStorage.removeItem("cart");
-        navigate("/order-success", { state: { order: data.order } });
-      } else {
-        alert("Payment verification failed");
-      }
-    },
+        handler: async function (response) {
+          // 3️⃣ Verify payment on backend
+          const verifyRes = await fetch("http://localhost:5000/api/payment/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              ...response,
+              cartItems: cart,
+              totalAmount: grandTotal,
+              deliveryAddress: address,
+            }),
+          });
 
-    theme: { color: "#C9C27A" },
+          const data = await verifyRes.json();
+
+          if (data.success) {
+            localStorage.removeItem("cart"); // Clear cart
+            navigate("/order-success", { state: { order: data.order } });
+          } else {
+            alert("Payment verification failed");
+          }
+        },
+
+        theme: { color: "#C9C27A" },
+      };
+
+      // 4️⃣ Open Razorpay popup
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+    } catch (err) {
+      console.error(err);
+      alert("Payment initiation failed");
+    }
   };
-
-  const paymentObject = new window.Razorpay(options);
-  paymentObject.open();
-};
 
   return (
     <div className="min-h-screen font-sans bg-[#faf9f6] text-gray-900 relative selection:bg-[#C9C27A]/30">

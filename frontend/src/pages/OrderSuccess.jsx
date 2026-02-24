@@ -15,19 +15,19 @@ import {
 const OrderSuccess = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const order = location.state?.order;
+const [order, setOrder] = useState(null);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "instant" });
-  }, []);
+     // Grab order from state sent from Checkout
+     if (location.state && location.state.order) {
+       setOrder(location.state.order);
+     } else {
+       // If no order is passed, redirect to homepage/cart
+       navigate("/");
+     }
+     window.scrollTo({ top: 0, behavior: "smooth" });
+   }, [location.state, navigate]);
 
-//  Login protection
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login");
-    }
-  }, [navigate]);
 
   // Prevent crash on refresh / direct visit
   if (!order) {

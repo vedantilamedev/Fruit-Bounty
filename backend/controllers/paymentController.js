@@ -33,9 +33,9 @@ export const verifyPayment = async (req, res) => {
     .update(sign.toString())
     .digest("hex");
 
-  if (expectedSign === razorpay_signature) {
-    res.json({ success: true });
-  } else {
-    res.json({ success: false });
-  }
+if (expectedSign === razorpay_signature) {
+  res.json({ success: true, order: { id: razorpay_order_id, amount: req.body.totalAmount } });
+} else {
+  res.json({ success: false });
+}
 };
