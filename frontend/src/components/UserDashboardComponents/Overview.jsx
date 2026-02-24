@@ -53,7 +53,14 @@ const Overview = ({ userData, orders }) => {
       <motion.div
         variants={itemVariants}
         whileHover={{ y: -5, transition: { duration: 0.2 } }}
-        className="bg-white p-6 rounded-[1rem] shadow-sm border border-[#E8E4D9/60] flex flex-col justify-between hover:shadow-xl hover:shadow-green-900/5 transition-all duration-300 group h-full relative overflow-hidden"
+        className="
+bg-gradient-to-br from-[#2e5f35] to-[#1f3f25]
+p-6 rounded-[1.2rem]
+border border-[#c6a84b]
+shadow-[0_8px_25px_rgba(0,0,0,0.5)]
+flex flex-col justify-between
+transition-all duration-300
+group h-full relative overflow-hidden"
       >
 
         {/* Background decoration with rotation animation */}
@@ -66,16 +73,20 @@ const Overview = ({ userData, orders }) => {
 
         <div className="flex justify-between items-start z-10 mb-4">
           <motion.div
-            whileHover={{ scale: 1.1, rotate: 5 }}
-            className="w-14 h-14 rounded-2xl flex items-center justify-center text-white relative overflow-hidden shadow-lg shadow-black/5"
-            style={{
-              backgroundColor: hex,
-              boxShadow: `0 8px 20px -6px ${hex}66`
-            }}
+            whileHover={{ scale: 1.05 }}
+            className="
+    w-14 h-14 
+    rounded-xl 
+    flex items-center justify-center 
+    text-white
+    border border-[#c6a84b]
+    shadow-[0_4px_12px_rgba(0,0,0,0.4)]
+  "
+            style={{ backgroundColor: hex }}
           >
             {/* Glossy/Gradient Effects */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-black/5" />
-            <div className="absolute -top-2 -right-2 w-8 h-8 bg-white/20 rounded-full blur-md" />
+            {/* <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-black/5" />
+            <div className="absolute -top-2 -right-2 w-8 h-8 bg-white/20 rounded-full blur-md" /> */}
 
             <Icon size={26} strokeWidth={1.5} className="relative z-10 drop-shadow-sm" />
           </motion.div>
@@ -97,11 +108,11 @@ const Overview = ({ userData, orders }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-3xl lg:text-4xl font-normal text-gray-900 tracking-tight leading-none mb-1"
+            className="text-3xl lg:text-4xl font-normal text-white tracking-tight leading-none mb-1"
           >
             {value}
           </motion.h3>
-          {subtitle && <p className="text-[12px] text-gray-400 font-medium uppercase tracking-wide truncate pl-1">{subtitle}</p>}
+          {subtitle && <p className="text-[12px] text-white/60 font-medium uppercase tracking-wide truncate pl-1">{subtitle}</p>}
         </div>
       </motion.div>
     );
@@ -121,7 +132,7 @@ const Overview = ({ userData, orders }) => {
           className="bg-gradient-to-br min-w-[75vw] from-[#3C7E44] to-[#244f2a]
   border border-[#DAA520] rounded-[1rem] p-6 lg:p-8 
   relative overflow-hidden group 
-  hover:shadow-lg hover:shadow-yellow-900/20 
+ shadow-[0_10px_30px_rgba(0,0,0,0.6)]
   transition-all duration-500"
         >
           <div className="absolute top-0 right-0 w-80 h-80 bg-[url('https://www.transparenttextures.com/patterns/cubes.webp')] opacity-[0.03] rotate-12" />
@@ -191,7 +202,8 @@ const Overview = ({ userData, orders }) => {
           <motion.div
             variants={itemVariants}
             whileHover={{ y: -5 }}
-            className="bg-gradient-to-br min-w-[75vw] from-[#3C7E44] to-[#244f2a] p-8 rounded-[1rem] text-white shadow-2xl shadow-green-900/20 relative overflow-hidden flex flex-col justify-between min-h-[320px]  group"
+            className="bg-gradient-to-br min-w-[75vw] from-[#3C7E44] to-[#244f2a] p-8 rounded-[1rem] text-white shadow-[0_12px_35px_rgba(0,0,0,0.65)]
+border border-[#c6a84b] relative overflow-hidden flex flex-col justify-between min-h-[320px]  group"
           >
             <motion.div
               animate={{ rotate: 360 }}
@@ -231,7 +243,13 @@ const Overview = ({ userData, orders }) => {
               <motion.button
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setIsTrackingOpen(true)}
-                className="w-full py-4 bg-white text-[#3C7E44] hover:text-white rounded-[1rem] font-bold text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-[#9f8846] hover:text  transition-colors shadow-lg shadow-black/10 hover:shadow-xl group/btn"
+                className="w-full py-4 bg-[#e8e4d9]
+text-[#1f3f25]
+rounded-full
+shadow-[0_5px_12px_rgba(0,0,0,0.4)]
+hover:bg-[#d4b75f]
+hover:text-[#1f3f25]
+transition-all   font-bold text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3  hover:text   shadow-black/10 hover:shadow-xl group/btn"
               >
                 Track Order <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
               </motion.button>
@@ -273,7 +291,7 @@ const Overview = ({ userData, orders }) => {
                         }`}
                     />
                     <div>
-                      <p className={`font-medium ${step.completed || step.current ? 'text-gray-900' : 'text-gray-400'}`}>
+                      <p className={`font-medium ${step.completed || step.current ? 'text-white' : 'text-white/60'}`}>
                         {step.status}
                       </p>
                       <p className="text-xs text-gray-500">{step.description}</p>

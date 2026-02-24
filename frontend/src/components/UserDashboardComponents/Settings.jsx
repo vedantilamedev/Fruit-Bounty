@@ -7,7 +7,12 @@ import { useState } from "react";
 const cn = (...c) => c.filter(Boolean).join(" ");
 
 const Card = ({ className, children }) => (
-    <div className={cn("bg-white rounded-xl border border-slate-200/60 shadow-sm", className)}>
+    <div
+        className={cn(
+            "bg-[#1f5a32]/60 backdrop-blur-xl rounded-2xl border border-[#d5b975]/40 shadow-[0_20px_60px_rgba(0,0,0,0.35)]",
+            className
+        )}
+    >
         {children}
     </div>
 );
@@ -16,10 +21,10 @@ const Button = ({ className, variant, children, ...props }) => (
     <button
         {...props}
         className={cn(
-            "px-4 py-2 rounded-lg font-medium transition",
+            "px-5 py-2.5 rounded-xl font-bold uppercase tracking-wider text-xs transition-all duration-300",
             variant === "outline"
-                ? "border border-slate-300 hover:bg-slate-100"
-                : "bg-green-700 hover:bg-green-900 text-white",
+                ? "border border-[#d5b975]/40 text-[#d5b975] hover:bg-[#d5b975]/10"
+                : "bg-[#2c6e3f] hover:bg-[#2f7c47] text-white border border-[#d5b975]/30",
             className
         )}
     >
@@ -31,27 +36,31 @@ const Input = ({ className, ...props }) => (
     <input
         {...props}
         className={cn(
-            "w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-green-700 outline-none",
+            "w-full px-4 py-2.5 rounded-xl bg-[#163d24] border border-[#d5b975]/30 text-white placeholder:text-white/40 focus:ring-2 focus:ring-[#d5b975] outline-none transition",
             className
         )}
     />
 );
 
 const Label = ({ children }) => (
-    <label className="text-sm font-medium text-slate-700">{children}</label>
+    <label className="text-xs font-bold uppercase tracking-widest text-[#d5b975]">
+        {children}
+    </label>
 );
 
 const Switch = ({ checked, onChange }) => (
     <button
         onClick={() => onChange(!checked)}
         className={cn(
-            "relative w-12 h-6 rounded-full transition-all duration-300",
-            checked ? "bg-green-700" : "bg-slate-300"
+            "relative w-12 h-6 rounded-full transition-all duration-300 border",
+            checked
+                ? "bg-[#2c6e3f] border-[#d5b975]/40"
+                : "bg-[#163d24] border-[#d5b975]/20"
         )}
     >
         <span
             className={cn(
-                "absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-all duration-300",
+                "absolute top-1 left-1 w-4 h-4 rounded-full bg-[#d5b975] transition-all duration-300",
                 checked ? "translate-x-6" : "translate-x-0"
             )}
         />
@@ -63,7 +72,6 @@ const Switch = ({ checked, onChange }) => (
 export default function Settings({ userData }) {
     const [tab, setTab] = useState("profile");
 
-    // 🔥 ORIGINAL NOTIFICATION STRUCTURE (unchanged)
     const [notifications, setNotifications] = useState({
         email: true,
         sms: false,
@@ -72,21 +80,23 @@ export default function Settings({ userData }) {
     });
 
     return (
-        <div className="p-6 lg:p-8">
+        <div className="min-h-screen  p-6 lg:p-10 text-white">
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-8"
+                className="mb-10"
             >
-                <h1 className="text-3xl font-bold text-slate-800 mb-2">Settings</h1>
-                <p className="text-slate-500 text-sm">
+                <h1 className="text-4xl font-black tracking-tight mb-2">
+                    Settings
+                </h1>
+                <p className="text-white/60 text-sm uppercase tracking-widest">
                     Manage your account and application preferences
                 </p>
             </motion.div>
 
             {/* ---------- Tabs ---------- */}
 
-            <div className="flex gap-2 bg-slate-100 p-1 rounded-lg mb-6 w-fit">
+            <div className="flex gap-2 bg-[#163d24] p-1 rounded-xl mb-8 w-fit border border-[#d5b975]/30">
                 {[
                     { id: "profile", label: "Profile", icon: User },
                     { id: "notifications", label: "Notifications", icon: Bell },
@@ -96,10 +106,10 @@ export default function Settings({ userData }) {
                         key={item.id}
                         onClick={() => setTab(item.id)}
                         className={cn(
-                            "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition",
+                            "flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300",
                             tab === item.id
-                                ? "bg-white shadow text-green-700"
-                                : "text-slate-600 hover:bg-white/70"
+                                ? "bg-[#1f5a32] text-[#d5b975] border border-[#d5b975]/40 shadow"
+                                : "text-white/60 hover:text-white hover:bg-white/5"
                         )}
                     >
                         <item.icon className="w-4 h-4" />
@@ -111,15 +121,15 @@ export default function Settings({ userData }) {
             {/* ---------- PROFILE ---------- */}
 
             {tab === "profile" && (
-                <Card className="p-6">
-                    <h3 className="text-lg font-semibold text-slate-800 mb-6">
+                <Card className="p-8">
+                    <h3 className="text-xl font-black text-[#d5b975] mb-8 tracking-wide">
                         Profile Settings
                     </h3>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
                             <Label>Full Name</Label>
-                            <Input defaultValue={userData?.name} className="mt-2" />
+                            <Input defaultValue={userData?.name} className="mt-3" />
                         </div>
 
                         <div>
@@ -127,7 +137,7 @@ export default function Settings({ userData }) {
                             <Input
                                 defaultValue={userData?.email}
                                 readOnly
-                                className="mt-2 bg-slate-100"
+                                className="mt-3 opacity-70"
                             />
                         </div>
 
@@ -136,17 +146,17 @@ export default function Settings({ userData }) {
                             <Input
                                 defaultValue={userData?.phone}
                                 readOnly
-                                className="mt-2 bg-slate-100"
+                                className="mt-3 opacity-70"
                             />
                         </div>
 
                         <div>
                             <Label>Location</Label>
-                            <Input defaultValue="Bengaluru, India" className="mt-2" />
+                            <Input defaultValue="Bengaluru, India" className="mt-3" />
                         </div>
                     </div>
 
-                    <div className="flex justify-end gap-3 mt-6">
+                    <div className="flex justify-end gap-4 mt-10">
                         <Button variant="outline">Cancel</Button>
                         <Button>Save Changes</Button>
                     </div>
@@ -156,22 +166,25 @@ export default function Settings({ userData }) {
             {/* ---------- NOTIFICATIONS ---------- */}
 
             {tab === "notifications" && (
-                <Card className="p-6">
-                    <h3 className="text-lg font-semibold text-slate-800 mb-6">
+                <Card className="p-8">
+                    <h3 className="text-xl font-black text-[#d5b975] mb-8 tracking-wide">
                         Notification Preferences
                     </h3>
 
-                    <div className="space-y-5">
+                    <div className="space-y-6">
                         {[
                             ["email", "Email Updates", "Receive order updates and summaries"],
                             ["whatsapp", "WhatsApp Alerts", "Instant WhatsApp updates"],
                             ["sms", "SMS Notifications", "Important alerts via SMS"],
                             ["marketing", "Special Offers", "Promotions & seasonal deals"],
                         ].map(([key, title, desc]) => (
-                            <div key={key} className="flex items-center justify-between">
+                            <div
+                                key={key}
+                                className="flex items-center justify-between border-b border-[#d5b975]/10 pb-5"
+                            >
                                 <div>
-                                    <p className="font-medium text-slate-700">{title}</p>
-                                    <p className="text-sm text-slate-500">{desc}</p>
+                                    <p className="font-semibold text-white">{title}</p>
+                                    <p className="text-sm text-white/50">{desc}</p>
                                 </div>
 
                                 <Switch
@@ -192,27 +205,29 @@ export default function Settings({ userData }) {
             {/* ---------- SECURITY ---------- */}
 
             {tab === "security" && (
-                <Card className="p-6">
-                    <h3 className="text-lg font-semibold text-slate-800 mb-6">
+                <Card className="p-8">
+                    <h3 className="text-xl font-black text-[#d5b975] mb-8 tracking-wide">
                         Security Settings
                     </h3>
 
-                    <div className="space-y-4">
+                    <div className="space-y-6">
                         <div>
                             <Label>Current Password</Label>
-                            <Input type="currentpassword" className="mt-2" />
+                            <Input type="password" className="mt-3" />
                         </div>
 
                         <div>
                             <Label>New Password</Label>
-                            <Input type="newpassword" className="mt-2" />
-                        </div>
-                        <div>
-                            <Label>confirm password</Label>
-                            <Input type="confirmpassword" className="mt-2" />
+                            <Input type="password" className="mt-3" />
                         </div>
 
-                        <Button>Update Password</Button>
+                        <div>
+                            <Label>Confirm Password</Label>
+                            <Input type="password" className="mt-3" />
+                        </div>
+                        <p className="text-blue-500 hover:[text-shadow:2px_2px_5px_rgba(0,0,0,0.9)] cursor-pointer">Forget Password?</p>
+
+                        <Button className="mt-4">Update Password</Button>
                     </div>
                 </Card>
             )}

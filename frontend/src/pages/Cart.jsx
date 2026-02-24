@@ -112,6 +112,7 @@ function CartPage() {
                 const lineTotal = item.price * quantity;
                 const details = getDescriptionParts(item.description);
                 const bowlSize = item.size || getSizeFromName(item.name);
+                const itemDisplayName = item.name || item.title || "Selected Item";
 
                 return (
                   <article
@@ -122,7 +123,7 @@ function CartPage() {
                       <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-[#faf9f6] overflow-hidden border border-gray-100 flex-shrink-0">
                         <img
                           src={item.image || "/images/custom.webp"}
-                          alt={item.name}
+                          alt={itemDisplayName}
                           className="w-full h-full object-cover"
                         />
                       </div>
@@ -131,7 +132,7 @@ function CartPage() {
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0">
                             <h3 className="font-black text-gray-900 text-lg md:text-xl uppercase tracking-tight leading-tight truncate">
-                              {item.name}
+                              {itemDisplayName}
                             </h3>
                             <p className="text-green-800 font-black text-base md:text-lg">
                               {formatPrice(item.price)}
@@ -141,7 +142,7 @@ function CartPage() {
                           <button
                             onClick={() => removeFromCart(item.id || item._id)}
                             className="w-9 h-9 rounded-xl border border-red-100 text-red-500 hover:bg-red-50 flex items-center justify-center"
-                            aria-label={`Remove ${item.name}`}
+                            aria-label={`Remove ${itemDisplayName}`}
                           >
                             <Trash2 size={16} />
                           </button>
@@ -214,7 +215,7 @@ function CartPage() {
                             <button
                               onClick={() => handleDecrease(item)}
                               className="w-8 h-8 rounded-lg bg-white border border-gray-100 text-gray-600 hover:text-red-500 flex items-center justify-center"
-                              aria-label={`Decrease ${item.name}`}
+                              aria-label={`Decrease ${itemDisplayName}`}
                             >
                               <Minus size={15} />
                             </button>
@@ -222,7 +223,7 @@ function CartPage() {
                             <button
                               onClick={() => handleIncrease(item)}
                               className="w-8 h-8 rounded-lg bg-white border border-gray-100 text-green-800 flex items-center justify-center"
-                              aria-label={`Increase ${item.name}`}
+                              aria-label={`Increase ${itemDisplayName}`}
                             >
                               <Plus size={15} />
                             </button>
@@ -255,11 +256,11 @@ function CartPage() {
                     </h2>
                   </div>
 
-                  <div className="mt-5 space-y-3 text-[11px] font-black uppercase tracking-widest">
-                    <div className="flex justify-between text-white/60">
-                      <span>Item Total</span>
-                      <span className="text-white">{formatPrice(total)}</span>
-                    </div>
+                <div className="mt-5 space-y-3 text-[11px] font-black uppercase tracking-widest">
+                  <div className="flex justify-between text-white/60">
+                    <span>Item Total</span>
+                    <span className="text-white">{formatPrice(total)}</span>
+                  </div>
                     <div className="flex justify-between text-white/60">
                       <span>Delivery</span>
                       <span className="text-white">{formatPrice(deliveryFee)}</span>
