@@ -79,7 +79,7 @@ function Footer() {
                   { label: "Home", to: "/" },
                   { label: "Our Bowls", to: "/shop" },
                   { label: "Customize Bowl", to: "/customize" },
-                  { label: "About Us", to: "/aboutus" },
+                  { label: "About Us", to: "/about-us" },
                 ].map((link) => (
                   <Link
                     key={link.label}
