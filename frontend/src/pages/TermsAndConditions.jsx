@@ -63,7 +63,7 @@ const TermsAndConditions = () => {
     <div
       className="min-h-screen px-4 sm:px-6 lg:px-8 py-12 lg:py-20"
       style={{
-        backgroundImage: "url('/public/images/main-background.webp')",
+        backgroundImage: "url('/images/main-background.webp')",
         backgroundSize: "contain",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",

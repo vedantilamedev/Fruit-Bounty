@@ -34,11 +34,11 @@ function Testimonials() {
   ];
 
   return (
-<section ref={sectionRef} className="relative pt-10 pb-24 md:pb-32 px-4 overflow-hidden">      {/* 1. MAIN BACKGROUND IMAGE INTEGRATION */}
+<section ref={sectionRef} className="relative pt-10 pb-10 md:pb-12 px-4 overflow-hidden">      {/* 1. MAIN BACKGROUND IMAGE INTEGRATION */}
       <div 
         className="absolute inset-0 z-0 opacity-85 pointer-events-none" 
         style={{ 
-            backgroundImage: `url('/public/images/main-background.webp')`, 
+            backgroundImage: `url('/images/main-background.webp')`, 
             backgroundSize: '400px',
             backgroundRepeat: 'repeat'
         }}

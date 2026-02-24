@@ -24,7 +24,7 @@ function WhatIsFruitSalad() {
     /* Reduced bottom padding: changed from py-12 md:py-24 to pt-12 pb-6 md:pt-24 md:pb-12 */
     <section ref={sectionRef} className="relative pt-12 pb-6 md:pt-24 md:pb-12 px-4 overflow-hidden bg-[#FBF8F2]">
       {/* Background Pattern */}
-      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none" style={{ backgroundImage: `url('/public/images/main-background.webp')`, backgroundSize: '400px' }}></div>
+      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none" style={{ backgroundImage: `url('/images/main-background.webp')`, backgroundSize: '400px' }}></div>
 
       <div className={`relative z-10 text-center max-w-2xl mx-auto mb-10 md:mb-20 transition-all duration-1000 ${visible ? "opacity-100" : "opacity-0"}`}>
         <h2 className="text-3xl md:text-6xl font-black text-gray-900 tracking-tight">Why is it so Delicious?</h2>
@@ -40,7 +40,7 @@ function WhatIsFruitSalad() {
           
           <div className="relative w-44 h-44 md:w-80 md:h-80 lg:w-[480px] lg:h-[480px] flex items-center justify-center animate-heartbeat">
             <img 
-              src="/public/images/—Pngtree—mixed-fruits.webp" 
+              src="/images/—Pngtree—mixed-fruits.webp" 
               alt="Fresh Salad" 
               className="w-full h-full object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.1)]" 
             />

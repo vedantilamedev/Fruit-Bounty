@@ -46,7 +46,6 @@ const sizes = [
   { id: "small", name: "Small", multiplier: 1, desc: "Perfect for a quick, vitamin-rich refreshment." },
   { id: "medium", name: "Medium", multiplier: 1.3, desc: "Our most popular balanced meal size." },
   { id: "large", name: "Large", multiplier: 1.6, desc: "High-fiber powerhouse for active days." },
-  { id: "family", name: "Family Size", multiplier: 2, desc: "Shared health for the whole family." },
 ];
 
 const portionHighlights = {

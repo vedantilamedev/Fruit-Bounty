@@ -32,7 +32,7 @@ function CustomizeBowl() {
       <div 
         className="absolute inset-0 z-0 opacity-40 pointer-events-none"
         style={{ 
-          backgroundImage: `url('/public/images/main-background.webp')`,
+          backgroundImage: `url('/images/main-background.webp')`,
           backgroundSize: '400px',
           backgroundRepeat: 'repeat'
         }}
