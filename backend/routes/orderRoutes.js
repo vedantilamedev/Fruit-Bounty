@@ -1,21 +1,26 @@
 import express from "express";
+import { protect, admin } from "../middleware/authMiddleware.js";
 import {
+  createOrder,
+  getMyOrders,
+  getOrderById,
+  getMySubscriptions,
+  cancelOrder,
   getAllOrders,
-  updateOrderStatus
+  updateOrderStatus,
 } from "../controllers/orderController.js";
-
-import authMiddleware from "../middleware/authMiddleware.js";
-import roleMiddleware from "../middleware/roleMiddleware.js";
 
 const router = express.Router();
 
-// // Customer creates order
-// router.post("/", authMiddleware, createOrder);
+// Customer
+router.post("/", protect, createOrder);
+router.get("/myorders", protect, getMyOrders);
+router.get("/mysubscriptions", protect, getMySubscriptions);
+router.get("/:id", protect, getOrderById);
+router.put("/cancel/:id", protect, cancelOrder);
 
-// Admin views all orders
-router.get("/", authMiddleware, roleMiddleware("admin"), getAllOrders);
-
-// Admin updates order status
-router.put("/:id", authMiddleware, roleMiddleware("admin"), updateOrderStatus);
+// Admin
+router.get("/", protect, admin, getAllOrders);
+router.put("/:id/status", protect, admin, updateOrderStatus);
 
 export default router;
