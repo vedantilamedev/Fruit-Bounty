@@ -14,10 +14,10 @@ const ContactUs = () => {
   const navigate = useNavigate();
 
   // The deep green hex code from your provided image
-  const brandGreen = '#264d33';
+  const brandGreen = '#3C7E44';
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+   window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   }, []);
 
   const styles = {
@@ -78,7 +78,8 @@ const ContactUs = () => {
       flex: '1',
       minWidth: '350px',
       padding: '50px',
-      backgroundColor: brandGreen, // Updated
+    backgroundColor: "#1a5a3a",
+borderLeft: "3px solid #C9C27A",
       color: '#fff',
       display: 'flex',
       flexDirection: 'column',
