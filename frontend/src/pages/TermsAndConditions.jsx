@@ -96,7 +96,7 @@ const TermsAndConditions = () => {
           <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-[#FBF8F2] rounded-lg border border-[#E8E4D9]">
             <CheckCircle2 size={16} className="text-[#3C7E44]" />
             <span className="text-xs font-bold text-gray-700">
-              Effective Date: {monthYear}
+              Updated Date: {monthYear}
             </span>
           </div>
         </div>
@@ -151,5 +151,6 @@ const TermsAndConditions = () => {
 
 
 export default TermsAndConditions;
+
 
 
