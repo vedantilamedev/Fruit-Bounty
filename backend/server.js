@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
-
+dotenv.config({ path: "./.env" });
 // Routes
 import authRoutes from "./routes/authRoutes.js";
 import fruitRoutes from "./routes/fruitRoutes.js";
@@ -12,7 +12,7 @@ import paymentRoutes from "./routes/paymentRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 
 // Load environment variables
-dotenv.config();
+
 
 // Connect to MongoDB
 connectDB();
