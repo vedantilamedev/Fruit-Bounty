@@ -1,6 +1,5 @@
 import express from "express";
 import {
-  createOrder,
   getAllOrders,
   updateOrderStatus
 } from "../controllers/orderController.js";
@@ -10,8 +9,8 @@ import roleMiddleware from "../middleware/roleMiddleware.js";
 
 const router = express.Router();
 
-// Customer creates order
-router.post("/", authMiddleware, createOrder);
+// // Customer creates order
+// router.post("/", authMiddleware, createOrder);
 
 // Admin views all orders
 router.get("/", authMiddleware, roleMiddleware("admin"), getAllOrders);

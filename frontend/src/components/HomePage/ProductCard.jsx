@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 function ProductCard({ product }) {
+
+  const navigate = useNavigate();
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
 
@@ -13,6 +17,11 @@ function ProductCard({ product }) {
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
   }, []);
+
+
+ const handleOrderNow = () => {
+   navigate("/shop");
+ };
 
   return (
     /* Removed extra horizontal padding to ensure parent gap controls spacing exactly */
@@ -74,9 +83,12 @@ function ProductCard({ product }) {
             <div className="text-2xl md:text-3xl font-black text-[#C9C27A] mb-3">
               ₹{product.price}
             </div>
-            <button className="w-full bg-gradient-to-r from-green-700 to-green-900 hover:from-green-800 hover:to-green-950 text-white py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-green-900/10">
-              Order Now
-            </button>
+           <button
+             onClick={handleOrderNow}
+             className="w-full bg-gradient-to-r from-green-700 to-green-900 hover:from-green-800 hover:to-green-950 text-white py-3.5 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-green-900/10"
+           >
+             Order Now
+           </button>
           </div>
         </div>
 

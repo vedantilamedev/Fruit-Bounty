@@ -10,6 +10,7 @@ import packageRoutes from "./routes/packageRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import userRotes from "./routes/userRoutes.js"
 
 // Load environment variables
 
@@ -38,7 +39,7 @@ app.use("/api/packages", packageRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/admin", adminRoutes);
-
+app.use("/api/users", userRotes);
 
 // ✅ 404 Handler
 app.use((req, res) => {

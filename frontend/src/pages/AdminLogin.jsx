@@ -32,7 +32,7 @@ const AdminLogin = () => {
     }
 
     try {
-      await axios.post("/api/admin/register", registerData);
+      await axios.post("http://localhost:5000/api/admin/register", registerData);
       alert("Request sent successfully");
       setIsRegistering(false);
     } catch (error) {
@@ -44,6 +44,7 @@ const AdminLogin = () => {
     e.preventDefault();
 
     try {
+        console.log(loginData);
       const res = await axios.post(
         "http://localhost:5000/api/admin/login",
         loginData,
