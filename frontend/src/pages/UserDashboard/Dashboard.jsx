@@ -11,11 +11,12 @@ import Settings from '../../components/UserDashboardComponents/Settings';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
+
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('overview');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [showToast, setShowToast] = useState(false);
-
+    const [payments, setPayments] = useState([]);
 
     // Dummy Data for Development
     const [userData, setUserData] = useState({
@@ -33,72 +34,51 @@ const Dashboard = () => {
             renewalDate: "2026-03-01",
             status: "Active",
             fruits: ["Apple", "Banana", "Pomegranate", "Kiwi", "Orange", "Mango", "Papaya"]
-        },
-        payments: [
-            { id: "TXN789456", date: "2026-02-15", amount: 2499, status: "Success", method: "UPI" },
-            { id: "TXN789123", date: "2026-01-15", amount: 2499, status: "Success", method: "Card" },
-            { id: "TXN788901", date: "2025-12-15", amount: 2499, status: "Success", method: "UPI" },
-            { id: "TXN788888", date: "2026-02-19", amount: 499, status: "Pending", method: "UPI" },
-            { id: "TXN788777", date: "2026-02-18", amount: 1299, status: "Failed", method: "Card" },
-        ]
+        }
     });
 
-    const [orders, setOrders] = useState([
-        {
-            id: "ORD-2026-105",
-            date: "2026-02-16",
-            amount: 399,
-            status: "Pending",
-            paymentStatus: "Paid",
-            deliveryDate: "2026-02-17", // Order Date + 1
-            items: [{ name: "Premium Mixed Fruit Bowl", qty: 1 }]
-        },
-        {
-            id: "ORD-2026-104",
-            date: "2026-02-14",
-            amount: 599,
-            status: "Delivered",
-            paymentStatus: "Paid",
-            deliveryDate: "2026-02-15",
-            items: [{ name: "Exotic Tropical Salad", qty: 2 }]
-        },
-        {
-            id: "ORD-2026-103",
-            date: "2026-02-12",
-            amount: 299,
-            status: "Delivered",
-            paymentStatus: "Paid",
-            deliveryDate: "2026-02-13",
-            items: [{ name: "Fresh Citrus Bowl", qty: 1 }]
-        },
-        {
-            id: "ORD-2026-102",
-            date: "2026-02-10",
-            amount: 250,
-            status: "Canceled",
-            paymentStatus: "Failed",
-            deliveryDate: "2026-02-11",
-            items: [{ name: "Daily Citrus Pack", qty: 1 }]
-        },
-        {
-            id: "ORD-2026-101",
-            date: "2026-02-18",
-            amount: 450,
-            status: "Confirmed",
-            paymentStatus: "Paid",
-            deliveryDate: "2026-02-19",
-            items: [{ name: "Royal Mango Platter", qty: 1 }]
-        },
-        {
-            id: "ORD-2026-100",
-            date: "2026-02-17",
-            amount: 320,
-            status: "Confirmed",
-            paymentStatus: "Paid",
-            deliveryDate: "2026-02-18",
-            items: [{ name: "Berry Blast Box", qty: 1 }]
-        }
-    ]);
+    const [orders, setOrders] = useState([]);
+
+    useEffect(() => {
+        const fetchOrders = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                const res = await axios.get("/api/users/my-orders", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                const rawOrders = res.data.data || [];
+
+                setOrders(
+                    rawOrders.map(order => ({
+                        id: order._id,
+                        status: order.order_status,
+                        amount: order.total_amount,
+                        date: order.createdAt,
+                        items: order.items
+                    }))
+                );
+
+                // ✅ Derive payments from the same orders
+                setPayments(
+                    rawOrders
+                        .filter(order => order.payment_status === "Paid") // only paid ones
+                        .map(order => ({
+                            id: order._id,
+                            amount: order.total_amount,
+                            method: "Razorpay",   // you don't store method separately, hardcode or add to schema
+                            status: order.payment_status === "Paid" ? "Success" : "Pending",
+                            date: new Date(order.createdAt).toLocaleDateString("en-IN")
+                        }))
+                );
+
+            } catch (error) {
+                console.error("Error fetching orders:", error.response?.data || error.message);
+            }
+        };
+
+        fetchOrders();
+    }, []);
 
     const handleCancelOrder = (orderId) => {
         setOrders(prev => prev.map(order =>
@@ -125,7 +105,7 @@ const Dashboard = () => {
             case 'packages':
                 return <Packages activePackage={userData.activePackage} />;
             case 'payments':
-                return <Payments payments={userData.payments} />;
+                return <Payments payments={payments} />;
             case 'settings':
                 return <Settings userData={userData} />;
             default:
@@ -150,7 +130,7 @@ const Dashboard = () => {
     };
 
     return (
-        
+
         <div className="h-screen bg-[url('/images/main-background.webp')] flex flex-col lg:flex-row overflow-hidden relative">
             <ToastContainer
                 position="top-right"
@@ -161,11 +141,11 @@ const Dashboard = () => {
                 pauseOnHover
                 theme="light"
             />
-            
+
             {/* Mobile Header */}
             <div className="lg:hidden bg-white shadow-sm flex justify-between items-center shrink-0 z-30">
-                
-                
+
+
                 <div className=" p-4 flex items-center justify-center bg-transparent">
                     <img
                         src="/images/footerlogo.webp"
@@ -177,7 +157,7 @@ const Dashboard = () => {
                     {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
             </div>
-            
+
 
             {/* Sidebar Navigation */}
             {/* Sidebar Navigation */}
@@ -186,7 +166,7 @@ const Dashboard = () => {
     fixed inset-y-0 left-0 z-50 w-72
     bg-gradient-to-b from-[#2f5e2f] to-[#1f3d1f]
     shadow-[8px_0_30px_rgba(0,0,0,0.6)] transform transition-transform duration-300 ease-in-out
-    lg:static lg:translate-x-0 
+    lg:static lg:translate-x-0
     shrink-0
     ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
     lg:h-full lg:overflow-y-auto
@@ -214,7 +194,7 @@ const Dashboard = () => {
             rounded-xl transition-all duration-300
             text-[15px] font-medium
             ${activeTab === item.id
-                                    ? "bg-[#3f7c3f] text-white shadow-[0_9px_14px_rgba(0,0,0,1),inset_0_1px_2px_rgba(255,255,255,0.15)] border border-[#c6a84b]"
+                                        ? "bg-[#3f7c3f] text-white shadow-[0_9px_14px_rgba(0,0,0,1),inset_0_1px_2px_rgba(255,255,255,0.15)] border border-[#c6a84b]"
                                         : "text-[#f5e6b3] hover:bg-[#346639]/60 hover:text-white"
                                     }
           `}

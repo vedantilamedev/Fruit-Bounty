@@ -1,4 +1,5 @@
 import razorpay from "../config/razorpay.js";
+import Order from "../models/Order.js";
 import crypto from "crypto";
 
 export const createOrder = async (req, res) => {
@@ -20,22 +21,47 @@ export const createOrder = async (req, res) => {
 };
 
 export const verifyPayment = async (req, res) => {
-  const {
-    razorpay_order_id,
-    razorpay_payment_id,
-    razorpay_signature,
-  } = req.body;
+  try {
 
-  const sign = razorpay_order_id + "|" + razorpay_payment_id;
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      cartItems,
+      totalAmount,
+      deliveryAddress
+    } = req.body;
 
-  const expectedSign = crypto
-    .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
-    .update(sign.toString())
-    .digest("hex");
+    const sign = razorpay_order_id + "|" + razorpay_payment_id;
 
-  if (expectedSign === razorpay_signature) {
-    res.json({ success: true });
-  } else {
-    res.json({ success: false });
+    const expectedSign = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(sign.toString())
+      .digest("hex");
+
+    if (expectedSign !== razorpay_signature) {
+      return res.json({ success: false });
+    }
+
+    // ✅ SAVE ORDER TO DATABASE
+
+    const newOrder = await Order.create({
+      user_id: req.user?.id, // if using auth middleware
+      total_amount: totalAmount,
+      delivery_date: new Date(),
+      order_status: "Confirmed",
+      payment_status: "Paid",
+      items: cartItems,
+      deliveryAddress: deliveryAddress
+    });
+
+    res.json({
+      success: true,
+      order: newOrder
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
   }
 };

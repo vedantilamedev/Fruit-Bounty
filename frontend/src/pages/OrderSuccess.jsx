@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
+
 import { 
   CheckCircle, 
   Package, 
@@ -15,19 +15,24 @@ import {
 const OrderSuccess = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const order = location.state?.order;
+const [order, setOrder] = useState(null);
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "instant" });
-  }, []);
+useEffect(() => {
+  if (location.state && location.state.order) {
+    const newOrder = location.state.order;
+    setOrder(newOrder);
 
-//  Login protection
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login");
-    }
-  }, [navigate]);
+    // 🔥 SAVE TO LOCALSTORAGE
+    const existingOrders = JSON.parse(localStorage.getItem("userOrders")) || [];
+    localStorage.setItem("userOrders", JSON.stringify([newOrder, ...existingOrders]));
+
+  } else {
+    navigate("/");
+  }
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, [location.state, navigate]);
+
 
   // Prevent crash on refresh / direct visit
   if (!order) {

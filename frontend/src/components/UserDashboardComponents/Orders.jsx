@@ -7,11 +7,13 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Orders = ({ orders, onCancelOrder }) => {
+    console.log(orders);
+    
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [statusFilter, setStatusFilter] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
 
-    const filteredOrders = orders.filter(order => {
+    const filteredOrders = orders?.filter(order => {
         const matchesStatus = statusFilter === 'All' || order.status === statusFilter;
         const matchesSearch =
             order.id.toString().includes(searchQuery) ||
@@ -76,17 +78,17 @@ const Orders = ({ orders, onCancelOrder }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <StatCard
                     title="Active Orders"
-                    value={orders.filter(o => ['Pending', 'Confirmed'].includes(o.status)).length}
+                    value={orders?.filter(o => ['Pending', 'Confirmed'].includes(o.status))?.length}
                     icon={Package}
                 />
                 <StatCard
                     title="Completed"
-                    value={orders.filter(o => o.status === 'Delivered').length}
+                    value={orders?.filter(o => o.status === 'Delivered')?.length}
                     icon={CheckCircle}
                 />
                 <StatCard
                     title="Invested in Freshness"
-                    value={`₹${orders.reduce((sum, o) => sum + o.amount, 0)}`}
+                    value={`₹${orders?.reduce((sum, o) => sum + o.amount, 0)}`}
                     icon={CreditCard}
                 />
             </div>
@@ -120,7 +122,7 @@ const Orders = ({ orders, onCancelOrder }) => {
                      border border-[#c6a84b]
                      rounded-xl text-sm text-white
                      focus:outline-none focus:ring-2 focus:ring-green-500">
-                    {['All', 'Pending', 'Confirmed', 'Delivered', 'Canceled'].map((status) => (
+                    {['All', 'Pending', 'Confirmed', 'Delivered', 'Canceled']?.map((status) => (
                         <option key={status} value={status}>
                             {status}
                         </option>
@@ -131,13 +133,13 @@ const Orders = ({ orders, onCancelOrder }) => {
             {/* Orders */}
             <div className="space-y-4">
                 <AnimatePresence>
-                    {filteredOrders.length === 0 ? (
+                    {filteredOrders?.length === 0 ? (
                         <div className="text-center py-16 bg-green-900/40 rounded-2xl border border-[#c6a84b]0">
                             <ShoppingBag size={40} className="mx-auto text-green-400/50 mb-4" />
                             <p className="text-green-200">No Orders Found</p>
                         </div>
                     ) : (
-                        filteredOrders.map(order => (
+                        filteredOrders?.map(order => (
                             <motion.div
                                 key={order.id}
                                 whileHover={{ scale: 1.02 }}
