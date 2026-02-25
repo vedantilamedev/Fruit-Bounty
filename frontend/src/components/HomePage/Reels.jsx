@@ -88,7 +88,7 @@ function Reels() {
         </h2>
         <div className="w-16 h-1 bg-[#2D5A27] mx-auto mt-3 mb-6 rounded-full"></div>
         <p className="text-gray-600 text-sm md:text-base font-medium leading-relaxed">
-          Watch how we craft our premium fruit bowls. Click a reel to unmute!
+          Watch how we craft our premium fruit bowls ! 
         </p>
       </div>
 
