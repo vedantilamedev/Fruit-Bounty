@@ -38,7 +38,8 @@ import userRoutes from "./routes/userRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 import customBowlRoutes from "./routes/customBowlRoutes.js";
-import deliveryRoutes from "./routes/deliveryRoutes.js"; // 
+import deliveryRoutes from "./routes/deliveryRoutes.js"; 
+import whatsappRoutes from "./routes/whatsappRoutes.js";
 
 // ===============================
 // Base Route
@@ -66,6 +67,7 @@ app.use("/api/contact", contactRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/custom-bowls", customBowlRoutes);
 app.use("/api/delivery", deliveryRoutes); // 
+app.use("/api/whatsapp", whatsappRoutes);
 
 // ===============================
 // 404 Route Not Found
