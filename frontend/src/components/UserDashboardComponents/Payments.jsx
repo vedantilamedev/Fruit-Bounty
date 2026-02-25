@@ -77,8 +77,8 @@ const Payments = ({ payments = [] }) => {
                 {/* Stats */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <StatCard title="Total Investment" value={`₹${totalInvested.toLocaleString()}`} icon={TrendingUp} trend="+12.5%" label="Total payment history" />
-                    <StatCard title="Active Credits" value="₹840.00" icon={Wallet} trend="Balance" label="Wallet Credits" />
-                    <StatCard title="Total Savings" value="₹1,250" icon={ShieldCheck} trend="Verified" label="Eco Member Discount" />
+                    <StatCard title="Active Credits" value="₹00" icon={Wallet} trend="Balance" label="Wallet Credits" />
+                    <StatCard title="Total Savings" value="₹00" icon={ShieldCheck} trend="Verified" label="Eco Member Discount" />
                 </div>
 
                 {/* Transaction Table */}
