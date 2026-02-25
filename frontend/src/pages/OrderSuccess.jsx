@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
+
 import { 
   CheckCircle, 
   Package, 
@@ -17,16 +17,21 @@ const OrderSuccess = () => {
   const location = useLocation();
 const [order, setOrder] = useState(null);
 
-  useEffect(() => {
-     // Grab order from state sent from Checkout
-     if (location.state && location.state.order) {
-       setOrder(location.state.order);
-     } else {
-       // If no order is passed, redirect to homepage/cart
-       navigate("/");
-     }
-     window.scrollTo({ top: 0, behavior: "smooth" });
-   }, [location.state, navigate]);
+useEffect(() => {
+  if (location.state && location.state.order) {
+    const newOrder = location.state.order;
+    setOrder(newOrder);
+
+    // 🔥 SAVE TO LOCALSTORAGE
+    const existingOrders = JSON.parse(localStorage.getItem("userOrders")) || [];
+    localStorage.setItem("userOrders", JSON.stringify([newOrder, ...existingOrders]));
+
+  } else {
+    navigate("/");
+  }
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, [location.state, navigate]);
 
 
   // Prevent crash on refresh / direct visit

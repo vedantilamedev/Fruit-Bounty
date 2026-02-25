@@ -35,70 +35,16 @@ const Dashboard = () => {
             fruits: ["Apple", "Banana", "Pomegranate", "Kiwi", "Orange", "Mango", "Papaya"]
         },
         payments: [
-            { id: "TXN789456", date: "2026-02-15", amount: 2499, status: "Success", method: "UPI" },
-            { id: "TXN789123", date: "2026-01-15", amount: 2499, status: "Success", method: "Card" },
-            { id: "TXN788901", date: "2025-12-15", amount: 2499, status: "Success", method: "UPI" },
-            { id: "TXN788888", date: "2026-02-19", amount: 499, status: "Pending", method: "UPI" },
-            { id: "TXN788777", date: "2026-02-18", amount: 1299, status: "Failed", method: "Card" },
+
         ]
     });
 
-    const [orders, setOrders] = useState([
-        {
-            id: "ORD-2026-105",
-            date: "2026-02-16",
-            amount: 399,
-            status: "Pending",
-            paymentStatus: "Paid",
-            deliveryDate: "2026-02-17", // Order Date + 1
-            items: [{ name: "Premium Mixed Fruit Bowl", qty: 1 }]
-        },
-        {
-            id: "ORD-2026-104",
-            date: "2026-02-14",
-            amount: 599,
-            status: "Delivered",
-            paymentStatus: "Paid",
-            deliveryDate: "2026-02-15",
-            items: [{ name: "Exotic Tropical Salad", qty: 2 }]
-        },
-        {
-            id: "ORD-2026-103",
-            date: "2026-02-12",
-            amount: 299,
-            status: "Delivered",
-            paymentStatus: "Paid",
-            deliveryDate: "2026-02-13",
-            items: [{ name: "Fresh Citrus Bowl", qty: 1 }]
-        },
-        {
-            id: "ORD-2026-102",
-            date: "2026-02-10",
-            amount: 250,
-            status: "Canceled",
-            paymentStatus: "Failed",
-            deliveryDate: "2026-02-11",
-            items: [{ name: "Daily Citrus Pack", qty: 1 }]
-        },
-        {
-            id: "ORD-2026-101",
-            date: "2026-02-18",
-            amount: 450,
-            status: "Confirmed",
-            paymentStatus: "Paid",
-            deliveryDate: "2026-02-19",
-            items: [{ name: "Royal Mango Platter", qty: 1 }]
-        },
-        {
-            id: "ORD-2026-100",
-            date: "2026-02-17",
-            amount: 320,
-            status: "Confirmed",
-            paymentStatus: "Paid",
-            deliveryDate: "2026-02-18",
-            items: [{ name: "Berry Blast Box", qty: 1 }]
-        }
-    ]);
+   const [orders, setOrders] = useState([]);
+
+   useEffect(() => {
+     const savedOrders = JSON.parse(localStorage.getItem("userOrders")) || [];
+     setOrders(savedOrders);
+   }, []);
 
     const handleCancelOrder = (orderId) => {
         setOrders(prev => prev.map(order =>

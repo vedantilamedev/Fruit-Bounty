@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function ProductCard({ product }) {
+
+  const navigate = useNavigate();
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
 
@@ -13,6 +16,40 @@ function ProductCard({ product }) {
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
   }, []);
+
+  // ✅ ADD THIS FUNCTION
+  const handleOrderNow = () => {
+
+    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const newItem = {
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      image: product.image,
+      qty: 1
+    };
+
+    // Check if already exists
+    const alreadyExists = existingCart.find(item => item.id === product.id);
+
+    let updatedCart;
+
+    if (alreadyExists) {
+      updatedCart = existingCart.map(item =>
+        item.id === product.id
+          ? { ...item, qty: item.qty + 1 }
+          : item
+      );
+    } else {
+      updatedCart = [...existingCart, newItem];
+    }
+
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+    // Redirect to cart
+    navigate("/cart");
+  };
 
   return (
     <div className="pt-6 pb-4 px-2 snap-center"> {/* Container to prevent badge cropping */}
@@ -72,9 +109,12 @@ function ProductCard({ product }) {
             <div className="text-3xl font-black text-[#C9C27A] mb-4">
               ₹{product.price}
             </div>
-            <button className="w-full bg-gradient-to-r from-green-700 to-green-900 hover:from-green-800 hover:to-green-950 text-white py-3.5 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-green-900/10">
-              Order Now
-            </button>
+           <button
+             onClick={handleOrderNow}
+             className="w-full bg-gradient-to-r from-green-700 to-green-900 hover:from-green-800 hover:to-green-950 text-white py-3.5 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-green-900/10"
+           >
+             Order Now
+           </button>
           </div>
         </div>
 
