@@ -41,10 +41,11 @@ const Dashboard = () => {
 
    const [orders, setOrders] = useState([]);
 
-   useEffect(() => {
-     const savedOrders = JSON.parse(localStorage.getItem("userOrders")) || [];
-     setOrders(savedOrders);
-   }, []);
+  useEffect(() => {
+    const savedOrders = JSON.parse(localStorage.getItem("userOrders")) || [];
+    const uniqueOrders = Array.from(new Map(savedOrders.map(order => [order.id, order])).values());
+    setOrders(uniqueOrders);
+  }, []);
 
     const handleCancelOrder = (orderId) => {
         setOrders(prev => prev.map(order =>
@@ -96,7 +97,7 @@ const Dashboard = () => {
     };
 
     return (
-        
+
         <div className="h-screen bg-[url('/images/main-background.webp')] flex flex-col lg:flex-row overflow-hidden relative">
             <ToastContainer
                 position="top-right"
@@ -107,11 +108,11 @@ const Dashboard = () => {
                 pauseOnHover
                 theme="light"
             />
-            
+
             {/* Mobile Header */}
             <div className="lg:hidden bg-white shadow-sm flex justify-between items-center shrink-0 z-30">
-                
-                
+
+
                 <div className=" p-4 flex items-center justify-center bg-transparent">
                     <img
                         src="/images/footerlogo.webp"
@@ -123,7 +124,7 @@ const Dashboard = () => {
                     {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
             </div>
-            
+
 
             {/* Sidebar Navigation */}
             {/* Sidebar Navigation */}
@@ -132,7 +133,7 @@ const Dashboard = () => {
     fixed inset-y-0 left-0 z-50 w-72
     bg-gradient-to-b from-[#2f5e2f] to-[#1f3d1f]
     shadow-[8px_0_30px_rgba(0,0,0,0.6)] transform transition-transform duration-300 ease-in-out
-    lg:static lg:translate-x-0 
+    lg:static lg:translate-x-0
     shrink-0
     ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
     lg:h-full lg:overflow-y-auto
