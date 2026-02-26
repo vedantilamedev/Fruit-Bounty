@@ -22,7 +22,7 @@ router.post(
   "/",
   authMiddleware,
   roleMiddleware("admin"),
-  upload.single("image"),
+  upload.array("images", 10), // Support up to 10 images for bowls
   addFruit
 );
 
@@ -30,7 +30,7 @@ router.put(
   "/:id",
   authMiddleware,
   roleMiddleware("admin"),
-  upload.single("image"),
+  upload.array("images", 10), // Support up to 10 images for bowls
   updateFruit
 );
 

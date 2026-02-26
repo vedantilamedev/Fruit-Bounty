@@ -29,7 +29,10 @@ const Sidebar = ({ onLinkClick }) => {
 
   const handleLogout = () => {
     console.log("Logout clicked");
-    navigate("/login");
+    // Clear all admin-related localStorage items
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    navigate("/admin/login");
   };
 
   return (

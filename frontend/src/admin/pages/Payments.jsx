@@ -1,5 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
+import axios from "axios";
 import {
   DollarSign,
   CreditCard,
@@ -7,85 +8,168 @@ import {
   XCircle,
   Search,
   Calendar,
+  Loader2,
 } from "lucide-react";
 
-/* ------------------ Data ------------------ */
-const paymentsData = [
-  { id: "PAY-1001", customer: "John Smith", amount: 120, method: "Card", status: "Paid", date: "2026-02-01" },
-  { id: "PAY-1002", customer: "Sarah Johnson", amount: 95, method: "Card", status: "Paid", date: "2026-02-01" },
-  { id: "PAY-1003", customer: "Mike Wilson", amount: 200, method: "COD", status: "Pending", date: "2026-02-02" },
-  { id: "PAY-1004", customer: "Emily Brown", amount: 85, method: "Wallet", status: "Paid", date: "2026-02-02" },
-  { id: "PAY-1005", customer: "David Lee", amount: 125, method: "COD", status: "Pending", date: "2026-02-02" },
-  { id: "PAY-1006", customer: "Lisa Anderson", amount: 75, method: "Card", status: "Failed", date: "2026-02-01" },
-];
+const BASE_URL = "http://localhost:5000/api";
 
-const conversionRate = 83;
+const conversionRate = 1; // Backend already returns amount in INR
 
 /* ------------------ Main Component ------------------ */
 export default function Payments() {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("All");
   const [sort, setSort] = useState("latest");
+  const [paymentsData, setPaymentsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [summary, setSummary] = useState({
+    totalEarnings: 0,
+    paidOrders: 0,
+    codOrders: 0,
+    failedPayments: 0,
+    pendingOrders: 0
+  });
+
+  useEffect(() => {
+    fetchPayments();
+  }, []);
+
+  const fetchPayments = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+      console.log("Token:", token);
+      
+      const res = await axios.get(`${BASE_URL}/payment/payments`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
+      // console.log("API Response:", res.data);
+      
+      if (res.data.success) {
+        setPaymentsData(res.data.data);
+        setSummary(res.data.summary || {
+          totalEarnings: 0,
+          paidOrders: 0,
+          codOrders: 0,
+          failedPayments: 0,
+          pendingOrders: 0
+        });
+      } else {
+        setPaymentsData(getSampleData());
+        setSummary(getSampleSummary());
+      }
+    } catch (err) {
+      console.error("Error fetching payments:", err);
+      setPaymentsData(getSampleData());
+      setSummary(getSampleSummary());
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getSampleData = () => [
+    { id: "PAY-1001", customer: "John Smith", amount: 120, method: "Card", status: "Paid", date: "2026-02-01" },
+    { id: "PAY-1002", customer: "Sarah Johnson", amount: 95, method: "Card", status: "Paid", date: "2026-02-01" },
+    { id: "PAY-1003", customer: "Mike Wilson", amount: 200, method: "COD", status: "Pending", date: "2026-02-02" },
+    { id: "PAY-1004", customer: "Emily Brown", amount: 85, method: "Wallet", status: "Paid", date: "2026-02-02" },
+    { id: "PAY-1005", customer: "David Lee", amount: 125, method: "COD", status: "Pending", date: "2026-02-02" },
+    { id: "PAY-1006", customer: "Lisa Anderson", amount: 75, method: "Card", status: "Failed", date: "2026-02-01" },
+  ];
+
+  const getSampleSummary = () => ({
+    totalEarnings: 705,
+    paidOrders: 3,
+    codOrders: 2,
+    failedPayments: 1,
+    pendingOrders: 2
+  });
 
   const filteredPayments = useMemo(() => {
     let data = [...paymentsData];
+    console.log("Filtering data:", data);
+    console.log("Current status filter:", status);
     if (search) {
       data = data.filter((p) => p.customer.toLowerCase().includes(search.toLowerCase()) || p.id.toLowerCase().includes(search.toLowerCase()));
     }
     if (status !== "All") {
       data = data.filter((p) => p.status === status);
     }
+    console.log("Filtered result:", data);
     if (sort === "amountAsc") data.sort((a, b) => a.amount - b.amount);
     if (sort === "amountDesc") data.sort((a, b) => b.amount - a.amount);
     if (sort === "latest") data.sort((a, b) => new Date(b.date) - new Date(a.date));
     if (sort === "oldest") data.sort((a, b) => new Date(a.date) - new Date(b.date));
     return data;
-  }, [search, status, sort]);
+  }, [search, status, sort, paymentsData]);
 
-  const totalEarnings = paymentsData.filter((p) => p.status === "Paid").reduce((sum, p) => sum + p.amount, 0);
-  const paidOrders = paymentsData.filter((p) => p.status === "Paid").length;
-  const codOrders = paymentsData.filter((p) => p.method === "COD").length;
-  const failedPayments = paymentsData.filter((p) => p.status === "Failed").length;
+  const totalEarnings = summary.totalEarnings;
+  const paidOrders = summary.paidOrders;
+  const codOrders = summary.codOrders;
+  const failedPayments = summary.failedPayments;
+  
+  console.log("Summary state:", summary);
+  console.log("Card values - Earnings:", totalEarnings, "Paid:", paidOrders, "COD:", codOrders, "Failed:", failedPayments);
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6">
 
       {/* Header */}
-      <div>
-        <h2 className="hidden md:block text-2xl sm:text-3xl font-bold">Payments & Revenue</h2>
-        <p className="hidden md:block text-gray-500 text-sm">Track earnings and payment status</p>
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="hidden md:block text-2xl sm:text-3xl font-bold">Payments & Revenue</h2>
+          <p className="hidden md:block text-gray-500 text-sm">Track earnings and payment status</p>
+        </div>
+        <button 
+          onClick={fetchPayments}
+          className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700 transition-colors"
+        >
+          Refresh
+        </button>
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
-        <StatCard title="Total Earnings" value={`₹${(totalEarnings * conversionRate).toFixed(0)}`} icon={<DollarSign />} color="green" sub="+22.5% from last month" />
-        <StatCard title="Paid Orders" value={paidOrders} icon={<CreditCard />} color="blue" sub="Successfully completed" />
-        <StatCard title="COD Orders" value={codOrders} icon={<Wallet />} color="orange" sub="Cash on delivery" />
-        <StatCard title="Failed" value={failedPayments} icon={<XCircle />} color="red" sub="Need attention" />
-      </div>
-
-      {/* Filters */}
-      <div className="bg-white p-3 sm:p-4 rounded-xl shadow border flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <input type="text" placeholder="Search..." className="pl-9 pr-3 py-2 border rounded-lg w-full text-sm focus:ring-2 focus:ring-indigo-500 outline-none" value={search} onChange={(e) => setSearch(e.target.value)} />
+      {loading ? (
+        <div className="flex items-center justify-center h-64">
+          <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
         </div>
-        <select className="border rounded-lg px-3 py-2 text-sm" value={status} onChange={(e) => setStatus(e.target.value)}>
-          <option value="All">All Status</option>
-          <option value="Paid">Paid</option>
-          <option value="Pending">Pending</option>
-          <option value="Failed">Failed</option>
-        </select>
-        <select className="border rounded-lg px-3 py-2 text-sm" value={sort} onChange={(e) => setSort(e.target.value)}>
-          <option value="latest">Latest</option>
-          <option value="oldest">Oldest</option>
-          <option value="amountAsc">Amount ↑</option>
-          <option value="amountDesc">Amount ↓</option>
-        </select>
-      </div>
+      ) : error ? (
+        <div className="flex items-center justify-center h-64 text-red-500">
+          {error}
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-6">
+            <StatCard title="Total Orders" value={summary.totalOrders || paymentsData.length} icon={<DollarSign />} color="indigo" sub="All time orders" />
+            <StatCard title="Total Earnings" value={`₹${(totalEarnings * conversionRate).toFixed(0)}`} icon={<DollarSign />} color="green" sub="From paid orders" />
+            <StatCard title="Paid Orders" value={paidOrders} icon={<CreditCard />} color="blue" sub="Completed" />
+            <StatCard title="Pending Orders" value={summary.pendingOrders || 0} icon={<XCircle />} color="yellow" sub="Awaiting payment" />
+            <StatCard title="Failed" value={failedPayments} icon={<XCircle />} color="red" sub="Need attention" />
+          </div>
 
-      {/* Mobile Card View */}
-      <div className="block lg:hidden space-y-3">
+          {/* Filters */}
+          <div className="bg-white p-3 sm:p-4 rounded-xl shadow border flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input type="text" placeholder="Search..." className="pl-9 pr-3 py-2 border rounded-lg w-full text-sm focus:ring-2 focus:ring-indigo-500 outline-none" value={search} onChange={(e) => setSearch(e.target.value)} />
+            </div>
+            <select className="border rounded-lg px-3 py-2 text-sm" value={status} onChange={(e) => setStatus(e.target.value)}>
+              <option value="All">All Status</option>
+              <option value="Paid">Paid</option>
+              <option value="Pending">Pending</option>
+              <option value="Failed">Failed</option>
+            </select>
+            <select className="border rounded-lg px-3 py-2 text-sm" value={sort} onChange={(e) => setSort(e.target.value)}>
+              <option value="latest">Latest</option>
+              <option value="oldest">Oldest</option>
+              <option value="amountAsc">Amount ↑</option>
+              <option value="amountDesc">Amount ↓</option>
+            </select>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="block lg:hidden space-y-3">
         {filteredPayments.map((p) => (
           <div key={p.id} className="bg-white rounded-xl shadow border p-4 space-y-2">
             <div className="flex justify-between items-start">
@@ -105,8 +189,8 @@ export default function Payments() {
         {filteredPayments.length === 0 && <div className="p-6 text-center text-gray-500">No records found</div>}
       </div>
 
-      {/* Desktop Table View */}
-      <motion.div className="hidden lg:block bg-white rounded-xl shadow border overflow-hidden">
+          {/* Desktop Table View */}
+          <motion.div className="hidden lg:block bg-white rounded-xl shadow border overflow-hidden">
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
@@ -133,13 +217,15 @@ export default function Payments() {
         </table>
         {filteredPayments.length === 0 && <div className="p-6 text-center text-gray-500">No records found</div>}
       </motion.div>
+        </>
+      )}
     </div>
   );
 }
 
 /* ---------------- Components ---------------- */
 const StatCard = ({ title, value, icon, color, sub }) => {
-  const colors = { green: "bg-green-500", blue: "bg-blue-500", orange: "bg-orange-500", red: "bg-red-500" };
+  const colors = { green: "bg-green-500", blue: "bg-blue-500", orange: "bg-orange-500", red: "bg-red-500", yellow: "bg-yellow-500", indigo: "bg-indigo-500" };
   return (
     <motion.div whileHover={{ scale: 1.02 }} className="bg-white rounded-2xl shadow border p-3 sm:p-5 flex justify-between items-center transition-transform duration-200">
       <div>

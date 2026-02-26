@@ -5,7 +5,7 @@ import axios from "axios";
 // });
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api"
+  baseURL: "https://fruit-bounty-dmzs.onrender.com/api"
 });
 
 //  APIs

@@ -38,7 +38,32 @@ const fruitSchema = new mongoose.Schema(
     available: {
       type: Boolean,
       default: true
-    }
+    },
+
+    // Bowl-specific fields
+    isBowl: {
+      type: Boolean,
+      default: false
+    },
+
+    description: {
+      type: String,
+      default: ""
+    },
+
+    ingredients: [{
+      type: String,
+      trim: true
+    }],
+
+    salesCount: {
+      type: Number,
+      default: 0
+    },
+
+    images: [{
+      type: String
+    }]
   },
   { timestamps: true }
 );

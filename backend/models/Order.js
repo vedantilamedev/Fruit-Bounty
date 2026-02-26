@@ -13,6 +13,37 @@ const orderSchema = new mongoose.Schema(
       ref: "Package"
     },
 
+    fruits: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Fruit"
+    }],
+
+    bowl_type: {
+      type: String,
+      enum: ["regular", "custom"],
+      default: "regular"
+    },
+
+    subscription_type: {
+      type: String,
+      enum: ["weekly", "monthly", null],
+      default: null
+    },
+
+    delivery_schedule: {
+      type: String,
+      enum: ["daily", "weekly", null],
+      default: null
+    },
+
+    start_date: {
+      type: Date
+    },
+
+    end_date: {
+      type: Date
+    },
+
     total_amount: {
       type: Number,
       required: true
@@ -24,8 +55,7 @@ const orderSchema = new mongoose.Schema(
     },
 
     delivery_date: {
-      type: Date,
-      required: true
+      type: Date
     },
 
     next_delivery_date: {
@@ -39,14 +69,37 @@ const orderSchema = new mongoose.Schema(
 
     order_status: {
       type: String,
-      enum: ["Pending", "Confirmed", "Delivered","Cancelled"],
+      enum: ["Pending", "Processing", "Shipped", "Confirmed", "Delivered", "Cancelled"],
       default: "Pending"
     },
 
     payment_status: {
       type: String,
-      enum: ["Paid", "Pending", "Failed"],
+      enum: ["Paid", "Pending", "Failed", "COD"],
       default: "Pending"
+    },
+
+    payment_method: {
+      type: String,
+      enum: ["Card", "Wallet", "COD", "UPI", "Bank Transfer"],
+      default: null
+    },
+
+    razorpay_order_id: {
+      type: String
+    },
+
+    razorpay_payment_id: {
+      type: String
+    },
+
+    items: {
+      type: Array,
+      default: []
+    },
+
+    deliveryAddress: {
+      type: String
     }
   },
   { timestamps: true }

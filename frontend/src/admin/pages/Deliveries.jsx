@@ -1,6 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Truck, Clock, MapPin, Phone, X, Filter, Edit2 } from "lucide-react";
+import axios from "axios";
+
+/* ======================
+   API Configuration
+====================== */
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
+});
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
 /* ======================
    Utility
@@ -66,75 +80,13 @@ function Button({ className, variant = "default", size = "default", ...props }) 
   );
 }
 
-/* ======================
-   Data with Bowl Details
-====================== */
-const deliveries = [
-  { 
-    id: "DEL-001", 
-    customer: "Olivia Martin", 
-    phone: "+1 (555) 111-2222", 
-    address: "123 Oak Street, San Francisco", 
-    time: "8:00 AM", 
-    type: "Subscription", 
-    status: "Scheduled",
-    bowlsDetail: [
-      { name: "Protein Power Bowl", fruits: ["Banana", "Oats", "Peanut Butter", "Dates"], toppings: ["Whey Protein", "Flax Seeds"] },
-      { name: "Berry Blast Bowl", fruits: ["Strawberry", "Raspberry", "Blueberry"], toppings: ["Mint Leaves", "Honey"] }
-    ]
-  },
-  { 
-    id: "DEL-002", 
-    customer: "Tech Corp Inc.", 
-    phone: "+1 (555) 123-4567", 
-    address: "789 Business Park, San Francisco", 
-    time: "9:00 AM", 
-    type: "Corporate", 
-    status: "Scheduled",
-    bowlsDetail: [
-      { name: "Large Bowl", fruits: ["Mixed Fruits", "Seeds", "Nuts", "Honey"], toppings: ["Cashews", "Walnuts"] },
-      { name: "Medium Bowl", fruits: ["Strawberry", "Blueberry", "Chia", "Almond"], toppings: ["Coconut Flakes", "Dark Chocolate"] }
-    ]
-  },
-  { 
-    id: "DEL-003", 
-    customer: "David Lee", 
-    phone: "+1 (555) 222-3333", 
-    address: "456 Pine Avenue, San Francisco", 
-    time: "10:30 AM", 
-    type: "Normal", 
-    status: "Scheduled",
-    bowlsDetail: [
-      { name: "Small Bowl", fruits: ["Apple", "Banana", "Granola", "Honey"], toppings: ["Chia Seeds", "Almonds"] }
-    ]
-  },
-  { 
-    id: "DEL-004", 
-    customer: "Sarah Johnson", 
-    phone: "+1 (555) 333-4444", 
-    address: "321 Maple Drive, San Francisco", 
-    time: "11:00 AM", 
-    type: "Subscription", 
-    status: "Scheduled",
-    bowlsDetail: [
-      { name: "Tropical Delight", fruits: ["Mango", "Pineapple", "Coconut"], toppings: ["Coconut Chips", "Chia Seeds"] },
-      { name: "Green Detox Bowl", fruits: ["Spinach", "Kiwi", "Apple", "Mint"], toppings: ["Sunflower Seeds", "Honey"] },
-      { name: "Chocolate Crunch Bowl", fruits: ["Banana", "Cocoa", "Oats"], toppings: ["Dark Chocolate", "Almond Butter"] }
-    ]
-  },
-  { 
-    id: "DEL-005", 
-    customer: "Mike Wilson", 
-    phone: "+1 (555) 444-5555", 
-    address: "654 Cedar Lane, San Francisco", 
-    time: "2:00 PM", 
-    type: "Normal", 
-    status: "Scheduled",
-    bowlsDetail: [
-      { name: "Classic Yogurt Bowl", fruits: ["Greek Yogurt", "Honey", "Granola"], toppings: ["Strawberry", "Blueberry"] }
-    ]
-  },
-];
+function LoadingSpinner() {
+  return (
+    <div className="flex items-center justify-center p-8">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+    </div>
+  );
+}
 
 /* ======================
    Main Component
@@ -144,7 +96,27 @@ export default function TomorrowDeliveries() {
   const [filter, setFilter] = useState("all");
   const [editingTime, setEditingTime] = useState(null);
   const [customTime, setCustomTime] = useState("");
-  const [deliveryData, setDeliveryData] = useState(deliveries);
+  const [deliveryData, setDeliveryData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch deliveries from API
+  useEffect(() => {
+    const fetchDeliveries = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const { data } = await api.get("/delivery");
+        setDeliveryData(data);
+      } catch (err) {
+        console.error("Failed to fetch deliveries:", err);
+        setError(err.response?.data?.message || err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDeliveries();
+  }, []);
 
   // Filter deliveries
   const filteredDeliveries = deliveryData.filter((d) => {
@@ -155,7 +127,7 @@ export default function TomorrowDeliveries() {
     return true;
   });
 
-  // Update delivery time
+  // Update delivery time (placeholder - would need backend endpoint)
   const handleTimeUpdate = (id) => {
     if (customTime.trim()) {
       setDeliveryData(deliveryData.map(d => 
@@ -169,11 +141,29 @@ export default function TomorrowDeliveries() {
   // Get stats based on filter
   const stats = {
     total: filteredDeliveries.length,
-    bowls: filteredDeliveries.reduce((sum, d) => sum + d.bowlsDetail.length, 0),
+    bowls: filteredDeliveries.reduce((sum, d) => sum + (d.bowlsDetail?.length || 0), 0),
     subscription: filteredDeliveries.filter(d => d.type === "Subscription").length,
     corporate: filteredDeliveries.filter(d => d.type === "Corporate").length,
     normal: filteredDeliveries.filter(d => d.type === "Normal").length,
   };
+
+  if (loading) {
+    return (
+      <div className="p-4 sm:p-8">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-4 sm:p-8">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-600">
+          Error loading deliveries: {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 sm:p-8">

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useCart } from '../context/CartContext';
 import { 
   CheckCircle, RefreshCcw, ArrowRight, Sparkles, ArrowLeft, Gem, Soup, Utensils, Copy, ChevronLeft, ChevronRight
 } from 'lucide-react';
@@ -27,7 +28,7 @@ const PlanCustomization = () => {
     { id: 'p2', name: "Antioxidant Berry", price: 349, cals: "180 kcal", img: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=400" },
     { id: 'p3', name: "Citrus Vitamin C", price: 250, cals: "150 kcal", img: "https://images.unsplash.com/photo-1557800636-894a64c1696f?w=400" },
   ];
-
+//FRUITS
   const FREE_FRUITS = [
     { name: "Watermelon", img: "/images/watermelon.webp" },
     { name: "Mango", img: "/images/mango.webp" },
@@ -38,7 +39,7 @@ const PlanCustomization = () => {
     { name: "Kiwi", img: "/images/kiwi.webp" },
     { name: "Grapes", img: "/images/grapes.webp" }
   ];
-
+//PREMIUM
   const PREMIUM_FRUITS = [
     { name: "Dragon Fruit", img: "https://images.unsplash.com/photo-1527325672343-29f45604496b?w=200" },
     { name: "Avocado", img: "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=200" }
@@ -96,23 +97,28 @@ const PlanCustomization = () => {
     setCurrentStep(1);
     if (activeDayIndex < 6) setActiveDayIndex(prev => prev + 1);
   };
+const { addToCart } = useCart();
 
-  const handleCheckout = () => {
-    const cartItem = {
-      id: Date.now(),
-      name: `${plan} ${duration} Day Plan`,
-      price: priceTotal,
-      meals: mealBag
-    };
-    console.log("Cart Items Added:", cartItem);
-    alert("Items added to cart successfully!");
-    navigate('/cart');
-  };
+ const handleCheckout = () => {
+   const cartItem = {
+     id: Date.now(),                          // unique ID
+     name: `${plan} ${duration}-Day Plan`,
+     price: priceTotal,
+     quantity: 1,
+     image: '/images/custom-bowl.webp',       // or any plan image
+     meals: mealBag,                          // ✅ this is what Cart.jsx reads to show the 7-day cycle
+   };
+
+   addToCart(cartItem);       // ✅ pushes into CartContext
+   navigate('/cart');         // ✅ then navigate
+ };
 
   const calendarDates = Array.from({ length: 7 }).map((_, i) => {
     const d = new Date(); d.setDate(d.getDate() + i);
     return { display: d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }), dayNum: i + 1 };
   });
+
+
 
   return (
     <div className="min-h-screen bg-[#faf9f6] text-gray-900 pt-6 md:pt-10 font-sans selection:bg-[#C9C27A]/30 relative">
@@ -302,11 +308,24 @@ const PlanCustomization = () => {
                   </button>
                 )}
 
-                <div className="pt-6 md:pt-8 border-t border-white/10">
-                    <p className="text-[9px] md:text-[10px] font-black text-[#C9C27A] uppercase tracking-widest mb-1">Estimated Total</p>
-                    <p className="text-2xl md:text-3xl font-black text-white tracking-tighter">₹{priceTotal.toLocaleString()}</p>
-                    <button onClick={handleCheckout} disabled={Object.keys(mealBag).length < 7} className="w-full mt-6 md:mt-8 py-4 md:py-5 bg-[#C9C27A] text-green-950 rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-[0.2em] shadow-lg disabled:opacity-20 hover:scale-[1.02] active:scale-95 transition-all">Add Selection to Cart</button>
-                </div>
+              <div className="pt-6 md:pt-8 border-t border-white/10">
+                  <p className="text-[9px] md:text-[10px] font-black text-[#C9C27A] uppercase tracking-widest mb-1">Estimated Total</p>
+                  <p className="text-2xl md:text-3xl font-black text-white tracking-tighter">₹{priceTotal.toLocaleString()}</p>
+
+                  {/* Days remaining hint */}
+                  {Object.keys(mealBag).length < 7 && (
+                      <p className="text-[8px] text-white/40 text-center mt-4 uppercase tracking-widest">
+                          {7 - Object.keys(mealBag).length} day{7 - Object.keys(mealBag).length !== 1 ? 's' : ''} remaining
+                      </p>
+                  )}
+
+                  <button
+                  onClick={handleCheckout}
+                  disabled={Object.keys(mealBag).length < 7}
+                  className="w-full mt-3 md:mt-4 py-4 md:py-5 bg-[#C9C27A] text-green-950 rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-[0.2em] shadow-lg disabled:opacity-20 hover:scale-[1.02] active:scale-95 transition-all">
+                  Add Selection to Cart
+                  </button>
+              </div>
             </div>
           </div>
         </div>
