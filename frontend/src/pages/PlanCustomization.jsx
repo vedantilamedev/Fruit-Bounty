@@ -28,7 +28,7 @@ const PlanCustomization = () => {
     { id: 'p2', name: "Antioxidant Berry", price: 349, cals: "180 kcal", img: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=400" },
     { id: 'p3', name: "Citrus Vitamin C", price: 250, cals: "150 kcal", img: "https://images.unsplash.com/photo-1557800636-894a64c1696f?w=400" },
   ];
-
+//FRUITS
   const FREE_FRUITS = [
     { name: "Watermelon", img: "/images/watermelon.webp" },
     { name: "Mango", img: "/images/mango.webp" },
@@ -39,7 +39,7 @@ const PlanCustomization = () => {
     { name: "Kiwi", img: "/images/kiwi.webp" },
     { name: "Grapes", img: "/images/grapes.webp" }
   ];
-
+//PREMIUM
   const PREMIUM_FRUITS = [
     { name: "Dragon Fruit", img: "https://images.unsplash.com/photo-1527325672343-29f45604496b?w=200" },
     { name: "Avocado", img: "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=200" }
