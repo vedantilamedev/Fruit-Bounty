@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Edit, Star, Trash2, X, Plus, ChevronLeft, ChevronRight } from "lucide-react";
+import { Edit, Star, Trash2, X, Plus, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import axios from "axios";
+
+const API_URL = "http://localhost:5000/api";
 
 function cn(...classes) { return classes.filter(Boolean).join(" "); }
 
@@ -117,16 +120,7 @@ function BowlForm({ bowl, onSave, onCancel }) {
   );
 }
 
-const MOCK_BOWLS = [
-  { id: "1", name: "Tropical Paradise", description: "A refreshing mix of tropical fruits with coconut flakes", ingredients: ["Mango", "Pineapple", "Kiwi", "Coconut"], price: 15.99, available: true, salesCount: 145, images: [] },
-  { id: "2", name: "Berry Bliss", description: "Mixed berries with banana and honey drizzle", ingredients: ["Strawberry", "Blueberry", "Raspberry", "Banana"], price: 14.99, available: true, salesCount: 128, images: [] },
-  { id: "3", name: "Citrus Burst", description: "Zesty citrus fruits for vitamin C boost", ingredients: ["Orange", "Grapefruit", "Lemon", "Lime"], price: 13.99, available: true, salesCount: 98, images: [] },
-  { id: "4", name: "Dragon Delight", description: "Exotic dragon fruit with tropical twist", ingredients: ["Dragon Fruit", "Papaya", "Mango", "Passion Fruit"], price: 18.99, available: true, salesCount: 87, images: [] },
-  { id: "5", name: "Classic Mix", description: "Traditional fruit mix with fresh seasonal fruits", ingredients: ["Apple", "Banana", "Grapes", "Orange"], price: 12.99, available: true, salesCount: 76, images: [] },
-  { id: "6", name: "Melon Medley", description: "Refreshing melon mix for hot summer days", ingredients: ["Watermelon", "Cantaloupe", "Honeydew"], price: 13.99, available: false, salesCount: 65, images: [] },
-];
-
-function ProductCard({ bowl, onEdit, onDelete, onToggleAvailability }) {
+function ProductCard({ bowl, onEdit, onDelete, onToggleAvailability, bestSellerCount }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   
   const hasMultipleImages = bowl.images && bowl.images.length > 1;
@@ -171,7 +165,7 @@ function ProductCard({ bowl, onEdit, onDelete, onToggleAvailability }) {
           ) : (
             <div className="absolute inset-0 flex items-center justify-center text-green-600 text-4xl font-bold">{bowl.name[0]}</div>
           )}
-          {bowl.salesCount === Math.max(...MOCK_BOWLS.map(b => b.salesCount)) && <div className="absolute top-2 right-2 z-10"><Badge className="bg-yellow-400 text-yellow-900 flex items-center gap-1"><Star className="w-3 h-3" />Best Seller</Badge></div>}
+          {bowl.salesCount > 0 && bowl.salesCount === bestSellerCount && <div className="absolute top-2 right-2 z-10"><Badge className="bg-yellow-400 text-yellow-900 flex items-center gap-1"><Star className="w-3 h-3" />Best Seller</Badge></div>}
           {!bowl.available && <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10"><Badge className="bg-white text-slate-700">Unavailable</Badge></div>}
         </div>
         <div className="p-4 sm:p-6">
@@ -199,17 +193,144 @@ function ProductCard({ bowl, onEdit, onDelete, onToggleAvailability }) {
 }
 
 export default function Products() {
-  const [bowls, setBowls] = useState(MOCK_BOWLS);
+  const [bowls, setBowls] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [editingBowl, setEditingBowl] = useState(null);
   const [addingBowl, setAddingBowl] = useState(false);
-  const bestSellerCount = Math.max(...bowls.map(b => b.salesCount));
-  const toggleAvailability = id => setBowls(bowls.map(b => b.id === id ? { ...b, available: !b.available } : b));
-  const deleteBowl = (id) => {
-    if (window.confirm("Are you sure you want to delete this bowl?")) {
-      setBowls(bowls.filter(b => b.id !== id));
+
+  // Get auth token
+  const token = localStorage.getItem("token");
+  const headers = { Authorization: `Bearer ${token}` };
+
+  // Fetch bowls from API
+  const fetchBowls = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get(`${API_URL}/fruits`, { headers });
+      // Filter only bowls (isBowl = true) and normalize data
+      const bowlData = res.data.data
+        .filter(item => item.isBowl === true)
+        .map(item => ({
+          id: item._id,
+          name: item.name,
+          description: item.description || "",
+          price: item.price,
+          ingredients: item.ingredients || [],
+          available: item.available ?? true,
+          salesCount: item.salesCount || 0,
+          images: item.images || []
+        }));
+      setBowls(bowlData);
+      setError(null);
+    } catch (err) {
+      console.error("Error fetching bowls:", err);
+      setError("Failed to load bowls");
+    } finally {
+      setLoading(false);
     }
   };
-  const saveBowl = (id, updated) => { setBowls(id ? bowls.map(b => b.id === id ? { ...b, ...updated } : b) : [{ id: Date.now().toString(), salesCount: 0, ...updated }, ...bowls]); setEditingBowl(null); setAddingBowl(false); };
+
+  useEffect(() => {
+    fetchBowls();
+  }, []);
+
+  const bestSellerCount = bowls.length > 0 ? Math.max(...bowls.map(b => b.salesCount || 0)) : 0;
+
+  const toggleAvailability = async (id) => {
+    const bowl = bowls.find(b => b.id === id);
+    if (!bowl) return;
+    try {
+      await axios.put(`${API_URL}/fruits/${id}`, 
+        { available: !bowl.available },
+        { headers }
+      );
+      setBowls(bowls.map(b => b.id === id ? { ...b, available: !b.available } : b));
+    } catch (err) {
+      console.error("Error toggling availability:", err);
+      alert("Failed to update availability");
+    }
+  };
+
+  const deleteBowl = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this bowl?")) return;
+    try {
+      await axios.delete(`${API_URL}/fruits/${id}`, { headers });
+      setBowls(bowls.filter(b => b.id !== id));
+    } catch (err) {
+      console.error("Error deleting bowl:", err);
+      alert("Failed to delete bowl");
+    }
+  };
+
+  const saveBowl = async (id, updated) => {
+    try {
+      const formData = new FormData();
+      formData.append("name", updated.name);
+      formData.append("price", updated.price);
+      formData.append("description", updated.description || "");
+      formData.append("ingredients", updated.ingredients.join(", "));
+      formData.append("available", updated.available);
+      formData.append("isBowl", "true");
+      
+      // Add images if any new ones selected (base64 URLs need special handling)
+      // For now, we'll handle images separately
+
+      if (id) {
+        // Update existing
+        const res = await axios.put(`${API_URL}/fruits/${id}`, formData, { headers });
+        const updatedBowl = {
+          id: res.data.data._id,
+          name: res.data.data.name,
+          description: res.data.data.description || "",
+          price: res.data.data.price,
+          ingredients: res.data.data.ingredients || [],
+          available: res.data.data.available ?? true,
+          salesCount: res.data.data.salesCount || 0,
+          images: res.data.data.images || []
+        };
+        setBowls(bowls.map(b => b.id === id ? updatedBowl : b));
+      } else {
+        // Create new
+        const res = await axios.post(`${API_URL}/fruits`, formData, { headers });
+        const newBowl = {
+          id: res.data.data._id,
+          name: res.data.data.name,
+          description: res.data.data.description || "",
+          price: res.data.data.price,
+          ingredients: res.data.data.ingredients || [],
+          available: res.data.data.available ?? true,
+          salesCount: res.data.data.salesCount || 0,
+          images: res.data.data.images || []
+        };
+        setBowls([newBowl, ...bowls]);
+      }
+      setEditingBowl(null);
+      setAddingBowl(false);
+    } catch (err) {
+      console.error("Error saving bowl:", err);
+      alert("Failed to save bowl");
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="w-8 h-8 animate-spin text-green-600" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-4 sm:p-6 lg:p-8">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          {error}
+          <button onClick={fetchBowls} className="ml-2 underline">Retry</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">
@@ -237,6 +358,7 @@ export default function Products() {
             onEdit={setEditingBowl} 
             onDelete={deleteBowl} 
             onToggleAvailability={toggleAvailability}
+            bestSellerCount={bestSellerCount}
           />
         ))}
       </div>
