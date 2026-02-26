@@ -6,9 +6,9 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+
 const Orders = ({ orders, onCancelOrder }) => {
-    console.log(orders);
-    
+
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [statusFilter, setStatusFilter] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
@@ -35,11 +35,11 @@ const Orders = ({ orders, onCancelOrder }) => {
 
     const StatusBadge = ({ status }) => {
         const config = {
-            Pending: { icon: Clock, color: 'bg-yellow-400/20 text-yellow-300 border-yellow-400/30' },
-            Confirmed: { icon: Truck, color: 'bg-blue-400/20 text-blue-300 border-blue-400/30' },
-            Delivered: { icon: CheckCircle, color: 'bg-emerald-400/20 text-emerald-300 border-emerald-400/30' },
-            Canceled: { icon: AlertCircle, color: 'bg-red-400/20 text-red-300 border-red-400/30' }
-        }[status] || { icon: Package, color: 'bg-white/10 text-white border-white/20' };
+            Pending: { icon: Clock, color: 'bg-yellow-100 text-yellow-800 border-yellow-300' },
+            Confirmed: { icon: Truck, color: 'bg-blue-100 text-blue-800 border-blue-300' },
+            Delivered: { icon: CheckCircle, color: 'bg-emerald-100 text-emerald-800 border-emerald-300' },
+            Canceled: { icon: AlertCircle, color: 'bg-red-100 text-red-800 border-red-300' }
+        }[status] || { icon: Package, color: 'bg-gray-100 text-gray-700 border-gray-300' };
 
         const Icon = config.icon;
 
@@ -52,27 +52,27 @@ const Orders = ({ orders, onCancelOrder }) => {
     };
 
     const StatCard = ({ title, value, icon: Icon }) => (
-        <div className="bg-gradient-to-br from-green-800/60 to-green-900/60 
-                    border border-[#c6a84b]
-                    backdrop-blur-xl
-                    rounded-2xl p-6 shadow-lg">
+        <div className="bg-gradient-to-br from-[#2f5e2f] to-[#3c7a3c]
+            text-white rounded-2xl p-6 shadow-lg">
+
             <div className="flex justify-between items-center">
                 <div>
-                    <p className="text-xs uppercase tracking-widest text-green-300/70 mb-2">
+                    <p className="text-xs uppercase tracking-widest text-white/70 mb-2">
                         {title}
                     </p>
-                    <h3 className="text-3xl font-bold text-white">{value}</h3>
+                    <h3 className="text-3xl font-bold">{value}</h3>
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-green-700/40 
-                        flex items-center justify-center">
-                    <Icon size={22} className="text-green-300" />
+
+                <div className="w-12 h-12 rounded-xl bg-white/20
+                    flex items-center justify-center">
+                    <Icon size={22} className="text-white" />
                 </div>
             </div>
         </div>
     );
 
     return (
-        <div className="p-8 space-y-10 text-white">
+        <div className="p-8 space-y-10  min-h-screen">
 
             {/* Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -95,35 +95,34 @@ const Orders = ({ orders, onCancelOrder }) => {
 
             {/* Toolbar */}
             <div className="flex flex-col lg:flex-row gap-4 items-center justify-between
-                      bg-green-900/40 backdrop-blur-xl
-                      border border-[#c6a84b]
-                      rounded-2xl p-4">
+                bg-gradient-to-r from-[#2f5e2f] to-[#3c7a3c]
+                rounded-2xl p-4 shadow-lg text-white">
 
                 <div className="relative w-full lg:flex-1">
-                    <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-green-300" />
+                    <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70" />
                     <input
                         type="text"
                         placeholder="Search by ID or item..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full pl-10 pr-4 py-3
-                       bg-green-950/60
-                       border border-green-[#c6a84b]
-                       rounded-xl
-                       text-sm text-white
-                       focus:outline-none focus:ring-2 focus:ring-green-500"
+                            bg-white/20 backdrop-blur-md
+                            border border-white/20
+                            rounded-xl text-sm text-white
+                            placeholder-white/60
+                            focus:outline-none focus:ring-2 focus:ring-white/40"
                     />
                 </div>
 
                 <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className="px-4 py-3 bg-green-950/60
-                     border border-[#c6a84b]
-                     rounded-xl text-sm text-white
-                     focus:outline-none focus:ring-2 focus:ring-green-500">
-                    {['All', 'Pending', 'Confirmed', 'Delivered', 'Canceled']?.map((status) => (
-                        <option key={status} value={status}>
+                    className="px-4 py-3 bg-white/20
+                        border border-white/20
+                        rounded-xl text-sm text-white
+                        focus:outline-none focus:ring-2 focus:ring-white/40">
+                    {['All', 'Pending', 'Confirmed', 'Delivered', 'Canceled'].map((status) => (
+                        <option key={status} value={status} className="text-black">
                             {status}
                         </option>
                     ))}
@@ -131,38 +130,38 @@ const Orders = ({ orders, onCancelOrder }) => {
             </div>
 
             {/* Orders */}
-            <div className="space-y-4">
+            <div className="space-y-5">
                 <AnimatePresence>
                     {filteredOrders?.length === 0 ? (
-                        <div className="text-center py-16 bg-green-900/40 rounded-2xl border border-[#c6a84b]0">
-                            <ShoppingBag size={40} className="mx-auto text-green-400/50 mb-4" />
-                            <p className="text-green-200">No Orders Found</p>
+                        <div className="text-center py-16
+                            bg-gradient-to-br from-[#2f5e2f] to-[#3c7a3c]
+                            text-white rounded-2xl shadow-lg">
+                            <ShoppingBag size={40} className="mx-auto text-white/70 mb-4" />
+                            <p className="text-white/80">No Orders Found</p>
                         </div>
                     ) : (
                         filteredOrders?.map(order => (
                             <motion.div
                                 key={order.id}
                                 whileHover={{ scale: 1.02 }}
-                                className="bg-green-900/40 
-                           border border-[#c6a84b]
-                           backdrop-blur-xl
-                           rounded-2xl p-6
-                           flex flex-col md:flex-row
-                           justify-between items-center
-                           cursor-pointer transition">
+                                className="bg-gradient-to-r from-[#2f5e2f] to-[#3c7a3c]
+                                    text-white rounded-2xl p-6
+                                    flex flex-col md:flex-row
+                                    justify-between items-center
+                                    cursor-pointer shadow-lg transition">
 
                                 <div className="flex items-center gap-5">
-                                    <div className="w-14 h-14 bg-green-800/60 rounded-xl flex items-center justify-center">
-                                        <Package className="text-green-300" size={24} />
+                                    <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
+                                        <Package className="text-white" size={24} />
                                     </div>
                                     <div>
-                                        <p className="text-sm text-green-300">
+                                        <p className="text-sm text-white/80">
                                             Order #{order.id}
                                         </p>
-                                        <p className="text-xs text-green-400/70">
+                                        <p className="text-xs text-white/60">
                                             {formatDate(order.date)}
                                         </p>
-                                        <p className="font-semibold text-white mt-1">
+                                        <p className="font-semibold mt-1">
                                             {order.items?.[0]?.name}
                                         </p>
                                     </div>
@@ -170,11 +169,11 @@ const Orders = ({ orders, onCancelOrder }) => {
 
                                 <div className="flex items-center gap-6 mt-4 md:mt-0">
                                     <StatusBadge status={order.status} />
-                                    <p className="text-xl font-bold text-green-300">
+                                    <p className="text-xl font-bold">
                                         ₹{order.amount}
                                     </p>
                                     <ChevronRight
-                                        className="text-green-400 hover:translate-x-1 transition"
+                                        className="text-white/70 hover:translate-x-1 transition"
                                         onClick={() => setSelectedOrder(order)}
                                     />
                                 </div>
@@ -188,21 +187,22 @@ const Orders = ({ orders, onCancelOrder }) => {
             <AnimatePresence>
                 {selectedOrder && (
                     <motion.div
-                        className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+                        className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50"
                         onClick={() => setSelectedOrder(null)}>
 
                         <motion.div
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.8, opacity: 0 }}
-                            className="bg-green-950 border border-[#c6a84b]
-                         rounded-2xl p-8 w-full max-w-md text-white"
+                            className="bg-gradient-to-br from-[#2f5e2f] to-[#3c7a3c]
+                                text-white rounded-2xl p-8 w-full max-w-md shadow-xl"
                             onClick={(e) => e.stopPropagation()}>
 
                             <h3 className="text-xl font-bold mb-2">
                                 Order #{selectedOrder.id}
                             </h3>
-                            <p className="text-sm text-green-400 mb-4">
+
+                            <p className="text-sm text-white/70 mb-4">
                                 {formatDate(selectedOrder.date)}
                             </p>
 
@@ -210,7 +210,7 @@ const Orders = ({ orders, onCancelOrder }) => {
                                 {selectedOrder.items?.[0]?.name}
                             </p>
 
-                            <p className="text-green-300 font-bold text-lg mt-2">
+                            <p className="font-bold text-lg mt-2">
                                 ₹{selectedOrder.amount}
                             </p>
 
@@ -218,7 +218,6 @@ const Orders = ({ orders, onCancelOrder }) => {
                                 <StatusBadge status={selectedOrder.status} />
                             </div>
 
-                            {/* Show Cancel Button only if Pending */}
                             {selectedOrder.status === "Pending" && (
                                 <button
                                     onClick={() => {
@@ -226,15 +225,16 @@ const Orders = ({ orders, onCancelOrder }) => {
                                         setSelectedOrder(null);
                                     }}
                                     className="mt-6 w-full py-3 bg-red-600 hover:bg-red-500
-        rounded-xl font-semibold transition">
+                                        text-white rounded-xl font-semibold transition">
                                     Cancel Order
                                 </button>
                             )}
 
                             <button
                                 onClick={() => setSelectedOrder(null)}
-                                className="mt-4 w-full py-3 bg-green-700 hover:bg-green-600
-    rounded-xl font-semibold transition">
+                                className="mt-4 w-full py-3 bg-white/20
+                                    hover:bg-white/30
+                                    text-white rounded-xl font-semibold transition">
                                 Close
                             </button>
                         </motion.div>

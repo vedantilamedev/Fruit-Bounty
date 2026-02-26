@@ -54,7 +54,7 @@ const Overview = ({ userData, orders }) => {
         variants={itemVariants}
         whileHover={{ y: -5, transition: { duration: 0.2 } }}
         className="
-bg-gradient-to-br from-[#2e5f35] to-[#1f3f25]
+bg-gradient-to-br from-[#fbfcfb] 
 p-6 rounded-[1.2rem]
 border border-[#c6a84b]
 shadow-[0_8px_25px_rgba(0,0,0,0.5)]
@@ -78,7 +78,6 @@ group h-full relative overflow-hidden"
     w-14 h-14 
     rounded-xl 
     flex items-center justify-center 
-    text-white
     border border-[#c6a84b]
     shadow-[0_4px_12px_rgba(0,0,0,0.4)]
   "
@@ -88,7 +87,7 @@ group h-full relative overflow-hidden"
             {/* <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-black/5" />
             <div className="absolute -top-2 -right-2 w-8 h-8 bg-white/20 rounded-full blur-md" /> */}
 
-            <Icon size={26} strokeWidth={1.5} className="relative z-10 drop-shadow-sm" />
+            <Icon size={26} strokeWidth={1.5} className="relative text-white z-10 drop-shadow-sm" />
           </motion.div>
 
           {trend && (
@@ -108,11 +107,11 @@ group h-full relative overflow-hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-3xl lg:text-4xl font-normal text-white tracking-tight leading-none mb-1"
+            className="text-3xl lg:text-4xl font-normal  tracking-tight leading-none mb-1"
           >
             {value}
           </motion.h3>
-          {subtitle && <p className="text-[12px] text-white/60 font-medium uppercase tracking-wide truncate pl-1">{subtitle}</p>}
+          {subtitle && <p className="text-[12px] text-[#858181] font-medium uppercase tracking-wide truncate pl-1">{subtitle}</p>}
         </div>
       </motion.div>
     );
