@@ -1,6 +1,6 @@
 import { registerUser, loginUser } from "../api/api";
 import React, { useState, useEffect } from 'react';
-import { Google, Visibility, VisibilityOff } from '@mui/icons-material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Sparkles, ShieldCheck, Lock } from "lucide-react";
 
@@ -27,46 +27,34 @@ const LoginRegister = () => {
     setIsRegistering(!isRegistering);
   };
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: ""
-  });
+  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
 
-  const [loginData, setLoginData] = useState({
-    email: "",
-    password: ""
-  });
-
-  // RESTORED ORIGINAL REGISTER LOGIC
   const handleRegister = async () => {
     try {
-      console.log("Sending register:", formData);
       const res = await registerUser(formData);
-      console.log("Register response:", res.data);
       alert("User registered successfully 🎉");
       setIsRegistering(false);
     } catch (err) {
-      console.error("Register error:", err);
       alert(err.response?.data?.message || "Registration failed");
     }
   };
 
-  // RESTORED ORIGINAL LOGIN LOGIC
   const handleLogin = async () => {
     try {
-      console.log("Sending login:", loginData);
       const res = await loginUser(loginData);
-      console.log("Login response:", res.data);
       localStorage.setItem("token", res.data.token);
+      alert("Successfully logged in! Redirecting...");
       navigate("/", { replace: true });
     } catch (err) {
-      console.error("Login error:", err);
-      alert(err.response?.data?.message || "Login failed");
+      if (err.response?.status === 401) {
+        alert("Invalid credentials. Please check your email and password.");
+      } else {
+        alert(err.response?.data?.message || "Login failed");
+      }
     }
   };
 
-  // RESTORED NUMERIC INPUT HANDLER
   const handleNumericInput = (e) => {
     e.target.value = e.target.value.replace(/[^0-9]/g, '');
   };
@@ -78,27 +66,27 @@ const LoginRegister = () => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#faf9f6', // Cart Page background
+      backgroundColor: '#faf9f6',
       fontFamily: "'Poppins', sans-serif",
       position: 'fixed',
       top: 0,
       left: 0,
       zIndex: 9999,
+      overflow: 'hidden'
     },
     bgOverlay: {
       position: 'absolute',
       inset: 0,
-      backgroundImage: "url('/images/main-background.webp')", // Cart texture
+      backgroundImage: "url('/images/main-background.webp')",
       backgroundSize: "400px",
       opacity: 0.6,
       zIndex: 0
     },
     mainBox: {
       position: 'relative',
-      width: '100vw',
-      height: '100vh',
+      width: '100%',
+      height: '100%',
       display: 'flex',
-      overflow: 'hidden',
       zIndex: 1
     },
     overlaySection: {
@@ -121,19 +109,56 @@ const LoginRegister = () => {
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'center',
-      transition: 'opacity 0.5s ease, transform 0.5s ease',
-      opacity: animate ? 1 : 0,
-      transform: animate ? 'scale(1)' : 'scale(0.98)',
+      alignItems: 'center',
+      padding: '20px 20px 40px 20px', 
       overflowY: 'auto',
-      padding: '0 8%',
+      transition: 'opacity 0.5s ease',
+      zIndex: 5,
+    },
+    headerRow: {
+        display: 'grid',
+        gridTemplateColumns: '1fr auto 1fr', // Layout: [Arrow] [Logo] [Empty Space]
+        alignItems: 'center',
+        width: '100%',
+        maxWidth: '520px',
+        marginBottom: '20px',
+        marginTop: '10px'
+    },
+    smallBackBtn: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '35px',
+        height: '35px',
+        borderRadius: '50%',
+        backgroundColor: '#FFF',
+        border: '1px solid #e5e7eb',
+        color: '#14532d',
+        cursor: 'pointer',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+        transition: 'all 0.2s ease',
+    },
+    outsideLogo: {
+      height: '50px',
+      display: 'block',
+      filter: 'drop-shadow(0px 4px 4px rgba(0,0,0,0.1))'
     },
     card: {
       backgroundColor: 'white',
       padding: '40px',
+      width: '100%',
+      maxWidth: '520px',
       borderRadius: '2rem',
-      border: '3px solid #C9C27A', // Cart border color
+      border: '3px solid #C9C27A',
       boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+      margin: '0 auto' 
+    },
+    cardHeading: {
+      fontSize: '2rem',
+      fontWeight: 900,
+      textTransform: 'uppercase',
+      marginBottom: '25px',
+      textAlign: 'left'
     },
     label: {
       fontSize: '10px',
@@ -179,14 +204,13 @@ const LoginRegister = () => {
       padding: '16px',
       borderRadius: '1.2rem',
       border: 'none',
-      backgroundColor: '#14532d', // Cart green
+      backgroundColor: '#14532d',
       color: '#FFF',
       fontWeight: '900',
       textTransform: 'uppercase',
       letterSpacing: '0.1em',
       cursor: 'pointer',
       marginTop: '25px',
-      transition: 'all 0.3s ease',
     }
   };
 
@@ -194,64 +218,69 @@ const LoginRegister = () => {
     <div style={styles.pageWrapper}>
       <div style={styles.bgOverlay}></div>
       <style>{`
-        .back-btn-mobile { display: none; }
+        .form-column::-webkit-scrollbar { width: 0px; background: transparent; }
+        .back-btn-hover:hover { background-color: #14532d !important; color: #FFF !important; transform: translateX(-2px); }
+        
         @media (max-width: 900px) {
           .sliding-overlay { display: none !important; }
-          .form-column { width: 100% !important; padding: 20px !important; }
-          .back-btn-mobile { 
-             display: flex !important; 
-             position: absolute; top: 25px; left: 20px; 
-             z-index: 100; align-items: center; gap: 8px;
-             font-size: 10px; font-weight: 900; color: #9ca3af; text-transform: uppercase;
-          }
+          .form-column { width: 100% !important; padding: 15px !important; }
           .signup-col { display: ${isRegistering ? 'flex' : 'none'} !important; }
           .login-col { display: ${!isRegistering ? 'flex' : 'none'} !important; }
+          .card-responsive { padding: 30px 20px !important; border-radius: 1.5rem !important; }
+          .header-row-responsive { max-width: 100% !important; }
         }
-        .primary-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+        /* Full Responsiveness for every size */
+        @media (min-height: 850px) {
+            .form-column { justify-content: center !important; }
+        }
       `}</style>
 
-      {/* Mobile Back Option */}
-      <div className="back-btn-mobile" onClick={() => navigate(-1)}>
-        <ArrowLeft size={16} /> Back
-      </div>
-
-      {/* Top Right Logo */}
-      <img 
-        src="/images/footerlogo.webp" 
-        alt="Logo" 
-        style={{ position: 'absolute', top: '25px', right: '25px', height: '40px', zIndex: 100 }} 
-      />
-
       <div style={styles.mainBox}>
+        {/* Sliding Image Background */}
         <div className="sliding-overlay" style={styles.overlaySection}>
           <div style={{ background: 'rgba(255,255,255,0.9)', padding: '20px', borderRadius: '1.5rem', border: '3px solid #C9C27A', width: 'fit-content' }}>
             <h3 style={{ color: '#14532d', margin: 0, fontSize: '1.1rem', fontWeight: 900, textTransform: 'uppercase' }}>
               {isRegistering ? 'Fresh Starts' : 'Welcome Back'}
             </h3>
-            <p style={{ color: '#666', fontSize: '0.7rem', margin: '4px 0 0 0', fontWeight: 700, textTransform: 'uppercase' }}>Best fruit bowls in the city.</p>
           </div>
         </div>
 
-        {/* LEFT FORM (Signup) */}
-        <div className="form-column signup-col" style={{ ...styles.formSide, visibility: isRegistering ? "visible" : "hidden" }}>
-          <div style={styles.card}>
-            <h1 style={{ fontSize: '2rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '20px' }}>
-              Sign Up <Sparkles className="inline text-[#C9C27A]" size={24} />
-            </h1>
+        {/* SIGNUP FORM */}
+        <div className="form-column signup-col" style={{ 
+          ...styles.formSide, 
+          visibility: isRegistering ? "visible" : "hidden",
+          opacity: isRegistering ? 1 : 0 
+        }}>
+          <div className="header-row-responsive" style={styles.headerRow}>
+              <button 
+                className="back-btn-hover" 
+                style={styles.smallBackBtn}
+                onClick={() => navigate("/")}
+                title="Back to Home"
+              >
+                <ArrowLeft size={18} />
+              </button>
+              <img src="/images/footerlogo.webp" alt="Logo" style={styles.outsideLogo} />
+              <div></div> {/* Spacer for grid alignment */}
+          </div>
 
+          <div className="card-responsive" style={styles.card}>
+            <h1 style={styles.cardHeading}>Sign Up <Sparkles className="inline text-[#C9C27A]" size={24} /></h1>
+            
             <div style={{ marginBottom: '15px' }}>
               <label style={styles.label}>Full Name</label>
-              <input type="text" placeholder="John Doe" style={styles.input} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+              <input type="text" placeholder="Full Name" style={styles.input} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+            </div>
+
+            <div style={{ marginBottom: '15px' }}>
+              <label style={styles.label}>Phone</label>
+              <input type="tel" onInput={handleNumericInput} placeholder="1234567890" style={styles.input} />
             </div>
 
             <div style={{ marginBottom: '15px' }}>
               <label style={styles.label}>Email Address</label>
-              <input type="email" placeholder="john@example.com" style={styles.input} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
-            </div>
-
-            <div style={{ marginBottom: "15px" }}>
-              <label style={styles.label}>Phone</label>
-              <input type="tel" onInput={handleNumericInput} placeholder="1234567890" style={styles.input} />
+              <input type="email" placeholder="name@email.com" style={styles.input} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
             </div>
 
             <div style={{ marginBottom: '15px' }}>
@@ -259,30 +288,41 @@ const LoginRegister = () => {
               <div style={styles.passwordWrapper}>
                 <Lock size={16} style={{ marginLeft: '15px', color: '#9ca3af', zIndex: 2 }} />
                 {!formData.password && <div style={styles.pretextDots}>••••••••••••</div>}
-                <input
-                  type={showPassword ? "text" : "password"}
-                  style={{ ...styles.input, backgroundColor: 'transparent', border: 'none', position: 'relative', zIndex: 2 }}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                />
+                <input type={showPassword ? "text" : "password"} style={{ ...styles.input, backgroundColor: 'transparent', border: 'none', position: 'relative', zIndex: 2 }} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
                 <div style={{ paddingRight: '15px', color: '#14532d', cursor: 'pointer', zIndex: 3 }} onClick={() => setShowPassword(!showPassword)}>
                   {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
                 </div>
               </div>
             </div>
 
-            <button className="primary-btn" style={styles.primaryBtn} onClick={handleRegister}>Create Account</button>
+            <button style={styles.primaryBtn} onClick={handleRegister}>Create Account</button>
             <p style={{ textAlign: "center", fontSize: "0.8rem", marginTop: "20px", fontWeight: 700 }}>
               Member? <span onClick={toggleMode} style={{ color: "#C9C27A", cursor: "pointer", textDecoration: "underline" }}>Login</span>
             </p>
           </div>
         </div>
 
-        {/* RIGHT FORM (Login) */}
-        <div className="form-column login-col" style={{ ...styles.formSide, visibility: !isRegistering ? 'visible' : 'hidden' }}>
-          <div style={styles.card}>
-            <h1 style={{ fontSize: '2.5rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '20px' }}>
-              Login <ShieldCheck className="inline text-[#C9C27A]" size={28} />
-            </h1>
+        {/* LOGIN FORM */}
+        <div className="form-column login-col" style={{ 
+          ...styles.formSide, 
+          visibility: !isRegistering ? 'visible' : 'hidden',
+          opacity: !isRegistering ? 1 : 0 
+        }}>
+          <div className="header-row-responsive" style={styles.headerRow}>
+              <button 
+                className="back-btn-hover" 
+                style={styles.smallBackBtn}
+                onClick={() => navigate("/")}
+                title="Back to Home"
+              >
+                <ArrowLeft size={18} />
+              </button>
+              <img src="/images/footerlogo.webp" alt="Logo" style={styles.outsideLogo} />
+              <div></div> {/* Spacer for grid alignment */}
+          </div>
+
+          <div className="card-responsive" style={styles.card}>
+            <h1 style={styles.cardHeading}>Login <ShieldCheck className="inline text-[#C9C27A]" size={28} /></h1>
             
             <div style={{ marginBottom: '20px' }}>
               <label style={styles.label}>Email</label>
@@ -294,24 +334,15 @@ const LoginRegister = () => {
               <div style={styles.passwordWrapper}>
                 <Lock size={16} style={{ marginLeft: '15px', color: '#9ca3af', zIndex: 2 }} />
                 {!loginData.password && <div style={styles.pretextDots}>••••••••••••</div>}
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  style={{ ...styles.input, backgroundColor: 'transparent', border: 'none', position: 'relative', zIndex: 2 }}
-                  onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                />
+                <input type={showPassword ? 'text' : 'password'} style={{ ...styles.input, backgroundColor: 'transparent', border: 'none', position: 'relative', zIndex: 2 }} onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} />
                 <div style={{ paddingRight: '15px', color: '#14532d', cursor: 'pointer', zIndex: 3 }} onClick={() => setShowPassword(!showPassword)}>
                   {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
                 </div>
               </div>
             </div>
 
-            <button className="primary-btn" style={styles.primaryBtn} onClick={handleLogin}>Sign In</button>
+            <button style={styles.primaryBtn} onClick={handleLogin}>Sign In</button>
             
-            {/* Restored Original Google Button Logic */}
-            <button className="primary-btn" style={{ width: '100%', padding: '15px', borderRadius: '1rem', marginTop: '15px', border: '1px solid #e5e7eb', backgroundColor: '#FFF', color: '#14532d', fontWeight: '900', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', cursor: 'pointer', textTransform: 'uppercase', fontSize: '0.75rem' }}>
-              <Google style={{ color: '#EA4335' }} /> Continue with Google
-            </button>
-
             <div style={{ textAlign: 'center', marginTop: '15px' }}>
               <Link to="/forgot-password" style={{ color: '#9ca3af', fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', textDecoration: 'none' }}>Forget password?</Link>
             </div>

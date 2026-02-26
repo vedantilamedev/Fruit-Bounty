@@ -25,6 +25,7 @@ import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import AdminRoutes from "./admin/routes/AdminRoutes";
 import AboutUs from "./pages/AboutUs";
+import FruitNotFound404 from "./pages/NotFound404";
 
 // ---------------- Layout Wrapper ----------------
 function Layout({ children }) {
@@ -110,6 +111,7 @@ export default function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />          
           <Route path="/customize" element={<CustomBowlPage />} />
           <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/404" element={<FruitNotFound404/>} />
 
           {/* Protected Dashboard Route */}
           <Route
