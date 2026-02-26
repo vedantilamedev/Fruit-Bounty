@@ -5,11 +5,14 @@ import { useState } from "react";
 /* ---------- UI Helpers ---------- */
 
 const cn = (...c) => c.filter(Boolean).join(" ");
-
 const Card = ({ className, children }) => (
     <div
         className={cn(
-            "bg-[#1f5a32]/60 backdrop-blur-xl rounded-2xl border border-[#d5b975]/40 shadow-[0_20px_60px_rgba(0,0,0,0.35)]",
+            "bg-gradient-to-br from-[#3a7a41] to-[#25512b]",
+            "rounded-2xl",
+            "border border-[#d5b975]/30",
+            "shadow-[0_25px_70px_rgba(0,0,0,0.45)]",
+            "transition-all duration-300",
             className
         )}
     >
@@ -23,7 +26,7 @@ const Button = ({ className, variant, children, ...props }) => (
         className={cn(
             "px-5 py-2.5 rounded-xl font-bold uppercase tracking-wider text-xs transition-all duration-300",
             variant === "outline"
-                ? "border border-[#d5b975]/40 text-[#d5b975] hover:bg-[#d5b975]/10"
+                ? "border border-[#d5b975]/40 text-white hover:bg-[#d5b975]/10"
                 : "bg-[#2c6e3f] hover:bg-[#2f7c47] text-white border border-[#d5b975]/30",
             className
         )}
@@ -43,7 +46,7 @@ const Input = ({ className, ...props }) => (
 );
 
 const Label = ({ children }) => (
-    <label className="text-xs font-bold uppercase tracking-widest text-[#d5b975]">
+    <label className="text-xs font-bold uppercase tracking-widest text-white">
         {children}
     </label>
 );
@@ -80,24 +83,18 @@ export default function Settings({ userData }) {
     });
 
     return (
-        <div className="min-h-screen  p-6 lg:p-10 text-white">
+        <div className="min-h-screen bg-gradient-to-br  p-6 lg:p-10 ">
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="mb-10"
             >
-                <h1 className="text-4xl font-black tracking-tight mb-2">
-                    Settings
-                </h1>
-                <p className="text-white/60 text-sm uppercase tracking-widest">
-                    Manage your account and application preferences
-                </p>
+              
             </motion.div>
 
             {/* ---------- Tabs ---------- */}
 
-            <div className="flex gap-2 bg-[#163d24] p-1 rounded-xl mb-8 w-fit border border-[#d5b975]/30">
-                {[
+            <div className="lg:flex gap-2 bg-gradient-to-tl from-[#3a7a41] to-[#25512b] p-1.5 rounded-xl mb-8 w-fit border border-[#d5b975]/20 shadow-md">                {[
                     { id: "profile", label: "Profile", icon: User },
                     { id: "notifications", label: "Notifications", icon: Bell },
                     { id: "security", label: "Security", icon: Lock },
@@ -106,10 +103,10 @@ export default function Settings({ userData }) {
                         key={item.id}
                         onClick={() => setTab(item.id)}
                         className={cn(
-                            "flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300",
+                            "flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold uppercase tracking-wider transition-all duration-300",
                             tab === item.id
-                                ? "bg-[#1f5a32] text-[#d5b975] border border-[#d5b975]/40 shadow"
-                                : "text-white/60 hover:text-white hover:bg-white/5"
+                                ? "bg-gradient-to-br from-[#1f5a32] to-[#17462a] text-white border border-[#d5b975]/30"
+                                : "text-white/70 hover:text-white hover:bg-white/5"
                         )}
                     >
                         <item.icon className="w-4 h-4" />
@@ -122,7 +119,7 @@ export default function Settings({ userData }) {
 
             {tab === "profile" && (
                 <Card className="p-8">
-                    <h3 className="text-xl font-black text-[#d5b975] mb-8 tracking-wide">
+                    <h3 className="text-xl font-medium text-white mb-8 tracking-wide">
                         Profile Settings
                     </h3>
 
@@ -167,7 +164,7 @@ export default function Settings({ userData }) {
 
             {tab === "notifications" && (
                 <Card className="p-8">
-                    <h3 className="text-xl font-black text-[#d5b975] mb-8 tracking-wide">
+                    <h3 className="text-xl font-medium text-white mb-8 tracking-wide">
                         Notification Preferences
                     </h3>
 
@@ -183,7 +180,7 @@ export default function Settings({ userData }) {
                                 className="flex items-center justify-between border-b border-[#d5b975]/10 pb-5"
                             >
                                 <div>
-                                    <p className="font-semibold text-white">{title}</p>
+                                    <p className="font-medium text-white">{title}</p>
                                     <p className="text-sm text-white/50">{desc}</p>
                                 </div>
 
@@ -206,7 +203,7 @@ export default function Settings({ userData }) {
 
             {tab === "security" && (
                 <Card className="p-8">
-                    <h3 className="text-xl font-black text-[#d5b975] mb-8 tracking-wide">
+                    <h3 className="text-xl font-medium text-white mb-8 tracking-wide">
                         Security Settings
                     </h3>
 
@@ -225,9 +222,10 @@ export default function Settings({ userData }) {
                             <Label>Confirm Password</Label>
                             <Input type="password" className="mt-3" />
                         </div>
-                        <p className="text-blue-500 hover:[text-shadow:2px_2px_5px_rgba(0,0,0,0.9)] cursor-pointer">Forget Password?</p>
-
+                        <div className="w-full flex justify-between items-center ">
+                            <a href="/forgot-password"><Button className="mt-4">Forget Password ?</Button></a>
                         <Button className="mt-4">Update Password</Button>
+                        </div>
                     </div>
                 </Card>
             )}

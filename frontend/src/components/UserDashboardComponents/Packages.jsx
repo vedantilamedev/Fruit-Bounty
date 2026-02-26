@@ -19,14 +19,14 @@ const Packages = ({ activePackage }) => {
         <motion.div
             whileHover={{ y: -5 }}
             className="
-bg-[#1f5a32]/60
-backdrop-blur-xl
+bg-gradient-to-br from-[#3a7a41] to-[#25512b]
 p-6
 rounded-2xl
-border border-[#d5b975]/40
-shadow-[0_20px_60px_rgba(0,0,0,0.25)]
+border border-[#d5b975]/30
+shadow-[0_25px_70px_rgba(0,0,0,0.45)]
 relative overflow-hidden group
-"        >
+transition-all duration-300
+"    >
             <div className={`absolute -top-4 -right-4 w-24 h-24 ${color} opacity-[0.03] rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700`} />
             <div className="relative z-10 flex justify-between items-start">
                 <div>
@@ -79,8 +79,8 @@ relative overflow-hidden group
 
             {/* Main Interactive Plan Board */}
             <div className="
-bg-[#1f5a32]/60
-backdrop-blur-xl
+bg-gradient-to-br 
+from-[#3a7a41] to-[#25512b]
 rounded-2xl
 border border-[#d5b975]/40
 shadow-[0_25px_70px_rgba(0,0,0,0.35)]
