@@ -1,57 +1,139 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Trash2, Edit, X } from "lucide-react";
+import axios from "axios";
 
-/* ---------------- MOCK DATA ---------------- */
-
-const mockFruits = [
-  { id: "1", name: "Watermelon", type: "Free", price: 0, available: true },
-  { id: "2", name: "Dragon Fruit", type: "Premium", price: 150, available: true },
-  { id: "3", name: "Kiwi", type: "Premium", price: 80, available: true },
-  { id: "4", name: "Mango", type: "Premium", price: 120, available: true },
-  { id: "5", name: "Passion Fruit", type: "Premium", price: 130, available: true },
-  { id: "6", name: "Papaya", type: "Premium", price: 90, available: false },
-];
-
-/* ---------------- MAIN COMPONENT ---------------- */
+const BASE_URL = "http://localhost:5000/api";
 
 export default function CustomizeBowl() {
-  const [fruits, setFruits] = useState(mockFruits);
+  const [fruits, setFruits] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
   const [tempPrice, setTempPrice] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [newFruit, setNewFruit] = useState({ name: "", type: "Free", price: 0 });
+  const [newFruitImage, setNewFruitImage] = useState(null); // ← image file
+  const [addingFruit, setAddingFruit] = useState(false);
 
-  const toggleAvailability = (id) =>
-    setFruits((prev) => prev.map((f) => (f.id === id ? { ...f, available: !f.available } : f)));
+  const token = localStorage.getItem("token");
+  const headers = { Authorization: `Bearer ${token}` };
 
-  const toggleType = (id) =>
-    setFruits((prev) =>
-      prev.map((f) =>
-        f.id === id
-          ? { ...f, type: f.type === "Free" ? "Premium" : "Free", price: f.type === "Free" ? 100 : 0 }
-          : f
-      )
-    );
+  useEffect(() => { fetchFruits(); }, []);
 
-  const deleteFruit = (id) => setFruits((prev) => prev.filter((f) => f.id !== id));
+  const fetchFruits = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/fruits`, { headers });
+      const normalized = res.data.data.map((f) => ({
+        id: f._id,
+        name: f.name,
+        type: f.type || "Free",
+        price: f.price || 0,
+        available: f.available ?? true,
+      }));
+      setFruits(normalized);
+    } catch (err) {
+      console.error("Failed to fetch fruits", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const addFruit = () => {
+  // PUT — toggle availability
+  const toggleAvailability = async (id) => {
+    const fruit = fruits.find((f) => f.id === id);
+    try {
+      await axios.put(`${BASE_URL}/fruits/${id}`,
+        { available: !fruit.available },
+        { headers }
+      );
+      setFruits((prev) =>
+        prev.map((f) => (f.id === id ? { ...f, available: !f.available } : f))
+      );
+    } catch (err) {
+      console.error("Failed to update availability", err);
+    }
+  };
+
+  // PUT — toggle type Free ↔ Premium
+  const toggleType = async (id) => {
+    const fruit = fruits.find((f) => f.id === id);
+    const newType = fruit.type === "Free" ? "Premium" : "Free";
+    const newPrice = newType === "Free" ? 0 : 100;
+    try {
+      await axios.put(`${BASE_URL}/fruits/${id}`,
+        { type: newType, price: newPrice },
+        { headers }
+      );
+      setFruits((prev) =>
+        prev.map((f) => (f.id === id ? { ...f, type: newType, price: newPrice } : f))
+      );
+    } catch (err) {
+      console.error("Failed to toggle type", err);
+    }
+  };
+
+  // DELETE
+  const deleteFruit = async (id) => {
+    try {
+      await axios.delete(`${BASE_URL}/fruits/${id}`, { headers });
+      setFruits((prev) => prev.filter((f) => f.id !== id));
+    } catch (err) {
+      console.error("Failed to delete fruit", err);
+    }
+  };
+
+  // PUT — save updated price
+  const savePrice = async (id) => {
+    try {
+      await axios.put(`${BASE_URL}/fruits/${id}`,
+        { price: Number(tempPrice) },
+        { headers }
+      );
+      setFruits((prev) =>
+        prev.map((f) => (f.id === id ? { ...f, price: Number(tempPrice) } : f))
+      );
+      setEditingId(null);
+    } catch (err) {
+      console.error("Failed to update price", err);
+    }
+  };
+
+  // POST — add fruit with FormData (required by your upload middleware)
+  const addFruit = async () => {
     if (!newFruit.name.trim()) return;
 
-    setFruits((prev) => [
-      ...prev,
-      {
-        id: Date.now().toString(),
-        name: newFruit.name,
-        type: newFruit.type,
-        price: newFruit.type === "Premium" ? Number(newFruit.price) : 0,
-        available: true,
-      },
-    ]);
+    try {
+      setAddingFruit(true);
 
-    setNewFruit({ name: "", type: "Free", price: 0 });
-    setShowModal(false);
+      const formData = new FormData();
+      formData.append("name", newFruit.name);
+      formData.append("type", newFruit.type);
+      formData.append("price", newFruit.type === "Premium" ? Number(newFruit.price) : 0);
+      formData.append("stock", 0);
+      formData.append("available", true);
+      if (newFruitImage) formData.append("image", newFruitImage);
+
+      const res = await axios.post(`${BASE_URL}/fruits`, formData, {
+        headers: {
+          ...headers,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      const f = res.data.data;
+      setFruits((prev) => [
+        ...prev,
+        { id: f._id, name: f.name, type: f.type, price: f.price || 0, available: f.available },
+      ]);
+
+      setNewFruit({ name: "", type: "Free", price: 0 });
+      setNewFruitImage(null);
+      setShowModal(false);
+    } catch (err) {
+      console.error("Failed to add fruit", err);
+    } finally {
+      setAddingFruit(false); // ✅ unfreeze
+    }
   };
 
   const sortedFruits = [...fruits].sort((a, b) => {
@@ -60,7 +142,13 @@ export default function CustomizeBowl() {
     return 0;
   });
 
-  const premiumFruits = fruits.filter((f) => f.type === "Premium" && f.available);
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-gray-500 animate-pulse">Loading fruits...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 sm:p-8">
@@ -71,7 +159,6 @@ export default function CustomizeBowl() {
           <h1 className="hidden md:block text-2xl sm:text-3xl font-bold">Customize Bowl</h1>
           <p className="hidden md:block text-gray-500">Manage fruit ingredients</p>
         </div>
-
         <button
           onClick={() => setShowModal(true)}
           className="bg-[#22c55e] text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-[#16a34a] transition"
@@ -100,7 +187,6 @@ export default function CustomizeBowl() {
               <th className="text-center">Action</th>
             </tr>
           </thead>
-
           <tbody>
             {sortedFruits.map((fruit) => (
               <tr key={fruit.id} className="border-b last:border-none hover:bg-gray-50 transition">
@@ -108,18 +194,10 @@ export default function CustomizeBowl() {
 
                 <td>
                   <div className="flex items-center gap-3">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        fruit.type === "Free" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
-                      }`}
-                    >
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${fruit.type === "Free" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>
                       {fruit.type}
                     </span>
-
-                    <button
-                      onClick={() => toggleType(fruit.id)}
-                      className="text-xs text-gray-600 hover:text-black"
-                    >
+                    <button onClick={() => toggleType(fruit.id)} className="text-xs text-gray-600 hover:text-black">
                       Switch
                     </button>
                   </div>
@@ -136,64 +214,36 @@ export default function CustomizeBowl() {
                             onChange={(e) => setTempPrice(e.target.value)}
                             className="w-20 border rounded px-2 py-1 text-sm"
                           />
-                          <button
-                            onClick={() => {
-                              setFruits((prev) =>
-                                prev.map((f) => (f.id === fruit.id ? { ...f, price: Number(tempPrice) } : f))
-                              );
-                              setEditingId(null);
-                            }}
-                            className="text-xs text-green-600 hover:underline"
-                          >
+                          <button onClick={() => savePrice(fruit.id)} className="text-xs text-green-600 hover:underline">
                             Save
                           </button>
                         </>
                       ) : (
                         <>
                           ₹{fruit.price}
-                          <button
-                            onClick={() => {
-                              setEditingId(fruit.id);
-                              setTempPrice(fruit.price);
-                            }}
-                            className="p-1 rounded hover:bg-gray-100"
-                          >
+                          <button onClick={() => { setEditingId(fruit.id); setTempPrice(fruit.price); }} className="p-1 rounded hover:bg-gray-100">
                             <Edit size={14} />
                           </button>
                         </>
                       )}
                     </div>
-                  ) : (
-                    "Free"
-                  )}
+                  ) : "Free"}
                 </td>
 
                 <td className="pl-12">
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() => toggleAvailability(fruit.id)}
-                      className={`w-11 h-6 flex items-center rounded-full px-1 transition ${
-                        fruit.available ? "bg-black" : "bg-gray-300"
-                      }`}
+                      className={`w-11 h-6 flex items-center rounded-full px-1 transition ${fruit.available ? "bg-black" : "bg-gray-300"}`}
                     >
-                      <div
-                        className={`h-4 w-4 bg-white rounded-full transition ${
-                          fruit.available ? "translate-x-5" : ""
-                        }`}
-                      />
+                      <div className={`h-4 w-4 bg-white rounded-full transition ${fruit.available ? "translate-x-5" : ""}`} />
                     </button>
-
-                    <span className="text-sm text-gray-600">
-                      {fruit.available ? "Available" : "Unavailable"}
-                    </span>
+                    <span className="text-sm text-gray-600">{fruit.available ? "Available" : "Unavailable"}</span>
                   </div>
                 </td>
 
                 <td className="text-center">
-                  <button
-                    onClick={() => deleteFruit(fruit.id)}
-                    className="border border-red-400 text-red-600 p-2 rounded-lg hover:bg-red-50 transition"
-                  >
+                  <button onClick={() => deleteFruit(fruit.id)} className="border border-red-400 text-red-600 p-2 rounded-lg hover:bg-red-50 transition">
                     <Trash2 size={16} />
                   </button>
                 </td>
@@ -202,27 +252,14 @@ export default function CustomizeBowl() {
           </tbody>
         </table>
       </div>
+
       {/* ADD FRUIT MODAL */}
       <AnimatePresence>
         {showModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
-          >
-            <motion.div
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.9 }}
-              className="bg-white w-[90%] max-w-[400px] rounded-xl p-6 relative"
-            >
-              <button onClick={() => setShowModal(false)} className="absolute right-4 top-4">
-                <X size={18} />
-              </button>
-
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }} className="bg-white w-[90%] max-w-[400px] rounded-xl p-6 relative">
+              <button onClick={() => setShowModal(false)} className="absolute right-4 top-4"><X size={18} /></button>
               <h2 className="text-xl font-bold mb-4">Add New Fruit</h2>
-
               <div className="space-y-4">
                 <div>
                   <label className="text-sm font-medium">Fruit Name</label>
@@ -233,7 +270,6 @@ export default function CustomizeBowl() {
                     className="w-full border rounded-lg px-3 py-2 mt-1"
                   />
                 </div>
-
                 <div>
                   <label className="text-sm font-medium">Type</label>
                   <select
@@ -245,7 +281,6 @@ export default function CustomizeBowl() {
                     <option>Premium</option>
                   </select>
                 </div>
-
                 {newFruit.type === "Premium" && (
                   <div>
                     <label className="text-sm font-medium">Price (for premium)</label>
@@ -258,12 +293,26 @@ export default function CustomizeBowl() {
                     />
                   </div>
                 )}
-
+                {/* ✅ Image upload — required by your backend */}
+                <div>
+                  <label className="text-sm font-medium">Fruit Image</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setNewFruitImage(e.target.files[0])}
+                    className="w-full border rounded-lg px-3 py-2 mt-1 text-sm"
+                  />
+                </div>
                 <button
                   onClick={addFruit}
-                  className="w-full bg-[#22c55e] text-white py-2 rounded-lg font-medium hover:bg-[#16a34a] transition"
+                  disabled={addingFruit}
+                  className={`w-full py-2 rounded-lg font-medium transition
+    ${addingFruit
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-[#22c55e] text-white hover:bg-[#16a34a]"}
+  `}
                 >
-                  Add Fruit
+                  {addingFruit ? "Adding..." : "Add Fruit"}
                 </button>
               </div>
             </motion.div>
@@ -274,14 +323,8 @@ export default function CustomizeBowl() {
   );
 }
 
-/* ---------------- SMALL COMPONENT ---------------- */
-
 const StatCard = ({ title, value, color = "text-gray-900" }) => (
-  <motion.div
-    className="bg-white p-6 rounded-xl border shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-  >
+  <motion.div className="bg-white p-6 rounded-xl border shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
     <p className="text-sm text-gray-500 mb-1">{title}</p>
     <h3 className={`text-3xl font-bold ${color}`}>{value}</h3>
   </motion.div>

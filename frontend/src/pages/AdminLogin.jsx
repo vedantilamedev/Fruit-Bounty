@@ -32,7 +32,8 @@ const AdminLogin = () => {
     }
 
     try {
-      await axios.post("https://fruit-bounty-dmzs.onrender.com/api/admin/register", registerData);
+      // await axios.post("https://fruit-bounty-dmzs.onrender.com/api/admin/register", registerData);
+      await axios.post("http://localhost:5000/api/admin/register", registerData);
       alert("Request sent successfully");
       setIsRegistering(false);
     } catch (error) {
@@ -44,18 +45,24 @@ const AdminLogin = () => {
     e.preventDefault();
 
     try {
-        console.log(loginData);
+      console.log(loginData);
+      // const res = await axios.post(
+      //   "https://fruit-bounty-dmzs.onrender.com/api/admin/login",
+      //   loginData,
+      // );
       const res = await axios.post(
-        "https://fruit-bounty-dmzs.onrender.com:5000/api/admin/login",
+        "http://localhost:5000/api/admin/login",
         loginData,
       );
 
-      if (res.data.role !== "admin") {
+      if (res.data.admin.role !== "admin") {
         alert("Access denied. Not an admin.");
         return;
       }
 
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("role", res.data.admin.role);
+      
       alert("Admin login successful");
       navigate("/admin/dashboard");
     } catch (error) {

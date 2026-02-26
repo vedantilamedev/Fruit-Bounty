@@ -13,14 +13,17 @@ import {
 const router = express.Router();
 
 // Customer
+// ✅ FIXED orderRoutes.js
 router.post("/", protect, createOrder);
 router.get("/myorders", protect, getMyOrders);
 router.get("/mysubscriptions", protect, getMySubscriptions);
+
+// Admin routes BEFORE /:id
+router.get("/", protect, admin, getAllOrders);           // ← move up
+router.put("/:id/status", protect, admin, updateOrderStatus);
+
+// Dynamic :id routes LAST
 router.get("/:id", protect, getOrderById);
 router.put("/cancel/:id", protect, cancelOrder);
-
-// Admin
-router.get("/", protect, admin, getAllOrders);
-router.put("/:id/status", protect, admin, updateOrderStatus);
 
 export default router;

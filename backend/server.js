@@ -1,33 +1,18 @@
-import express from "express";
 import dotenv from "dotenv";
+dotenv.config();   // ✅ LOAD ENV HERE
+
+import express from "express";
 import cors from "cors";
 import connectDB from "./config/db.js";
 
-// ===============================
-// Load ENV Variables
-// ===============================
-dotenv.config();
-
-// ===============================
-// Connect Database
-// ===============================
 connectDB();
 
-// ===============================
-// Initialize App
-// ===============================
 const app = express();
 
-// ===============================
-// Middlewares
-// ===============================
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ===============================
-// Routes Import
-// ===============================
 import authRoutes from "./routes/authRoutes.js";
 import fruitRoutes from "./routes/fruitRoutes.js";
 import packageRoutes from "./routes/packageRoutes.js";
@@ -39,16 +24,31 @@ import contactRoutes from "./routes/contactRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 import customBowlRoutes from "./routes/customBowlRoutes.js";
 import deliveryRoutes from "./routes/deliveryRoutes.js"; // 
+import { sendWhatsAppMessage } from "./services/whatsappService.js";
 
-// ===============================
-// Base Route
-// ===============================
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
     message: "FruitsBounty API is running 🚀",
   });
 });
+
+app.get("/send", async (req, res) => {
+  try {
+    await sendWhatsAppMessage("918436430197", "I am just testing!");
+    res.status(200).json({
+      success: true,
+      message: "Successfully sending"
+    })
+  } catch (error) {
+    console.log(error);
+
+    res.status(400).json({
+      success: false,
+      message: "not sending"
+    })
+  }
+})
 
 // ===============================
 // API Routes

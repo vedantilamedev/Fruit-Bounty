@@ -97,7 +97,7 @@ export default function App() {
           {/* User Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/adminlogin" element={<AdminLogin />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/fruits" element={<Fruits />} />
           <Route path="/shop" element={<FruitShop />} />
