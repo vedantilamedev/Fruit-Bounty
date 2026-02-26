@@ -32,13 +32,13 @@ function Reels() {
   const prev = () => {
     const nextIdx = current === 0 ? reels.length - 1 : current - 1;
     setCurrent(nextIdx);
-    setUnmutedIndex(null); // Reset mute state on swipe
+    setUnmutedIndex(null); 
   };
 
   const next = () => {
     const nextIdx = current === reels.length - 1 ? 0 : current + 1;
     setCurrent(nextIdx);
-    setUnmutedIndex(null); // Reset mute state on swipe
+    setUnmutedIndex(null); 
   };
 
   useEffect(() => {
@@ -58,7 +58,7 @@ function Reels() {
           } else {
             if (video) {
               video.pause();
-              video.muted = true; // Auto-mute when scrolling away
+              video.muted = true; 
             }
           }
         });
@@ -88,7 +88,7 @@ function Reels() {
         </h2>
         <div className="w-16 h-1 bg-[#2D5A27] mx-auto mt-3 mb-6 rounded-full"></div>
         <p className="text-gray-600 text-sm md:text-base font-medium leading-relaxed">
-          Watch how we craft our premium fruit bowls ! 
+          Watch how we craft our premium fruit bowls! 
         </p>
       </div>
 
@@ -99,6 +99,20 @@ function Reels() {
         </button>
 
         <div className="w-[280px] relative cursor-pointer group" onClick={() => toggleMute(current)}>
+          {/* MOBILE TRANSPARENT INSTAGRAM ICON */}
+          <a
+            href={reels[current].link}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="absolute top-5 right-5 z-40"
+          >
+            <span className="absolute inset-0 rounded-full bg-pink-500/30 animate-ping"></span>
+            <div className="relative bg-white/20 backdrop-blur-md p-2.5 rounded-xl border border-white/30 shadow-xl">
+              <FaInstagram className="text-white text-xl" />
+            </div>
+          </a>
+
           <video
             key={current}
             ref={(el) => (videoRefs.current[current] = el)}
@@ -108,7 +122,6 @@ function Reels() {
             playsInline
             className="rounded-[2.5rem] shadow-2xl w-full object-cover aspect-[9/16] bg-black border-4 border-white"
           />
-          {/* Enhanced Mobile Indicator */}
           <div className="absolute bottom-6 right-6 z-30 bg-black/60 backdrop-blur-md p-3 rounded-full text-white border border-white/20 transition-transform active:scale-90">
             {unmutedIndex === current ? <FaVolumeUp size={20} /> : <FaVolumeMute size={20} />}
           </div>
@@ -134,6 +147,22 @@ function Reels() {
                 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-20"}`}
               onClick={() => toggleMute(index)}
             >
+              {/* DESKTOP TRANSPARENT INSTAGRAM ICON */}
+              <a
+                href={reel.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="absolute top-6 right-6 z-40 group/insta"
+              >
+                {/* Pulsing Attention Ring */}
+                <span className="absolute inset-0 rounded-full bg-pink-400/30 animate-ping"></span>
+                
+                <div className="relative bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/20 shadow-2xl transition-all duration-300 group-hover/insta:scale-110 group-hover:animate-bounce group-hover:bg-white/30">
+                  <FaInstagram className="text-white text-2xl drop-shadow-md" />
+                </div>
+              </a>
+
               <video
                 ref={(el) => (videoRefs.current[index] = el)}
                 src={reel.video}
@@ -143,22 +172,11 @@ function Reels() {
                 className="rounded-[2.5rem] shadow-2xl w-full object-cover aspect-[9/16] bg-black border-[3px] border-transparent group-hover:border-[#C9C27A] transition-all duration-500"
               />
 
-              {/* Mute/Unmute Indicator - Always visible on hover or when unmuted */}
+              {/* Mute/Unmute Indicator */}
               <div className={`absolute bottom-6 right-6 z-30 p-3 rounded-full text-white border border-white/20 backdrop-blur-md transition-all duration-300
                 ${isUnmuted ? "bg-[#2D5A27] scale-110 shadow-lg" : "bg-black/40 opacity-0 group-hover:opacity-100"}`}>
                 {isUnmuted ? <FaVolumeUp size={20} /> : <FaVolumeMute size={20} />}
               </div>
-
-              {/* Instagram Floating Badge */}
-              <a
-                href={reel.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="absolute top-6 right-6 z-30 bg-white p-2.5 rounded-xl shadow-xl opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 hover:scale-110"
-              >
-                <FaInstagram className="text-pink-600 text-xl" />
-              </a>
             </div>
           );
         })}

@@ -195,6 +195,11 @@ function FruitShop() {
   const toastTimeoutRef = useRef(null);
   const itemsPerPage = 6;
 
+  // SCROLL TO TOP ON LOAD
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     return () => {
       if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);

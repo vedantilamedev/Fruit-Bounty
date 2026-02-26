@@ -77,7 +77,7 @@ function Footer() {
                   { label: "Home", to: "/" },
                   { label: "Our Bowls", to: "/shop" },
                   { label: "Customize Bowl", to: "/customize" },
-                  { label: "About Us", to: "/aboutus" },
+                  { label: "About Us", to: "/about-us" },
                 ].map((link) => (
                   <Link key={link.label} to={link.to} className="text-[12px] font-bold uppercase tracking-widest hover:text-[#C9C27A] transition-colors">
                     {link.label}
