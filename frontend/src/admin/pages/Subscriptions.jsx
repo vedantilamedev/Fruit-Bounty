@@ -1,29 +1,77 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Pause, Play, Users, Calendar, CreditCard } from "lucide-react";
+import axios from "axios";
 
 const Subscriptions = () => {
-
-  const initialSubscribers = [
-    { id: "SUB-001", customerName: "Sarah Johnson", planType: "Individual", duration: "1 Month", deliveryDays: "Mon, Wed, Fri", totalDays: 30, dailyPrice: 99, totalAmount: 2970, status: "Active" },
-    { id: "SUB-002", customerName: "Tech Corp Pvt Ltd", planType: "Corporate", duration: "2 Months", deliveryDays: "Mon - Sat", totalDays: 60, dailyPrice: 249, totalAmount: 14940, status: "Paused" },
-    { id: "SUB-003", customerName: "Amit Sharma", planType: "Individual", duration: "2 Weeks", deliveryDays: "Tue, Thu, Sat", totalDays: 14, dailyPrice: 89, totalAmount: 1246, status: "Active" },
-    { id: "SUB-004", customerName: "GreenTech Solutions", planType: "Corporate", duration: "3 Months", deliveryDays: "Mon - Fri", totalDays: 90, dailyPrice: 229, totalAmount: 20610, status: "Active" }
-  ];
-
-  const [subscribers, setSubscribers] = useState(initialSubscribers);
+  const [subscribers, setSubscribers] = useState([]);
   const [filter, setFilter] = useState("All");
 
-  const toggleSubscriberStatus = (id) => {
-    setSubscribers((prev) => prev.map((s) => s.id === id ? { ...s, status: s.status === "Active" ? "Paused" : "Active" } : s));
+  // ----------------------------
+  // FETCH SUBSCRIPTIONS FROM BACKEND
+  // ----------------------------
+  useEffect(() => {
+    const fetchSubscriptions = async () => {
+      try {
+        const token = localStorage.getItem("token"); // Admin JWT token
+        const { data } = await axios.get(
+          "http://localhost:5000/api/admin/subscriptions",
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        // Map backend data to frontend structure
+        setSubscribers(
+          data.data.map((s) => ({
+            id: s._id,
+            customerName: s.customer.name,
+            planType: s.plan,
+            duration: s.duration,
+            deliveryDays: s.deliveryDays || "-",
+            totalDays: s.daysRemaining,
+            totalAmount: s.amount,
+            status: s.status,
+          }))
+        );
+      } catch (err) {
+        console.error("Error fetching subscriptions:", err.response?.data || err.message);
+      }
+    };
+
+    fetchSubscriptions();
+  }, []);
+
+  // ----------------------------
+  // PAUSE / RESUME SUBSCRIPTION
+  // ----------------------------
+  const toggleSubscriberStatus = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      const { data } = await axios.patch(
+        `http://localhost:5000/api/admin/subscriptions/${id}/status`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setSubscribers((prev) =>
+        prev.map((s) => (s.id === id ? { ...s, status: data.subscription.status } : s))
+      );
+    } catch (err) {
+      console.error("Error updating subscription status:", err.response?.data || err.message);
+    }
   };
 
+  // ----------------------------
+  // CALCULATE STATS
+  // ----------------------------
   const filteredSubscribers = filter === "All" ? subscribers : subscribers.filter((s) => s.planType === filter);
   const totalSubscribers = subscribers.length;
   const activeCount = subscribers.filter((s) => s.status === "Active").length;
   const pausedCount = subscribers.filter((s) => s.status === "Paused").length;
   const monthlyRevenue = subscribers.filter((s) => s.status === "Active").reduce((acc, s) => acc + s.totalAmount, 0);
 
+  // ----------------------------
+  // JSX RENDER
+  // ----------------------------
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 lg:space-y-8">
       <div>
@@ -31,7 +79,7 @@ const Subscriptions = () => {
         <p className="hidden md:block text-gray-500 text-sm">Monitor dynamic user subscriptions & delivery schedules</p>
       </div>
 
-      {/* SUMMARY */}
+      {/* SUMMARY CARDS */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
         {[
           { label: "Total Subscribers", value: totalSubscribers, icon: <Users className="w-5 h-5 text-green-600" /> },
@@ -58,32 +106,57 @@ const Subscriptions = () => {
           </select>
         </div>
 
-        {/* Mobile Card View */}
-        <div className="block lg:hidden space-y-3">
-          {filteredSubscribers.map((s, i) => (
-            <motion.div key={s.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }} className="bg-white border rounded-xl shadow p-4 space-y-3">
-              <div className="flex justify-between items-start">
-                <div>
-                  <p className="font-bold text-gray-900">{s.customerName}</p>
-                  <p className="text-xs text-gray-500">{s.id}</p>
-                </div>
-                <span className={`px-2 py-1 rounded-full text-xs ${s.status === "Active" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>{s.status}</span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <span className="bg-gray-100 px-2 py-1 rounded-full text-xs">{s.planType}</span>
-                <span className="text-xs text-gray-600">{s.duration}</span>
-              </div>
-              <div className="flex justify-between items-center text-xs text-gray-600">
-                <span>₹{s.totalAmount}</span>
-                <button onClick={() => toggleSubscriberStatus(s.id)} className={`px-3 py-1.5 rounded text-xs font-medium flex items-center gap-1 ${s.status === "Active" ? "bg-yellow-100 text-yellow-700" : "bg-green-100 text-green-700"}`}>
-                  {s.status === "Active" ? <><Pause className="w-3 h-3" /> Pause</> : <><Play className="w-3 h-3" /> Resume</>}
-                </button>
-              </div>
-            </motion.div>
-          ))}
+        {/* MOBILE VIEW */}
+<div className="block lg:hidden space-y-3">
+  {filteredSubscribers.map((s, i) => (
+    <motion.div
+      key={s.id}
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: i * 0.05 }}
+      className="bg-white border rounded-xl shadow p-4 space-y-3"
+    >
+      <div className="flex justify-between items-start">
+        <div>
+          <p className="font-bold text-gray-900">{s.customerName}</p>
+          <p className="text-xs text-gray-500">{s.id}</p>
         </div>
+        <span
+          className={`px-2 py-1 rounded-full text-xs ${
+            s.status === "Active" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
+          }`}
+        >
+          {s.status}
+        </span>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        <span className="bg-gray-100 px-2 py-1 rounded-full text-xs">{s.planType}</span>
+        <span className="text-xs text-gray-600">{s.duration}</span>
+      </div>
+      <div className="flex justify-between items-center text-xs text-gray-600">
+        <span>₹{s.totalAmount}</span>
+        <button
+          onClick={() => toggleSubscriberStatus(s.id)}
+          className={`px-3 py-1.5 rounded text-xs font-medium flex items-center gap-1 ${
+            s.status === "Active" ? "bg-yellow-100 text-yellow-700" : "bg-green-100 text-green-700"
+          }`}
+        >
+          {s.status === "Active" ? (
+            <>
+              <Pause className="w-3 h-3" /> Pause
+            </>
+          ) : (
+            <>
+              <Play className="w-3 h-3" /> Resume
+            </>
+          )}
+        </button>
+      </div>
+    </motion.div>
+  ))}
+</div>
 
-        {/* Desktop Table View */}
+        {/* DESKTOP TABLE */}
         <div className="hidden lg:block bg-white border rounded-xl shadow overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -100,20 +173,49 @@ const Subscriptions = () => {
             </thead>
             <tbody className="divide-y divide-gray-200">
               {filteredSubscribers.map((s, i) => (
-                <motion.tr key={s.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }} className="hover:bg-gray-50">
-                  <td className="px-3 py-2 text-sm">{s.customerName}</td>
-                  <td className="px-3 py-2 text-sm"><span className="bg-gray-100 px-2 py-1 rounded-full">{s.planType}</span></td>
-                  <td className="px-3 py-2 text-sm font-semibold">{s.duration}</td>
-                  <td className="px-3 py-2 text-sm">{s.deliveryDays}</td>
-                  <td className="px-3 py-2 text-sm">{s.totalDays}</td>
-                  <td className="px-3 py-2 text-sm font-semibold text-green-600">₹{s.totalAmount}</td>
-                  <td className="px-3 py-2 text-sm"><span className={`px-2 py-1 rounded-full text-xs ${s.status === "Active" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>{s.status}</span></td>
-                  <td className="px-3 py-2">
-                    <button onClick={() => toggleSubscriberStatus(s.id)} className={`px-3 py-1 rounded text-xs font-medium flex items-center gap-1 ${s.status === "Active" ? "bg-yellow-100 text-yellow-700" : "bg-green-100 text-green-700"}`}>
-                      {s.status === "Active" ? <><Pause className="w-3 h-3" /> Pause</> : <><Play className="w-3 h-3" /> Resume</>}
-                    </button>
-                  </td>
-                </motion.tr>
+             <motion.tr
+  key={s.id}
+  initial={{ opacity: 0, x: -20 }}
+  animate={{ opacity: 1, x: 0 }}
+  transition={{ delay: i * 0.05 }}
+  className="hover:bg-gray-50"
+>
+  <td className="px-3 py-2 text-sm">{s.customerName}</td>
+  <td className="px-3 py-2 text-sm">
+    <span className="bg-gray-100 px-2 py-1 rounded-full">{s.planType}</span>
+  </td>
+  <td className="px-3 py-2 text-sm font-semibold">{s.duration}</td>
+  <td className="px-3 py-2 text-sm">{s.deliveryDays}</td>
+  <td className="px-3 py-2 text-sm">{s.totalDays}</td>
+  <td className="px-3 py-2 text-sm font-semibold text-green-600">₹{s.totalAmount}</td>
+  <td className="px-3 py-2 text-sm">
+    <span
+      className={`px-2 py-1 rounded-full text-xs ${
+        s.status === "Active" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
+      }`}
+    >
+      {s.status}
+    </span>
+  </td>
+  <td className="px-3 py-2">
+    <button
+      onClick={() => toggleSubscriberStatus(s.id)}
+      className={`px-3 py-1 rounded text-xs font-medium flex items-center gap-1 ${
+        s.status === "Active" ? "bg-yellow-100 text-yellow-700" : "bg-green-100 text-green-700"
+      }`}
+    >
+      {s.status === "Active" ? (
+        <>
+          <Pause className="w-3 h-3" /> Pause
+        </>
+      ) : (
+        <>
+          <Play className="w-3 h-3" /> Resume
+        </>
+      )}
+    </button>
+  </td>
+</motion.tr>
               ))}
             </tbody>
           </table>

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { Search, Mail, Phone, MapPin, ShoppingBag, X, Eye } from "lucide-react";
 import { Users, UserPlus, Briefcase, TrendingUp } from "lucide-react";
+import axios from "axios";
 
 /* ----------------- Utility ----------------- */
 function cn(...classes) {
@@ -56,30 +57,57 @@ function Button({ children, variant = "default", size = "default", className, ..
   );
 }
 
-/* ----------------- Customers Data ----------------- */
-const customers = [
-  { id: "CUST-001", name: "Sarah Johnson", email: "sarah.j@email.com", phone: "+1 (555) 123-4567", address: "123 Green Street, San Francisco, CA", totalOrders: 45, totalSpent: 832.5, type: "Subscriber", subscriptionMonths: 6, joinDate: "2025-08-15" },
-  { id: "CUST-002", name: "Michael Chen", email: "m.chen@email.com", phone: "+1 (555) 234-5678", address: "456 Market Avenue, San Francisco, CA", totalOrders: 12, totalSpent: 198.0, type: "Regular", joinDate: "2025-11-20" },
-  { id: "CUST-003", name: "Tech Corp Inc.", email: "orders@techcorp.com", phone: "+1 (555) 345-6789", address: "789 Business Park, San Francisco, CA", totalOrders: 180, totalSpent: 15300.0, type: "Corporate", joinDate: "2025-06-01" },
-  { id: "CUST-004", name: "Emma Wilson", email: "emma.w@email.com", phone: "+1 (555) 456-7890", address: "321 Oak Lane, San Francisco, CA", totalOrders: 28, totalSpent: 462.0, type: "Regular", joinDate: "2025-09-10" },
-  { id: "CUST-005", name: "David Lee", email: "david.lee@email.com", phone: "+1 (555) 567-8901", address: "654 Pine Road, San Francisco, CA", totalOrders: 52, totalSpent: 961.0, type: "Subscriber", subscriptionMonths: 12, joinDate: "2025-07-22" },
-];
-
 /* ----------------- Main Component ----------------- */
 export default function Customers() {
+  const [customers, setCustomers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [modalCustomer, setModalCustomer] = useState(null);
 
+  // Fetch customers from backend
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        setLoading(true);
+        const token = localStorage.getItem("token"); // Admin token
+        const { data } = await axios.get("/api/admin/customers", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const mappedCustomers = data.data.map(c => ({
+          id: c._id,
+          name: c.name,
+          email: c.email,
+          phone: c.phone || "-",
+          address: c.address || "-",
+          type: c.type || "Regular",
+          totalOrders: c.totalOrders || 0,
+          totalSpent: c.totalSpent || 0,
+          subscriptionMonths: c.subscriptionMonths || 0,
+          joinDate: new Date(c.createdAt).toLocaleDateString()
+        }));
+        setCustomers(mappedCustomers);
+      } catch (err) {
+        console.error("Error fetching customers:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCustomers();
+  }, []);
+
   const filteredCustomers = customers.filter(
-    (c) => (c.name.toLowerCase().includes(searchTerm.toLowerCase()) || c.email.toLowerCase().includes(searchTerm.toLowerCase())) && (typeFilter === "all" || c.type === typeFilter)
+    (c) => 
+      (c.name.toLowerCase().includes(searchTerm.toLowerCase()) || c.email.toLowerCase().includes(searchTerm.toLowerCase())) &&
+      (typeFilter === "all" || c.type === typeFilter)
   );
+
+  if (loading) return <p className="p-4 text-center text-gray-500">Loading customers...</p>;
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-6 sm:mb-8">
-        {/* Hidden on mobile since it's now in AdminLayout header */}
         <h1 className="hidden md:block text-2xl sm:text-3xl font-bold text-gray-900">Customers</h1>
         <p className="hidden md:block text-gray-500">Manage your customer database</p>
       </motion.div>
