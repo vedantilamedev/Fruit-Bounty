@@ -20,7 +20,11 @@ function TopBar({ onOpen }) {
 
     checkLocation();
     window.addEventListener("storage", checkLocation);
-    return () => window.removeEventListener("storage", checkLocation);
+    window.addEventListener("pincodeUpdated", checkLocation); // ✅ NEW
+    return () => {
+      window.removeEventListener("storage", checkLocation);
+      window.removeEventListener("pincodeUpdated", checkLocation); // ✅ NEW
+    };
   }, []);
 
   useEffect(() => {
@@ -42,14 +46,12 @@ function TopBar({ onOpen }) {
   return (
     <div className="w-full bg-[#3d693d] text-white sticky top-0 z-[60]">
       <div className="max-w-6xl mx-auto flex justify-between items-center px-4 md:px-6 py-2.5">
-        
-        {/* Typewriter Text - Responsive font size */}
+
         <p className="font-bold tracking-wide flex items-center text-[10px] sm:text-xs md:text-sm flex-1 mr-4">
           <span className="text-white leading-tight">{displayText}</span>
           <span className="ml-1 w-[2px] h-3 md:h-4 bg-[#C9C27A] animate-pulse shrink-0"></span>
         </p>
 
-        {/* Location Section - Icon only on mobile, text on desktop */}
         <button
           onClick={onOpen}
           className="flex items-center gap-2 transition-all duration-300 hover:text-[#C9C27A] group shrink-0"
