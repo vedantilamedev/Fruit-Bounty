@@ -33,7 +33,7 @@ const AdminLogin = () => {
 
     try {
       // await axios.post("https://fruit-bounty-dmzs.onrender.com/api/admin/register", registerData);
-      await axios.post("http://localhost:5000/api/admin/register", registerData);
+      await axios.post("https://fruit-bounty-dmzs.onrender.com/api/admin/register", registerData);
       alert("Request sent successfully");
       setIsRegistering(false);
     } catch (error) {
@@ -51,7 +51,7 @@ const AdminLogin = () => {
       //   loginData,
       // );
       const res = await axios.post(
-        "http://localhost:5000/api/admin/login",
+        "https://fruit-bounty-dmzs.onrender.com/api/admin/login",
         loginData,
       );
 
