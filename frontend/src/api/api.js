@@ -1,7 +1,11 @@
 import axios from "axios";
 
+// const API = axios.create({
+//   baseURL: "https://fruit-bounty-dmzs.onrender.com/api"
+// });
+
 const API = axios.create({
-  baseURL: "https://fruit-bounty-dmzs.onrender.com/api"
+  baseURL: "http://localhost:5000/api"
 });
 
 //  APIs

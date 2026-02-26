@@ -15,16 +15,27 @@ const fruitSchema = new mongoose.Schema(
 
     image: {
       type: String,
-      required: true
+      default: ""          // made optional so admin can add fruits without image
     },
 
     stock: {
       type: Number,
-      required: true,
       default: 0
     },
 
     isActive: {
+      type: Boolean,
+      default: true
+    },
+
+    // ✅ NEW — needed by CustomizeBowl admin panel
+    type: {
+      type: String,
+      enum: ["Free", "Premium"],
+      default: "Free"
+    },
+
+    available: {
       type: Boolean,
       default: true
     }

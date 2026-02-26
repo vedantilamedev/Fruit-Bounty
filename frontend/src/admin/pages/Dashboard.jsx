@@ -1,132 +1,84 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
-  TrendingUp,
-  TrendingDown,
-  ShoppingCart,
-  AlertCircle,
-  Clock,
+  TrendingUp, ShoppingCart, AlertCircle, Clock,
 } from "lucide-react";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  PieChart,
-  Pie,
-  Cell,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+  ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell,
 } from "recharts";
-
-// ---------------- DATA ----------------
-
-const revenueData = {
-  daily: [
-    { name: "Mon", revenue: 4200 },
-    { name: "Tue", revenue: 5100 },
-    { name: "Wed", revenue: 4800 },
-    { name: "Thu", revenue: 6200 },
-    { name: "Fri", revenue: 7500 },
-    { name: "Sat", revenue: 8900 },
-    { name: "Sun", revenue: 7200 },
-  ],
-  weekly: [
-    { name: "W1", revenue: 28000 },
-    { name: "W2", revenue: 32000 },
-    { name: "W3", revenue: 35000 },
-    { name: "W4", revenue: 42580 },
-  ],
-  monthly: [
-    { name: "Jan", revenue: 98000 },
-    { name: "Feb", revenue: 112000 },
-    { name: "Mar", revenue: 125000 },
-    { name: "Apr", revenue: 145000 },
-    { name: "May", revenue: 162000 },
-  ],
-  total: [
-    { name: "Jan", revenue: 98000 },
-    { name: "Feb", revenue: 210000 },
-    { name: "Mar", revenue: 335000 },
-    { name: "Apr", revenue: 480000 },
-    { name: "May", revenue: 642580 },
-  ],
-};
-
-const peakOrderTimes = [
-  { time: "9 AM", orders: 20 },
-  { time: "12 PM", orders: 55 },
-  { time: "3 PM", orders: 42 },
-  { time: "6 PM", orders: 70 },
-  { time: "9 PM", orders: 48 },
-];
-
-const bestSellingBowls = [
-  { name: "Tropical Blast", orders: 145 },
-  { name: "Berry Mix", orders: 132 },
-  { name: "Green Detox", orders: 118 },
-  { name: "Protein Bowl", orders: 95 },
-  { name: "Classic Combo", orders: 80 },
-];
-
-const orderTypePie = [
-  { name: "Normal", value: 55, count: 180 },
-  { name: "Subscription", value: 30, count: 98 },
-  { name: "Corporate", value: 15, count: 46 },
-];
+import axios from "axios";
 
 const COLORS = ["#22c55e", "#3b82f6", "#f97316", "#16a34a", "#86efac"];
-
-const metrics = [
-  {
-    title: "Total Orders",
-    value: "324",
-    change: "+12.5%",
-    trend: "up",
-    icon: ShoppingCart,
-  },
-  {
-    title: "Revenue",
-    value: "₹42,580",
-    change: "+18.2%",
-    trend: "up",
-    icon: TrendingUp,
-  },
-  {
-    title: "Out of Stock",
-    value: "8",
-    change: "-3",
-    trend: "down",
-    icon: AlertCircle,
-  },
-  {
-    title: "Pending Orders",
-    value: "67",
-    change: "+5",
-    trend: "up",
-    icon: Clock,
-  },
-];
-
-// ---------------- COMPONENT ----------------
+const BASE_URL = "http://localhost:5000/api";
 
 export default function Dashboard() {
   const [revenueView, setRevenueView] = useState("daily");
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get(`${BASE_URL}/admin/dashboard`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setData(res.data.data);
+      } catch (err) {
+        console.error("Failed to fetch dashboard stats", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="text-gray-500 text-lg animate-pulse">Loading dashboard...</div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="text-red-500 text-lg">Failed to load dashboard data.</div>
+      </div>
+    );
+  }
+
+  const metrics = [
+    {
+      title: "Total Orders",
+      value: data.metrics.totalOrders,
+      icon: ShoppingCart,
+    },
+    {
+      title: "Revenue",
+      value: `₹${data.metrics.totalRevenue.toLocaleString("en-IN")}`,
+      icon: TrendingUp,
+    },
+    {
+      title: "Pending Orders",
+      value: data.metrics.pendingOrders,
+      icon: Clock,
+    },
+  ];
 
   return (
     <div className="p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6 bg-gray-50 min-h-screen">
 
-      {/* PAGE HEADING */}
+      {/* HEADING */}
       <div>
         <h1 className="hidden md:block text-2xl sm:text-3xl font-bold text-gray-800">Admin Dashboard</h1>
         <p className="hidden md:block text-sm text-gray-500">Overview of your business performance</p>
       </div>
 
       {/* METRIC CARDS */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-6">
         {metrics.map((item, i) => {
           const Icon = item.icon;
           return (
@@ -157,7 +109,6 @@ export default function Dashboard() {
           <div className="bg-white p-4 sm:p-6 rounded-xl border shadow-sm">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
               <h3 className="font-semibold text-lg">Revenue Trend</h3>
-
               <div className="flex flex-wrap gap-1.5 sm:gap-2">
                 {["daily", "weekly", "monthly", "total"].map((view) => (
                   <button
@@ -174,13 +125,12 @@ export default function Dashboard() {
                 ))}
               </div>
             </div>
-
-            <ResponsiveContainer width="100%" height={250} >
-              <LineChart data={revenueData[revenueView]}>
+            <ResponsiveContainer width="100%" height={250}>
+              <LineChart data={data.revenueData[revenueView]}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" fontSize={12} />
                 <YAxis fontSize={12} />
-                <Tooltip />
+                <Tooltip formatter={(v) => `₹${v.toLocaleString("en-IN")}`} />
                 <Line type="monotone" dataKey="revenue" stroke="#427A43" strokeWidth={3} />
               </LineChart>
             </ResponsiveContainer>
@@ -190,9 +140,8 @@ export default function Dashboard() {
         <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
           <div className="bg-white p-4 sm:p-6 rounded-xl border shadow-sm">
             <h3 className="font-semibold text-lg mb-4">Peak Order Times</h3>
-
             <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={peakOrderTimes}>
+              <BarChart data={data.peakOrderTimes}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="time" fontSize={12} />
                 <YAxis fontSize={12} />
@@ -204,50 +153,15 @@ export default function Dashboard() {
         </motion.div>
       </div>
 
-      {/* BEST SELLING + PIE CHART */}
+      {/* PIE CHART */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-
-        {/* Best Selling */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="bg-white p-4 sm:p-6 rounded-xl border shadow-sm">
-            <h3 className="text-lg font-semibold mb-4">Best Selling Bowl Combos</h3>
-
-            <div className="space-y-3 sm:space-y-4">
-              {bestSellingBowls.map((bowl, index) => (
-                <div key={index} className="flex items-center gap-3 sm:gap-4">
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-green-100 flex items-center justify-center font-bold text-green-600 text-xs sm:text-sm">
-                    {index + 1}
-                  </div>
-
-                  <div className="flex-1">
-                    <p className="text-sm font-medium">{bowl.name}</p>
-                    <div className="w-full bg-gray-100 h-2 rounded-full mt-1 sm:mt-2">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${(bowl.orders / 145) * 100}%` }}
-                        transition={{ duration: 1 }}
-                        className="h-2 rounded-full"
-                        style={{ background: "#22c55e" }}
-                      />
-                    </div>
-                  </div>
-
-                  <span className="font-semibold text-sm">{bowl.orders}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Pie Chart */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="bg-white p-4 sm:p-6 rounded-xl border shadow-sm">
             <h3 className="text-lg font-semibold mb-4">Order Type Distribution</h3>
-
             <ResponsiveContainer width="100%" height={220}>
               <PieChart>
                 <Pie
-                  data={orderTypePie}
+                  data={data.orderTypeDistribution}
                   cx="50%"
                   cy="50%"
                   labelLine={false}
@@ -256,19 +170,18 @@ export default function Dashboard() {
                   dataKey="value"
                   fontSize={12}
                 >
-                  {orderTypePie.map((entry, index) => (
+                  {data.orderTypeDistribution.map((_, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip />
               </PieChart>
             </ResponsiveContainer>
-
             <div className="mt-3 sm:mt-4 space-y-2">
-              {orderTypePie.map((item, index) => (
+              {data.orderTypeDistribution.map((item, index) => (
                 <div key={item.name} className="flex items-center justify-between p-2 rounded-lg bg-slate-50">
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
+                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[index] }} />
                     <span className="text-xs sm:text-sm text-slate-700">{item.name}</span>
                   </div>
                   <span className="text-xs sm:text-sm font-semibold text-slate-700">{item.count} orders</span>
@@ -277,7 +190,6 @@ export default function Dashboard() {
             </div>
           </div>
         </motion.div>
-
       </div>
 
     </div>

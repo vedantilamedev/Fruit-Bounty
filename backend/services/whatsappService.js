@@ -1,26 +1,37 @@
 import axios from "axios";
 
-const WHATSAPP_API_URL = process.env.WHATSAPP_API_URL; // Your provider URL
-const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;     // Your API token
+console.log("I am just testing", process.env.WHATSAPP_TOKEN)
 
 export const sendWhatsAppMessage = async (to, message) => {
   try {
+
     const payload = {
-      to,              // recipient number with country code
-      type: "text",
-      text: { body: message }
+      apiKey: process.env.WHATSAPP_TOKEN,
+      campaignName: "your_campaign_name",
+      destination: to,
+      userName: "User",
+      templateParams: [message]
     };
 
-    const headers = {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${WHATSAPP_TOKEN}`
-    };
+    const response = await axios.post(
+      process.env.WHATSAPP_API_URL,
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+    );
 
-    const response = await axios.post(WHATSAPP_API_URL, payload, { headers });
+    console.log("AiSensy Response:", response.data);
+
     return response.data;
 
   } catch (error) {
-    console.error("WhatsApp Error:", error.response?.data || error.message);
+    console.error(
+      "WhatsApp Error:",
+      error.response?.data || error.message
+    );
     return null;
   }
-}
+};
