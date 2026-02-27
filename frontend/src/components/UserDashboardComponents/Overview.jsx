@@ -258,17 +258,18 @@ transition-all   font-bold text-xs uppercase tracking-[0.2em] flex items-center 
       </motion.div>
 
       {/* Tracking Modal */}
-      <AnimatePresence>
+      <AnimatePresence >
+        
         {isTrackingOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 p-4">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white w-full max-w-md rounded-lg shadow-md overflow-hidden"
+              className="bg-white  border-yellow-600 border-2 w-full max-w-md rounded-3xl shadow-md overflow-hidden"
             >
               {/* Header */}
-              <div className="bg-green-600 text-white p-4 flex justify-between items-center">
+              <div className="bg-gradient-to-tr from-[#3a7942] to-[#25522b] text-white p-4 flex justify-between items-center">
                 <div>
                   <h3 className="font-bold text-lg">Delivery Status</h3>
                   <p className="text-sm text-green-100 mt-1">Order ID: #FRUIT-2026-X10</p>
@@ -286,7 +287,7 @@ transition-all   font-bold text-xs uppercase tracking-[0.2em] flex items-center 
                 {trackingSteps.map((step, idx) => (
                   <div key={idx} className="flex items-start gap-3">
                     <div
-                      className={`w-4 h-4 mt-1 rounded-full ${step.completed ? 'bg-green-600' : step.current ? 'bg-yellow-500' : 'bg-gray-300'
+                      className={`w-4 h-4 mt-1 rounded-full ${step.completed ? 'bg-[#40884b]' : step.current ? 'bg-yellow-500' : 'bg-gray-300'
                         }`}
                     />
                     <div>
@@ -305,8 +306,8 @@ transition-all   font-bold text-xs uppercase tracking-[0.2em] flex items-center 
                 <p className="text-sm font-semibold text-gray-700">Delivery Partner:</p>
                 <p className="text-gray-800">Vikram S.</p>
                 <div className="flex gap-2 mt-2">
-                  <button className="flex-1 py-2 bg-green-600 text-white rounded-lg">Call</button>
                   <button className="flex-1 py-2 border border-gray-300 rounded-lg">Message</button>
+                  <button className="flex-1 py-2 bg-gradient-to-tr from-[#3a7942] to-[#25522b] text-white rounded-lg">Call</button>
                 </div>
               </div>
             </motion.div>
