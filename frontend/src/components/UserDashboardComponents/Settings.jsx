@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
 import { User, Bell, Lock } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 /* ---------- UI Helpers ---------- */
 
@@ -73,8 +76,60 @@ const Switch = ({ checked, onChange }) => (
 
 /* ---------- Settings Component ---------- */
 
-export default function Settings({ userData }) {
+export default function Settings({ userData, onUpdateUser }) {
     const [tab, setTab] = useState("profile");
+    const [loading, setLoading] = useState(false);
+    const [localUserData, setLocalUserData] = useState(null);
+
+    // Fetch user profile directly if not provided via props
+    useEffect(() => {
+        const fetchProfile = async () => {
+            // If userData is already provided and has values, use it
+            if (userData?.name && userData?.email) {
+                console.log('[Settings] Using userData from props:', userData);
+                setLocalUserData(userData);
+                return;
+            }
+            
+            // Otherwise fetch directly
+            try {
+                console.log('[Settings] Fetching profile from API...');
+                const token = localStorage.getItem("token");
+                const res = await axios.get("/api/users/profile", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                console.log('[Settings] API response:', res.data);
+                setLocalUserData(res.data);
+            } catch (error) {
+                console.error('[Settings] Error fetching profile:', error);
+            }
+        };
+
+        fetchProfile();
+    }, [userData]);
+
+    // Form state for profile - use localUserData if available, otherwise fall back to userData
+    const currentUserData = localUserData || userData;
+    console.log('[Settings] currentUserData:', currentUserData);
+    
+    const [formData, setFormData] = useState({
+        name: currentUserData?.name || "",
+        email: currentUserData?.email || "",
+        phone: currentUserData?.phone || "",
+        address: currentUserData?.address || ""
+    });
+
+    // Update form when userData changes
+    useEffect(() => {
+        const dataToUse = localUserData || userData;
+        console.log('[Settings] Updating form with:', dataToUse);
+        setFormData({
+            name: dataToUse?.name || "",
+            email: dataToUse?.email || "",
+            phone: dataToUse?.phone || "",
+            address: dataToUse?.address || ""
+        });
+    }, [userData, localUserData]);
 
     const [notifications, setNotifications] = useState({
         email: true,
@@ -83,8 +138,98 @@ export default function Settings({ userData }) {
         marketing: false,
     });
 
+    // Password change state
+    const [passwordData, setPasswordData] = useState({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: ""
+    });
+
+    // Handle profile form change
+    const handleFormChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    // Save profile handler
+    const handleSaveProfile = async () => {
+        setLoading(true);
+        try {
+            const token = localStorage.getItem("token");
+            const res = await axios.put("/api/users/profile", {
+                name: formData.name,
+                address: formData.address
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            // Update parent state
+            if (onUpdateUser) {
+                onUpdateUser({
+                    ...userData,
+                    name: formData.name,
+                    address: formData.address
+                });
+            }
+
+            toast.success("Profile updated successfully!", {
+                position: "top-right",
+                autoClose: 3000
+            });
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Failed to update profile", {
+                position: "top-right",
+                autoClose: 3000
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Handle password change
+    const handlePasswordChange = async () => {
+        if (passwordData.newPassword !== passwordData.confirmPassword) {
+            toast.error("New passwords don't match!", {
+                position: "top-right",
+                autoClose: 3000
+            });
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const token = localStorage.getItem("token");
+            await axios.put("/api/users/profile", {
+                password: passwordData.newPassword
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            setPasswordData({
+                currentPassword: "",
+                newPassword: "",
+                confirmPassword: ""
+            });
+
+            toast.success("Password updated successfully!", {
+                position: "top-right",
+                autoClose: 3000
+            });
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Failed to update password", {
+                position: "top-right",
+                autoClose: 3000
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className="min-h-screen bg-gradient-to-br p-4 sm:p-6 lg:p-10 overflow-x-hidden">
+            <ToastContainer position="top-right" autoClose={3000} theme="dark" />
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -127,13 +272,18 @@ export default function Settings({ userData }) {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                         <div>
                             <Label>Full Name</Label>
-                            <Input defaultValue={userData?.name} className="mt-3" />
+                            <Input 
+                                name="name"
+                                value={formData.name} 
+                                onChange={handleFormChange}
+                                className="mt-3" 
+                            />
                         </div>
 
                         <div>
                             <Label>Email Address</Label>
                             <Input
-                                defaultValue={userData?.email}
+                                value={formData.email}
                                 readOnly
                                 className="mt-3 opacity-70"
                             />
@@ -142,7 +292,7 @@ export default function Settings({ userData }) {
                         <div>
                             <Label>Mobile Number</Label>
                             <Input
-                                defaultValue={userData?.phone}
+                                value={formData.phone}
                                 readOnly
                                 className="mt-3 opacity-70"
                             />
@@ -150,13 +300,28 @@ export default function Settings({ userData }) {
 
                         <div>
                             <Label>Location</Label>
-                            <Input defaultValue="Bengaluru, India" className="mt-3" />
+                            <Input 
+                                name="address"
+                                value={formData.address} 
+                                onChange={handleFormChange}
+                                placeholder="Enter your location"
+                                className="mt-3" 
+                            />
                         </div>
                     </div>
 
                     <div className="flex flex-col sm:flex-row justify-end gap-4 mt-8 sm:mt-10">
-                        <Button variant="outline">Cancel</Button>
-                        <Button>Save Changes</Button>
+                        <Button variant="outline" onClick={() => {
+                            setFormData({
+                                name: userData?.name || "",
+                                email: userData?.email || "",
+                                phone: userData?.phone || "",
+                                address: userData?.address || ""
+                            });
+                        }}>Cancel</Button>
+                        <Button onClick={handleSaveProfile} disabled={loading}>
+                            {loading ? "Saving..." : "Save Changes"}
+                        </Button>
                     </div>
                 </Card>
             )}
@@ -211,17 +376,32 @@ export default function Settings({ userData }) {
                     <div className="space-y-6">
                         <div>
                             <Label>Current Password</Label>
-                            <Input type="password" className="mt-3" />
+                            <Input 
+                                type="password" 
+                                value={passwordData.currentPassword}
+                                onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
+                                className="mt-3" 
+                            />
                         </div>
 
                         <div>
                             <Label>New Password</Label>
-                            <Input type="password" className="mt-3" />
+                            <Input 
+                                type="password" 
+                                value={passwordData.newPassword}
+                                onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
+                                className="mt-3" 
+                            />
                         </div>
 
                         <div>
                             <Label>Confirm Password</Label>
-                            <Input type="password" className="mt-3" />
+                            <Input 
+                                type="password" 
+                                value={passwordData.confirmPassword}
+                                onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
+                                className="mt-3" 
+                            />
                         </div>
 
                         <div className="w-full flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4">
@@ -230,8 +410,12 @@ export default function Settings({ userData }) {
                                     Forget Password ?
                                 </Button>
                             </a>
-                            <Button className="mt-2 sm:mt-4 w-full sm:w-auto">
-                                Update Password
+                            <Button 
+                                onClick={handlePasswordChange} 
+                                disabled={loading || !passwordData.currentPassword || !passwordData.newPassword}
+                                className="mt-2 sm:mt-4 w-full sm:w-auto"
+                            >
+                                {loading ? "Updating..." : "Update Password"}
                             </Button>
                         </div>
                     </div>

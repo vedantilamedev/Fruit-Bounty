@@ -18,7 +18,7 @@ const generateToken = (id, role) => {
 //  Register User (Customer or Admin)
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, phone } = req.body;
 
     const userExists = await User.findOne({ email });
 
@@ -32,7 +32,8 @@ export const registerUser = async (req, res) => {
       name,
       email,
       password,
-      role
+      role,
+      phone: phone || "-"
     });
 
     if (user) {
@@ -53,6 +54,7 @@ export const registerUser = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
+        phone: user.phone,
         role: user.role,
         token: generateToken(user._id, user.role)
       });

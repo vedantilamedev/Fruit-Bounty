@@ -1,18 +1,12 @@
+import "./config/env.js"
+
 import express from "express";
-import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
 
 // ===============================
 // Load ENV Variables
 // ===============================
-dotenv.config();
-
-// ===============================
-// Connect Database
-// ===============================
-connectDB();
-
 // ===============================
 // Initialize App
 // ===============================
@@ -54,20 +48,24 @@ app.get("/", (req, res) => {
   });
 });
 
+// Add temporarily to server.js
+app.get("/api/test-secret", (req, res) => {
+  res.json({ secret: process.env.JWT_SECRET });
+});
 // ===============================
 // API Routes
 // ===============================
+app.use("/api/orders", orderRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/fruits", fruitRoutes);
 app.use("/api/packages", packageRoutes);
-app.use("/api/orders", orderRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/admin/customers", customerRoutes);
 app.use("/api/admin/subscriptions", subscriptionRoutes);
 
 // Customer Routes
-app.use("/api/user", userRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/custom-bowls", customBowlRoutes);
@@ -84,6 +82,17 @@ app.use((req, res) => {
     success: false,
     message: "Route Not Found ",
   });
+});
+
+app.get("/api/test-jwt", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.json({ error: "no token" });
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    res.json({ success: true, decoded });
+  } catch (e) {
+    res.json({ error: e.message });
+  }
 });
 
 // ===============================

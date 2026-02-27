@@ -20,26 +20,35 @@ const Dashboard = () => {
     const [payments, setPayments] = useState([]);
 
     const [userData, setUserData] = useState({
-        name: "Aditya Kumar",
-        email: "aditya@fruitbounty.com",
-        phone: "+91 98765 43210",
-        activePackage: {
-            name: "1 Month Individual Plan",
-            type: "Individual",
-            peopleCount: 1,
-            duration: "Monthly",
-            frequency: "Daily",
-            startDate: "2026-02-01",
-            endDate: "2026-02-28",
-            renewalDate: "2026-03-01",
-            status: "Active",
-            fruits: ["Apple", "Banana", "Pomegranate", "Kiwi", "Orange", "Mango", "Papaya"]
-        }
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+        activePackage: null
     });
 
     const [orders, setOrders] = useState([]);
 
     useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                const res = await axios.get("/api/users/profile", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                
+                setUserData(prev => ({
+                    ...prev,
+                    name: res.data.name || "",
+                    email: res.data.email || "",
+                    phone: res.data.phone || "",
+                    address: res.data.address || ""
+                }));
+            } catch (error) {
+                console.error("Error fetching user profile:", error.response?.data || error.message);
+            }
+        };
+
         const fetchOrders = async () => {
             try {
                 const token = localStorage.getItem("token");
@@ -76,6 +85,7 @@ const Dashboard = () => {
             }
         };
 
+        fetchUserProfile();
         fetchOrders();
     }, []);
 
@@ -83,6 +93,14 @@ const Dashboard = () => {
         setOrders(prev => prev.map(order =>
             order.id === orderId ? { ...order, status: 'Canceled' } : order
         ));
+    };
+
+    // Update user data from Settings
+    const handleUpdateUser = (updatedData) => {
+        setUserData(prev => ({
+            ...prev,
+            ...updatedData
+        }));
     };
 
     const menuItems = [
@@ -104,7 +122,7 @@ const Dashboard = () => {
             case 'payments':
                 return <Payments payments={payments} />;
             case 'settings':
-                return <Settings userData={userData} />;
+                return <Settings userData={userData} onUpdateUser={handleUpdateUser} />;
             default:
                 return <Overview userData={userData} orders={orders} />;
         }

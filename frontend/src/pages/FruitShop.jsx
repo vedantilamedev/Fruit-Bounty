@@ -14,8 +14,9 @@ import {
   Crown,
   Sparkles,
 } from "lucide-react";
+import { getAllFruits } from "../api/api";
 
-const products = [
+const defaultProducts = [
   {
     id: 1,
     title: "Small Bowl",
@@ -189,12 +190,50 @@ function FreshnessCard({ icon, title, desc }) {
 function FruitShop() {
   const { addToCart } = useCart();
   const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedBowls, setSelectedBowls] = useState([]);
   const [quantities, setQuantities] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [toast, setToast] = useState({ show: false, message: "", type: "success" });
   const toastTimeoutRef = useRef(null);
   const itemsPerPage = 6;
+
+  // Fetch products from API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await getAllFruits();
+        if (response.data.success) {
+          // Map backend data to frontend format
+          const mappedProducts = response.data.data
+            .filter(item => item.isBowl && item.available)
+            .map((item) => ({
+              id: item._id,
+              title: item.name,
+              weight: item.description?.split('|')[0]?.trim() || "400g",
+              price: item.price,
+              rating: 4.5 + Math.random() * 0.5, // Simulated rating
+              calories: item.description?.split('|')[1]?.trim() || "400 kcal",
+              protein: item.ingredients?.length ? `${item.ingredients.length * 3}g Protein` : "15g Protein",
+              ingredients: item.ingredients || ["Mixed Fruits"],
+              toppings: item.ingredients?.slice(0, 3) || ["Honey", "Chia Seeds"],
+              description: item.description || "Delicious fruit bowl",
+              image: item.image || item.images?.[0] || "/images/mediumBowl.webp",
+            }));
+          setProducts(mappedProducts);
+        }
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        // Fallback to default products
+        setProducts(defaultProducts);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   // SCROLL TO TOP ON LOAD
   useEffect(() => {
@@ -281,6 +320,15 @@ function FruitShop() {
 
   return (
     <section className="relative pt-0 pb-4 md:pt-2 md:pb-8 px-4 sm:px-5 md:px-16 lg:px-24 overflow-hidden">
+      {loading ? (
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-700 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading products...</p>
+          </div>
+        </div>
+      ) : (
+      <>
       <div
         className="absolute inset-0 z-0 opacity-40 pointer-events-none"
         style={{
@@ -725,6 +773,8 @@ function FruitShop() {
         >
           <p className="text-xs md:text-sm font-bold">{toast.message}</p>
         </div>
+      )}
+      </>
       )}
     </section>
   );

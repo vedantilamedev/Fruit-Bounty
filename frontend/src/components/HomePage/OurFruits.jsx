@@ -1,7 +1,57 @@
 import FruitCard from "./FruitCard";
+import { getAllFruits } from "../../api/api";
+import { useState, useEffect } from "react";
 
 function OurFruits() {
-  const fruits = [
+  const [fruits, setFruits] = useState([]);
+
+  useEffect(() => {
+    const fetchFruits = async () => {
+      try {
+        const response = await getAllFruits();
+        if (response.data.success) {
+          // Filter only non-bowl items and map to required format
+          const fruitItems = response.data.data
+            .filter(item => !item.isBowl && item.available)
+            .map(item => ({
+              name: item.name,
+              desc: item.description || "Fresh & Healthy",
+              image: item.image || `/images/${item.name.toLowerCase()}.webp`
+            }));
+          
+          // If no fruits from API, use fallback
+          if (fruitItems.length > 0) {
+            setFruits(fruitItems);
+          } else {
+            setFruits([
+              { name: "Strawberries", desc: "Sweet & Juicy", image: "/images/strawberries.webp" },
+              { name: "Pineapple", desc: "Tropical Twist", image: "/images/pinapple.webp" },
+              { name: "Grapes", desc: "Crisp & Sweet", image: "/images/grapes.webp" },
+              { name: "Watermelon", desc: "Hydrating & Fresh", image: "/images/watermelon.webp" },
+              { name: "Kiwi", desc: "Tangy Boost", image: "/images/kiwi.webp" },
+              { name: "Mango", desc: "Seasonal Delight", image: "/images/mango.webp" },
+            ]);
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching fruits:", err);
+        // Fallback to default
+        setFruits([
+          { name: "Strawberries", desc: "Sweet & Juicy", image: "/images/strawberries.webp" },
+          { name: "Pineapple", desc: "Tropical Twist", image: "/images/pinapple.webp" },
+          { name: "Grapes", desc: "Crisp & Sweet", image: "/images/grapes.webp" },
+          { name: "Watermelon", desc: "Hydrating & Fresh", image: "/images/watermelon.webp" },
+          { name: "Kiwi", desc: "Tangy Boost", image: "/images/kiwi.webp" },
+          { name: "Mango", desc: "Seasonal Delight", image: "/images/mango.webp" },
+        ]);
+      }
+    };
+
+    fetchFruits();
+  }, []);
+
+  // Fallback fruits if empty
+  const displayFruits = fruits.length > 0 ? fruits : [
     { name: "Strawberries", desc: "Sweet & Juicy", image: "/images/strawberries.webp" },
     { name: "Pineapple", desc: "Tropical Twist", image: "/images/pinapple.webp" },
     { name: "Grapes", desc: "Crisp & Sweet", image: "/images/grapes.webp" },
@@ -38,7 +88,7 @@ function OurFruits() {
       <div className="relative z-10 w-full overflow-hidden pt-4">
         {/* The 'w-max' and tripling the array creates the seamless loop */}
         <div className="flex animate-infinite-scroll w-max">
-          {[...fruits, ...fruits, ...fruits].map((fruit, index) => (
+          {[...displayFruits, ...displayFruits, ...displayFruits].map((fruit, index) => (
             <div key={index} className="flex-shrink-0">
               <FruitCard fruit={fruit} />
             </div>

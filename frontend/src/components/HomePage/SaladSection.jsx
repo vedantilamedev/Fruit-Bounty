@@ -1,39 +1,77 @@
 import ProductCard from "./ProductCard";
+import { getAllFruits } from "../../api/api";
+import { useState, useEffect } from "react";
 
 function SaladSection() {
-  const products = [
-    {
-      id: 1,
-      title: "Small Bowl",
-      category: "STARTER",
-      weight: "250g",
-      fruits: "5 Types",
-      calories: "120 kcal",
-      price: 199,
-      image: "/images/smallBowl.webp",
-    },
-    {
-      id: 2,
-      title: "Medium Bowl",
-      category: "MOST POPULAR",
-      weight: "400g",
-      fruits: "7 Types",
-      calories: "190 kcal",
-      price: 299,
-      image: "/images/mediumBowl.webp",
-      badge: "BESTSELLER",
-    },
-    {
-      id: 3,
-      title: "Large Bowl",
-      category: "FAMILY SIZE",
-      weight: "900g",
-      fruits: "9 Types",
-      calories: "280 kcal",
-      price: 449,
-      image: "/images/largeBowl.webp",
-    },
-  ];
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await getAllFruits();
+        if (response.data.success) {
+          // Filter only bowls and map to the expected format
+          const bowls = response.data.data
+            .filter(item => item.isBowl && item.available)
+            .map((item, index) => ({
+              id: item._id || index + 1,
+              title: item.name,
+              category: item.type || "Fresh & Healthy",
+              weight: item.description?.split('|')[0]?.trim() || "400g",
+              fruits: item.ingredients?.length ? `${item.ingredients.length} Types` : "5 Types",
+              calories: item.description?.split('|')[1]?.trim() || "200 kcal",
+              price: item.price,
+              image: item.image || item.images?.[0] || "/images/smallBowl.webp",
+              badge: item.salesCount > 10 ? "BESTSELLER" : null,
+            }));
+          setProducts(bowls);
+        }
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        setError("Failed to load products");
+        // Fallback to default bowls if API fails
+        setProducts([
+          {
+            id: 1,
+            title: "Small Bowl",
+            category: "STARTER",
+            weight: "250g",
+            fruits: "5 Types",
+            calories: "120 kcal",
+            price: 199,
+            image: "/images/smallBowl.webp",
+          },
+          {
+            id: 2,
+            title: "Medium Bowl",
+            category: "MOST POPULAR",
+            weight: "400g",
+            fruits: "7 Types",
+            calories: "190 kcal",
+            price: 299,
+            image: "/images/mediumBowl.webp",
+            badge: "BESTSELLER",
+          },
+          {
+            id: 3,
+            title: "Large Bowl",
+            category: "FAMILY SIZE",
+            weight: "900g",
+            fruits: "9 Types",
+            calories: "280 kcal",
+            price: 449,
+            image: "/images/largeBowl.webp",
+          },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
     <section className="relative py-10 md:py-16 overflow-hidden bg-[#FBF8F2]">
