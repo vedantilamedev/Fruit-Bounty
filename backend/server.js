@@ -28,7 +28,7 @@ const corsOptions = {
       'https://localhost:3000',
       'https"//fruit-bounty-git-main-fruitsbountyshop-5632s-projects.vercel.app',
       'https://fruit-bounty-n2cybwjg1-fruitsbountyshop-5632s-projects.vercel.app',
-      'https://fruit-bounty.vercel.app/',
+      'https://fruit-bounty.vercel.app',
       // Add your Vercel frontend URL here after deployment
       // Format: 'https://your-project-name.vercel.app'
       process.env.FRONTEND_URL
