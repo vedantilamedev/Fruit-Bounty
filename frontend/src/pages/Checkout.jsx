@@ -11,8 +11,6 @@ import {
   Truck,
   Sparkles
 } from "lucide-react";
-import dotenv from "dotenv";
-dotenv.config();
 
 
 const Checkout = () => {

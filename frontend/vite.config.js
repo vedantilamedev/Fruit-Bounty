@@ -1,17 +1,18 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  // Proxy is only used in development mode
-  // For production, API calls go directly to the backend URL
+  plugins: [react(),tailwindcss(),],
   server: {
-    proxy: process.env.NODE_ENV !== 'production' ? {
+    proxy: {
       '/api': {
         target: 'http://localhost:5000',
         changeOrigin: true,
+        secure: false,
       }
-    } : undefined
-  }
+
+    },
+  },
 })
