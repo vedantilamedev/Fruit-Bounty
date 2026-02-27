@@ -97,11 +97,12 @@ const orderSchema = new mongoose.Schema(
       type: Array,
       default: []
     },
-
     deliveryAddress: {
-      type: mongoose.Schema.Types.Mixed,
-      default: {}
-    }
+      fullName: { type: String },
+      house: { type: String },
+      pincode: { type: String },
+      contact: { type: String },
+    },
   },
   { timestamps: true }
 );

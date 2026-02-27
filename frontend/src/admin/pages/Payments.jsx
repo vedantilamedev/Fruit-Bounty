@@ -11,7 +11,8 @@ import {
   Loader2,
 } from "lucide-react";
 
-const BASE_URL = "https://fruit-bounty-dmzs.onrender.com/api";
+// const BASE_URL = "https://fruit-bounty-dmzs.onrender.com/api";
+const BASE_URL = "http://localhost:5000/api";
 
 const conversionRate = 1; // Backend already returns amount in INR
 
