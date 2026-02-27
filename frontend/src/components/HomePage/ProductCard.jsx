@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
 function ProductCard({ product }) {
-
   const navigate = useNavigate();
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -18,22 +16,19 @@ function ProductCard({ product }) {
     return () => observer.disconnect();
   }, []);
 
-
- const handleOrderNow = () => {
-   navigate("/shop");
- };
+  const handleOrderNow = () => {
+    navigate("/shop");
+  };
 
   return (
-    /* Removed extra horizontal padding to ensure parent gap controls spacing exactly */
-    <div className="pt-6 pb-4 snap-center"> 
+    <div className="pt-6 pb-4 snap-center">
       <div
         ref={ref}
         className={`
           relative 
-          /* UPDATED: Further reduced width for a tighter fit */
           w-[275px] md:w-[315px] 
-          /* UPDATED: Reduced min-height to stay proportional to the new width */
-          min-h-[540px] md:min-h-[580px] 
+          /* UPDATED: Changed from min-h to h-fit so the card shrinks with the content */
+          h-fit 
           rounded-[24px] 
           bg-white
           border-[3px] border-[#C9C27A] 
@@ -44,9 +39,9 @@ function ProductCard({ product }) {
           ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}
         `}
       >
-        <div className="p-5 flex flex-col flex-grow items-center">
+        <div className="p-5 flex flex-col items-center">
           {/* 1. HEADER */}
-          <div className="text-center mt-2 mb-4">
+          <div className="text-center mt-2 mb-3">
             <span className="text-[10px] font-bold text-[#C9C27A] uppercase tracking-widest mb-1 block">
               {product.category || "Fresh & Healthy"}
             </span>
@@ -55,8 +50,8 @@ function ProductCard({ product }) {
             </h3>
           </div>
 
-          {/* 2. SQUARE IMAGE CONTAINER */}
-          <div className="w-full aspect-square max-h-44 flex items-center justify-center bg-gray-50 rounded-xl overflow-hidden mb-5 border border-gray-100 shadow-inner">
+          {/* 2. SQUARE IMAGE CONTAINER - Reduced mb-5 to mb-3 */}
+          <div className="w-full aspect-square max-h-44 flex items-center justify-center bg-gray-50 rounded-xl overflow-hidden mb-3 border border-gray-100 shadow-inner">
             <img
               src={product.image}
               alt={product.title}
@@ -64,8 +59,8 @@ function ProductCard({ product }) {
             />
           </div>
 
-          {/* 3. SPECS */}
-          <div className="w-full space-y-2.5 px-1 mb-5">
+          {/* 3. SPECS - Reduced mb-1 to mb-0 */}
+          <div className="w-full space-y-2.5 px-1 mb-0">
             {[
               { label: "Weight", value: product.weight },
               { label: "Fruits", value: product.fruits },
@@ -78,17 +73,17 @@ function ProductCard({ product }) {
             ))}
           </div>
 
-          {/* 4. PRICE & ACTION */}
-          <div className="w-full text-center mt-auto">
+          {/* 4. PRICE & ACTION - Removed mt-auto and added pt-4 to pull it tight to the specs */}
+          <div className="w-full text-center pt-4">
             <div className="text-2xl md:text-3xl font-black text-[#C9C27A] mb-3">
               ₹{product.price}
             </div>
-           <button
-             onClick={handleOrderNow}
-             className="w-full bg-gradient-to-r from-green-700 to-green-900 hover:from-green-800 hover:to-green-950 text-white py-3.5 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-green-900/10"
-           >
-             Order Now
-           </button>
+            <button
+              onClick={handleOrderNow}
+              className="w-full bg-gradient-to-r from-green-700 to-green-900 hover:from-green-800 hover:to-green-950 text-white py-3.5 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-green-900/10"
+            >
+              Order Now
+            </button>
           </div>
         </div>
 
