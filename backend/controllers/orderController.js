@@ -209,19 +209,20 @@ export const updateOrderStatus = async (req, res) => {
     // =========================
     // WhatsApp notification (wrapped in try-catch to prevent failures)
     // =========================
-    try {
-      if (order.user_id && order.user_id.phone && order.user_id.phone !== "-") {
-        const msg = `Hi! Your order #${order._id} status has been updated to "${order.order_status}".`;
-        await sendWhatsAppMessage(order.user_id.phone, msg);
-      }
-    } catch (waError) {
-      console.error("WhatsApp notification failed:", waError.message);
-      // Continue even if WhatsApp fails - status update is more important
-    }
+    // try {
+    //   if (order.user_id && order.user_id.phone && order.user_id.phone !== "-") {
+    //     const msg = `Hi! Your order #${order._id} status has been updated to "${order.order_status}".`;
+    //     await sendWhatsAppMessage(order.user_id.phone, msg);
+    //   }
+    // } catch (waError) {
+    //   console.error("WhatsApp notification failed:", waError.message);
+    //   // Continue even if WhatsApp fails - status update is more important
+    // }
 
     res.status(200).json({ success: true, message: "Order status updated", order });
   } catch (error) {
     res.status(500).json({ message: error.message });
+    // console.log("updateOrderStatus error:", error.message);
   }
 };
 
