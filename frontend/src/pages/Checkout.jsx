@@ -49,9 +49,21 @@ const Checkout = () => {
   };
 
   const handlePayment = async () => {
-    // ✅ Validate address
-    if (!address.fullName || !address.house || !address.pincode || !address.contact) {
-      alert("Please fill delivery address");
+    // ✅ 1. Validate address (Compulsory fields)
+    if (!address.fullName.trim() || !address.house.trim() || !address.pincode.trim() || !address.contact.trim()) {
+      alert("Please fill all delivery address fields to proceed.");
+      return;
+    }
+
+    // ✅ Validate Pincode length (Optional: added for better UX, e.g., 6 digits)
+    if (address.pincode.length !== 6) {
+      alert("Please enter a valid 6-digit Pincode.");
+      return;
+    }
+
+    // ✅ Validate Contact length (Optional: added for better UX, e.g., 10 digits)
+    if (address.contact.length !== 10) {
+      alert("Please enter a valid 10-digit Mobile Number.");
       return;
     }
 
@@ -64,11 +76,6 @@ const Checkout = () => {
 
     try {
       // 1️⃣ Create order on backend
-      // const orderRes = await fetch("https://fruit-bounty-dmzs.onrender.com/api/payment/create-order", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ amount: grandTotal }),
-      // });
       const orderRes = await fetch("https://fruit-bounty-dmzs.onrender.com/api/payment/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -123,6 +130,9 @@ const Checkout = () => {
     }
   };
 
+  // Input styling constant
+  const inputStyle = "w-full p-4 rounded-xl border-2 border-gray-100 focus:border-[#C9C27A] focus:ring-1 focus:ring-[#C9C27A] outline-none text-sm font-medium tracking-tight bg-white text-gray-900 placeholder:text-gray-400";
+
   return (
     <div className="min-h-screen font-sans bg-[#faf9f6] text-gray-900 relative selection:bg-[#C9C27A]/30">
       {/* Signature Background Overlay */}
@@ -172,7 +182,8 @@ const Checkout = () => {
                   onChange={(e) =>
                     setAddress({ ...address, fullName: e.target.value })
                   }
-                  className="..."
+                  className={inputStyle}
+                  required
                 />
                 <input
                   type="text"
@@ -181,26 +192,33 @@ const Checkout = () => {
                   onChange={(e) =>
                     setAddress({ ...address, house: e.target.value })
                   }
-                  className="..."
+                  className={inputStyle}
+                  required
                 />
                 <div className="grid grid-cols-2 gap-4">
                   <input
                     type="text"
                     placeholder="PINCODE"
                     value={address.pincode}
+                    maxLength="6"
                     onChange={(e) =>
-                      setAddress({ ...address, pincode: e.target.value })
+                      // ✅ Regex to allow only numbers
+                      setAddress({ ...address, pincode: e.target.value.replace(/[^0-9]/g, '') })
                     }
-                    className="..."
+                    className={inputStyle}
+                    required
                   />
                   <input
                     type="text"
                     placeholder="CONTACT NO."
                     value={address.contact}
+                    maxLength="10"
                     onChange={(e) =>
-                      setAddress({ ...address, contact: e.target.value })
+                      // ✅ Regex to allow only numbers
+                      setAddress({ ...address, contact: e.target.value.replace(/[^0-9]/g, '') })
                     }
-                    className="..."
+                    className={inputStyle}
+                    required
                   />
                 </div>
               </div>
