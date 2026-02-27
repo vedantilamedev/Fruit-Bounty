@@ -82,7 +82,7 @@ const Checkout = () => {
       //   headers: { "Content-Type": "application/json" },
       //   body: JSON.stringify({ amount: grandTotal }),
       // });
-      const orderRes = await fetch(`${import.meta.env.VITE_BASE_URL}/payment/create-order`, {
+      const orderRes = await fetch(`/api/payment/create-order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: grandTotal }),
