@@ -11,5 +11,7 @@ const API = axios.create({
 //  APIs
 export const registerUser = (data) => API.post("/auth/register", data);
 export const loginUser = (data) => API.post("/auth/login", data);
+export const getAllFruits = () => API.get("/fruits");
+export const getSingleFruit = (id) => API.get(`/fruits/${id}`);
 
 export default API;

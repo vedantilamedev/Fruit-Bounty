@@ -99,7 +99,8 @@ const orderSchema = new mongoose.Schema(
     },
 
     deliveryAddress: {
-      type: String
+      type: mongoose.Schema.Types.Mixed,
+      default: {}
     }
   },
   { timestamps: true }

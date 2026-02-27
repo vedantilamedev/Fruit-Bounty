@@ -97,6 +97,11 @@ export const verifyPayment = async (req, res) => {
     }
 
     // ✅ SAVE ORDER TO DATABASE
+    
+    // Format delivery address as a string
+    const formattedAddress = deliveryAddress 
+      ? `${deliveryAddress.fullName || ''}, ${deliveryAddress.house || ''}, ${deliveryAddress.pincode || ''}, ${deliveryAddress.contact || ''}`
+      : "";
 
     const newOrder = await Order.create({
       user_id: req.user?.id,
@@ -108,7 +113,7 @@ export const verifyPayment = async (req, res) => {
       razorpay_order_id,
       razorpay_payment_id,
       items: cartItems,
-      deliveryAddress: deliveryAddress
+      deliveryAddress: formattedAddress
     });
 
     res.json({

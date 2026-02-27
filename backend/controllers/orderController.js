@@ -191,17 +191,33 @@ export const getAllOrders = async (req, res) => {
 // ===============================
 export const updateOrderStatus = async (req, res) => {
   try {
+    // Use updateOne with explicit $set to avoid validation issues
+    const result = await Order.updateOne(
+      { _id: req.params.id },
+      { $set: { order_status: req.body.order_status } }
+    );
+    
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // Fetch the updated order
     const order = await Order.findById(req.params.id);
+    
     if (!order) return res.status(404).json({ message: "Order not found" });
 
-    order.order_status = req.body.order_status;
-    await order.save();
-
     // =========================
-    // WhatsApp notification
+    // WhatsApp notification (wrapped in try-catch to prevent failures)
     // =========================
-    const msg = `Hi! Your order #${order._id} status has been updated to "${order.order_status}".`;
-    await sendWhatsAppMessage(order.user_id.phone, msg);
+    try {
+      if (order.user_id && order.user_id.phone && order.user_id.phone !== "-") {
+        const msg = `Hi! Your order #${order._id} status has been updated to "${order.order_status}".`;
+        await sendWhatsAppMessage(order.user_id.phone, msg);
+      }
+    } catch (waError) {
+      console.error("WhatsApp notification failed:", waError.message);
+      // Continue even if WhatsApp fails - status update is more important
+    }
 
     res.status(200).json({ success: true, message: "Order status updated", order });
   } catch (error) {
