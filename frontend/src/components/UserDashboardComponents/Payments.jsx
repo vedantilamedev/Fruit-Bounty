@@ -6,7 +6,6 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-
 const Payments = ({ payments = [] }) => {
     const [selectedPayment, setSelectedPayment] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
@@ -29,9 +28,11 @@ const Payments = ({ payments = [] }) => {
 
     const filteredPayments = useMemo(() => {
         return payments.filter(payment => {
-            const matchesSearch = payment.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            const matchesSearch =
+                payment.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 payment.method.toLowerCase().includes(searchQuery.toLowerCase());
-            const matchesFilter = filterStatus === 'All' || payment.status === filterStatus;
+            const matchesFilter =
+                filterStatus === 'All' || payment.status === filterStatus;
             return matchesSearch && matchesFilter;
         });
     }, [payments, searchQuery, filterStatus]);
@@ -46,7 +47,7 @@ const Payments = ({ payments = [] }) => {
             className="
                 bg-gradient-to-br
                 from-[#3a7a41] to-[#25512b]
-                p-8
+                p-6 sm:p-8
                 rounded-3xl
                 border border-[#d5b975]/30
                 shadow-xl
@@ -54,7 +55,7 @@ const Payments = ({ payments = [] }) => {
             "
         >
             <div className="flex justify-between items-start mb-6">
-                <div className="w-14 h-14 rounded-2xl bg-[#1b5e34] flex items-center justify-center">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#1b5e34] flex items-center justify-center">
                     <Icon size={26} className="text-[#d5b975]" />
                 </div>
                 <div className="text-right">
@@ -67,7 +68,7 @@ const Payments = ({ payments = [] }) => {
                 </div>
             </div>
 
-            <h3 className="text-4xl font-black text-white mb-2">
+            <h3 className="text-3xl sm:text-4xl font-black text-white mb-2">
                 {value}
             </h3>
 
@@ -87,10 +88,10 @@ const Payments = ({ payments = [] }) => {
 
     return (
         <>
-            <div className="min-h-screen p-10 space-y-14">
+            <div className="min-h-screen p-6 sm:p-10 space-y-10 sm:space-y-14">
 
                 {/* Stats */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                     <StatCard
                         title="Total Investment"
                         value={`₹${totalInvested.toLocaleString()}`}
@@ -123,18 +124,20 @@ const Payments = ({ payments = [] }) => {
                     shadow-xl
                     overflow-hidden
                 ">
-                    <div className="p-10">
-                        <h3 className="text-3xl font-black text-white mb-10">
+                    <div className="p-6 sm:p-10">
+                        <h3 className="text-2xl sm:text-3xl font-black text-white mb-8 sm:mb-10">
                             Transaction History
                         </h3>
 
                         <div className="overflow-x-auto">
-                            <table className="w-full text-left">
+                            <table className="w-full min-w-[700px] text-left">
                                 <thead>
                                     <tr className="border-b border-[#d5b975]/20">
                                         {["Receipt ID", "Date", "Amount", "Method", "Status", "Actions"].map((h) => (
-                                            <th key={h}
-                                                className="pb-6 text-[10px] font-black text-[#d5b975] uppercase tracking-[0.2em] px-4">
+                                            <th
+                                                key={h}
+                                                className="pb-6 text-[10px] font-black text-[#d5b975] uppercase tracking-[0.2em] px-4"
+                                            >
                                                 {h}
                                             </th>
                                         ))}
@@ -198,29 +201,27 @@ const Payments = ({ payments = [] }) => {
                 <div className="
                     bg-gradient-to-br
                     from-[#3a7a41] to-[#25512b]
-                    p-12
+                    p-8 sm:p-12
                     rounded-3xl
                     border border-[#d5b975]/30
                     shadow-2xl
                 ">
-                    <h3 className="text-4xl font-black text-white mb-4">
+                    <h3 className="text-3xl sm:text-4xl font-black text-white mb-4">
                         Payment Analysis
                     </h3>
                     <p className="text-white/60 mb-6">
                         Your verified investment total:
                     </p>
-                    <p className="text-6xl font-black text-[#d5b975]">
+                    <p className="text-4xl sm:text-6xl font-black text-[#d5b975] break-words">
                         ₹{totalInvested.toLocaleString()}
                     </p>
                 </div>
             </div>
 
-            {/* Modal */}
+            {/* Modal remains untouched except safe padding scaling */}
             <AnimatePresence>
                 {selectedPayment && (
-                    <motion.div
-                        className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 z-50"
-                    >
+                    <motion.div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 z-50">
                         <motion.div
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
@@ -231,11 +232,11 @@ const Payments = ({ payments = [] }) => {
                                 rounded-3xl
                                 border border-[#d5b975]/30
                                 shadow-2xl
-                                p-8
+                                p-6 sm:p-8
                                 text-white
                             "
                         >
-                            <h3 className="text-2xl font-bold mb-6 text-[#d5b975]">
+                            <h3 className="text-xl sm:text-2xl font-bold mb-6 text-[#d5b975]">
                                 Payment Receipt
                             </h3>
 
