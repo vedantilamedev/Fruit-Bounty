@@ -3,6 +3,7 @@ import "./config/env.js"
 import express from "express";
 import cors from "cors";
 import connectDB from "./config/db.js";
+import cloudinary from "./config/cloudinary.js";
 
 // ===============================
 // Load ENV Variables
@@ -141,8 +142,12 @@ app.use((err, req, res, next) => {
 // Start Server
 // ===============================
 const PORT = process.env.PORT || 5000;
-
+async function deleteImage() {
+  const result = await cloudinary.uploader.destroy('fruits/gy5hojjl209asevrlfgn');
+  console.log(result);
+}
 app.listen(PORT, () => {
   connectDB();
+  deleteImage();
   console.log(`Server running on port ${PORT}`);
 });
