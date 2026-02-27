@@ -6,7 +6,6 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-
 const Orders = ({ orders, onCancelOrder }) => {
 
     const [selectedOrder, setSelectedOrder] = useState(null);
@@ -44,7 +43,7 @@ const Orders = ({ orders, onCancelOrder }) => {
         const Icon = config.icon;
 
         return (
-            <div className={`flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-semibold ${config.color}`}>
+            <div className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full border text-xs font-semibold ${config.color}`}>
                 <Icon size={14} />
                 {status}
             </div>
@@ -53,29 +52,29 @@ const Orders = ({ orders, onCancelOrder }) => {
 
     const StatCard = ({ title, value, icon: Icon }) => (
         <div className="bg-gradient-to-br from-[#2f5e2f] to-[#3c7a3c]
-            text-white rounded-2xl p-6 shadow-lg">
+            text-white rounded-2xl p-4 sm:p-6 shadow-lg">
 
             <div className="flex justify-between items-center">
                 <div>
                     <p className="text-xs uppercase tracking-widest text-white/70 mb-2">
                         {title}
                     </p>
-                    <h3 className="text-3xl font-bold">{value}</h3>
+                    <h3 className="text-2xl sm:text-3xl font-bold break-words">{value}</h3>
                 </div>
 
-                <div className="w-12 h-12 rounded-xl bg-white/20
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/20
                     flex items-center justify-center">
-                    <Icon size={22} className="text-white" />
+                    <Icon size={20} className="text-white" />
                 </div>
             </div>
         </div>
     );
 
     return (
-        <div className="p-8 space-y-10  min-h-screen">
+        <div className="p-4 sm:p-6 md:p-8 space-y-8 sm:space-y-10 min-h-screen">
 
             {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 <StatCard
                     title="Active Orders"
                     value={orders?.filter(o => ['Pending', 'Confirmed'].includes(o.status))?.length}
@@ -94,7 +93,7 @@ const Orders = ({ orders, onCancelOrder }) => {
             </div>
 
             {/* Toolbar */}
-            <div className="flex flex-col lg:flex-row gap-4 items-center justify-between
+            <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between
                 bg-gradient-to-r from-[#2f5e2f] to-[#3c7a3c]
                 rounded-2xl p-4 shadow-lg text-white">
 
@@ -117,7 +116,7 @@ const Orders = ({ orders, onCancelOrder }) => {
                 <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className="px-4 py-3 bg-white/20
+                    className="w-full lg:w-auto px-4 py-3 bg-white/20
                         border border-white/20
                         rounded-xl text-sm text-white
                         focus:outline-none focus:ring-2 focus:ring-white/40">
@@ -130,14 +129,14 @@ const Orders = ({ orders, onCancelOrder }) => {
             </div>
 
             {/* Orders */}
-            <div className="space-y-5">
+            <div className="space-y-4 sm:space-y-5">
                 <AnimatePresence>
                     {filteredOrders?.length === 0 ? (
-                        <div className="text-center py-16
+                        <div className="text-center py-12 sm:py-16
                             bg-gradient-to-br from-[#2f5e2f] to-[#3c7a3c]
                             text-white rounded-2xl shadow-lg">
                             <ShoppingBag size={40} className="mx-auto text-white/70 mb-4" />
-                            <p className="text-white/80">No Orders Found</p>
+                            <p className="text-white/80 text-sm sm:text-base">No Orders Found</p>
                         </div>
                     ) : (
                         filteredOrders?.map(order => (
@@ -145,35 +144,36 @@ const Orders = ({ orders, onCancelOrder }) => {
                                 key={order.id}
                                 whileHover={{ scale: 1.02 }}
                                 className="bg-gradient-to-r from-[#2f5e2f] to-[#3c7a3c]
-                                    text-white rounded-2xl p-6
+                                    text-white rounded-2xl p-4 sm:p-6
                                     flex flex-col md:flex-row
-                                    justify-between items-center
-                                    cursor-pointer shadow-lg transition">
+                                    gap-4 md:gap-0
+                                    justify-between md:items-center
+                                    shadow-lg transition">
 
-                                <div className="flex items-center gap-5">
-                                    <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
-                                        <Package className="text-white" size={24} />
+                                <div className="flex items-center gap-4 sm:gap-5">
+                                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white/20 rounded-xl flex items-center justify-center">
+                                        <Package className="text-white" size={22} />
                                     </div>
-                                    <div>
+                                    <div className="min-w-0">
                                         <p className="text-sm text-white/80">
                                             Order #{order.id}
                                         </p>
                                         <p className="text-xs text-white/60">
                                             {formatDate(order.date)}
                                         </p>
-                                        <p className="font-semibold mt-1">
+                                        <p className="font-semibold mt-1 truncate">
                                             {order.items?.[0]?.name}
                                         </p>
                                     </div>
                                 </div>
 
-                                <div className="flex items-center gap-6 mt-4 md:mt-0">
+                                <div className="flex flex-wrap items-center gap-4 sm:gap-6">
                                     <StatusBadge status={order.status} />
-                                    <p className="text-xl font-bold">
+                                    <p className="text-lg sm:text-xl font-bold">
                                         ₹{order.amount}
                                     </p>
                                     <ChevronRight
-                                        className="text-white/70 hover:translate-x-1 transition"
+                                        className="text-white/70 hover:translate-x-1 transition cursor-pointer"
                                         onClick={() => setSelectedOrder(order)}
                                     />
                                 </div>
@@ -187,7 +187,7 @@ const Orders = ({ orders, onCancelOrder }) => {
             <AnimatePresence>
                 {selectedOrder && (
                     <motion.div
-                        className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50"
+                        className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4"
                         onClick={() => setSelectedOrder(null)}>
 
                         <motion.div
@@ -195,10 +195,11 @@ const Orders = ({ orders, onCancelOrder }) => {
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.8, opacity: 0 }}
                             className="bg-gradient-to-br from-[#2f5e2f] to-[#3c7a3c]
-                                text-white rounded-2xl p-8 w-full max-w-md shadow-xl"
+                                text-white rounded-2xl p-6 sm:p-8
+                                w-full max-w-md shadow-xl"
                             onClick={(e) => e.stopPropagation()}>
 
-                            <h3 className="text-xl font-bold mb-2">
+                            <h3 className="text-lg sm:text-xl font-bold mb-2">
                                 Order #{selectedOrder.id}
                             </h3>
 
@@ -206,7 +207,7 @@ const Orders = ({ orders, onCancelOrder }) => {
                                 {formatDate(selectedOrder.date)}
                             </p>
 
-                            <p className="font-medium">
+                            <p className="font-medium break-words">
                                 {selectedOrder.items?.[0]?.name}
                             </p>
 

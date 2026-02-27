@@ -24,6 +24,7 @@ const Button = ({ className, variant, children, ...props }) => (
     <button
         {...props}
         className={cn(
+            "w-full sm:w-auto",
             "px-5 py-2.5 rounded-xl font-bold uppercase tracking-wider text-xs transition-all duration-300",
             variant === "outline"
                 ? "border border-[#d5b975]/40 text-white hover:bg-[#d5b975]/10"
@@ -55,7 +56,7 @@ const Switch = ({ checked, onChange }) => (
     <button
         onClick={() => onChange(!checked)}
         className={cn(
-            "relative w-12 h-6 rounded-full transition-all duration-300 border",
+            "relative w-12 h-6 rounded-full transition-all duration-300 border flex-shrink-0",
             checked
                 ? "bg-[#2c6e3f] border-[#d5b975]/40"
                 : "bg-[#163d24] border-[#d5b975]/20"
@@ -83,18 +84,18 @@ export default function Settings({ userData }) {
     });
 
     return (
-        <div className="min-h-screen bg-gradient-to-br  p-6 lg:p-10 ">
+        <div className="min-h-screen bg-gradient-to-br p-4 sm:p-6 lg:p-10 overflow-x-hidden">
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-10"
+                className="mb-6 sm:mb-10"
             >
-              
             </motion.div>
 
             {/* ---------- Tabs ---------- */}
 
-            <div className="lg:flex gap-2 bg-gradient-to-tl from-[#3a7a41] to-[#25512b] p-1.5 rounded-xl mb-8 w-fit border border-[#d5b975]/20 shadow-md">                {[
+            <div className="flex flex-wrap gap-2 bg-gradient-to-tl from-[#3a7a41] to-[#25512b] p-1.5 rounded-xl mb-6 sm:mb-8 w-full sm:w-fit border border-[#d5b975]/20 shadow-md">
+                {[
                     { id: "profile", label: "Profile", icon: User },
                     { id: "notifications", label: "Notifications", icon: Bell },
                     { id: "security", label: "Security", icon: Lock },
@@ -103,7 +104,7 @@ export default function Settings({ userData }) {
                         key={item.id}
                         onClick={() => setTab(item.id)}
                         className={cn(
-                            "flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold uppercase tracking-wider transition-all duration-300",
+                            "flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 flex-1 sm:flex-none",
                             tab === item.id
                                 ? "bg-gradient-to-br from-[#1f5a32] to-[#17462a] text-white border border-[#d5b975]/30"
                                 : "text-white/70 hover:text-white hover:bg-white/5"
@@ -118,12 +119,12 @@ export default function Settings({ userData }) {
             {/* ---------- PROFILE ---------- */}
 
             {tab === "profile" && (
-                <Card className="p-8">
-                    <h3 className="text-xl font-medium text-white mb-8 tracking-wide">
+                <Card className="p-5 sm:p-8">
+                    <h3 className="text-lg sm:text-xl font-medium text-white mb-6 sm:mb-8 tracking-wide">
                         Profile Settings
                     </h3>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                         <div>
                             <Label>Full Name</Label>
                             <Input defaultValue={userData?.name} className="mt-3" />
@@ -153,7 +154,7 @@ export default function Settings({ userData }) {
                         </div>
                     </div>
 
-                    <div className="flex justify-end gap-4 mt-10">
+                    <div className="flex flex-col sm:flex-row justify-end gap-4 mt-8 sm:mt-10">
                         <Button variant="outline">Cancel</Button>
                         <Button>Save Changes</Button>
                     </div>
@@ -163,8 +164,8 @@ export default function Settings({ userData }) {
             {/* ---------- NOTIFICATIONS ---------- */}
 
             {tab === "notifications" && (
-                <Card className="p-8">
-                    <h3 className="text-xl font-medium text-white mb-8 tracking-wide">
+                <Card className="p-5 sm:p-8">
+                    <h3 className="text-lg sm:text-xl font-medium text-white mb-6 sm:mb-8 tracking-wide">
                         Notification Preferences
                     </h3>
 
@@ -177,7 +178,7 @@ export default function Settings({ userData }) {
                         ].map(([key, title, desc]) => (
                             <div
                                 key={key}
-                                className="flex items-center justify-between border-b border-[#d5b975]/10 pb-5"
+                                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#d5b975]/10 pb-5"
                             >
                                 <div>
                                     <p className="font-medium text-white">{title}</p>
@@ -202,8 +203,8 @@ export default function Settings({ userData }) {
             {/* ---------- SECURITY ---------- */}
 
             {tab === "security" && (
-                <Card className="p-8">
-                    <h3 className="text-xl font-medium text-white mb-8 tracking-wide">
+                <Card className="p-5 sm:p-8">
+                    <h3 className="text-lg sm:text-xl font-medium text-white mb-6 sm:mb-8 tracking-wide">
                         Security Settings
                     </h3>
 
@@ -222,9 +223,16 @@ export default function Settings({ userData }) {
                             <Label>Confirm Password</Label>
                             <Input type="password" className="mt-3" />
                         </div>
-                        <div className="w-full flex justify-between items-center ">
-                            <a href="/forgot-password"><Button className="mt-4">Forget Password ?</Button></a>
-                        <Button className="mt-4">Update Password</Button>
+
+                        <div className="w-full flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4">
+                            <a href="/forgot-password" className="w-full sm:w-auto">
+                                <Button className="mt-2 sm:mt-4 w-full sm:w-auto">
+                                    Forget Password ?
+                                </Button>
+                            </a>
+                            <Button className="mt-2 sm:mt-4 w-full sm:w-auto">
+                                Update Password
+                            </Button>
                         </div>
                     </div>
                 </Card>
