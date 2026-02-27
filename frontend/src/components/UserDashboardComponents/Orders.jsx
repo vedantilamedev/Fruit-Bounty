@@ -14,11 +14,14 @@ const Orders = ({ orders, onCancelOrder }) => {
 
     const filteredOrders = orders?.filter(order => {
         const matchesStatus = statusFilter === 'All' || order.status === statusFilter;
+        // Handle both items array (payment orders) and package-based orders
+        const orderItems = order.items || [];
+        const itemNames = Array.isArray(orderItems) 
+            ? orderItems.map(item => item.name || item.title || item).join(' ')
+            : '';
         const matchesSearch =
             order.id.toString().includes(searchQuery) ||
-            order.items?.some(item =>
-                item.name.toLowerCase().includes(searchQuery.toLowerCase())
-            );
+            itemNames.toLowerCase().includes(searchQuery.toLowerCase());
         return matchesStatus && matchesSearch;
     });
 
@@ -162,7 +165,9 @@ const Orders = ({ orders, onCancelOrder }) => {
                                             {formatDate(order.date)}
                                         </p>
                                         <p className="font-semibold mt-1 truncate">
-                                            {order.items?.[0]?.name}
+                                            {Array.isArray(order.items) && order.items.length > 0
+                                                ? order.items.map(item => item.name || item.title || item).join(', ')
+                                                : order.items || 'Order'}
                                         </p>
                                     </div>
                                 </div>
@@ -208,7 +213,9 @@ const Orders = ({ orders, onCancelOrder }) => {
                             </p>
 
                             <p className="font-medium break-words">
-                                {selectedOrder.items?.[0]?.name}
+                                {Array.isArray(selectedOrder.items) && selectedOrder.items.length > 0
+                                    ? selectedOrder.items.map(item => item.name || item.title || item).join(', ')
+                                    : selectedOrder.items || 'Order'}
                             </p>
 
                             <p className="font-bold text-lg mt-2">

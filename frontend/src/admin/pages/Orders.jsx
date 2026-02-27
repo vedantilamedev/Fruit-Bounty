@@ -50,24 +50,35 @@ export default function Orders() {
         const { data } = await api.get("/orders");
 
         // Normalize backend data to match UI shape
-        const normalized = data.data.map((order) => ({
-          id: order._id,
-          customerName: order.user_id?.name || "Unknown",
-          phone: order.user_id?.phone || "N/A",
-          address: order.user_id?.address || "N/A",
-          items: order.fruits?.map((f) => f.name).join(", ") || "—",
-          total: order.total_amount,
-          paymentStatus: order.payment_status,
-          orderStatus: order.order_status,
-          date: new Date(order.order_date || order.createdAt).toISOString().split("T")[0],
-          planType: order.isRecurring
-            ? order.subscription_type === "monthly"
-              ? "Monthly Plan"
-              : "Weekly Plan"
-            : null,
-          package: order.package_id?.name || null,
-          rawOrder: order,
-        }));
+        const normalized = data.data.map((order) => {
+          // Get order name from items array (first item's name or title)
+          const orderName = order.items && order.items.length > 0
+            ? order.items[0]?.name || order.items[0]?.title || "Order"
+            : order.fruits?.[0]?.name || "Order";
+          
+          return {
+            id: order._id,
+            orderName: orderName,
+            customerName: order.user_id?.name || "Unknown",
+            phone: order.user_id?.phone || "N/A",
+            address: order.user_id?.address || "N/A",
+            // Check both 'items' (payment orders with title/name) and 'fruits' (subscription orders)
+            items: order.items && order.items.length > 0 
+              ? order.items.map((item) => item.name || item.title || "Item").join(", ")
+              : order.fruits?.map((f) => f.name).join(", ") || "—",
+            total: order.total_amount,
+            paymentStatus: order.payment_status,
+            orderStatus: order.order_status,
+            date: new Date(order.order_date || order.createdAt).toISOString().split("T")[0],
+            planType: order.isRecurring
+              ? order.subscription_type === "monthly"
+                ? "Monthly Plan"
+                : "Weekly Plan"
+              : null,
+            package: order.package_id?.name || null,
+            rawOrder: order,
+          };
+        });
 
         setOrders(normalized);
       } catch (err) {
@@ -103,7 +114,7 @@ export default function Orders() {
 
   const filteredOrders = orders.filter((order) => {
     const matchesSearch =
-      order.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.orderName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       order.customerName.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus =
       statusFilter === "all" || order.orderStatus === statusFilter;
@@ -210,7 +221,7 @@ export default function Orders() {
             className="bg-white rounded-xl shadow-sm border border-gray-100 p-4"
           >
             <div className="flex justify-between items-start mb-2">
-              <span className="font-semibold text-gray-800 text-sm">{order.id}</span>
+              <span className="font-semibold text-gray-800 text-sm">{order.orderName}</span>
               <span className="font-bold text-green-600">₹{order.total}</span>
             </div>
             <p className="text-gray-600 text-sm mb-2">{order.customerName}</p>
@@ -241,7 +252,7 @@ export default function Orders() {
           <table className="w-full text-sm">
             <thead className="bg-gray-50 border-b border-gray-100">
               <tr>
-                {["Order ID", "Customer", "Items", "Total", "Payment", "Status", "Plan", "Date", "Actions"].map((h) => (
+                                {["Order Name", "Customer", "Items", "Total", "Payment", "Status", "Plan", "Date", "Actions"].map((h) => (
                   <th key={h} className="text-left px-4 py-3 text-gray-500 font-medium text-xs uppercase tracking-wide">
                     {h}
                   </th>
@@ -257,7 +268,7 @@ export default function Orders() {
                   transition={{ delay: index * 0.03 }}
                   className="hover:bg-gray-50/50 transition-colors"
                 >
-                  <td className="px-4 py-3 font-medium text-gray-800">{order.id}</td>
+                  <td className="px-4 py-3 font-medium text-gray-800">{order.orderName}</td>
                   <td className="px-4 py-3 text-gray-600">{order.customerName}</td>
                   <td className="px-4 py-3 text-gray-500 max-w-[140px] truncate">{order.items}</td>
                   <td className="px-4 py-3 font-semibold text-green-600">₹{order.total}</td>

@@ -1,33 +1,45 @@
 import { Pencil, Trash2 } from "lucide-react";
-
-const products = [
-  {
-    id: 1,
-    name: "Mango",
-    category: "Fruits",
-    price: 120,
-    stock: 40,
-    image: "https://via.placeholder.com/50",
-  },
-  {
-    id: 2,
-    name: "Apple",
-    category: "Fruits",
-    price: 180,
-    stock: 25,
-    image: "https://via.placeholder.com/50",
-  },
-  {
-    id: 3,
-    name: "Banana",
-    category: "Fruits",
-    price: 60,
-    stock: 80,
-    image: "https://via.placeholder.com/50",
-  },
-];
+import { useState, useEffect } from "react";
+import { getAllFruits } from "../../../api/api";
 
 const ProductTable = ({ onEdit }) => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await getAllFruits();
+        if (response.data.success) {
+          const mappedProducts = response.data.data.map(item => ({
+            id: item._id,
+            name: item.name,
+            category: item.isBowl ? "Bowl" : "Fruit",
+            price: item.price,
+            stock: item.stock,
+            image: item.image || item.images?.[0] || "https://via.placeholder.com/50"
+          }));
+          setProducts(mappedProducts);
+        }
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        // Fallback
+        setProducts([
+          { id: 1, name: "Mango", category: "Fruits", price: 120, stock: 40, image: "https://via.placeholder.com/50" },
+          { id: 2, name: "Apple", category: "Fruits", price: 180, stock: 25, image: "https://via.placeholder.com/50" },
+          { id: 3, name: "Banana", category: "Fruits", price: 60, stock: 80, image: "https://via.placeholder.com/50" },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return <div className="p-4 text-center">Loading products...</div>;
+  }
   return (
     <div className="bg-white rounded-xl shadow overflow-x-auto">
 
