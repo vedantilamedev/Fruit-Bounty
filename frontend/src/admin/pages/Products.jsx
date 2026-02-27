@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Edit, Star, Trash2, X, Plus, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://fruit-bounty-dmzs.onrender.com/api";
 
 function cn(...classes) { return classes.filter(Boolean).join(" "); }
 

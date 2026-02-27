@@ -10,7 +10,7 @@ import {
 import axios from "axios";
 
 const COLORS = ["#22c55e", "#3b82f6", "#f97316", "#16a34a", "#86efac"];
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = "https://fruit-bounty-dmzs.onrender.com/api";
 
 export default function Dashboard() {
   const [revenueView, setRevenueView] = useState("daily");

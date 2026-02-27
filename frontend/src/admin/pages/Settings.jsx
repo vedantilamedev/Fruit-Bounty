@@ -118,7 +118,7 @@ export default function Settings() {
     const token = localStorage.getItem("token");
 
     axios
-      .get("http://localhost:5000/api/users/profile", {
+      .get("https://fruit-bounty-dmzs.onrender.com/api/users/profile", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -137,7 +137,7 @@ export default function Settings() {
 
     axios
       .put(
-        "http://localhost:5000/api/settings/profile",
+        "https://fruit-bounty-dmzs.onrender.com/api/settings/profile",
         profile,
         {
           headers: {

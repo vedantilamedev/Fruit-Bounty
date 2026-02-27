@@ -20,7 +20,7 @@ import {
 // Axios instance with base URL + auth token
 // =============================================
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
+  baseURL: import.meta.env.VITE_API_URL || "https://fruit-bounty-dmzs.onrender.com/api",
 });
 
 api.interceptors.request.use((config) => {

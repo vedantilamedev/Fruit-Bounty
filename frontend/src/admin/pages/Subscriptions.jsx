@@ -15,7 +15,7 @@ const Subscriptions = () => {
       try {
         const token = localStorage.getItem("token"); // Admin JWT token
         const { data } = await axios.get(
-          "http://localhost:5000/api/admin/subscriptions",
+          "https://fruit-bounty-dmzs.onrender.com/api/admin/subscriptions",
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -47,7 +47,7 @@ const Subscriptions = () => {
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.patch(
-        `http://localhost:5000/api/admin/subscriptions/${id}/status`,
+        `https://fruit-bounty-dmzs.onrender.com/api/admin/subscriptions/${id}/status`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
