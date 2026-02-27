@@ -75,6 +75,7 @@ const AdminRoutes = () => {
             <Subscriptions />
           </ProtectedRoute>
         } />
+        <Route path="*" element={<Navigate to="/admin" replace />} />
       </Route>
     </Routes>
   );

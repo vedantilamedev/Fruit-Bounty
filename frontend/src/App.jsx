@@ -35,13 +35,17 @@ function Layout({ children }) {
   const isDashboard = location.pathname.startsWith("/dashboard");
 
   useEffect(() => {
-    AOS.init({
-      duration: 900,
-      easing: "ease-out-cubic",
-      once: false,
-      mirror: true,
-      offset: 100,
-    });
+    try {
+      AOS.init({
+        duration: 900,
+        easing: "ease-out-cubic",
+        once: false,
+        mirror: true,
+        offset: 100,
+      });
+    } catch (error) {
+      console.error("AOS init failed:", error);
+    }
   }, []);
 
   return (
@@ -125,6 +129,7 @@ export default function App() {
 
           {/* Admin */}
           <Route path="/admin/*" element={<AdminRoutes />} />
+          <Route path="*" element={<Navigate to="/404" replace />} />
         </Routes>
       </Layout>
     </Router>
