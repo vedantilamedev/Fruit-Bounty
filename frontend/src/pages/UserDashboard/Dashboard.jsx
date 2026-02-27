@@ -209,7 +209,7 @@ const Dashboard = () => {
                         </button>
 
                         <p className="mt-6 text-xs text-gray-500 text-center">
-                            © Graphura India Pvt. Ltd.
+                            © Fruit's Bounty
                             <br />
                             All rights reserved
                         </p>
