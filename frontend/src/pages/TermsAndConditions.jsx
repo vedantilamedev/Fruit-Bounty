@@ -50,97 +50,101 @@ const termsSections = [
 
 const TermsAndConditions = () => {
   useEffect(() => {
-   window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, []);
 
-   const currentDate = new Date();
+  const currentDate = new Date();
   const monthYear = currentDate.toLocaleDateString("en-US", {
-    month: "long",
+    month: "short",
     year: "numeric",
   });
 
   return (
-    <div
-      className="min-h-screen px-4 sm:px-6 lg:px-8 py-12 lg:py-20"
-      style={{
-        backgroundImage: "url('/images/main-background.webp')",
-        backgroundSize: "contain",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-        backgroundColor: "rgba(255, 255, 255, 0.95)",
-      }}
-    >
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="mb-12 pb-8 border-b-2 border-[#3C7E44]">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-xl bg-[#3C7E44] flex items-center justify-center">
-              <FileCheck size={24} className="text-white" />
-            </div>
-            <div className="text-xs uppercase tracking-[0.3em] font-bold text-[#3C7E44]">
-              Legal Document
-            </div>
-          </div>
+    <div className="min-h-screen font-sans bg-[#faf9f6] text-gray-900 relative selection:bg-[#C9C27A]/30">
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div
+          className="absolute inset-0 opacity-[0.6]"
+          style={{
+            backgroundImage: "url('/images/main-background.webp')",
+            backgroundSize: "400px",
+            backgroundRepeat: "repeat",
+            backgroundAttachment: "fixed",
+          }}
+        ></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#f3f8f2]/65 via-transparent to-[#faf9f6]"></div>
+      </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 mb-4">
-            Terms & Conditions
-          </h1>
-
-          <p className="text-base text-gray-600 leading-relaxed">
-
-            Please read these terms carefully before using Fruit Bounty
-            services.
-
-          </p>
-
-          <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-[#FBF8F2] rounded-lg border border-[#E8E4D9]">
-            <CheckCircle2 size={16} className="text-[#3C7E44]" />
-            <span className="text-xs font-bold text-gray-700">
-              Updated Date: {monthYear}
-            </span>
-          </div>
-        </div>
-
-        {/* Sections - Numbered Document Style */}
-        <div className="space-y-8">
-          {termsSections.map((section, index) => (
-            <motion.div
-              key={section.number}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-            >
-              <div className="flex items-start gap-6">
-                <div className="w-14 h-14 rounded-full bg-[#3C7E44] text-white flex items-center justify-center font-bold">
-                  {section.number}
-                </div>
-
-                <div className="flex-1 pt-1">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="text-[#3C7E44]">{section.icon}</div>
-                    <h2 className="text-xl sm:text-2xl font-black text-gray-900">
-                      {section.title}
-                    </h2>
-                  </div>
-                  <p className="text-base text-gray-700 leading-relaxed pl-9">
-                    {section.content}
-                  </p>
-                </div>
+      <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="mb-12 pb-8 border-b-2 border-[#3C7E44]">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-xl bg-[#3C7E44] flex items-center justify-center">
+                <FileCheck size={24} className="text-white" />
               </div>
-            </motion.div>
-          ))}
-        </div>
+              <div className="text-xs uppercase tracking-[0.3em] font-bold text-[#3C7E44]">
+                Legal Document
+              </div>
+            </div>
 
-        {/* Footer */}
-        <div className="mt-16 pt-8 border-t">
-          <div className="bg-[#FBF8F2] rounded-xl p-6 border">
-            <div className="flex gap-4">
-              <AlertCircle className="text-[#3C7E44]" />
-              <p className="text-sm text-gray-600">
-                By continuing to use Fruit Bounty, you agree to these Terms &
-                Conditions.
-              </p>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 mb-4">
+              Terms & Conditions
+            </h1>
+
+            <p className="text-base text-gray-600 leading-relaxed">
+              Please read these terms carefully before using Fruit Bounty
+              services.
+            </p>
+
+            <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-[#FBF8F2] rounded-lg border border-[#E8E4D9]">
+              <CheckCircle2 size={16} className="text-[#3C7E44]" />
+              <span className="text-xs font-bold text-gray-700">
+                Updated Date: {monthYear}
+              </span>
+            </div>
+          </div>
+
+          {/* Sections - Numbered Document Style */}
+          <div className="space-y-8">
+            {termsSections.map((section, index) => (
+              <motion.div
+                key={section.number}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+              >
+                <div className="flex items-start gap-6">
+                  <div className="w-14 h-14 rounded-full bg-[#3C7E44] text-white flex items-center justify-center font-bold">
+                    {section.number}
+                  </div>
+
+                  <div className="flex-1 pt-1">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="text-[#3C7E44]">{section.icon}</div>
+                      <h2 className="text-xl sm:text-2xl font-black text-gray-900">
+                        {section.title}
+                      </h2>
+                    </div>
+                    <p className="text-base text-gray-700 leading-relaxed pl-9">
+                      {section.content}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Footer */}
+          <div className="mt-16 pt-8 border-t">
+            <div className="bg-[#FBF8F2] rounded-xl p-6 border">
+              <div className="flex gap-4">
+                <AlertCircle className="text-[#3C7E44]" />
+                <p className="text-sm text-gray-600">
+                  By continuing to use Fruit Bounty, you agree to these Terms &
+                  Conditions.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -149,9 +153,4 @@ const TermsAndConditions = () => {
   );
 };
 
-
 export default TermsAndConditions;
-
-
-
-
