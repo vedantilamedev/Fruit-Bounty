@@ -137,17 +137,17 @@ app.use((err, req, res, next) => {
     message: err.message || "Internal Server Error",
   });
 });
+//TO delete image from cloudinary
+// async function deleteImage() {
+//   const result = await cloudinary.uploader.destroy('fruits/gy5hojjl209asevrlfgn');
+//   console.log(result);
+// }
 
 // ===============================
 // Start Server
 // ===============================
 const PORT = process.env.PORT || 5000;
-async function deleteImage() {
-  const result = await cloudinary.uploader.destroy('fruits/gy5hojjl209asevrlfgn');
-  console.log(result);
-}
 app.listen(PORT, () => {
   connectDB();
-  deleteImage();
   console.log(`Server running on port ${PORT}`);
 });
