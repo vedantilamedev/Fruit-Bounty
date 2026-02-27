@@ -8,7 +8,7 @@ export const getAllPayments = async (req, res) => {
     const payments = await Order.find()
       .populate("user_id", "name email phone")
       .sort({ createdAt: -1 });
-    
+
     // Transform data to match frontend expected format
     const transformedPayments = payments.map((payment, index) => ({
       id: `PAY-${1001 + index}`,
@@ -21,23 +21,23 @@ export const getAllPayments = async (req, res) => {
       date: payment.createdAt ? payment.createdAt.toISOString().split("T")[0] : new Date().toISOString().split("T")[0],
       orderId: payment._id
     }));
-    
+
     // Calculate summary statistics
     const totalEarnings = payments
       .filter(p => p.payment_status === "Paid")
       .reduce((sum, p) => sum + (p.total_amount || 0), 0);
-    
+
     const paidOrders = payments.filter(p => p.payment_status === "Paid").length;
     const codOrders = payments.filter(p => p.payment_method === "COD").length;
     const failedPayments = payments.filter(p => p.payment_status === "Failed").length;
     const pendingOrders = payments.filter(p => p.payment_status === "Pending" || p.payment_status === "pending").length;
     const totalOrders = payments.length;
-    
+
     // console.log("Payment statuses found:", payments.map(p => p.payment_status));
     // console.log("Summary:", { totalEarnings, paidOrders, codOrders, failedPayments, pendingOrders, totalOrders });
-    
-    res.json({ 
-      success: true, 
+
+    res.json({
+      success: true,
       data: transformedPayments,
       summary: {
         totalEarnings,
@@ -85,12 +85,23 @@ export const verifyPayment = async (req, res) => {
       paymentMethod
     } = req.body;
 
+    console.log("=== PAYMENT VERIFY DEBUG ===");
+    console.log("order_id:", razorpay_order_id);
+    console.log("payment_id:", razorpay_payment_id);
+    console.log("signature:", razorpay_signature);
+    console.log("secret loaded:", !!process.env.RAZORPAY_KEY_SECRET);
+
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
 
     const expectedSign = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
       .update(sign.toString())
       .digest("hex");
+
+    console.log("expected:", expectedSign);
+    console.log("received:", razorpay_signature);
+    console.log("match:", expectedSign === razorpay_signature);
+    console.log("============================");
 
     if (expectedSign !== razorpay_signature) {
       return res.json({ success: false });

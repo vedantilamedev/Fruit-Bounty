@@ -1,5 +1,5 @@
-import dotenv from "dotenv";
-dotenv.config();   // ✅ LOAD ENV HERE
+// import dotenv from "dotenv";
+// dotenv.config();   // ✅ LOAD ENV HERE
 
 import { v2 as cloudinary } from "cloudinary";
 

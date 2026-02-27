@@ -99,8 +99,11 @@ const orderSchema = new mongoose.Schema(
     },
 
     deliveryAddress: {
-      type: String
-    }
+      fullName: { type: String },
+      house: { type: String },
+      pincode: { type: String },
+      contact: { type: String },
+    },
   },
   { timestamps: true }
 );
