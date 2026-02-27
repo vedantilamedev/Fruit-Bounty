@@ -7,7 +7,7 @@ import axios from "axios";
    API Configuration
 ====================== */
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "https://fruit-bounty-dmzs.onrender.com/api",
+  baseURL: import.meta.env.VITE_BASE_URL || "https://fruit-bounty-dmzs.onrender.com/api",
 });
 
 api.interceptors.request.use((config) => {

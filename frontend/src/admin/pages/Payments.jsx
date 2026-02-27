@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 // const BASE_URL = "https://fruit-bounty-dmzs.onrender.com/api";
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://fruit-bounty-dmzs.onrender.com/api";
 
 const conversionRate = 1; // Backend already returns amount in INR
 

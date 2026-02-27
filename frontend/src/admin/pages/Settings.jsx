@@ -3,6 +3,8 @@ import { User, Bell, Lock } from "lucide-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://fruit-bounty-dmzs.onrender.com/api";
+
 const cn = (...c) => c.filter(Boolean).join(" ");
 
 const Card = ({ className, children }) => (
@@ -118,7 +120,7 @@ export default function Settings() {
     const token = localStorage.getItem("token");
 
     axios
-      .get("https://fruit-bounty-dmzs.onrender.com/api/users/profile", {
+      .get(`${BASE_URL}/users/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -137,7 +139,7 @@ export default function Settings() {
 
     axios
       .put(
-        "https://fruit-bounty-dmzs.onrender.com/api/settings/profile",
+        `${BASE_URL}/settings/profile`,
         profile,
         {
           headers: {

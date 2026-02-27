@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Trash2, Edit, X } from "lucide-react";
 import axios from "axios";
 
-const BASE_URL = "https://fruit-bounty-dmzs.onrender.com/api";
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://fruit-bounty-dmzs.onrender.com/api";
 
 export default function CustomizeBowl() {
   const [fruits, setFruits] = useState([]);
