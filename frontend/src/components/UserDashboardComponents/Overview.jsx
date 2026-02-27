@@ -2,9 +2,11 @@
 import React, { useState } from 'react';
 import { ShoppingBag, CreditCard, Calendar, Truck, ArrowRight, Package, X, CheckCircle2, MapPin, Clock, User, Smartphone, Phone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const Overview = ({ userData, orders }) => {
   const [isTrackingOpen, setIsTrackingOpen] = useState(false);
+    const navigate = useNavigate();
 
   // Safe access to user data with fallbacks
   const activePackage = userData?.activePackage ?
@@ -155,13 +157,13 @@ group h-full relative overflow-hidden"
                 To guarantee maximum freshness from orchard to your bowl, <strong className="font-medium text-[#50e261] bg-[#3C7E44]/10 px-2 py-0.5 rounded-md">Same-day delivery is currently paused.</strong> All new fruit orders will reach you within 24 hours.
               </p>
             </div>
-            <a href="/privacy-policy"><motion.button
+            <motion.button onClick={() => { navigate("/privacy-policy")}}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="bg-[#1b361b] text-white px-8 py-4 rounded-[1rem] font-medium text-[10px] uppercase tracking-[0.2em] shadow-sm shadow-black"
             >
               Read Policy
-            </motion.button></a>
+            </motion.button>
           </div>
         </motion.div>
 
