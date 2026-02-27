@@ -27,6 +27,7 @@ export const updateProfile = async (req, res) => {
     }
 
     user.name = req.body.name || user.name;
+    user.address = req.body.address || user.address;
 
     if (req.body.password) {
       const salt = await bcrypt.genSalt(10);
