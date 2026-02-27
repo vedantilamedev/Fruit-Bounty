@@ -27,7 +27,7 @@ const LoginRegister = () => {
     setIsRegistering(!isRegistering);
   };
 
-  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", password: "", phone: "" });
   const [loginData, setLoginData] = useState({ email: "", password: "" });
 
   const handleRegister = async () => {
@@ -275,7 +275,7 @@ const LoginRegister = () => {
 
             <div style={{ marginBottom: '15px' }}>
               <label style={styles.label}>Phone</label>
-              <input type="tel" onInput={handleNumericInput} placeholder="1234567890" style={styles.input} />
+              <input type="tel" onInput={handleNumericInput} placeholder="1234567890" style={styles.input} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} />
             </div>
 
             <div style={{ marginBottom: '15px' }}>

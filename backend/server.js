@@ -65,7 +65,7 @@ app.use("/api/admin/customers", customerRoutes);
 app.use("/api/admin/subscriptions", subscriptionRoutes);
 
 // Customer Routes
-app.use("/api/user", userRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/custom-bowls", customBowlRoutes);
