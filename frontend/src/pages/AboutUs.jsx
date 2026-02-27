@@ -1,55 +1,60 @@
-  import React, { useEffect } from "react";
-  import { Leaf, Heart, ShieldCheck, Truck, Users, Sprout } from "lucide-react";
-  
-  const highlights = [
-    {
-      icon: <Leaf size={20} />,
-      title: "Farm Fresh Quality",
-      text: "We source handpicked fruits from trusted growers to keep every bowl naturally fresh and flavorful.",
-    },
-    {
-      icon: <Truck size={20} />,
-      title: "Fast & Hygienic Delivery",
-      text: "Our team follows strict hygiene practices and timely delivery to serve freshness at your doorstep.",
-    },
-    {
-      icon: <ShieldCheck size={20} />,
-      title: "Trusted Standards",
-      text: "From sourcing to packing, every step is monitored to maintain quality, consistency, and safety.",
-    },
-  ];
-  
-  const values = [
-    {
-      icon: <Heart size={18} />,
-      label: "Customer First",
-    },
-    {
-      icon: <Sprout size={18} />,
-      label: "Sustainable Choices",
-    },
-    {
-      icon: <Users size={18} />,
-      label: "Community Growth",
-    },
-  ];
-  
-  const AboutUs = () => {
-    useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-    }, []);
-  
-    return (
-      <div
-        className="min-h-screen px-4 sm:px-6 lg:px-8 py-12 lg:py-20"
-        style={{
-          backgroundImage: "url('/images/main-background.webp')",
-          backgroundSize: "cotain",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed",
-          backgroundColor: "rgba(255, 255, 255, 0.95)",
-        }}
-      >
+import React, { useEffect } from "react";
+import { Leaf, Heart, ShieldCheck, Truck, Users, Sprout } from "lucide-react";
+
+const highlights = [
+  {
+    icon: <Leaf size={20} />,
+    title: "Farm Fresh Quality",
+    text: "We source handpicked fruits from trusted growers to keep every bowl naturally fresh and flavorful.",
+  },
+  {
+    icon: <Truck size={20} />,
+    title: "Fast & Hygienic Delivery",
+    text: "Our team follows strict hygiene practices and timely delivery to serve freshness at your doorstep.",
+  },
+  {
+    icon: <ShieldCheck size={20} />,
+    title: "Trusted Standards",
+    text: "From sourcing to packing, every step is monitored to maintain quality, consistency, and safety.",
+  },
+];
+
+const values = [
+  {
+    icon: <Heart size={18} />,
+    label: "Customer First",
+  },
+  {
+    icon: <Sprout size={18} />,
+    label: "Sustainable Choices",
+  },
+  {
+    icon: <Users size={18} />,
+    label: "Community Growth",
+  },
+];
+
+const AboutUs = () => {
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, []);
+
+  return (
+    <div className="min-h-screen font-sans bg-[#faf9f6] text-gray-900 relative selection:bg-[#C9C27A]/30">
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div
+          className="absolute inset-0 opacity-[0.6]"
+          style={{
+            backgroundImage: "url('/images/main-background.webp')",
+            backgroundSize: "400px",
+            backgroundRepeat: "repeat",
+            backgroundAttachment: "fixed",
+          }}
+        ></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#f3f8f2]/65 via-transparent to-[#faf9f6]"></div>
+      </div>
+
+      <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
         <div className="max-w-6xl mx-auto">
           <section className="rounded-3xl border border-[#E8E4D9] bg-white/85 backdrop-blur-sm p-8 sm:p-12 shadow-sm">
             <p className="text-xs uppercase tracking-[0.3em] font-bold text-[#3C7E44] mb-3">
@@ -64,7 +69,7 @@
               preparation, and a customer-first experience so every order feels
               fresh, nourishing, and worth repeating.
             </p>
-  
+
             <div className="mt-8 grid sm:grid-cols-3 gap-4">
               {values.map((value) => (
                 <div
@@ -79,7 +84,7 @@
               ))}
             </div>
           </section>
-  
+
           <section className="mt-8 grid lg:grid-cols-3 gap-6">
             {highlights.map((item) => (
               <article
@@ -96,21 +101,23 @@
               </article>
             ))}
           </section>
-  
+
           <section className="mt-8 rounded-3xl border border-[#E8E4D9] bg-white/90 p-8 sm:p-10">
             <h3 className="text-2xl sm:text-3xl font-black text-gray-900 mb-4">
               Our Promise
             </h3>
             <p className="text-gray-700 leading-relaxed max-w-4xl">
               Every Fruit Bounty order is prepared to deliver quality you can
-              trust: fresh ingredients, balanced taste, and consistent service. We
-              continue improving our sourcing, packaging, and customer support so
-              your healthy routine stays easy and enjoyable every day.
+              trust: fresh ingredients, balanced taste, and consistent service.
+              We continue improving our sourcing, packaging, and customer
+              support so your healthy routine stays easy and enjoyable every
+              day.
             </p>
           </section>
         </div>
       </div>
-    );
-  };
-  
-  export default AboutUs;
+    </div>
+  );
+};
+
+export default AboutUs;
