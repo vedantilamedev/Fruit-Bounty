@@ -4,7 +4,7 @@ import { Search, Mail, Phone, MapPin, ShoppingBag, X, Eye } from "lucide-react";
 import { Users, UserPlus, Briefcase, TrendingUp } from "lucide-react";
 import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || "https://fruit-bounty-dmzs.onrender.com/api";
+// const BASE_URL = import.meta.env.VITE_BASE_URL || "https://fruit-bounty-dmzs.onrender.com/api";
 
 /* ----------------- Utility ----------------- */
 function cn(...classes) {
@@ -73,7 +73,7 @@ export default function Customers() {
       try {
         setLoading(true);
         const token = localStorage.getItem("token"); // Admin token
-        const { data } = await axios.get(`${BASE_URL}/admin/customers`, {
+        const { data } = await axios.get(`/api/admin/customers`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const mappedCustomers = data.data.map(c => ({

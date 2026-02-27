@@ -120,7 +120,7 @@ export default function Settings() {
     const token = localStorage.getItem("token");
 
     axios
-      .get(`${BASE_URL}/users/profile`, {
+      .get(`/api/users/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -139,7 +139,7 @@ export default function Settings() {
 
     axios
       .put(
-        `${BASE_URL}/settings/profile`,
+        `/api/settings/profile`,
         profile,
         {
           headers: {

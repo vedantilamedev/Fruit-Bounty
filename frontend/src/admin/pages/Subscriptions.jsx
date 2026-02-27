@@ -17,7 +17,7 @@ const Subscriptions = () => {
       try {
         const token = localStorage.getItem("token"); // Admin JWT token
         const { data } = await axios.get(
-          `${BASE_URL}/admin/subscriptions`,
+          `/api/admin/subscriptions`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -49,7 +49,7 @@ const Subscriptions = () => {
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.patch(
-        `${BASE_URL}/admin/subscriptions/${id}/status`,
+        `/api/admin/subscriptions/${id}/status`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -42,7 +42,7 @@ export default function Payments() {
       const token = localStorage.getItem("token");
       console.log("Token:", token);
       
-      const res = await axios.get(`${BASE_URL}/payment/payments`, {
+      const res = await axios.get(`/api/payment/payments`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       

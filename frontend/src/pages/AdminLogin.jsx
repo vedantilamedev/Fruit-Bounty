@@ -34,7 +34,7 @@ const AdminLogin = () => {
     }
 
     try {
-      await axios.post(`${BASE_URL}/admin/register`, registerData);
+      await axios.post(`/api/admin/register`, registerData);
       alert("Request sent successfully");
       setIsRegistering(false);
     } catch (error) {
@@ -48,7 +48,7 @@ const AdminLogin = () => {
     try {
       console.log(loginData);
       const res = await axios.post(
-        `${BASE_URL}/admin/login`,
+        `/api/admin/login`,
         loginData,
       );
 
