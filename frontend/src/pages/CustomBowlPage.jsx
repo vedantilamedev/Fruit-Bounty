@@ -14,25 +14,13 @@ import { useNavigate } from "react-router-dom";
 
 const fruits = [
   { id: 1, name: "Berries", price: 40, calories: 50, protein: 1, image: "/images/berries.webp" },
-  { id: 2, name: "Banana", price: 30, calories: 105, protein: 1.3, image: "/images/banana.webp" },
   { id: 3, name: "Grapes", price: 120, calories: 62, protein: 0.6, image: "/images/grapes.webp" },
-  { id: 4, name: "Pineapple", price: 60, calories: 82, protein: 0.9, image: "/images/pinapple.webp" },
   { id: 5, name: "Watermelon", price: 150, calories: 46, protein: 0.9, image: "/images/watermelon.webp" },
   { id: 6, name: "Strawberries", price: 100, calories: 49, protein: 1, image: "/images/strawberries.webp" },
   { id: 7, name: "Mango", price: 80, calories: 99, protein: 1.4, image: "/images/mango.webp" },
-  { id: 8, name: "Papaya", price: 50, calories: 59, protein: 0.9, image: "/images/papaya.webp" },
   { id: 9, name: "Kiwi", price: 140, calories: 42, protein: 0.8, image: "/images/kiwi.webp" },
-  { id: 10, name: "Orange", price: 60, calories: 62, protein: 1.2, image: "/images/oranges.webp" },
   { id: 11, name: "Blueberries", price: 200, calories: 84, protein: 1.1, image: "/images/blueberries.webp" },
-  { id: 12, name: "Pomegranate", price: 90, calories: 83, protein: 1.7, image: "/images/pomegranate.webp" },
-  { id: 13, name: "Guava", price: 40, calories: 68, protein: 2.6, image: "/images/guava.webp" },
-  { id: 14, name: "Dragon Fruit", price: 180, calories: 60, protein: 1.2, image: "/images/dragonfruit.webp" },
-  { id: 15, name: "Pear", price: 70, calories: 96, protein: 0.6, image: "/images/pear.webp" },
-  { id: 16, name: "Cherries", price: 220, calories: 87, protein: 1.4, image: "/images/cherries.webp" },
-  { id: 17, name: "Lychee", price: 160, calories: 66, protein: 0.8, image: "/images/lychee.webp" },
-  { id: 18, name: "Plum", price: 90, calories: 30, protein: 0.5, image: "/images/plum.webp" },
-  { id: 19, name: "Apricot", price: 130, calories: 48, protein: 1.4, image: "/images/apricot.webp" },
-  { id: 20, name: "Blackberries", price: 210, calories: 43, protein: 1.4, image: "/images/blackberries.webp" },
+
 ];
 
 const toppings = [

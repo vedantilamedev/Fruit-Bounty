@@ -80,9 +80,9 @@ function CartPage() {
           </div>
 
           <div className="text-center mt-7">
-            <h1 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tighter uppercase leading-none">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 tracking-tighter uppercase leading-none">
               Review Your <span className="text-[#C9C27A]">Cart</span>{" "}
-              <Sparkles className="inline text-[#C9C27A]" size={30} />
+              <Sparkles className="inline text-[#C9C27A] align-middle" size={26} />
             </h1>
             <p className="text-gray-500 mt-3 font-black uppercase tracking-widest text-[10px]">
               {cart.length} Item{cart.length !== 1 ? "s" : ""} Ready For Checkout
@@ -117,10 +117,10 @@ function CartPage() {
                 return (
                   <article
                     key={item.id || item._id || index}
-                    className="bg-white rounded-[2rem] p-5 md:p-6 shadow-xl border-[3px] border-[#C9C27A] hover:border-green-800 transition-all"
+                    className="bg-white rounded-[2rem] p-4 sm:p-5 md:p-6 shadow-xl border-[3px] border-[#C9C27A] hover:border-green-800 transition-all"
                   >
-                    <div className="flex items-start gap-4 md:gap-5">
-                      <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-[#faf9f6] overflow-hidden border border-gray-100 flex-shrink-0">
+                    <div className="flex flex-col sm:flex-row items-start gap-4 md:gap-5">
+                      <div className="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-[#faf9f6] overflow-hidden border border-gray-100 flex-shrink-0 mx-auto sm:mx-0">
                         <img
                           src={item.image || "/images/custom.webp"}
                           alt={itemDisplayName}
@@ -210,8 +210,8 @@ function CartPage() {
                           )}
                         </div>
 
-                        <div className="mt-4 flex items-center justify-between gap-3 flex-wrap pt-1">
-                          <div className="flex items-center bg-[#faf9f6] rounded-xl p-1 border border-gray-100">
+                        <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-1">
+                          <div className="flex items-center bg-[#faf9f6] rounded-xl p-1 border border-gray-100 w-fit">
                             <button
                               onClick={() => handleDecrease(item)}
                               className="w-8 h-8 rounded-lg bg-white border border-gray-100 text-gray-600 hover:text-red-500 flex items-center justify-center"
@@ -229,7 +229,7 @@ function CartPage() {
                             </button>
                           </div>
 
-                          <div className="text-right ml-auto">
+                          <div className="text-left sm:text-right sm:ml-auto">
                             <p className="text-[9px] font-black uppercase tracking-widest text-gray-400">
                               Line Total
                             </p>
@@ -248,7 +248,7 @@ function CartPage() {
             {/* RIGHT SIDE - STICKY ORDER SUMMARY */}
             <aside className="lg:col-span-5 lg:h-full">
               <div className="h-fit">
-                <div className="bg-green-950 rounded-[2.5rem] p-7 md:p-8 shadow-2xl border-[3px] border-[#C9C27A] h-fit">
+                <div className="bg-green-950 rounded-[2.5rem] p-5 sm:p-6 md:p-8 shadow-2xl border-[3px] border-[#C9C27A] h-fit">
                   <div className="flex items-center gap-2 pb-5 border-b border-white/10">
                     <ReceiptText size={19} className="text-[#C9C27A]" />
                     <h2 className="text-white font-black uppercase tracking-widest text-sm">
@@ -275,7 +275,7 @@ function CartPage() {
                     <span className="font-black text-[#C9C27A] text-lg uppercase tracking-tight">
                       Grand Total
                     </span>
-                    <span className="font-black text-white text-3xl tracking-tight">
+                    <span className="font-black text-white text-2xl sm:text-3xl tracking-tight">
                       {formatPrice(grandTotal)}
                     </span>
                   </div>

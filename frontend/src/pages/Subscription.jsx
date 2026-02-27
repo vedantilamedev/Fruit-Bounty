@@ -32,7 +32,7 @@ function Subscription() {
       title: "Corporate Group",
       tagline: "3+ Persons • Shared Address",
       description: "Designed for teams. We deliver premium fruit bowls to 3 or more people at a single address with fully customizable daily meals.",
-      image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1000",
+      image: "/images/custom-bowl.webp",
       benefits: ["Group Bowl Service (3+)", "Everyday Custom Meals", "Single Address Logistics", "Team Wellness Reports"],
       pricePerDay: 249
     }

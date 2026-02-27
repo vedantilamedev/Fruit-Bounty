@@ -24,7 +24,6 @@ const PlanCustomization = () => {
 
   const PRODUCTS = [
     { id: 'custom', name: "Customize Your Own Bowl", price: 0, cals: "Varies", img: "/images/custom-bowl.webp", isCustom: true },
-    { id: 'p1', name: "Exotic Mango Bowl", price: 299, cals: "220 kcal", img: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=800" },
     { id: 'p2', name: "Antioxidant Berry", price: 349, cals: "180 kcal", img: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=400" },
     { id: 'p3', name: "Citrus Vitamin C", price: 250, cals: "150 kcal", img: "https://images.unsplash.com/photo-1557800636-894a64c1696f?w=400" },
   ];
@@ -36,12 +35,11 @@ const PlanCustomization = () => {
     { name: "Berries", img: "/images/berries.webp" },
     { name: "Strawberries", img: "/images/strawberries.webp" },
     { name: "Pineapple", img: "/images/pinapple.webp" },
-    { name: "Kiwi", img: "/images/kiwi.webp" },
     { name: "Grapes", img: "/images/grapes.webp" }
   ];
 //PREMIUM
   const PREMIUM_FRUITS = [
-    { name: "Dragon Fruit", img: "https://images.unsplash.com/photo-1527325672343-29f45604496b?w=200" },
+    { name: "kiwi", img: "/images/kiwi.webp" },
     { name: "Avocado", img: "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=200" }
   ];
 
@@ -180,15 +178,13 @@ const { addToCart } = useCart();
                                         <div
                                           key={p.id}
                                           onClick={() => setSelectedBase(p)}
-                                          className={`flex-shrink-0 snap-center transition-all rounded-[30px] border-2 overflow-hidden flex h-auto ${
-                                            selectedBase?.id === p.id
-                                              ? 'border-[#C9C27A] bg-[#C9C27A]/10 shadow-[0_14px_30px_rgba(201,194,122,0.35)]'
-                                              : 'border-transparent'
+                                         className={`flex-shrink-0 snap-center transition-all duration-300 rounded-[30px] border-2 inline-flex h-auto ${
+  selectedBase?.id === p.id
+    ? 'relative z-10 border-[#C9C27A] bg-[#C9C27A]/10 shadow-[0_0_26px_rgba(201,194,122,0.30)]'
+    : 'border-transparent shadow-[0_0_18px_rgba(15,23,42,0.10)] hover:shadow-[0_0_22px_rgba(201,194,122,0.20)]'
                                           }`}
                                         >
-                                            <div className="w-[230px] md:w-[260px] flex">
-                                              <PremiumCard product={{ title: p.name, calories: p.cals, image: p.img, weight: "450g", fruits: "Customizable", category: p.isCustom ? "Builder" : "Premium" }} />
-                                            </div>
+                                          <PremiumCard product={{ title: p.name, calories: p.cals, image: p.img, weight: "450g", fruits: "Customizable", category: p.isCustom ? "Builder" : "Premium" }} />
                                         </div>
                                     ))}
                                 </div>

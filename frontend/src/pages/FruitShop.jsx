@@ -193,6 +193,7 @@ function FruitShop() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedBowls, setSelectedBowls] = useState([]);
+  const [quantities, setQuantities] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [toast, setToast] = useState({ show: false, message: "", type: "success" });
   const toastTimeoutRef = useRef(null);
@@ -245,20 +246,6 @@ function FruitShop() {
     };
   }, []);
 
-  const toggleSelection = (product) => {
-    const exists = selectedBowls.find((item) => item.id === product.id);
-    if (exists) {
-      setSelectedBowls(selectedBowls.filter((item) => item.id !== product.id));
-    } else {
-      setSelectedBowls([...selectedBowls, product]);
-    }
-  };
-
-  const totalSelectedPrice = selectedBowls.reduce((sum, item) => sum + item.price, 0);
-  const totalPages = Math.ceil(products.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedProducts = products.slice(startIndex, startIndex + itemsPerPage);
-
   const showToast = (message, type = "success") => {
     if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
     setToast({ show: true, message, type });
@@ -267,14 +254,67 @@ function FruitShop() {
     }, 2200);
   };
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const updateQuantity = (productId, delta) => {
+    setQuantities((prev) => {
+      const current = prev[productId] ?? 1;
+      const next = Math.max(0, current + delta);
+
+      setSelectedBowls((prevSelected) =>
+        prevSelected
+          .map((item) =>
+            item.id === productId ? { ...item, quantity: next } : item
+          )
+          .filter((item) => item.quantity > 0)
+      );
+
+      return { ...prev, [productId]: next };
+    });
+  };
+
+  const toggleSelection = (product) => {
+    setSelectedBowls((prev) => {
+      const exists = prev.some((item) => item.id === product.id);
+      if (exists) return prev.filter((item) => item.id !== product.id);
+
+      const qty = quantities[product.id] ?? 1;
+      if (qty <= 0) {
+        showToast("Quantity should be at least 1.", "error");
+        return prev;
+      }
+      return [...prev, { ...product, quantity: qty }];
+    });
+  };
+
+  const totalSelectedPrice = selectedBowls.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+  const totalSelectedItems = selectedBowls.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedProducts = products.slice(startIndex, startIndex + itemsPerPage);
+
   const handleBulkAddToCart = () => {
     if (selectedBowls.length === 0) {
       showToast("Please select at least one bowl first.", "error");
       return;
     }
-    selectedBowls.forEach((item) => addToCart({ ...item, quantity: 1 }));
-    showToast(`${selectedBowls.length} items added to your cart.`);
+    selectedBowls.forEach((item) => {
+      for (let i = 0; i < item.quantity; i++) {
+        addToCart(item);
+      }
+    });
+    showToast(`${totalSelectedItems} items added to your cart.`);
     setSelectedBowls([]);
+    setQuantities({});
     navigate("/cart");
   };
 
@@ -386,6 +426,7 @@ function FruitShop() {
       <section className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative z-10">
         {paginatedProducts.map((product) => {
           const isSelected = selectedBowls.some((item) => item.id === product.id);
+          const quantity = quantities[product.id] ?? 1;
           return (
             <motion.div
               key={product.id}
@@ -459,12 +500,40 @@ function FruitShop() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-auto pt-5 gap-3">
-                  <span className="text-xl sm:text-2xl font-black text-[#2d5a27]">Rs. {product.price}</span>
+                  <div className="flex items-center justify-between gap-3 w-full sm:w-auto">
+                    <span className="text-xl sm:text-2xl font-black text-[#2d5a27]">Rs. {product.price}</span>
+                    <div
+                      onClick={(e) => e.stopPropagation()}
+                      className="flex items-center rounded-xl border border-[#d8d2a0] bg-[#fffaf0]"
+                    >
+                      <button
+                        onClick={() => updateQuantity(product.id, -1)}
+                        className="w-9 h-9 text-lg font-black text-[#2d5a27] hover:bg-[#f2ead5] rounded-l-xl"
+                        aria-label={`Decrease quantity for ${product.title}`}
+                      >
+                        -
+                      </button>
+                      <span className="w-9 text-center text-sm font-black text-gray-800">{quantity}</span>
+                      <button
+                        onClick={() => updateQuantity(product.id, 1)}
+                        className="w-9 h-9 text-lg font-black text-[#2d5a27] hover:bg-[#f2ead5] rounded-r-xl"
+                        aria-label={`Increase quantity for ${product.title}`}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      addToCart({ ...product, quantity: 1 });
-                      showToast(`${product.title} added to cart.`);
+                      if (quantity <= 0) {
+                        showToast("Quantity should be at least 1.", "error");
+                        return;
+                      }
+                      for (let i = 0; i < quantity; i++) {
+                        addToCart(product);
+                      }
+                      showToast(`${quantity} ${product.title} added to cart.`);
                       navigate("/cart");
                     }}
                     className="w-full sm:w-auto bg-gradient-to-r from-green-700 to-green-900 hover:from-green-800 hover:to-green-950 text-white px-5 h-11 rounded-xl flex items-center justify-center shadow-lg transition font-bold text-sm"
@@ -481,7 +550,7 @@ function FruitShop() {
       {totalPages > 1 && (
         <div className="relative z-10 mt-12 flex flex-wrap items-center justify-center gap-2">
           <button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
             disabled={currentPage === 1}
             className="px-4 py-2 rounded-xl border border-[#d8d2a0] bg-white text-sm font-bold text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed hover:border-green-400"
           >
@@ -491,7 +560,7 @@ function FruitShop() {
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
             <button
               key={page}
-              onClick={() => setCurrentPage(page)}
+              onClick={() => handlePageChange(page)}
               className={`w-10 h-10 rounded-xl text-sm font-black border transition-all ${
                 currentPage === page
                   ? "bg-green-800 text-white border-green-800"
@@ -503,7 +572,7 @@ function FruitShop() {
           ))}
 
           <button
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
             disabled={currentPage === totalPages}
             className="px-4 py-2 rounded-xl border border-[#d8d2a0] bg-white text-sm font-bold text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed hover:border-green-400"
           >
@@ -656,10 +725,10 @@ function FruitShop() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-600 truncate">
-                      {selectedBowls.length} {selectedBowls.length === 1 ? "item" : "items"} selected
+                      {totalSelectedItems} {totalSelectedItems === 1 ? "item" : "items"} selected
                     </p>
                     <p className="text-xs text-gray-500 truncate mt-0.5">
-                      {selectedBowls.map((item) => item.title).join(", ")}
+                      {selectedBowls.map((item) => `${item.title} x${item.quantity}`).join(", ")}
                     </p>
                     <div className="flex items-center gap-1 mt-1">
                       {selectedBowls.slice(0, 3).map((item) => (

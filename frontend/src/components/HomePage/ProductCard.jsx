@@ -27,7 +27,6 @@ function ProductCard({ product }) {
         className={`
           relative 
           w-[275px] md:w-[315px] 
-          /* UPDATED: Changed from min-h to h-fit so the card shrinks with the content */
           h-fit 
           rounded-[24px] 
           bg-white
@@ -40,7 +39,7 @@ function ProductCard({ product }) {
         `}
       >
         <div className="p-5 flex flex-col items-center">
-          {/* 1. HEADER */}
+          {/* HEADER */}
           <div className="text-center mt-2 mb-3">
             <span className="text-[10px] font-bold text-[#C9C27A] uppercase tracking-widest mb-1 block">
               {product.category || "Fresh & Healthy"}
@@ -50,7 +49,7 @@ function ProductCard({ product }) {
             </h3>
           </div>
 
-          {/* 2. SQUARE IMAGE CONTAINER - Reduced mb-5 to mb-3 */}
+          {/* IMAGE */}
           <div className="w-full aspect-square max-h-44 flex items-center justify-center bg-gray-50 rounded-xl overflow-hidden mb-3 border border-gray-100 shadow-inner">
             <img
               src={product.image}
@@ -59,7 +58,7 @@ function ProductCard({ product }) {
             />
           </div>
 
-          {/* 3. SPECS - Reduced mb-1 to mb-0 */}
+          {/* SPECS */}
           <div className="w-full space-y-2.5 px-1 mb-0">
             {[
               { label: "Weight", value: product.weight },
@@ -73,7 +72,7 @@ function ProductCard({ product }) {
             ))}
           </div>
 
-          {/* 4. PRICE & ACTION - Removed mt-auto and added pt-4 to pull it tight to the specs */}
+          {/* PRICE + CTA */}
           <div className="w-full text-center pt-4">
             <div className="text-2xl md:text-3xl font-black text-[#C9C27A] mb-3">
               ₹{product.price}
@@ -87,10 +86,11 @@ function ProductCard({ product }) {
           </div>
         </div>
 
-        {/* 5. FIXED BOTTOM BAR */}
+        {/* BOTTOM BAR */}
         <div className="bg-gradient-to-r from-green-800 to-green-950 py-2 px-4 text-center">
           <p className="text-[8px] text-white font-medium">
-            Orders placed today will be delivered <span className="font-bold text-[#C9C27A]">tomorrow.</span>
+            Orders placed today will be delivered{" "}
+            <span className="font-bold text-[#C9C27A]">tomorrow.</span>
           </p>
         </div>
       </div>
