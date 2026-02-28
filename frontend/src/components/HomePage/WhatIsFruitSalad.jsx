@@ -88,34 +88,6 @@ function WhatIsFruitSalad() {
         ))}
       </div>
 
-      <style jsx>{`
-        @keyframes heartbeat {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.06); }
-        }
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-        
-        /* Mobile Circular Orbit with Radius (140px) */
-        @keyframes orbit {
-          from { transform: rotate(0deg) translateX(140px) rotate(0deg); }
-          to { transform: rotate(360deg) translateX(140px) rotate(-360deg); }
-        }
-
-        .animate-heartbeat { animation: heartbeat 4s ease-in-out infinite; }
-        .lg\\:animate-float { animation: float 5s ease-in-out infinite; }
-
-        @media (max-width: 1023px) {
-          .orbit-1 { animation: orbit 18s linear infinite; animation-delay: 0s; }
-          .orbit-2 { animation: orbit 18s linear infinite; animation-delay: -3s; }
-          .orbit-3 { animation: orbit 18s linear infinite; animation-delay: -6s; }
-          .orbit-4 { animation: orbit 18s linear infinite; animation-delay: -9s; }
-          .orbit-5 { animation: orbit 18s linear infinite; animation-delay: -12s; }
-          .orbit-6 { animation: orbit 18s linear infinite; animation-delay: -15s; }
-        }
-      `}</style>
     </section>
   );
 }

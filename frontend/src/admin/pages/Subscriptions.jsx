@@ -8,6 +8,8 @@ const BASE_URL = import.meta.env.VITE_BASE_URL || "https://fruit-bounty-dmzs.onr
 const Subscriptions = () => {
   const [subscribers, setSubscribers] = useState([]);
   const [filter, setFilter] = useState("All");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // ----------------------------
   // FETCH SUBSCRIPTIONS FROM BACKEND
@@ -15,27 +17,36 @@ const Subscriptions = () => {
   useEffect(() => {
     const fetchSubscriptions = async () => {
       try {
+        setLoading(true);
         const token = localStorage.getItem("token"); // Admin JWT token
         const { data } = await axios.get(
           `/api/admin/subscriptions`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
+        console.log("Subscriptions data received:", data);
+
         // Map backend data to frontend structure
         setSubscribers(
           data.data.map((s) => ({
             id: s._id,
-            customerName: s.customer.name,
-            planType: s.plan,
-            duration: s.duration,
-            deliveryDays: s.deliveryDays || "-",
-            totalDays: s.daysRemaining,
-            totalAmount: s.amount,
-            status: s.status,
+            customerName: s.customer?.name || "Unknown",
+            planType: s.plan || "Individual",
+            duration: s.duration || "1 Month",
+            deliveryDays: s.deliveryDays || "Mon, Wed, Fri",
+            totalDays: s.daysRemaining || 0,
+            totalAmount: s.amount || 0,
+            status: s.status || "Active",
+            startDate: s.start_date,
+            endDate: s.end_date
           }))
         );
+        setError(null);
       } catch (err) {
         console.error("Error fetching subscriptions:", err.response?.data || err.message);
+        setError(err.response?.data?.message || "Failed to fetch subscriptions");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -74,6 +85,35 @@ const Subscriptions = () => {
   // ----------------------------
   // JSX RENDER
   // ----------------------------
+  
+  if (loading) {
+    return (
+      <div className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 lg:space-y-8">
+        <div>
+          <h1 className="hidden md:block text-2xl sm:text-3xl font-bold text-gray-800">Subscription Management</h1>
+          <p className="hidden md:block text-gray-500 text-sm">Monitor dynamic user subscriptions & delivery schedules</p>
+        </div>
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 lg:space-y-8">
+        <div>
+          <h1 className="hidden md:block text-2xl sm:text-3xl font-bold text-gray-800">Subscription Management</h1>
+          <p className="hidden md:block text-gray-500 text-sm">Monitor dynamic user subscriptions & delivery schedules</p>
+        </div>
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
+          <p className="text-red-600 font-medium">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 lg:space-y-8">
       <div>

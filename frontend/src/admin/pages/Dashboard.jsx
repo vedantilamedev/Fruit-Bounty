@@ -53,17 +53,17 @@ export default function Dashboard() {
   const metrics = [
     {
       title: "Total Orders",
-      value: data.metrics.totalOrders,
+      value: data?.metrics?.totalOrders || 0,
       icon: ShoppingCart,
     },
     {
       title: "Revenue",
-      value: `₹${data.metrics.totalRevenue.toLocaleString("en-IN")}`,
+      value: `₹${(data?.metrics?.totalRevenue || 0).toLocaleString("en-IN")}`,
       icon: TrendingUp,
     },
     {
       title: "Pending Orders",
-      value: data.metrics.pendingOrders,
+      value: data?.metrics?.pendingOrders || 0,
       icon: Clock,
     },
   ];
@@ -126,7 +126,7 @@ export default function Dashboard() {
               </div>
             </div>
             <ResponsiveContainer width="100%" height={250}>
-              <LineChart data={data.revenueData[revenueView]}>
+              <LineChart data={data?.revenueData?.[revenueView] || []}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" fontSize={12} />
                 <YAxis fontSize={12} />
@@ -141,7 +141,7 @@ export default function Dashboard() {
           <div className="bg-white p-4 sm:p-6 rounded-xl border shadow-sm">
             <h3 className="font-semibold text-lg mb-4">Peak Order Times</h3>
             <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={data.peakOrderTimes}>
+              <BarChart data={data?.peakOrderTimes || []}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="time" fontSize={12} />
                 <YAxis fontSize={12} />
@@ -161,7 +161,7 @@ export default function Dashboard() {
             <ResponsiveContainer width="100%" height={220}>
               <PieChart>
                 <Pie
-                  data={data.orderTypeDistribution}
+                  data={data?.orderTypeDistribution || []}
                   cx="50%"
                   cy="50%"
                   labelLine={false}
@@ -178,7 +178,7 @@ export default function Dashboard() {
               </PieChart>
             </ResponsiveContainer>
             <div className="mt-3 sm:mt-4 space-y-2">
-              {data.orderTypeDistribution.map((item, index) => (
+              {(data?.orderTypeDistribution || []).map((item, index) => (
                 <div key={item.name} className="flex items-center justify-between p-2 rounded-lg bg-slate-50">
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[index] }} />

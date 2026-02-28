@@ -100,7 +100,7 @@ export default function Customers() {
 
   const filteredCustomers = customers.filter(
     (c) => 
-      (c.name.toLowerCase().includes(searchTerm.toLowerCase()) || c.email.toLowerCase().includes(searchTerm.toLowerCase())) &&
+      ((c.name?.toString() || '').toLowerCase().includes(searchTerm.toLowerCase()) || (c.email?.toString() || '').toLowerCase().includes(searchTerm.toLowerCase())) &&
       (typeFilter === "all" || c.type === typeFilter)
   );
 

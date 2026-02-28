@@ -4,17 +4,20 @@ import { ShoppingBag, CreditCard, Calendar, Truck, ArrowRight, Package, X, Check
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
-const Overview = ({ userData, orders, payments }) => {
+const Overview = ({ userData, orders, payments, onTabChange }) => {
   const [isTrackingOpen, setIsTrackingOpen] = useState(false);
     const navigate = useNavigate();
 
   // Safe access to user data with fallbacks
-  const activePackage = userData?.activePackage ?
-    `${userData.activePackage.name} (${userData.activePackage.peopleCount} Person)` :
-    'No Active Plan';
-
   const totalOrders = orders?.length || 0;
+  const activePackage = userData?.activePackage ?
+    `${userData.activePackage.name} (${userData.activePackage.peopleCount || 1} Person)` :
+    'No Active Plan';
+  const activePackageName = userData?.activePackage?.name || 'No Active Plan';
+  const activePackageSubtitle = userData?.activePackage ? 
+    `${userData.activePackage.peopleCount || 1} Person` : 'Plan Active';
   const lastPayment = payments && payments.length > 0 ? payments[0] : null;
+  const lastPaymentAmount = lastPayment?.amount ?? lastPayment?.total_amount ?? 0;
 
   const trackingSteps = [
     { status: 'Order Confirmed', description: 'Orchard selection finalized', time: 'Feb 18, 10:30 AM', completed: true, current: false, icon: ShoppingBag },
@@ -178,14 +181,14 @@ group h-full relative overflow-hidden"
           />
           <StatCard
             title="Active Subscription"
-            value={<span className="text-2xl lg:text-3xl truncate block" title={activePackage}>{activePackage.split('(')[0]}</span>}
-            subtitle={activePackage.includes('(') ? activePackage.split('(')[1].replace(')', '') : 'Plan Active'}
+            value={<span className="text-2xl lg:text-3xl truncate block" title={activePackageName}>{activePackageName}</span>}
+            subtitle={activePackageSubtitle}
             icon={Package}
             color="bg-[#3C7E44]"
           />
           <StatCard
             title="Last Payment"
-            value={<span className="text-3xl">₹{lastPayment?.amount || lastPayment?.total_amount || 0}</span>}
+            value={<span className="text-3xl">₹{typeof lastPaymentAmount === 'number' ? lastPaymentAmount.toLocaleString() : 0}</span>}
             subtitle={lastPayment ? (lastPayment.status === 'Success' ? 'Payment Successful' : lastPayment.status) : 'No payments yet'}
             icon={CreditCard}
             color={lastPayment?.status === 'Success' ? 'bg-[#3C7E44]' : 'bg-[#A44A3F]'}

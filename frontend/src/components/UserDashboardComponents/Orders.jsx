@@ -12,15 +12,16 @@ const Orders = ({ orders, onCancelOrder }) => {
     const [statusFilter, setStatusFilter] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
 
-    const filteredOrders = orders?.filter(order => {
+    const filteredOrders = (orders || []).filter(order => {
         const matchesStatus = statusFilter === 'All' || order.status === statusFilter;
         // Handle both items array (payment orders) and package-based orders
         const orderItems = order.items || [];
         const itemNames = Array.isArray(orderItems) 
             ? orderItems.map(item => item.name || item.title || item).join(' ')
             : '';
+        const orderId = order?.id ? String(order.id) : '';
         const matchesSearch =
-            order.id.toString().includes(searchQuery) ||
+            orderId.includes(searchQuery) ||
             itemNames.toLowerCase().includes(searchQuery.toLowerCase());
         return matchesStatus && matchesSearch;
     });
@@ -80,17 +81,17 @@ const Orders = ({ orders, onCancelOrder }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 <StatCard
                     title="Active Orders"
-                    value={orders?.filter(o => ['Pending', 'Confirmed'].includes(o.status))?.length}
+                    value={(orders || []).filter(o => ['Pending', 'Confirmed'].includes(o.status))?.length || 0}
                     icon={Package}
                 />
                 <StatCard
                     title="Completed"
-                    value={orders?.filter(o => o.status === 'Delivered')?.length}
+                    value={(orders || []).filter(o => o.status === 'Delivered')?.length || 0}
                     icon={CheckCircle}
                 />
                 <StatCard
                     title="Invested in Freshness"
-                    value={`₹${orders?.reduce((sum, o) => sum + o.amount, 0)}`}
+                    value={`₹${(orders || []).reduce((sum, o) => sum + (typeof o.amount === 'number' ? o.amount : 0), 0)}`}
                     icon={CreditCard}
                 />
             </div>
@@ -175,7 +176,7 @@ const Orders = ({ orders, onCancelOrder }) => {
                                 <div className="flex flex-wrap items-center gap-4 sm:gap-6">
                                     <StatusBadge status={order.status} />
                                     <p className="text-lg sm:text-xl font-bold">
-                                        ₹{order.amount}
+                                        ₹{order.amount != null ? order.amount : '0'}
                                     </p>
                                     <ChevronRight
                                         className="text-white/70 hover:translate-x-1 transition cursor-pointer"
@@ -219,7 +220,7 @@ const Orders = ({ orders, onCancelOrder }) => {
                             </p>
 
                             <p className="font-bold text-lg mt-2">
-                                ₹{selectedOrder.amount}
+                                ₹{selectedOrder.amount != null ? selectedOrder.amount : '0'}
                             </p>
 
                             <div className="mt-4">

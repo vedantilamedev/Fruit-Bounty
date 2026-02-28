@@ -114,8 +114,8 @@ export default function Orders() {
 
   const filteredOrders = orders.filter((order) => {
     const matchesSearch =
-      order.orderName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.customerName.toLowerCase().includes(searchQuery.toLowerCase());
+      (order.orderName?.toString() || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (order.customerName?.toString() || '').toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus =
       statusFilter === "all" || order.orderStatus === statusFilter;
     const matchesPlan =

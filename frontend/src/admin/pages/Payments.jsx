@@ -92,7 +92,10 @@ export default function Payments() {
     console.log("Filtering data:", data);
     console.log("Current status filter:", status);
     if (search) {
-      data = data.filter((p) => p.customer.toLowerCase().includes(search.toLowerCase()) || p.id.toLowerCase().includes(search.toLowerCase()));
+      data = data.filter((p) => 
+        (p.customer?.toString() || '').toLowerCase().includes(search.toLowerCase()) || 
+        (p.id?.toString() || '').toLowerCase().includes(search.toLowerCase())
+      );
     }
     if (status !== "All") {
       data = data.filter((p) => p.status === status);

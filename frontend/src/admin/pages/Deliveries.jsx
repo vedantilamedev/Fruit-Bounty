@@ -118,14 +118,30 @@ export default function TomorrowDeliveries() {
     fetchDeliveries();
   }, []);
 
-  // Filter deliveries
-  const filteredDeliveries = deliveryData.filter((d) => {
-    if (filter === "all") return true;
-    if (filter === "subscription") return d.type === "Subscription";
-    if (filter === "corporate") return d.type === "Corporate";
-    if (filter === "normal") return d.type === "Normal";
-    return true;
-  });
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (selected) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [selected]);
+
+  // Filter deliveries - also filter out empty objects and invalid entries
+  const filteredDeliveries = (deliveryData || [])
+    .filter(d => d && typeof d === 'object' && Object.keys(d).length > 0)
+    .filter((d) => {
+      // Validate delivery has required fields
+      if (!d.id || !d.customer) return false;
+      if (filter === "all") return true;
+      if (filter === "subscription") return d.type === "Subscription";
+      if (filter === "corporate") return d.type === "Corporate";
+      if (filter === "normal") return d.type === "Normal";
+      return true;
+    });
 
   // Update delivery time (placeholder - would need backend endpoint)
   const handleTimeUpdate = (id) => {
@@ -209,7 +225,7 @@ export default function TomorrowDeliveries() {
         <Card className="p-6">
           <p className="text-sm text-gray-600 mb-2">Total Bowls</p>
           <h3 className="text-3xl font-bold text-green-600">
-            {deliveryData.reduce((sum, d) => sum + d.bowlsDetail.length, 0)}
+            {(deliveryData || []).reduce((sum, d) => sum + (d.bowlsDetail?.length || 0), 0)}
           </h3>
         </Card>
 
@@ -275,7 +291,7 @@ export default function TomorrowDeliveries() {
                   </div>
                 ) : (
                   <div className="mt-2 flex items-center gap-1">
-                    <p className="text-sm font-semibold">{delivery.time}</p>
+                    <p className="text-sm font-semibold">{String(delivery.time || 'N/A')}</p>
                     <button 
                       onClick={() => { setEditingTime(delivery.id); setCustomTime(delivery.time); }}
                       className="p-0.5 hover:bg-gray-200 rounded"
@@ -289,24 +305,24 @@ export default function TomorrowDeliveries() {
               <div className="flex-1">
                 <div className="flex justify-between mb-2 flex-wrap sm:flex-nowrap gap-2">
                   <div>
-                    <h4 className="font-semibold">{delivery.customer}</h4>
+                    <h4 className="font-semibold">{String(delivery.customer || 'Unknown')}</h4>
                     <p className="flex items-center gap-1 text-sm text-gray-600">
-                      <Phone size={14} /> {delivery.phone}
+                      <Phone size={14} /> {String(delivery.phone || 'N/A')}
                     </p>
                   </div>
 
                   <div className="flex flex-col gap-2 items-start sm:items-end">
                     <Badge variant={delivery.type === "Subscription" ? "purple" : delivery.type === "Corporate" ? "blue" : "secondary"}>
-                      {delivery.type}
+                      {String(delivery.type || 'Normal')}
                     </Badge>
                     <Badge variant="secondary">
-                      {delivery.bowlsDetail.length} bowl{delivery.bowlsDetail.length > 1 ? "s" : ""}
+                      {delivery.bowlsDetail?.length || 0} bowl{delivery.bowlsDetail?.length > 1 ? "s" : ""}
                     </Badge>
                   </div>
                 </div>
 
                 <p className="flex gap-1 text-sm text-gray-600 mb-3">
-                  <MapPin size={14} /> {delivery.address}
+                  <MapPin size={14} /> {String(delivery.address || 'N/A')}
                 </p>
 
                 <Button size="sm" variant="outline" onClick={() => setSelected(delivery)}>
@@ -355,9 +371,9 @@ export default function TomorrowDeliveries() {
               <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-3 mb-3 border border-purple-100">
                 <h3 className="font-bold text-purple-800 mb-2 text-sm">👤 Customer Info</h3>
                 <div className="space-y-1.5 text-xs">
-                  <InfoRow label="Name" value={selected.customer} />
-                  <InfoRow label="Phone" value={selected.phone} />
-                  <InfoRow label="Address" value={selected.address} />
+                  <InfoRow label="Name" value={String(selected.customer || 'Unknown')} />
+                  <InfoRow label="Phone" value={String(selected.phone || 'N/A')} />
+                  <InfoRow label="Address" value={String(selected.address || 'N/A')} />
                 </div>
               </div>
 
@@ -368,11 +384,11 @@ export default function TomorrowDeliveries() {
                     <Clock size={14} className="text-blue-600" />
                     <span className="text-xs text-blue-600 font-medium">Time</span>
                   </div>
-                  <p className="font-bold text-blue-800 text-sm">{selected.time}</p>
+                  <p className="font-bold text-blue-800 text-sm">{String(selected.time || 'N/A')}</p>
                 </div>
                 <div className="flex-1 bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl p-3 border border-orange-100">
                   <span className="text-xs text-orange-600 font-medium">Type</span>
-                  <p className="font-bold text-orange-800 text-sm">{selected.type}</p>
+                  <p className="font-bold text-orange-800 text-sm">{String(selected.type || 'Normal')}</p>
                 </div>
               </div>
 
@@ -381,12 +397,12 @@ export default function TomorrowDeliveries() {
                 <h3 className="font-bold text-gray-800 mb-2 flex items-center gap-2 text-sm">
                   <span>🍽️</span> Bowls & Fruits
                   <span className="text-xs font-normal text-gray-500">
-                    ({selected.bowlsDetail.length})
+                    ({selected.bowlsDetail?.length || 0})
                   </span>
                 </h3>
                 
                 <div className="space-y-2">
-                  {selected.bowlsDetail.map((bowl, idx) => (
+                  {(selected.bowlsDetail || []).map((bowl, idx) => (
                     <div 
                       key={idx} 
                       className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-3 border border-green-200"
@@ -400,7 +416,7 @@ export default function TomorrowDeliveries() {
                       <div className="mb-1.5">
                         <span className="text-xs font-medium text-green-600">🍎 Fruits:</span>
                         <div className="flex flex-wrap gap-1 mt-1">
-                          {bowl.fruits.map((fruit, fIdx) => (
+                          {(bowl.fruits || []).map((fruit, fIdx) => (
                             <span 
                               key={fIdx} 
                               className="bg-white text-green-700 text-xs px-2 py-0.5 rounded-full border border-green-200"
@@ -415,7 +431,7 @@ export default function TomorrowDeliveries() {
                       <div>
                         <span className="text-xs font-medium text-amber-600">✨ Toppings:</span>
                         <div className="flex flex-wrap gap-1 mt-1">
-                          {bowl.toppings.map((topping, tIdx) => (
+                          {(bowl.toppings || []).map((topping, tIdx) => (
                             <span 
                               key={tIdx} 
                               className="bg-white text-amber-700 text-xs px-2 py-0.5 rounded-full border border-amber-200"

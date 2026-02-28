@@ -120,16 +120,6 @@ function SaladSection() {
         <div className="absolute right-0 top-0 w-16 h-full bg-gradient-to-l from-[#FBF8F2] via-[#FBF8F2]/20 to-transparent pointer-events-none md:hidden"></div>
       </div>
 
-      {/* HIDE SCROLLBAR STYLE */}
-      <style jsx>{`
-        .hide-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .hide-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
     </section>
   );
 }

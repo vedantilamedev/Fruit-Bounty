@@ -4,18 +4,46 @@ import {
     Package, Users, User, Calendar, Check, XCircle,
     Zap, Award, ArrowUpCircle, Star, Sparkles,
     ChevronRight, ArrowRight, ShieldCheck,
-    Clock, RefreshCcw, TrendingUp, Gem
+    Clock, RefreshCcw, TrendingUp, Gem, AlertTriangle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
-const Packages = ({ activePackage }) => {
+const Packages = ({ activePackage, onCancelSubscription, onTabChange }) => {
     const navigate = useNavigate();
     const [isSixMonth, setIsSixMonth] = useState(false);
     const [isCompareOpen, setIsCompareOpen] = useState(false);
+    const [isCancelling, setIsCancelling] = useState(false);
+    const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
-const hanndleclick=()=>{
-    
-}
+    const handleCancelSubscription = async () => {
+        if (!onCancelSubscription) {
+            setShowCancelConfirm(true);
+            return;
+        }
+        setIsCancelling(true);
+        try {
+            console.log("Calling onCancelSubscription...");
+            await onCancelSubscription();
+            console.log("Cancellation successful!");
+            toast.success("Subscription cancelled successfully");
+        } catch (error) {
+            console.error("Cancel error:", error);
+            toast.error("Failed to cancel subscription: " + (error.message || "Unknown error"));
+        } finally {
+            setIsCancelling(false);
+            setShowCancelConfirm(false);
+        }
+    };
+
+    const handleManageBilling = () => {
+        if (onTabChange) {
+            onTabChange('payments');
+        } else {
+            navigate('/dashboard?tab=payments');
+        }
+    };
 
     const StatCard = ({ title, value, icon: Icon, color, subtitle }) => (
         <motion.div
@@ -60,6 +88,7 @@ transition-all duration-300
     }
 
     return (
+        <>
         <div className="space-y-10 animate-fadeIn pb-16">
             {/* Executive Status Header */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -157,7 +186,7 @@ border border-[#d5b975]/30">
                             <div className="flex-1">
                                 <div className="flex items-center justify-between mb-6">
                                     <h4 className="text-[10px] font-bold text-[#B7A261] uppercase tracking-[0.2em]">Box Contents</h4>
-                                    <span className="text-[9px] font-bold text-white/60 uppercase tracking-widest">{activePackage.fruits.length} Items</span>
+                                    <span className="text-[9px] font-bold text-white/60 uppercase tracking-widest">{(activePackage?.fruits || []).length} Items</span>
                                 </div>
                                 <div className="flex flex-wrap gap-2.5">
                                     {activePackage.fruits.map((fruit, idx) => (
@@ -192,11 +221,14 @@ px-4 py-2"
                                 <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest">Shared within your tribe</p>
                             </div>
                             <div className="flex items-center gap-3">
-                                <button className="px-8 py-3 border border-[#d5b975]/40
+                                <button 
+                                    onClick={handleManageBilling}
+                                    className="px-8 py-3 border border-[#d5b975]/40
 text-white
 bg-transparent
 hover:bg-[#d5b975]/10   rounded-2xl border-[#cfc5aa] text-[10px] font-bold uppercase tracking-widest hover:bg-[#b8b09b] transition-all shadow-sm">Manage Billing</button>
                                 <button
+                                    onClick={() => setShowCancelConfirm(true)}
                                     className="px-5 py-2.5 rounded-[0.8rem]  bg-red-50 text-red-600 border border-red-200 font-semibold text-xs uppercase tracking-widest  hover:bg-red-600 hover:text-white hover:border-red-600 active:scale-95 transition-all duration-300"
                                 >
                                     Exit Plan
@@ -252,7 +284,7 @@ hover:bg-[#d5b975]/10   rounded-2xl border-[#cfc5aa] text-[10px] font-bold upper
                                 icon: Users
                             }
                         ]
-                            .filter(tier => tier.id !== activePackage.type.toLowerCase())
+                            .filter(tier => tier.id !== (activePackage?.type || '').toLowerCase())
                             .map((tier, idx) => (
                                 <motion.div
                                     key={tier.id}
@@ -344,7 +376,55 @@ hover:bg-[#d5b975]/10   rounded-2xl border-[#cfc5aa] text-[10px] font-bold upper
                 </div>
             </div>
         </div>
-    );
+
+        {/* Cancel Confirmation Modal */}
+        <AnimatePresence>
+            {showCancelConfirm && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+                    onClick={() => setShowCancelConfirm(false)}
+                >
+                    <motion.div
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.9, opacity: 0 }}
+                        className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="flex items-center justify-center mb-4">
+                            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                                <AlertTriangle size={32} className="text-red-600" />
+                            </div>
+                        </div>
+                        <h3 className="text-xl font-bold text-center text-gray-900 mb-2">
+                            Cancel Subscription?
+                        </h3>
+                        <p className="text-gray-600 text-center mb-6">
+                            Are you sure you want to cancel your {activePackage?.name}? This action cannot be undone.
+                        </p>
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => setShowCancelConfirm(false)}
+                                className="flex-1 px-6 py-3 border-2 border-gray-200 rounded-full font-bold text-sm uppercase tracking-wider hover:bg-gray-50 transition-colors"
+                            >
+                                Keep Plan
+                            </button>
+                            <button
+                                onClick={handleCancelSubscription}
+                                disabled={isCancelling}
+                                className="flex-1 px-6 py-3 bg-red-600 text-white rounded-full font-bold text-sm uppercase tracking-wider hover:bg-red-700 transition-colors disabled:opacity-50"
+                            >
+                                {isCancelling ? 'Cancelling...' : 'Yes, Cancel'}
+                            </button>
+                        </div>
+                    </motion.div>
+                </motion.div>
+            )}
+        </AnimatePresence>
+    </>);
 };
 
 export default Packages;

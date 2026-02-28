@@ -27,18 +27,22 @@ const Payments = ({ payments = [] }) => {
     };
 
     const filteredPayments = useMemo(() => {
-        return payments.filter(payment => {
+        return (payments || []).filter(payment => {
+            const paymentId = payment?.id ? String(payment.id) : '';
+            const paymentName = payment?.name || '';
+            const paymentMethod = payment?.method || '';
             const matchesSearch =
-                payment.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                payment.method.toLowerCase().includes(searchQuery.toLowerCase());
+                paymentId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                paymentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                paymentMethod.toLowerCase().includes(searchQuery.toLowerCase());
             const matchesFilter =
                 filterStatus === 'All' || payment.status === filterStatus;
             return matchesSearch && matchesFilter;
         });
     }, [payments, searchQuery, filterStatus]);
 
-    const totalInvested = payments.reduce((acc, curr) =>
-        acc + (curr.status === 'Success' ? curr.amount : 0), 0
+    const totalInvested = (payments || []).reduce((acc, curr) =>
+        acc + ((curr?.status === 'Success' && typeof curr?.amount === 'number') ? curr.amount : 0), 0
     );
 
     const StatCard = ({ title, value, icon: Icon, trend, label }) => (
@@ -133,7 +137,7 @@ const Payments = ({ payments = [] }) => {
                             <table className="w-full min-w-[700px] text-left">
                                 <thead>
                                     <tr className="border-b border-[#d5b975]/20">
-                                        {["Receipt ID", "Date", "Amount", "Method", "Status", "Actions"].map((h) => (
+                                        {["Name", "Receipt ID", "Date", "Amount", "Method", "Status", "Actions"].map((h) => (
                                             <th
                                                 key={h}
                                                 className="pb-6 text-[10px] font-black text-[#d5b975] uppercase tracking-[0.2em] px-4"
@@ -150,6 +154,9 @@ const Payments = ({ payments = [] }) => {
                                             key={payment.id}
                                             className="hover:bg-[#1b5e34]/40 transition"
                                         >
+                                            <td className="py-6 px-4 text-white/70 text-xs">
+                                                {payment.name}
+                                            </td>
                                             <td className="py-6 px-4 text-white text-xs font-bold">
                                                 #{payment.id}
                                             </td>
@@ -157,7 +164,7 @@ const Payments = ({ payments = [] }) => {
                                                 {payment.date}
                                             </td>
                                             <td className="py-6 px-4 text-white font-black">
-                                                ₹{payment.amount.toLocaleString()}
+                                                ₹{payment.amount != null ? payment.amount.toLocaleString() : '0'}
                                             </td>
                                             <td className="py-6 px-4 text-white text-xs uppercase">
                                                 {payment.method}
@@ -245,7 +252,7 @@ const Payments = ({ payments = [] }) => {
                             <p className="mb-2 text-sm">Date: {selectedPayment.date}</p>
 
                             <p className="mb-6 text-lg font-black text-[#d5b975]">
-                                ₹{selectedPayment.amount.toLocaleString()}
+                                ₹{selectedPayment.amount != null ? selectedPayment.amount.toLocaleString() : '0'}
                             </p>
 
                             <button

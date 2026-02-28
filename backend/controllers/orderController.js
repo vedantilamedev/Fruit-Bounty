@@ -141,13 +141,20 @@ export const getMySubscriptions = async (req, res) => {
 export const updateSubscriptionStatus = async (req, res) => {
   try {
     const { order_status } = req.body;
-    const allowed = ["active", "paused", "cancelled"];
-    if (!allowed.includes(order_status)) return res.status(400).json({ message: "Invalid status" });
+    // Map frontend values to model enum values
+    const statusMap = {
+      'active': 'Confirmed',
+      'paused': 'Pending',
+      'cancelled': 'Cancelled'
+    };
+    const mappedStatus = statusMap[order_status];
+    const allowed = ['active', 'paused', 'cancelled'];
+    if (!allowed.includes(order_status)) return res.status(400).json({ message: 'Invalid status' });
 
-    const order = await Order.findById(req.params.id);  
+    const order = await Order.findById(req.params.id).populate('user_id');  
     if (!order) return res.status(404).json({ message: "Order not found" });  
 
-    order.order_status = order_status;  
+    order.order_status = mappedStatus;  
     await order.save();  
 
     // Cancel all future deliveries if cancelled  
@@ -162,7 +169,9 @@ export const updateSubscriptionStatus = async (req, res) => {
     // WhatsApp notification
     // =========================
     const msg = `Your subscription #${order._id} has been updated. New status: ${order_status}.`;
-    await sendWhatsAppMessage(order.user_id.phone, msg);
+    if (order.user_id?.phone) {
+      await sendWhatsAppMessage(order.user_id.phone, msg);
+    }
 
     res.status(200).json({ success: true, message: "Subscription updated", order });
 

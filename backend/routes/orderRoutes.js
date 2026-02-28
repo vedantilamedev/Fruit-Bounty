@@ -8,6 +8,7 @@ import {
   cancelOrder,
   getAllOrders,
   updateOrderStatus,
+  updateSubscriptionStatus
 } from "../controllers/orderController.js";
 
 const router = express.Router();
@@ -17,6 +18,9 @@ const router = express.Router();
 router.post("/", protect, createOrder);
 router.get("/myorders", protect, getMyOrders);
 router.get("/mysubscriptions", protect, getMySubscriptions);
+
+// Customer: Update own subscription status (pause/resume)
+router.patch("/:id/subscription-status", protect, updateSubscriptionStatus);
 
 // Admin routes BEFORE /:id
 router.get("/", protect, admin, getAllOrders);           // ← move up

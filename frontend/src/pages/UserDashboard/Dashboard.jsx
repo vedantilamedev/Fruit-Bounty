@@ -8,9 +8,8 @@ import Orders from '../../components/UserDashboardComponents/Orders';
 import Packages from '../../components/UserDashboardComponents/Packages';
 import Payments from '../../components/UserDashboardComponents/Payments';
 import Settings from '../../components/UserDashboardComponents/Settings';
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -30,6 +29,7 @@ const Dashboard = () => {
     });
 
     const [orders, setOrders] = useState([]);
+    const [subscriptions, setSubscriptions] = useState([]);
 
     useEffect(() => {
         // Don't show loading if no token
@@ -80,6 +80,7 @@ const Dashboard = () => {
                         .filter(order => order.payment_status === "Paid")
                         .map(order => ({
                             id: order._id,
+                            name: order.items?.[0]?.name || 'Fruit Order',
                             amount: order.total_amount,
                             method: "Razorpay",
                             status: order.payment_status === "Paid" ? "Success" : "Pending",
@@ -94,24 +95,179 @@ const Dashboard = () => {
             }
         };
 
+        const fetchSubscriptions = async () => {
+            try {
+                const res = await axios.get("/api/orders/mysubscriptions", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                const rawSubscriptions = res.data.data || [];
+                console.log("Fetched subscriptions:", rawSubscriptions);
+
+                // Transform subscription data for Packages component
+                // First try to find active/Confirmed subscriptions, then pick the most recent
+                const activeSubscriptions = rawSubscriptions.filter(sub => 
+                    sub.isRecurring && (
+                        sub.order_status === "active" || 
+                        sub.order_status === "Confirmed" || 
+                        sub.order_status === "Pending" ||
+                        sub.order_status === "Processing"
+                    )
+                );
+                
+                // Sort by creation date (newest first) to get the most recent active subscription
+                activeSubscriptions.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                
+                const activeSub = activeSubscriptions[0] || null;
+
+                if (activeSub) {
+                    // Extract plan type from the order items (check if it contains "personal" or "corporate")
+                    const firstItemName = activeSub.items?.[0]?.name || "";
+                    const isPersonal = firstItemName.toLowerCase().includes("personal") || 
+                                       firstItemName.toLowerCase().includes("individual");
+                    
+                    // Check subscription_type field (monthly = individual, weekly = corporate)
+                    const isMonthly = activeSub.subscription_type === "monthly";
+                    
+                    // Determine plan type: personal/individual if monthly OR if name contains personal/individual
+                    const planType = isPersonal || isMonthly ? "individual" : "corporate";
+                    const planName = isPersonal || isMonthly 
+                        ? "Individual Wellness Plan" 
+                        : "Corporate Group Plan";
+
+                    // Extract fruits from the subscription
+                    const fruits = activeSub.items?.flatMap(item => 
+                        item.meals ? Object.values(item.meals).map(m => m.fruits || []).flat() : []
+                    ) || [];
+
+                    // Calculate end date
+                    const endDate = activeSub.end_date 
+                        ? new Date(activeSub.end_date).toLocaleDateString("en-IN")
+                        : "N/A";
+
+                    // Calculate renewal date (30 days from start)
+                    const startDate = activeSub.start_date 
+                        ? new Date(activeSub.start_date) 
+                        : new Date();
+                    const renewalDate = new Date(startDate);
+                    renewalDate.setDate(renewalDate.getDate() + 30);
+
+                    setSubscriptions(rawSubscriptions);
+                    setUserData(prev => ({
+                        ...prev,
+                        activePackage: {
+                            name: planName,
+                            type: planType,
+                            peopleCount: planType === "corporate" ? 3 : 1,
+                            duration: isMonthly ? "Monthly" : "Weekly",
+                            frequency: activeSub.delivery_schedule || "Daily",
+                            endDate: endDate,
+                            renewalDate: renewalDate.toLocaleDateString("en-IN"),
+                            fruits: [...new Set(fruits.length > 0 ? fruits : ["Watermelon", "Mango", "Orange", "Berries"])]
+                        }
+                    }));
+                }
+            } catch (error) {
+                console.error("Error fetching subscriptions:", error.response?.data || error.message);
+            }
+        };
+
         fetchUserProfile();
         fetchOrders();
+        fetchSubscriptions();
 
         // Refresh orders when window gains focus (e.g., when navigating back from order success)
         const handleFocus = () => {
             setLoading(true);
             fetchOrders();
             fetchUserProfile();
+            fetchSubscriptions();
+        };
+        
+        // Also refresh when tab becomes visible again
+        const handleVisibilityChange = () => {
+            if (!document.hidden) {
+                setLoading(true);
+                fetchOrders();
+                fetchUserProfile();
+                fetchSubscriptions();
+            }
         };
         
         window.addEventListener('focus', handleFocus);
-        return () => window.removeEventListener('focus', handleFocus);
+        window.addEventListener('visibilitychange', handleVisibilityChange);
+        return () => {
+            window.removeEventListener('focus', handleFocus);
+            window.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
     }, []);
 
     const handleCancelOrder = (orderId) => {
         setOrders(prev => prev.map(order =>
             order.id === orderId ? { ...order, status: 'Canceled' } : order
         ));
+    };
+
+    const handleCancelSubscription = async () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            throw new Error("Please log in to cancel your subscription");
+        }
+        if (!userData.activePackage) {
+            throw new Error("You don't have an active subscription to cancel");
+        }
+
+        console.log("Subscriptions in state:", subscriptions);
+        console.log("Active package:", userData.activePackage);
+
+        // Find the active subscription order - check for multiple possible statuses
+        const activeSub = subscriptions.find(sub => 
+            sub.isRecurring === true && 
+            (sub.order_status === "active" || 
+             sub.order_status === "Confirmed" || 
+             sub.order_status === "confirmed")
+        );
+
+        console.log("Active sub found:", activeSub);
+
+        if (!activeSub) {
+            // Try to find any recurring order
+            console.log("Looking for any subscription order...");
+            if (subscriptions.length === 0) {
+                throw new Error("No subscription orders found. Please contact support.");
+            }
+            // Use the first subscription order
+            const subToCancel = subscriptions[0];
+            console.log("Using first subscription:", subToCancel);
+            
+            const response = await axios.patch(
+                `/api/orders/${subToCancel._id}/subscription-status`,
+                { order_status: "cancelled" },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+
+            console.log("Cancel response:", response.data);
+            setUserData(prev => ({ ...prev, activePackage: null }));
+            toast.success("Subscription cancelled successfully");
+            return;
+        }
+
+        // Call the API to cancel the subscription
+        const response = await axios.patch(
+            `/api/orders/${activeSub._id}/subscription-status`,
+            { order_status: "cancelled" },
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        console.log("Cancel response:", response.data);
+
+        // Update local state
+        setUserData(prev => ({ ...prev, activePackage: null }));
+        setSubscriptions(prev => prev.map(sub => 
+            sub._id === activeSub._id ? { ...sub, order_status: "cancelled" } : sub
+        ));
+        
+        toast.success("Subscription cancelled successfully");
     };
 
     // Update user data from Settings
@@ -137,7 +293,7 @@ const Dashboard = () => {
             case 'orders':
                 return <Orders orders={orders} onCancelOrder={handleCancelOrder} />;
             case 'packages':
-                return <Packages activePackage={userData.activePackage} />;
+                return <Packages activePackage={userData.activePackage} onCancelSubscription={handleCancelSubscription} onTabChange={handleTabChange} />;
             case 'payments':
                 return <Payments payments={payments} />;
             case 'settings':
