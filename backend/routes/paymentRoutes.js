@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get("/payments", protect, admin, getAllPayments);
 router.post("/create-order", createOrder);
-router.post("/verify", protect, verifyPayment);
+// Verify payment doesn't require auth - signature verification is done server-side
+router.post("/verify", verifyPayment);
 
 export default router;
