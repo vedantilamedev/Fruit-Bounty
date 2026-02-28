@@ -130,7 +130,7 @@ const PrivacyPolicy = () => {
               Privacy Policy
             </h1>
             <p className="text-sm text-gray-500 mb-4">
-              Updated date: {monthYear}
+              Updated Date: {monthYear}
             </p>
             <p className="text-base text-gray-600 leading-relaxed">
               At Fruit Bounty, we are committed to protecting your privacy and
@@ -231,3 +231,4 @@ const PrivacyPolicy = () => {
 };
 
 export default PrivacyPolicy;
+
