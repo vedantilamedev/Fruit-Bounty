@@ -39,18 +39,15 @@ function ProductCard({ product }) {
         `}
       >
         <div className="p-5 flex flex-col items-center">
-          {/* HEADER */}
-          <div className="text-center mt-2 mb-3">
-            <span className="text-[10px] font-bold text-[#C9C27A] uppercase tracking-widest mb-1 block">
-              {product.category || "Fresh & Healthy"}
-            </span>
+          {/* HEADER - Streamlined */}
+          <div className="text-center mt-2 mb-4">
             <h3 className="text-xl md:text-2xl font-black text-gray-900 leading-tight">
               {product.title}
             </h3>
           </div>
 
-          {/* IMAGE */}
-          <div className="w-full aspect-square max-h-44 flex items-center justify-center bg-gray-50 rounded-xl overflow-hidden mb-3 border border-gray-100 shadow-inner">
+          {/* IMAGE - Centered with consistent spacing */}
+          <div className="w-full aspect-square max-h-48 flex items-center justify-center bg-gray-50 rounded-xl overflow-hidden mb-6 border border-gray-100 shadow-inner">
             <img
               src={product.image}
               alt={product.title}
@@ -58,28 +55,27 @@ function ProductCard({ product }) {
             />
           </div>
 
-          {/* SPECS */}
-          <div className="w-full space-y-2.5 px-1 mb-0">
+          {/* SPECS - Clean and focused on Weight/Fruits */}
+          <div className="w-full space-y-3 px-1 mb-2">
             {[
               { label: "Weight", value: product.weight },
-              { label: "Fruits", value: product.fruits },
-              { label: "Calories", value: product.calories }
+              { label: "Fruits", value: product.fruits }
             ].map((item, idx) => (
-              <div key={idx} className="flex justify-between items-center border-b border-gray-100 pb-1.5">
-                <span className="text-[9px] font-bold text-gray-400 uppercase">{item.label}</span>
-                <span className="text-[10px] font-black text-gray-900">{item.value}</span>
+              <div key={idx} className="flex justify-between items-center border-b border-gray-100 pb-2">
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-tight">{item.label}</span>
+                <span className="text-[11px] font-black text-gray-900">{item.value}</span>
               </div>
             ))}
           </div>
 
           {/* PRICE + CTA */}
-          <div className="w-full text-center pt-4">
-            <div className="text-2xl md:text-3xl font-black text-[#C9C27A] mb-3">
+          <div className="w-full text-center pt-6">
+            <div className="text-3xl md:text-4xl font-black text-[#C9C27A] mb-4">
               ₹{product.price}
             </div>
             <button
               onClick={handleOrderNow}
-              className="w-full bg-gradient-to-r from-green-700 to-green-900 hover:from-green-800 hover:to-green-950 text-white py-3.5 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-green-900/10"
+              className="w-full bg-gradient-to-r from-green-700 to-green-900 hover:from-green-800 hover:to-green-950 text-white py-4 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-green-900/10"
             >
               Order Now
             </button>
@@ -87,8 +83,8 @@ function ProductCard({ product }) {
         </div>
 
         {/* BOTTOM BAR */}
-        <div className="bg-gradient-to-r from-green-800 to-green-950 py-2 px-4 text-center">
-          <p className="text-[8px] text-white font-medium">
+        <div className="bg-gradient-to-r from-green-800 to-green-950 py-2.5 px-4 text-center">
+          <p className="text-[9px] text-white font-medium">
             Orders placed today will be delivered{" "}
             <span className="font-bold text-[#C9C27A]">tomorrow.</span>
           </p>
