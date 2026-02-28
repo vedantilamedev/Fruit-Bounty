@@ -132,6 +132,7 @@ function BowlForm({ bowl, onSave, onCancel }) {
             <label className="text-sm font-medium text-slate-700 mb-1 block">Description</label>
             <textarea className="border p-2 rounded w-full min-h-[120px] resize-none" placeholder="Enter bowl description" value={description} onChange={e => setDescription(e.target.value)} />
           </div>
+
           <div className="flex items-center gap-2"><Switch checked={available} onChange={setAvailable} /><span>Available</span></div>
           <div className="flex justify-end gap-2 mt-4">
             <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700">Save</button>
@@ -197,6 +198,8 @@ function ProductCard({ bowl, onEdit, onDelete, onToggleAvailability, bestSellerC
             <p className="text-2xl font-bold text-green-600 ml-2">₹{bowl.price}</p>
           </div>
           <p className="text-xs text-slate-500 mb-3">{bowl.salesCount} orders</p>
+          <p className="text-xs text-slate-500 mb-3"> Weight: {bowl.weight} g</p>
+
           <div className="mb-4"><p className="text-xs font-medium text-slate-600 mb-2">Ingredients:</p><div className="flex flex-wrap gap-1">{bowl.ingredients.map(ing => <Badge key={ing}>{ing}</Badge>)}</div></div>
           <div className="flex justify-between items-center pt-3 border-t">
             <div className="flex items-center gap-2"><Switch checked={bowl.available} onChange={() => onToggleAvailability(bowl.id)} /><span className="text-sm">Available</span></div>
