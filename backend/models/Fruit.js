@@ -46,6 +46,11 @@ const fruitSchema = new mongoose.Schema(
       default: false
     },
 
+    weight: {
+      type: Number,
+      default: null
+    },
+
     description: {
       type: String,
       default: ""

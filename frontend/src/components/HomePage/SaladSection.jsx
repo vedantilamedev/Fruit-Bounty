@@ -19,7 +19,7 @@ function SaladSection() {
               id: item._id || index + 1,
               title: item.name,
               category: item.type || "Fresh & Healthy",
-              weight: item.description?.split('|')[0]?.trim() || "400g",
+              weight: item.weight ? `${item.weight}g` : item.description?.split('|')[0]?.trim() || "400g",
               fruits: item.ingredients?.length ? `${item.ingredients.length} Types` : "5 Types",
               calories: item.description?.split('|')[1]?.trim() || "200 kcal",
               price: item.price,

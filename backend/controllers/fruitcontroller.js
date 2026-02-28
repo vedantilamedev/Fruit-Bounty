@@ -4,7 +4,7 @@ import cloudinary from "../config/cloudinary.js";
 
 export const addFruit = async (req, res) => {
   try {
-    const { name, price, stock, type, available, isBowl, description, ingredients } = req.body;
+    const { name, price, stock, type, available, isBowl, description, ingredients, weight } = req.body;
 
     // ✅ Fix: use explicit undefined check, not falsy check
     // stock=0 and price=0 are valid values — don't reject them
@@ -56,7 +56,8 @@ export const addFruit = async (req, res) => {
       isBowl: isBowl === "true" || isBowl === true,
       description: description || "",
       ingredients: parsedIngredients,
-      salesCount: 0
+      salesCount: 0,
+      weight: weight ? Number(weight) : null
     });
 
     res.status(201).json({ success: true, data: fruit });
@@ -126,6 +127,9 @@ export const updateFruit = async (req, res) => {
     }
     if (req.body.salesCount !== undefined) {
       fruit.salesCount = Number(req.body.salesCount);
+    }
+    if (req.body.weight !== undefined) {
+      fruit.weight = req.body.weight ? Number(req.body.weight) : null;
     }
 
     await fruit.save();

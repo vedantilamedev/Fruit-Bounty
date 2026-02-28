@@ -211,7 +211,7 @@ function FruitShop() {
             .map((item) => ({
               id: item._id,
               title: item.name,
-              weight: item.description?.split('|')[0]?.trim() || "400g",
+              weight: item.weight ? `${item.weight}g` : item.description?.split('|')[0]?.trim() || "400g",
               price: item.price,
               rating: 4.5 + Math.random() * 0.5, // Simulated rating
               calories: item.description?.split('|')[1]?.trim() || "400 kcal",

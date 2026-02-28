@@ -22,7 +22,7 @@ function BowlForm({ bowl, onSave, onCancel }) {
   
   const handleSubmit = (e) => { 
     e.preventDefault(); 
-    onSave(bowl?.id, { name, description, price: parseFloat(price), ingredients: ingredients.split(",").map(i => i.trim()), available, images }); 
+    onSave(bowl?.id, { name, description, price: parseFloat(price), ingredients: ingredients.split(",").map(i => i.trim()), weight: weight ? parseInt(weight) : null, available, images }); 
   };
   
   const handleImageChange = (e) => {
@@ -243,6 +243,7 @@ export default function Products() {
           description: item.description || "",
           price: item.price,
           ingredients: item.ingredients || [],
+          weight: item.weight || null,
           available: item.available ?? true,
           salesCount: item.salesCount || 0,
           images: item.images || []
@@ -298,6 +299,9 @@ export default function Products() {
       formData.append("ingredients", updated.ingredients.join(", "));
       formData.append("available", updated.available);
       formData.append("isBowl", "true");
+      if (updated.weight) {
+        formData.append("weight", updated.weight);
+      }
       
       // Add images if any new ones selected (base64 URLs need special handling)
       // For now, we'll handle images separately
@@ -311,6 +315,7 @@ export default function Products() {
           description: res.data.data.description || "",
           price: res.data.data.price,
           ingredients: res.data.data.ingredients || [],
+          weight: res.data.data.weight || null,
           available: res.data.data.available ?? true,
           salesCount: res.data.data.salesCount || 0,
           images: res.data.data.images || []
@@ -325,6 +330,7 @@ export default function Products() {
           description: res.data.data.description || "",
           price: res.data.data.price,
           ingredients: res.data.data.ingredients || [],
+          weight: res.data.data.weight || null,
           available: res.data.data.available ?? true,
           salesCount: res.data.data.salesCount || 0,
           images: res.data.data.images || []
