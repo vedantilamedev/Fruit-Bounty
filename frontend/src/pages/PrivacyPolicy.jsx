@@ -98,123 +98,131 @@ const privacySections = [
 
 const PrivacyPolicy = () => {
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, []);
 
   const currentDate = new Date();
   const monthYear = currentDate.toLocaleDateString("en-US", {
-    month: "long",
+    month: "short",
     year: "numeric",
   });
 
   return (
-    <div
-      className="min-h-screen px-4 sm:px-6 lg:px-8 py-12 lg:py-20"
-      style={{
-        backgroundImage: "url('/images/main-background.webp')",
-        backgroundSize: "contain",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-        backgroundColor: "rgba(255, 255, 255, 0.95)",
-      }}
-    >
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border border-[#E8E4D9] p-8 sm:p-12">
-        {/* Header */}
-        <div className="mb-12 pb-8 border-b-2 border-[#E8E4D9]">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            Privacy Policy
-          </h1>
-          <p className="text-sm text-gray-500 mb-4">
-            Last Updated: {monthYear}
-          </p>
-          <p className="text-base text-gray-600 leading-relaxed">
-            At Fruit Bounty, we are committed to protecting your privacy and
-            ensuring the security of your personal information.
-          </p>
-        </div>
+    <div className="min-h-screen font-sans bg-[#faf9f6] text-gray-900 relative selection:bg-[#C9C27A]/30">
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div
+          className="absolute inset-0 opacity-[0.6]"
+          style={{
+            backgroundImage: "url('/images/main-background.webp')",
+            backgroundSize: "400px",
+            backgroundRepeat: "repeat",
+            backgroundAttachment: "fixed",
+          }}
+        ></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#f3f8f2]/65 via-transparent to-[#faf9f6]"></div>
+      </div>
 
-        {/* Content Sections */}
-        <div className="space-y-10">
-          {privacySections.map((section, index) => (
-            <div key={section.title} className="scroll-mt-20">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-start gap-3">
-                <span className="text-[#B7A261]">{index + 1}.</span>
-                <span>{section.title}</span>
-              </h2>
+      <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+        <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border border-[#E8E4D9] p-8 sm:p-12">
+          {/* Header */}
+          <div className="mb-12 pb-8 border-b-2 border-[#E8E4D9]">
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              Privacy Policy
+            </h1>
+            <p className="text-sm text-gray-500 mb-4">
+              Updated date: {monthYear}
+            </p>
+            <p className="text-base text-gray-600 leading-relaxed">
+              At Fruit Bounty, we are committed to protecting your privacy and
+              ensuring the security of your personal information.
+            </p>
+          </div>
 
-              {/* Regular content paragraphs */}
-              {section.content &&
-                section.content.map((paragraph, idx) => (
-                  <p
-                    key={idx}
-                    className="text-base text-gray-700 leading-relaxed mb-4"
-                  >
-                    {paragraph}
-                  </p>
-                ))}
+          {/* Content Sections */}
+          <div className="space-y-10">
+            {privacySections.map((section, index) => (
+              <div key={section.title} className="scroll-mt-20">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-start gap-3">
+                  <span className="text-[#B7A261]">{index + 1}.</span>
+                  <span>{section.title}</span>
+                </h2>
 
-              {/* Subsections */}
-              {section.subsections && (
-                <div className="space-y-6 ml-6">
-                  {section.subsections.map((subsection, idx) => (
-                    <div key={idx}>
-                      <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                        {subsection.subtitle}
-                      </h3>
-                      <p className="text-base text-gray-700 leading-relaxed">
-                        {subsection.text}
+                <div className="pl-8 sm:pl-10 space-y-4">
+                  {/* Regular content paragraphs */}
+                  {section.content &&
+                    section.content.map((paragraph, idx) => (
+                      <p
+                        key={idx}
+                        className="text-base text-gray-700 leading-relaxed"
+                      >
+                        {paragraph}
                       </p>
+                    ))}
+
+                  {/* Subsections */}
+                  {section.subsections && (
+                    <div className="space-y-6">
+                      {section.subsections.map((subsection, idx) => (
+                        <div key={idx}>
+                          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                            {subsection.subtitle}
+                          </h3>
+                          <p className="text-base text-gray-700 leading-relaxed">
+                            {subsection.text}
+                          </p>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  )}
+
+                  {/* Lists */}
+                  {section.list && (
+                    <ul className="space-y-3">
+                      {section.list.map((item, idx) => (
+                        <li
+                          key={idx}
+                          className="text-base text-gray-700 leading-relaxed flex items-start gap-3"
+                        >
+                          <span className="text-[#3C7E44] mt-1.5 flex-shrink-0">
+                            •
+                          </span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-              )}
+              </div>
+            ))}
+          </div>
 
-              {/* Lists */}
-              {section.list && (
-                <ul className="space-y-3 ml-6">
-                  {section.list.map((item, idx) => (
-                    <li
-                      key={idx}
-                      className="text-base text-gray-700 leading-relaxed flex items-start gap-3"
-                    >
-                      <span className="text-[#3C7E44] mt-1.5 flex-shrink-0">
-                        •
-                      </span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
+          {/* Footer Contact Section */}
+          <div className="mt-16 pt-8 border-t-2 border-[#E8E4D9]">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Contact Us</h3>
+            <p className="text-base text-gray-700 leading-relaxed mb-4">
+              If you have any questions about this Privacy Policy or our data
+              practices, please contact us:
+            </p>
+            <div className="space-y-2">
+              <p className="text-base text-gray-700">
+                <span className="font-semibold">Email:</span>{" "}
+                <a
+                  href="mailto:privacy@fruitbounty.com"
+                  className="text-[#B7A261] hover:text-[#9d8a51] transition-colors"
+                >
+                  privacy@fruitbounty.com
+                </a>
+              </p>
+              <p className="text-base text-gray-700">
+                <span className="font-semibold">Support:</span>{" "}
+                <a
+                  href="mailto:support@fruitbounty.com"
+                  className="text-[#B7A261] hover:text-[#9d8a51] transition-colors"
+                >
+                  support@fruitbounty.com
+                </a>
+              </p>
             </div>
-          ))}
-        </div>
-
-        {/* Footer Contact Section */}
-        <div className="mt-16 pt-8 border-t-2 border-[#E8E4D9]">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Contact Us</h3>
-          <p className="text-base text-gray-700 leading-relaxed mb-4">
-            If you have any questions about this Privacy Policy or our data
-            practices, please contact us:
-          </p>
-          <div className="space-y-2">
-            <p className="text-base text-gray-700">
-              <span className="font-semibold">Email:</span>{" "}
-              <a
-                href="mailto:privacy@fruitbounty.com"
-                className="text-[#B7A261] hover:text-[#9d8a51] transition-colors"
-              >
-                privacy@fruitbounty.com
-              </a>
-            </p>
-            <p className="text-base text-gray-700">
-              <span className="font-semibold">Support:</span>{" "}
-              <a
-                href="mailto:support@fruitbounty.com"
-                className="text-[#B7A261] hover:text-[#9d8a51] transition-colors"
-              >
-                support@fruitbounty.com
-              </a>
-            </p>
           </div>
         </div>
       </div>
@@ -223,4 +231,3 @@ const PrivacyPolicy = () => {
 };
 
 export default PrivacyPolicy;
-
