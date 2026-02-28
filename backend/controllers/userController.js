@@ -42,6 +42,7 @@ export const updateProfile = async (req, res) => {
         _id: updatedUser._id,
         name: updatedUser.name,
         email: updatedUser.email,
+        address: updatedUser.address,
         role: updatedUser.role
       }
     });

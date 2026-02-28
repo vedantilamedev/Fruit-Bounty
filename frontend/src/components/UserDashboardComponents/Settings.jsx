@@ -160,6 +160,8 @@ export default function Settings({ userData, onUpdateUser }) {
             const token = localStorage.getItem("token");
             const res = await axios.put("/api/users/profile", {
                 name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
                 address: formData.address
             }, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -170,6 +172,8 @@ export default function Settings({ userData, onUpdateUser }) {
                 onUpdateUser({
                     ...userData,
                     name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
                     address: formData.address
                 });
             }
@@ -292,9 +296,11 @@ export default function Settings({ userData, onUpdateUser }) {
                         <div>
                             <Label>Mobile Number</Label>
                             <Input
+                                name="phone"
                                 value={formData.phone}
-                                readOnly
-                                className="mt-3 opacity-70"
+                                onChange={handleFormChange}
+                                placeholder="Enter your mobile number"
+                                className="mt-3"
                             />
                         </div>
 

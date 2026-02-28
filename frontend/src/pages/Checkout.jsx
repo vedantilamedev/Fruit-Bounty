@@ -17,6 +17,13 @@ const Checkout = () => {
   const { cart, total, clearCart } = useCart();
   const navigate = useNavigate();
 
+  // Get API base URL (without /api suffix)
+  const getApiBaseUrl = () => {
+    const baseUrl = import.meta.env.VITE_BASE_URL || import.meta.env.VITE_PROD_API_URL || "https://fruit-bounty-dmzs.onrender.com/api";
+    // Remove /api suffix if present to avoid duplication
+    return baseUrl.replace(/\/$/, "").replace(/\/api$/, "");
+  };
+
   // Scroll to top on load
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -89,14 +96,18 @@ const Checkout = () => {
 
     try {
       // 1️⃣ Create order on backend
+      const token = localStorage.getItem("token");
       // const orderRes = await fetch("https://fruit-bounty-dmzs.onrender.com/api/payment/create-order", {
       //   method: "POST",
       //   headers: { "Content-Type": "application/json" },
       //   body: JSON.stringify({ amount: grandTotal }),
       // });
-      const orderRes = await fetch(`/api/payment/create-order`, {
+      const orderRes = await fetch(`${getApiBaseUrl()}/api/payment/create-order`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({ amount: grandTotal }),
       });
       const order = await orderRes.json();
@@ -121,13 +132,12 @@ const Checkout = () => {
             console.log("Payment response:", response);
             
             // 3️⃣ Verify payment on backend
-            const apiBaseUrl = getApiBaseUrl();
-            console.log("API Base URL:", apiBaseUrl);
-            
-            const verifyRes = await fetch(`${apiBaseUrl}/payment/verify`, {
+            const token = localStorage.getItem("token");
+            const verifyRes = await fetch(`${getApiBaseUrl()}/api/payment/verify`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
               },
               body: JSON.stringify({
                 razorpay_payment_id: response.razorpay_payment_id,
@@ -136,6 +146,7 @@ const Checkout = () => {
                 cartItems: cart,
                 totalAmount: grandTotal,
                 deliveryAddress: address,
+                paymentMethod: "Card"
               }),
             });
 

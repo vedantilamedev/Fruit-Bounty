@@ -163,16 +163,16 @@ useEffect(() => {
           {/* Action Buttons */}
           <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4">
             <button 
-              onClick={() => navigate('/shop')}
+              onClick={() => navigate('/dashboard')}
               className="flex-1 bg-green-950 text-white p-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-green-800 transition-all flex items-center justify-center gap-2 group"
             >
-              Back to Menu <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              Go to Dashboard <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </button>
             <button 
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/shop')}
               className="flex-1 bg-white border-[3px] border-gray-100 text-gray-400 p-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:border-[#C9C27A] hover:text-[#C9C27A] transition-all"
             >
-              Return Home
+              Back to Menu
             </button>
           </motion.div>
 

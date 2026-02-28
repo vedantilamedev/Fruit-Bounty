@@ -4,7 +4,7 @@ import { ShoppingBag, CreditCard, Calendar, Truck, ArrowRight, Package, X, Check
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
-const Overview = ({ userData, orders }) => {
+const Overview = ({ userData, orders, payments }) => {
   const [isTrackingOpen, setIsTrackingOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -13,8 +13,8 @@ const Overview = ({ userData, orders }) => {
     `${userData.activePackage.name} (${userData.activePackage.peopleCount} Person)` :
     'No Active Plan';
 
-  const totalOrders = orders ? orders.length : 0;
-  const lastPayment = userData?.payments && userData.payments.length > 0 ? userData.payments[0] : null;
+  const totalOrders = orders?.length || 0;
+  const lastPayment = payments && payments.length > 0 ? payments[0] : null;
 
   const trackingSteps = [
     { status: 'Order Confirmed', description: 'Orchard selection finalized', time: 'Feb 18, 10:30 AM', completed: true, current: false, icon: ShoppingBag },
@@ -133,10 +133,9 @@ group h-full relative overflow-hidden"
           className="bg-gradient-to-br min-w-[75vw] from-[#3C7E44] to-[#244f2a]
   border border-[#DAA520] rounded-[1rem] p-6 lg:p-8 
   relative overflow-hidden group 
- shadow-[0_10px_30px_rgba(0,0,0,0.6)]
+  shadow-[0_10px_30px_rgba(0,0,0,0.6)]
   transition-all duration-500"
         >
-          <div className="absolute top-0 right-0 w-80 h-80 bg-[url('https://www.transparenttextures.com/patterns/cubes.webp')] opacity-[0.03] rotate-12" />
           <motion.div
             animate={{ scale: [1, 1.2, 1], rotate: [0, 5, 0] }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
@@ -148,7 +147,6 @@ group h-full relative overflow-hidden"
               whileHover={{ rotate: 10, scale: 1.05 }}
               className="bg-gradient-to-br from-[#2e6034] to-[#1b361b]  p-5 rounded-[1rem] shadow-xl shadow-green-900/20 relative overflow-hidden"
             >
-              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.webp')] opacity-10" />
               <Calendar className="text-white relative z-10" size={36} strokeWidth={1.5} />
             </motion.div>
             <div className="text-center  lg:text-left flex-1 space-y-2">
@@ -187,8 +185,8 @@ group h-full relative overflow-hidden"
           />
           <StatCard
             title="Last Payment"
-            value={<span className="text-3xl">₹{lastPayment?.amount || 0}</span>}
-            subtitle={lastPayment ? lastPayment.status : 'No payments'}
+            value={<span className="text-3xl">₹{lastPayment?.amount || lastPayment?.total_amount || 0}</span>}
+            subtitle={lastPayment ? (lastPayment.status === 'Success' ? 'Payment Successful' : lastPayment.status) : 'No payments yet'}
             icon={CreditCard}
             color={lastPayment?.status === 'Success' ? 'bg-[#3C7E44]' : 'bg-[#A44A3F]'}
           />

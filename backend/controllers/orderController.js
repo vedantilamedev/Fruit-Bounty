@@ -71,7 +71,7 @@ export const createOrder = async (req, res) => {
       isRecurring,  
       next_delivery_date: start,  
       order_status: "active",  
-      payment_status: "paid",  
+      payment_status: "Paid",  
     });  
 
     // Create delivery schedule  
