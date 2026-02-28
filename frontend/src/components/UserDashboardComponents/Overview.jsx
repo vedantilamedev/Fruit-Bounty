@@ -104,12 +104,12 @@ group h-full relative overflow-hidden"
         </div>
 
         <div className="z-10 mt-auto">
-          <p className="text-[#B7A261] text-[11px] font-bold uppercase tracking-[0.15em] mb-2 pl-1">{title}</p>
+          <p className="text-[#1f3f25] text-[11px] font-bold uppercase tracking-[0.15em] mb-2 pl-1">{title}</p>
           <motion.h3
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-3xl lg:text-4xl font-normal  tracking-tight leading-none mb-1"
+            className="text-3xl lg:text-4xl font-semibold text-[#1f3f25] tracking-tight leading-none mb-1"
           >
             {value}
           </motion.h3>
