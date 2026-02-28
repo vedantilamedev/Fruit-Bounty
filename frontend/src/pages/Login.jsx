@@ -102,6 +102,8 @@ const LoginRegister = () => {
       transition: 'all 0.8s cubic-bezier(0.65, 0, 0.35, 1)',
       display: 'flex',
       flexDirection: 'column',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
       padding: '40px',
     },
     formSide: {
@@ -117,7 +119,7 @@ const LoginRegister = () => {
     },
     headerRow: {
         display: 'grid',
-        gridTemplateColumns: '1fr auto 1fr', // Layout: [Arrow] [Logo] [Empty Space]
+        gridTemplateColumns: '1fr auto 1fr',
         alignItems: 'center',
         width: '100%',
         maxWidth: '520px',
@@ -239,10 +241,28 @@ const LoginRegister = () => {
       <div style={styles.mainBox}>
         {/* Sliding Image Background */}
         <div className="sliding-overlay" style={styles.overlaySection}>
-          <div style={{ background: 'rgba(255,255,255,0.9)', padding: '20px', borderRadius: '1.5rem', border: '3px solid #C9C27A', width: 'fit-content' }}>
-            <h3 style={{ color: '#14532d', margin: 0, fontSize: '1.1rem', fontWeight: 900, textTransform: 'uppercase' }}>
-              {isRegistering ? 'Fresh Starts' : 'Welcome Back'}
+          <div style={{ 
+            background: 'rgba(255,255,255,0.95)', 
+            // UPDATED: Compact padding
+            padding: '10px 20px', 
+            borderRadius: '2rem',
+            border: '2px solid #C9C27A',
+            maxWidth: '90%', 
+            width: '600px',
+            textAlign: 'center',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+            // UPDATED: Moved even higher
+            marginTop: '5px' 
+          }}>
+            <h3 style={{ color: '#14532d', margin: '0 0 2px 0', fontSize: '1.2rem', fontWeight: 900, textTransform: 'uppercase' }}>
+              {isRegistering ? 'Start Your Journey' : 'Welcome Back'}
             </h3>
+            {/* UPDATED: Single line description with nowrap */}
+            <p style={{ color: '#4b5563', margin: 0, fontSize: '0.8rem', fontWeight: 500, lineHeight: '1', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {isRegistering 
+                ? 'Create an account to order fresh fruit bowls and get exclusive offers!' 
+                : 'Log in to manage your profile and quickly reorder your favorites.'}
+            </p>
           </div>
         </div>
 

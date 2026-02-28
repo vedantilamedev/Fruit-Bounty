@@ -150,11 +150,12 @@ useEffect(() => {
               </div>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-gray-100 flex items-center gap-3">
+            {/* UPDATED: Tighter gap and enhanced quote section */}
+            <div className="mt-3 pt-3 border-t border-gray-100 flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-800">
                 <Heart size={20} fill="currentColor" className="opacity-20" />
               </div>
-              <p className="text-[10px] font-bold text-gray-500 italic">
+              <p className="text-[11px] font-bold text-gray-600 italic leading-snug">
                 "We're hand-selecting the finest seasonal fruits just for you."
               </p>
             </div>
@@ -162,15 +163,17 @@ useEffect(() => {
 
           {/* Action Buttons */}
           <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4">
+            {/* UPDATED: Enhanced Dashboard Button */}
             <button 
               onClick={() => navigate('/dashboard')}
-              className="flex-1 bg-green-950 text-white p-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-green-800 transition-all flex items-center justify-center gap-2 group"
+              className="flex-1 bg-green-950 text-white p-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-green-800 hover:shadow-lg transition-all flex items-center justify-center gap-2 group"
             >
               Go to Dashboard <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </button>
+            {/* UPDATED: Enhanced Menu Button */}
             <button 
               onClick={() => navigate('/shop')}
-              className="flex-1 bg-white border-[3px] border-gray-100 text-gray-400 p-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:border-[#C9C27A] hover:text-[#C9C27A] transition-all"
+              className="flex-1 bg-stone-100 border-[3px] border-stone-200 text-gray-600 p-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:border-[#C9C27A] hover:text-[#C9C27A] hover:shadow-lg transition-all"
             >
               Back to Menu
             </button>
@@ -180,7 +183,7 @@ useEffect(() => {
             variants={itemVariants}
             className="mt-12 text-[9px] font-black text-gray-800 uppercase tracking-[0.4em]"
           >
-            Thank you for choosing Harvest
+            Thank you for choosing Fruit Bounty
           </motion.p>
         </motion.div>
       </div>

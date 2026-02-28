@@ -96,7 +96,7 @@ const Sidebar = ({ onLinkClick }) => {
         </button>
 
         <p className="mt-4 text-xs text-white/60 text-center">
-          © Graphura India Pvt. Ltd.
+          © Fruit's Bounty
           <br />
           All rights reserved
         </p>

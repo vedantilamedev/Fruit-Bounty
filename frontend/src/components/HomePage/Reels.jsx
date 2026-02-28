@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { FaInstagram, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -29,18 +29,34 @@ function Reels() {
     });
   };
 
+  // Callback ref for mobile video — fires when the element mounts/unmounts
+  const mobileVideoRef = useCallback((el) => {
+    videoRefs.current[current] = el;
+    if (el) {
+      el.muted = true;
+      el.load(); // force reload the source
+      const playPromise = el.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          console.warn("Autoplay was prevented:", error);
+        });
+      }
+    }
+  }, [current]);
+
   const prev = () => {
     const nextIdx = current === 0 ? reels.length - 1 : current - 1;
     setCurrent(nextIdx);
-    setUnmutedIndex(null); 
+    setUnmutedIndex(null);
   };
 
   const next = () => {
     const nextIdx = current === reels.length - 1 ? 0 : current + 1;
     setCurrent(nextIdx);
-    setUnmutedIndex(null); 
+    setUnmutedIndex(null);
   };
 
+  // Desktop grid intersection observer
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -54,11 +70,14 @@ function Reels() {
               copy[index] = true;
               return copy;
             });
-            if (video) video.play().catch(() => {});
+            if (video) {
+              video.muted = true;
+              video.play().catch(() => {});
+            }
           } else {
             if (video) {
               video.pause();
-              video.muted = true; 
+              video.muted = true;
             }
           }
         });
@@ -88,18 +107,24 @@ function Reels() {
         </h2>
         <div className="w-16 h-1 bg-[#2D5A27] mx-auto mt-3 mb-6 rounded-full"></div>
         <p className="text-gray-600 text-sm md:text-base font-medium leading-relaxed">
-          Watch how we craft our premium fruit bowls! 
+          Watch how we craft our premium fruit bowls!
         </p>
       </div>
 
       {/* MOBILE SLIDER */}
       <div className="relative z-20 flex items-center justify-center md:hidden">
-        <button onClick={prev} className="absolute left-2 z-30 bg-white/90 p-2 rounded-full shadow-lg text-gray-800">
+        <button
+          onClick={prev}
+          className="absolute left-2 z-30 bg-white/90 p-2 rounded-full shadow-lg text-gray-800"
+        >
           <ChevronLeft size={24} />
         </button>
 
-        <div className="w-[280px] relative cursor-pointer group" onClick={() => toggleMute(current)}>
-          {/* MOBILE TRANSPARENT INSTAGRAM ICON */}
+        <div
+          className="w-[280px] relative cursor-pointer group"
+          onClick={() => toggleMute(current)}
+        >
+          {/* MOBILE INSTAGRAM ICON */}
           <a
             href={reels[current].link}
             target="_blank"
@@ -113,21 +138,35 @@ function Reels() {
             </div>
           </a>
 
+          {/*
+            KEY FIXES:
+            1. `key={current}` forces a fresh mount on every slide change.
+            2. `ref={mobileVideoRef}` is a callback ref — it fires AFTER mount,
+               so the element is guaranteed to exist when we call .play().
+            3. `autoPlay` attribute added as a declarative hint for browsers.
+            4. `playsInline` is critical for iOS Safari inline playback.
+          */}
           <video
             key={current}
-            ref={(el) => (videoRefs.current[current] = el)}
+            ref={mobileVideoRef}
             src={reels[current].video}
             loop
             muted
+            autoPlay
             playsInline
+            preload="auto"
             className="rounded-[2.5rem] shadow-2xl w-full object-cover aspect-[9/16] bg-black border-4 border-white"
           />
+
           <div className="absolute bottom-6 right-6 z-30 bg-black/60 backdrop-blur-md p-3 rounded-full text-white border border-white/20 transition-transform active:scale-90">
             {unmutedIndex === current ? <FaVolumeUp size={20} /> : <FaVolumeMute size={20} />}
           </div>
         </div>
 
-        <button onClick={next} className="absolute right-2 z-30 bg-white/90 p-2 rounded-full shadow-lg text-gray-800">
+        <button
+          onClick={next}
+          className="absolute right-2 z-30 bg-white/90 p-2 rounded-full shadow-lg text-gray-800"
+        >
           <ChevronRight size={24} />
         </button>
       </div>
@@ -147,7 +186,7 @@ function Reels() {
                 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-20"}`}
               onClick={() => toggleMute(index)}
             >
-              {/* DESKTOP TRANSPARENT INSTAGRAM ICON */}
+              {/* DESKTOP INSTAGRAM ICON */}
               <a
                 href={reel.link}
                 target="_blank"
@@ -155,9 +194,7 @@ function Reels() {
                 onClick={(e) => e.stopPropagation()}
                 className="absolute top-6 right-6 z-40 group/insta"
               >
-                {/* Pulsing Attention Ring */}
                 <span className="absolute inset-0 rounded-full bg-pink-400/30 animate-ping"></span>
-                
                 <div className="relative bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/20 shadow-2xl transition-all duration-300 group-hover/insta:scale-110 group-hover:animate-bounce group-hover:bg-white/30">
                   <FaInstagram className="text-white text-2xl drop-shadow-md" />
                 </div>
@@ -168,13 +205,16 @@ function Reels() {
                 src={reel.video}
                 loop
                 muted
+                autoPlay
                 playsInline
+                preload="auto"
                 className="rounded-[2.5rem] shadow-2xl w-full object-cover aspect-[9/16] bg-black border-[3px] border-transparent group-hover:border-[#C9C27A] transition-all duration-500"
               />
 
-              {/* Mute/Unmute Indicator */}
-              <div className={`absolute bottom-6 right-6 z-30 p-3 rounded-full text-white border border-white/20 backdrop-blur-md transition-all duration-300
-                ${isUnmuted ? "bg-[#2D5A27] scale-110 shadow-lg" : "bg-black/40 opacity-0 group-hover:opacity-100"}`}>
+              <div
+                className={`absolute bottom-6 right-6 z-30 p-3 rounded-full text-white border border-white/20 backdrop-blur-md transition-all duration-300
+                  ${isUnmuted ? "bg-[#2D5A27] scale-110 shadow-lg" : "bg-black/40 opacity-0 group-hover:opacity-100"}`}
+              >
                 {isUnmuted ? <FaVolumeUp size={20} /> : <FaVolumeMute size={20} />}
               </div>
             </div>
