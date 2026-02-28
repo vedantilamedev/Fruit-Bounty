@@ -153,6 +153,12 @@ group h-full relative overflow-hidden"
               <Calendar className="text-white relative z-10" size={36} strokeWidth={1.5} />
             </motion.div>
             <div className="text-center  lg:text-left flex-1 space-y-2">
+              <h2 className="text-3xl lg:text-4xl font-semibold text-[#00ff2f] tracking-tight">
+                Welcome{" "}
+                <span className="text-[#00ff1e]">
+                  {userData?.name || "User"}
+                </span>
+              </h2>
               <h3 className="text-xl lg:text-2xl font-medium text-white tracking-tight">Freshness First Policy</h3>
               <p className="text-white/60 font-normal leading-relaxed max-w-2xl text-sm">
                 To guarantee maximum freshness from orchard to your bowl, <strong className="font-medium text-[#50e261] bg-[#3C7E44]/10 px-2 py-0.5 rounded-md">Same-day delivery is currently paused.</strong> All new fruit orders will reach you within 24 hours.

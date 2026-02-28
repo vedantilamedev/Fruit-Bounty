@@ -78,8 +78,8 @@ transition-all duration-300
                 <div className="bg-[#F7F5EF] p-8 rounded-[1rem] mb-6 shadow-sm">
                     <Package size={64} className="text-[#B7A261] opacity-40" strokeWidth={1} />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">No Active Harvest Plan</h3>
-                <p className="text-white text-sm max-w-xs mb-8">Reconnect with fresh fruit by choosing a subscription plan.</p>
+                <h3 className="text-2xl font-bold text-[#947d3a] mb-2 tracking-tight">No Active Harvest Plan</h3>
+                <p className="text-[#B7A261] text-sm max-w-xs mb-8">Reconnect with fresh fruit by choosing a subscription plan.</p>
                 <button onClick={() => { navigate("/subscription") }} className="px-12 py-4 bg-[#3C7E44] text-white rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:bg-[#2f6131] transition-all duration-300 shadow-2xl shadow-green-900/20">
                     Explore Plans
                 </button>

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 /* ---------- UI Helpers ---------- */
 
@@ -80,7 +81,10 @@ export default function Settings({ userData, onUpdateUser }) {
     const [tab, setTab] = useState("profile");
     const [loading, setLoading] = useState(false);
     const [localUserData, setLocalUserData] = useState(null);
-
+    // const [showPassword, setShowPassword] = useState(false);
+    const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     // Fetch user profile directly if not provided via props
     useEffect(() => {
         const fetchProfile = async () => {
@@ -373,6 +377,8 @@ export default function Settings({ userData, onUpdateUser }) {
 
             {/* ---------- SECURITY ---------- */}
 
+            {/* ---------- SECURITY ---------- */}
+
             {tab === "security" && (
                 <Card className="p-5 sm:p-8">
                     <h3 className="text-lg sm:text-xl font-medium text-white mb-6 sm:mb-8 tracking-wide">
@@ -380,34 +386,89 @@ export default function Settings({ userData, onUpdateUser }) {
                     </h3>
 
                     <div className="space-y-6">
-                        <div>
+
+                        {/* Current Password */}
+                        <div className="relative">
                             <Label>Current Password</Label>
-                            <Input 
-                                type="password" 
+                            <Input
+                                type={showCurrentPassword ? "text" : "password"}
                                 value={passwordData.currentPassword}
-                                onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
-                                className="mt-3" 
+                                onChange={(e) =>
+                                    setPasswordData({
+                                        ...passwordData,
+                                        currentPassword: e.target.value,
+                                    })
+                                }
+                                className="mt-3 pr-10"
                             />
+                            <div
+                                className="absolute right-3 top-[42px] cursor-pointer text-gray-400"
+                                onClick={() =>
+                                    setShowCurrentPassword(!showCurrentPassword)
+                                }
+                            >
+                                {showCurrentPassword ? (
+                                    <VisibilityOff fontSize="small" />
+                                ) : (
+                                    <Visibility fontSize="small" />
+                                )}
+                            </div>
                         </div>
 
-                        <div>
+                        {/* New Password */}
+                        <div className="relative">
                             <Label>New Password</Label>
-                            <Input 
-                                type="password" 
+                            <Input
+                                type={showNewPassword ? "text" : "password"}
                                 value={passwordData.newPassword}
-                                onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
-                                className="mt-3" 
+                                onChange={(e) =>
+                                    setPasswordData({
+                                        ...passwordData,
+                                        newPassword: e.target.value,
+                                    })
+                                }
+                                className="mt-3 pr-10"
                             />
+                            <div
+                                className="absolute right-3 top-[42px] cursor-pointer text-gray-400"
+                                onClick={() =>
+                                    setShowNewPassword(!showNewPassword)
+                                }
+                            >
+                                {showNewPassword ? (
+                                    <VisibilityOff fontSize="small" />
+                                ) : (
+                                    <Visibility fontSize="small" />
+                                )}
+                            </div>
                         </div>
 
-                        <div>
+                        {/* Confirm Password */}
+                        <div className="relative">
                             <Label>Confirm Password</Label>
-                            <Input 
-                                type="password" 
+                            <Input
+                                type={showConfirmPassword ? "text" : "password"}
                                 value={passwordData.confirmPassword}
-                                onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
-                                className="mt-3" 
+                                onChange={(e) =>
+                                    setPasswordData({
+                                        ...passwordData,
+                                        confirmPassword: e.target.value,
+                                    })
+                                }
+                                className="mt-3 pr-10"
                             />
+                            <div
+                                className="absolute right-3 top-[42px] cursor-pointer text-gray-400"
+                                onClick={() =>
+                                    setShowConfirmPassword(!showConfirmPassword)
+                                }
+                            >
+                                {showConfirmPassword ? (
+                                    <VisibilityOff fontSize="small" />
+                                ) : (
+                                    <Visibility fontSize="small" />
+                                )}
+                            </div>
                         </div>
 
                         <div className="w-full flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4">
@@ -416,9 +477,14 @@ export default function Settings({ userData, onUpdateUser }) {
                                     Forget Password ?
                                 </Button>
                             </a>
-                            <Button 
-                                onClick={handlePasswordChange} 
-                                disabled={loading || !passwordData.currentPassword || !passwordData.newPassword}
+
+                            <Button
+                                onClick={handlePasswordChange}
+                                disabled={
+                                    loading ||
+                                    !passwordData.currentPassword ||
+                                    !passwordData.newPassword
+                                }
                                 className="mt-2 sm:mt-4 w-full sm:w-auto"
                             >
                                 {loading ? "Updating..." : "Update Password"}

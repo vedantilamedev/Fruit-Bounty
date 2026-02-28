@@ -95,14 +95,7 @@ const Payments = ({ payments = [] }) => {
             <div className="min-h-screen p-6 sm:p-10 space-y-10 sm:space-y-14">
 
                 {/* Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                    <StatCard
-                        title="Total Investment"
-                        value={`₹${totalInvested.toLocaleString()}`}
-                        icon={TrendingUp}
-                        trend="+12.5%"
-                        label="Total payment history"
-                    />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                     <StatCard
                         title="Active Credits"
                         value="₹00"
@@ -119,7 +112,7 @@ const Payments = ({ payments = [] }) => {
                     />
                 </div>
 
-                {/* Transaction Table */}
+                {/* Transaction Table (unchanged) */}
                 <div className="
                     bg-gradient-to-br
                     from-[#3a7a41] to-[#25512b]
@@ -204,7 +197,7 @@ const Payments = ({ payments = [] }) => {
                     </div>
                 </div>
 
-                {/* Analysis Section */}
+                {/* Analysis Section (unchanged) */}
                 <div className="
                     bg-gradient-to-br
                     from-[#3a7a41] to-[#25512b]
@@ -224,54 +217,6 @@ const Payments = ({ payments = [] }) => {
                     </p>
                 </div>
             </div>
-
-            {/* Modal remains untouched except safe padding scaling */}
-            <AnimatePresence>
-                {selectedPayment && (
-                    <motion.div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 z-50">
-                        <motion.div
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.9, opacity: 0 }}
-                            className="
-                                bg-[#0f3d23]
-                                w-full max-w-md
-                                rounded-3xl
-                                border border-[#d5b975]/30
-                                shadow-2xl
-                                p-6 sm:p-8
-                                text-white
-                            "
-                        >
-                            <h3 className="text-xl sm:text-2xl font-bold mb-6 text-[#d5b975]">
-                                Payment Receipt
-                            </h3>
-
-                            <p className="mb-2 text-sm">ID: #{selectedPayment.id}</p>
-                            <p className="mb-2 text-sm">Method: {selectedPayment.method}</p>
-                            <p className="mb-2 text-sm">Date: {selectedPayment.date}</p>
-
-                            <p className="mb-6 text-lg font-black text-[#d5b975]">
-                                ₹{selectedPayment.amount != null ? selectedPayment.amount.toLocaleString() : '0'}
-                            </p>
-
-                            <button
-                                onClick={() => setSelectedPayment(null)}
-                                className="
-                                    w-full py-3
-                                    bg-[#206c3d]
-                                    hover:bg-[#2f7c47]
-                                    rounded-xl
-                                    font-bold
-                                    transition
-                                "
-                            >
-                                Close
-                            </button>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </>
     );
 };
