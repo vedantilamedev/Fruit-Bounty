@@ -13,7 +13,9 @@ const Packages = ({ activePackage }) => {
     const [isSixMonth, setIsSixMonth] = useState(false);
     const [isCompareOpen, setIsCompareOpen] = useState(false);
 
-
+const hanndleclick=()=>{
+    
+}
 
     const StatCard = ({ title, value, icon: Icon, color, subtitle }) => (
         <motion.div
@@ -50,7 +52,7 @@ transition-all duration-300
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">No Active Harvest Plan</h3>
                 <p className="text-white text-sm max-w-xs mb-8">Reconnect with fresh fruit by choosing a subscription plan.</p>
-                <button className="px-12 py-4 bg-[#3C7E44] text-white rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:bg-[#2f6131] transition-all duration-300 shadow-2xl shadow-green-900/20">
+                <button onClick={() => { navigate("/subscription") }} className="px-12 py-4 bg-[#3C7E44] text-white rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:bg-[#2f6131] transition-all duration-300 shadow-2xl shadow-green-900/20">
                     Explore Plans
                 </button>
             </div>

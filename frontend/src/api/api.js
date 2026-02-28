@@ -1,12 +1,12 @@
 import axios from "axios";
 
-// const API = axios.create({
-//   baseURL: "https://fruit-bounty-dmzs.onrender.com/api"
-// });
-
 const API = axios.create({
-  baseURL: "http://localhost:5000/api"
+  baseURL: import.meta.env.VITE_BASE_URL || "https://fruit-bounty-dmzs.onrender.com/api" 
 });
+
+// const API = axios.create({
+//   baseURL: ""
+// });
 
 //  APIs
 export const registerUser = (data) => API.post("/auth/register", data);

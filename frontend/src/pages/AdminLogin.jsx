@@ -3,6 +3,8 @@ import { Visibility, VisibilityOff, Security } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://fruit-bounty-dmzs.onrender.com/api";
+
 const AdminLogin = () => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -32,8 +34,7 @@ const AdminLogin = () => {
     }
 
     try {
-      // await axios.post("https://fruit-bounty-dmzs.onrender.com/api/admin/register", registerData);
-      await axios.post("https://fruit-bounty-dmzs.onrender.com/api/admin/register", registerData);
+      await axios.post(`/api/admin/register`, registerData);
       alert("Request sent successfully");
       setIsRegistering(false);
     } catch (error) {
@@ -46,12 +47,8 @@ const AdminLogin = () => {
 
     try {
       console.log(loginData);
-      // const res = await axios.post(
-      //   "https://fruit-bounty-dmzs.onrender.com/api/admin/login",
-      //   loginData,
-      // );
       const res = await axios.post(
-        "https://fruit-bounty-dmzs.onrender.com/api/admin/login",
+        `/api/admin/login`,
         loginData,
       );
 

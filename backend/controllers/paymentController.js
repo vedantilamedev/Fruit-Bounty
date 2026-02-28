@@ -104,7 +104,8 @@ export const verifyPayment = async (req, res) => {
     console.log("============================");
 
     if (expectedSign !== razorpay_signature) {
-      return res.json({ success: false });
+      console.error("Signature verification failed!");
+      return res.status(400).json({ success: false, message: "Payment signature verification failed" });
     }
 
     // ✅ SAVE ORDER TO DATABASE

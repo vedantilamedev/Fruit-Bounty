@@ -10,7 +10,7 @@ import {
 import axios from "axios";
 
 const COLORS = ["#22c55e", "#3b82f6", "#f97316", "#16a34a", "#86efac"];
-const BASE_URL = "https://fruit-bounty-dmzs.onrender.com/api";
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://fruit-bounty-dmzs.onrender.com/api";
 
 export default function Dashboard() {
   const [revenueView, setRevenueView] = useState("daily");
@@ -21,7 +21,7 @@ export default function Dashboard() {
     const fetchStats = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get(`${BASE_URL}/admin/dashboard`, {
+        const res = await axios.get(`/api/admin/dashboard`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setData(res.data.data);

@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 // const BASE_URL = "https://fruit-bounty-dmzs.onrender.com/api";
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://fruit-bounty-dmzs.onrender.com/api";
 
 const conversionRate = 1; // Backend already returns amount in INR
 
@@ -42,7 +42,7 @@ export default function Payments() {
       const token = localStorage.getItem("token");
       console.log("Token:", token);
       
-      const res = await axios.get(`${BASE_URL}/payment/payments`, {
+      const res = await axios.get(`/api/payment/payments`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       

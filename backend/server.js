@@ -3,6 +3,7 @@ import "./config/env.js"
 import express from "express";
 import cors from "cors";
 import connectDB from "./config/db.js";
+import cloudinary from "./config/cloudinary.js";
 
 // ===============================
 // Load ENV Variables
@@ -15,9 +16,39 @@ const app = express();
 // ===============================
 // Middlewares
 // ===============================
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+// CORS Configuration for Vercel deployment
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    // Also allow localhost for development
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://localhost:3000',
+      'https://localhost:5173',
+      'https://localhost:3000',
+      'https"//fruit-bounty-git-main-fruitsbountyshop-5632s-projects.vercel.app',
+      'https://fruit-bounty-n2cybwjg1-fruitsbountyshop-5632s-projects.vercel.app',
+      'https://fruit-bounty.vercel.app',
+      // Add your Vercel frontend URL here after deployment
+      // Format: 'https://your-project-name.vercel.app'
+      process.env.FRONTEND_URL
+    ].filter(Boolean);
+    
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // Allow cookies and authentication headers
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+};
+
+app.use(cors(corsOptions));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // ===============================
 // Routes Import
@@ -106,12 +137,16 @@ app.use((err, req, res, next) => {
     message: err.message || "Internal Server Error",
   });
 });
+//TO delete image from cloudinary
+// async function deleteImage() {
+//   const result = await cloudinary.uploader.destroy('fruits/gy5hojjl209asevrlfgn');
+//   console.log(result);
+// }
 
 // ===============================
 // Start Server
 // ===============================
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, () => {
   connectDB();
   console.log(`Server running on port ${PORT}`);

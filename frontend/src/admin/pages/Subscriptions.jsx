@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { Pause, Play, Users, Calendar, CreditCard } from "lucide-react";
 import axios from "axios";
 
+const BASE_URL = import.meta.env.VITE_BASE_URL || "https://fruit-bounty-dmzs.onrender.com/api";
+
 const Subscriptions = () => {
   const [subscribers, setSubscribers] = useState([]);
   const [filter, setFilter] = useState("All");
@@ -15,7 +17,7 @@ const Subscriptions = () => {
       try {
         const token = localStorage.getItem("token"); // Admin JWT token
         const { data } = await axios.get(
-          "https://fruit-bounty-dmzs.onrender.com/api/admin/subscriptions",
+          `/api/admin/subscriptions`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -47,7 +49,7 @@ const Subscriptions = () => {
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.patch(
-        `https://fruit-bounty-dmzs.onrender.com/api/admin/subscriptions/${id}/status`,
+        `/api/admin/subscriptions/${id}/status`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

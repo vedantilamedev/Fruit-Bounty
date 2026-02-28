@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Visibility, VisibilityOff, ArrowLeft } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,8 +10,18 @@ const ForgotPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
+  // Scroll to top whenever the step changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [step]);
+
   const handleNextStep = (e) => {
     e.preventDefault();
+    // Basic validation to ensure phone is 10 digits before proceeding
+    if (step === 1 && phone.length !== 10) {
+      alert("Please enter a valid 10-digit mobile number.");
+      return;
+    }
     setStep(step + 1);
   };
 
@@ -21,12 +31,29 @@ const ForgotPassword = () => {
     navigate('/login');
   };
 
+  // --- UPDATED HANDLER FOR PHONE ---
+  const handlePhoneChange = (e) => {
+    // Allows only numbers and restricts to 10 characters
+    const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+    setPhone(value);
+  };
+
+  const handleOtpChange = (e) => {
+    // Allows only numbers and restricts to 6 characters
+    const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 6);
+    setOtp(value);
+  };
+
   // Common input styling to match checkout page
   const inputClass = "w-full p-4 rounded-xl border-2 border-gray-100 focus:border-[#C9C27A] focus:ring-1 focus:ring-[#C9C27A] outline-none text-sm font-medium tracking-tight";
   const buttonClass = "w-full bg-green-950 text-white font-black uppercase tracking-widest text-sm p-4 rounded-xl shadow-lg hover:bg-green-900 transition-all flex items-center justify-center gap-2 mt-6";
 
   return (
-    <div className="min-h-screen font-sans bg-[#faf9f6] text-gray-900 relative selection:bg-[#C9C27A]/30 flex items-center justify-center p-4">
+    // --- UPDATED CONTAINER CLASSES ---
+    // Changed "items-center" to "items-start" and added "pt-6" for top-alignment on mobile, 
+    // "md:items-center md:pt-0" for desktop centering.
+    <div className="min-h-screen font-sans bg-[#faf9f6] text-gray-900 relative selection:bg-[#C9C27A]/30 flex items-start justify-center p-4 pt-6 md:items-center md:pt-0">
+      
       {/* Signature Background Overlay */}
       <div
         className="absolute inset-0 opacity-[0.6] pointer-events-none"
@@ -64,9 +91,10 @@ const ForgotPassword = () => {
                 type="tel" 
                 placeholder="9876543210" 
                 required 
+                maxLength="10"
                 className={inputClass}
                 value={phone} 
-                onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, ''))}
+                onChange={handlePhoneChange}
               />
               <button type="submit" className={buttonClass}>Send OTP</button>
             </div>
@@ -90,7 +118,7 @@ const ForgotPassword = () => {
                 required 
                 className={`${inputClass} text-center tracking-[10px] text-2xl font-black`}
                 value={otp} 
-                onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ''))}
+                onChange={handleOtpChange}
                 placeholder='------'
               />
               <button type="submit" className={buttonClass}>Verify & Proceed</button>

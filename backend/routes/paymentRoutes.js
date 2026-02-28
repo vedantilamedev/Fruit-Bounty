@@ -6,7 +6,8 @@ import { admin } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 router.get("/payments", protect, admin, getAllPayments);
-router.post("/create-order", createOrder);
+router.post("/create-order", protect, createOrder);
+// Verify payment requires auth to associate order with user
 router.post("/verify", protect, verifyPayment);
 
 export default router;

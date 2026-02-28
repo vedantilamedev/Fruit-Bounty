@@ -4,7 +4,9 @@ import Package from "../models/Package.js";
 import Fruit from "../models/Fruit.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-
+// ===============================
+// ADMIN AUTH
+// ===============================
 export const adminRegister = async (req, res) => {
   try {
     const { name, email, password, secretKey } = req.body;

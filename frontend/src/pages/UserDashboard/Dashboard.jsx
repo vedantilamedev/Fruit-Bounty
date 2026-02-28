@@ -18,6 +18,8 @@ const Dashboard = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [showToast, setShowToast] = useState(false);
     const [payments, setPayments] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const [userData, setUserData] = useState({
         name: "",
@@ -30,9 +32,15 @@ const Dashboard = () => {
     const [orders, setOrders] = useState([]);
 
     useEffect(() => {
+        // Don't show loading if no token
+        const token = localStorage.getItem("token");
+        if (!token) {
+            setLoading(false);
+            return;
+        }
+
         const fetchUserProfile = async () => {
             try {
-                const token = localStorage.getItem("token");
                 const res = await axios.get("/api/users/profile", {
                     headers: { Authorization: `Bearer ${token}` }
                 });
@@ -51,7 +59,6 @@ const Dashboard = () => {
 
         const fetchOrders = async () => {
             try {
-                const token = localStorage.getItem("token");
                 const res = await axios.get("/api/users/my-orders", {
                     headers: { Authorization: `Bearer ${token}` }
                 });
@@ -82,11 +89,23 @@ const Dashboard = () => {
 
             } catch (error) {
                 console.error("Error fetching orders:", error.response?.data || error.message);
+            } finally {
+                setLoading(false);
             }
         };
 
         fetchUserProfile();
         fetchOrders();
+
+        // Refresh orders when window gains focus (e.g., when navigating back from order success)
+        const handleFocus = () => {
+            setLoading(true);
+            fetchOrders();
+            fetchUserProfile();
+        };
+        
+        window.addEventListener('focus', handleFocus);
+        return () => window.removeEventListener('focus', handleFocus);
     }, []);
 
     const handleCancelOrder = (orderId) => {
@@ -114,7 +133,7 @@ const Dashboard = () => {
     const renderContent = () => {
         switch (activeTab) {
             case 'overview':
-                return <Overview userData={userData} orders={orders} onTabChange={handleTabChange} />;
+                return <Overview userData={userData} orders={orders} payments={payments} onTabChange={handleTabChange} />;
             case 'orders':
                 return <Orders orders={orders} onCancelOrder={handleCancelOrder} />;
             case 'packages':
@@ -124,7 +143,7 @@ const Dashboard = () => {
             case 'settings':
                 return <Settings userData={userData} onUpdateUser={handleUpdateUser} />;
             default:
-                return <Overview userData={userData} orders={orders} />;
+                return <Overview userData={userData} orders={orders} payments={payments} />;
         }
     };
 

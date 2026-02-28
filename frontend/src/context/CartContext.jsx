@@ -29,6 +29,11 @@ export const CartProvider = ({ children }) => {
     setCart((prev) => prev.filter((item) => item.id !== id));
   };
 
+  // ✅ Clear entire cart
+  const clearCart = () => {
+    setCart([]);
+  };
+
   // ✅ Update quantity
   const updateQty = (id, qty) => {
     setCart((prev) =>
@@ -46,7 +51,7 @@ export const CartProvider = ({ children }) => {
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, updateQty, total }}
+      value={{ cart, addToCart, removeFromCart, updateQty, total, clearCart }}
     >
       {children}
     </CartContext.Provider>

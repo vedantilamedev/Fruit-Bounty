@@ -8,13 +8,13 @@ export const protect = async (req, res, next) => {
     if (req.headers.authorization && req.headers.authorization.startsWith("Bearer ")) {
       token = req.headers.authorization.split(" ")[1];
 
-      // 👇 ADD THESE DEBUG LINES
-      console.log("=== AUTH MIDDLEWARE DEBUG ===");
-      console.log("Token received:", token ? token.substring(0, 30) + "..." : "NULL");
-      console.log("JWT_SECRET exists:", !!process.env.JWT_SECRET);
-      console.log("JWT_SECRET value:", process.env.JWT_SECRET);
-      console.log("=============================");
-      // 👆 END DEBUG LINES
+      // // 👇 ADD THESE DEBUG LINES
+      // console.log("=== AUTH MIDDLEWARE DEBUG ===");
+      // console.log("Token received:", token ? token.substring(0, 30) + "..." : "NULL");
+      // console.log("JWT_SECRET exists:", !!process.env.JWT_SECRET);
+      // console.log("JWT_SECRET value:", process.env.JWT_SECRET);
+      // console.log("=============================");
+      // // 👆 END DEBUG LINES
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const user = await User.findById(decoded.id).select("-password");

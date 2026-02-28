@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Trash2, Edit, X } from "lucide-react";
 import axios from "axios";
 
-const BASE_URL = "https://fruit-bounty-dmzs.onrender.com/api";
+// const BASE_URL = import.meta.env.VITE_BASE_URL || "https://fruit-bounty-dmzs.onrender.com/api";
 
 export default function CustomizeBowl() {
   const [fruits, setFruits] = useState([]);
@@ -22,7 +22,7 @@ export default function CustomizeBowl() {
 
   const fetchFruits = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/fruits`, { headers });
+      const res = await axios.get(`/api/fruits`, { headers });
       const normalized = res.data.data.map((f) => ({
         id: f._id,
         name: f.name,
@@ -42,7 +42,7 @@ export default function CustomizeBowl() {
   const toggleAvailability = async (id) => {
     const fruit = fruits.find((f) => f.id === id);
     try {
-      await axios.put(`${BASE_URL}/fruits/${id}`,
+      await axios.put(`/api/fruits/${id}`,
         { available: !fruit.available },
         { headers }
       );
@@ -60,7 +60,7 @@ export default function CustomizeBowl() {
     const newType = fruit.type === "Free" ? "Premium" : "Free";
     const newPrice = newType === "Free" ? 0 : 100;
     try {
-      await axios.put(`${BASE_URL}/fruits/${id}`,
+      await axios.put(`/api/fruits/${id}`,
         { type: newType, price: newPrice },
         { headers }
       );
@@ -75,7 +75,7 @@ export default function CustomizeBowl() {
   // DELETE
   const deleteFruit = async (id) => {
     try {
-      await axios.delete(`${BASE_URL}/fruits/${id}`, { headers });
+      await axios.delete(`/api/fruits/${id}`, { headers });
       setFruits((prev) => prev.filter((f) => f.id !== id));
     } catch (err) {
       console.error("Failed to delete fruit", err);
@@ -85,7 +85,7 @@ export default function CustomizeBowl() {
   // PUT — save updated price
   const savePrice = async (id) => {
     try {
-      await axios.put(`${BASE_URL}/fruits/${id}`,
+      await axios.put(`/api/fruits/${id}`,
         { price: Number(tempPrice) },
         { headers }
       );
@@ -113,7 +113,7 @@ export default function CustomizeBowl() {
       formData.append("available", true);
       if (newFruitImage) formData.append("image", newFruitImage);
 
-      const res = await axios.post(`${BASE_URL}/fruits`, formData, {
+      const res = await axios.post(`/api/fruits`, formData, {
         headers: {
           ...headers,
           "Content-Type": "multipart/form-data",
