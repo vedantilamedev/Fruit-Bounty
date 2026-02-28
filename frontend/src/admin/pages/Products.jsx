@@ -16,6 +16,7 @@ function BowlForm({ bowl, onSave, onCancel }) {
   const [description, setDescription] = useState(bowl?.description || "");
   const [price, setPrice] = useState(bowl?.price || "");
   const [ingredients, setIngredients] = useState(bowl?.ingredients?.join(", ") || "");
+  const [weight, setWeight] = useState(bowl?.weight || "");
   const [available, setAvailable] = useState(bowl?.available ?? true);
   const [images, setImages] = useState(bowl?.images || []);
   
@@ -105,6 +106,28 @@ function BowlForm({ bowl, onSave, onCancel }) {
             <label className="text-sm font-medium text-slate-700 mb-1 block">Ingredients</label>
             <input className="border p-2 rounded w-full" placeholder="Enter ingredients separated by comma" value={ingredients} onChange={e => setIngredients(e.target.value)} required />
           </div>
+          <div>
+  <label className="text-sm font-medium text-slate-700 mb-1 block">
+    Weight (in grams)
+  </label>
+
+  <div className="flex items-center border rounded w-full overflow-hidden">
+    
+
+    {/* Input */}
+    <input
+      type="number"
+      className="w-full outline-none p-2"
+      placeholder="Enter the weight in g (e.g. 250, 500)"
+      value={weight}
+      onChange={e => setWeight(e.target.value)}
+      min="0"
+    />
+
+  
+
+  </div>
+</div>
           <div>
             <label className="text-sm font-medium text-slate-700 mb-1 block">Description</label>
             <textarea className="border p-2 rounded w-full min-h-[120px] resize-none" placeholder="Enter bowl description" value={description} onChange={e => setDescription(e.target.value)} />
