@@ -4,6 +4,10 @@ import express from "express";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import cloudinary from "./config/cloudinary.js";
+import { getServerInstanceId } from "./config/serverInstance.js";
+
+// Initialize server instance ID on startup
+getServerInstanceId();
 
 // ===============================
 // Load ENV Variables

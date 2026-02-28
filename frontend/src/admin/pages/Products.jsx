@@ -11,7 +11,7 @@ function Card({ className, children, ...props }) { return <div className={cn("bg
 function Badge({ className, children }) { return <span className={cn("px-2 py-1 rounded-md text-xs font-medium bg-green-50 text-green-700 border", className)}>{children}</span>; }
 function Switch({ checked, onChange }) { return <button onClick={() => onChange(!checked)} className={cn("w-10 h-5 rounded-full transition", checked ? "bg-green-600" : "bg-gray-300")}><span className={cn("block w-4 h-4 bg-white rounded-full transition", checked ? "translate-x-5" : "translate-x-1")} /></button>; }
 
-function BowlForm({ bowl, onSave, onCancel }) {
+function BowlForm({ bowl, onSave, onCancel, saving }) {
   const [name, setName] = useState(bowl?.name || "");
   const [description, setDescription] = useState(bowl?.description || "");
   const [price, setPrice] = useState(bowl?.price || "");
@@ -135,8 +135,8 @@ function BowlForm({ bowl, onSave, onCancel }) {
 
           <div className="flex items-center gap-2"><Switch checked={available} onChange={setAvailable} /><span>Available</span></div>
           <div className="flex justify-end gap-2 mt-4">
-            <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700">Save</button>
             <button type="button" onClick={onCancel} className="px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300">Cancel</button>
+            <button type="submit" disabled={saving} className="bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700 disabled:bg-green-400 disabled:cursor-not-allowed">{saving ? "Saving..." : "Save"}</button>
           </div>
         </form>
       </div>
@@ -224,6 +224,7 @@ export default function Products() {
   const [error, setError] = useState(null);
   const [editingBowl, setEditingBowl] = useState(null);
   const [addingBowl, setAddingBowl] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   // Get auth token
   const token = localStorage.getItem("token");
@@ -292,6 +293,7 @@ export default function Products() {
 
   const saveBowl = async (id, updated) => {
     try {
+      setSaving(true);
       const formData = new FormData();
       formData.append("name", updated.name);
       formData.append("price", updated.price);
@@ -303,8 +305,29 @@ export default function Products() {
         formData.append("weight", updated.weight);
       }
       
-      // Add images if any new ones selected (base64 URLs need special handling)
-      // For now, we'll handle images separately
+      // Handle images - for existing images (URLs from server), keep them as-is
+      // For new images (base64), convert to blob and upload
+      if (updated.images && updated.images.length > 0) {
+        // For new bowl creation, upload all images
+        // For existing bowl editing, we need to send existing image URLs somehow
+        // The controller handles this by preserving old images if no new ones are added
+        for (let i = 0; i < updated.images.length; i++) {
+          const img = updated.images[i];
+          // Check if it's a base64 data URL (from local preview - new image)
+          if (img && typeof img === 'string' && img.startsWith('data:')) {
+            try {
+              const response = await fetch(img);
+              const blob = await response.blob();
+              const fileName = `bowl_image_${Date.now()}_${i}.jpg`;
+              formData.append("images", blob, fileName);
+            } catch (e) {
+              console.error("Error converting image:", e);
+            }
+          }
+          // If it's an existing URL from server, we don't need to do anything
+          // The backend controller will preserve existing images when no new ones are uploaded
+        }
+      }
 
       if (id) {
         // Update existing
@@ -342,6 +365,8 @@ export default function Products() {
     } catch (err) {
       console.error("Error saving bowl:", err);
       alert("Failed to save bowl");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -394,8 +419,8 @@ export default function Products() {
           />
         ))}
       </div>
-      {editingBowl && <BowlForm bowl={editingBowl} onSave={saveBowl} onCancel={() => setEditingBowl(null)} />}
-      {addingBowl && <BowlForm onSave={saveBowl} onCancel={() => setAddingBowl(false)} />}
+      {editingBowl && <BowlForm bowl={editingBowl} onSave={saveBowl} onCancel={() => setEditingBowl(null)} saving={saving} />}
+      {addingBowl && <BowlForm onSave={saveBowl} onCancel={() => setAddingBowl(false)} saving={saving} />}
     </div>
   );
 }

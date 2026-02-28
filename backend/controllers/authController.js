@@ -2,18 +2,20 @@ import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import sendEmail from "../utils/sendEmail.js"; // Brevo email utility
+import { getServerInstanceId } from "../config/serverInstance.js";
 
 //  Generate JWT Token
-const generateToken = (id, role) => {
+const generateToken = async (id, role) => {
+  // Get current server instance ID to invalidate tokens on server restart
+  const serverInstanceId = getServerInstanceId();
+
   return jwt.sign(
-    { id, role },
+    { id, role, serverId: serverInstanceId },
     process.env.JWT_SECRET,
     { expiresIn: "7d" }
   );
-
-
-  
 };
+
 
 //  Register User (Customer or Admin)
 export const registerUser = async (req, res) => {
@@ -56,7 +58,7 @@ export const registerUser = async (req, res) => {
         email: user.email,
         phone: user.phone,
         role: user.role,
-        token: generateToken(user._id, user.role)
+        token: await generateToken(user._id, user.role)
       });
     }
 
@@ -95,7 +97,7 @@ export const loginUser = async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
-      token: generateToken(user._id, user.role)
+      token: await generateToken(user._id, user.role)
     });
 
   } catch (error) {

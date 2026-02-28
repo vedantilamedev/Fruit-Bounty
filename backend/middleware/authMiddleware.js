@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import { getServerInstanceId } from "../config/serverInstance.js";
 
 // Protect Middleware
 export const protect = async (req, res, next) => {
@@ -17,6 +18,16 @@ export const protect = async (req, res, next) => {
       // // 👆 END DEBUG LINES
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      
+      // Validate server instance ID to invalidate tokens on server restart
+      const serverInstanceId = getServerInstanceId();
+      
+      // Check if the token was issued for a different server instance
+      if (decoded.serverId && decoded.serverId !== serverInstanceId) {
+        console.log("❌ Token from different server instance");
+        return res.status(401).json({ message: "Session expired. Please login again." });
+      }
+
       const user = await User.findById(decoded.id).select("-password");
       if (!user) return res.status(401).json({ message: "User not found" });
       req.user = user;
