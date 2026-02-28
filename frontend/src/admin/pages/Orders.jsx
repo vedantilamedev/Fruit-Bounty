@@ -14,6 +14,7 @@ import {
   Phone,
   MapPin,
   Calendar,
+  Trash2,
 } from "lucide-react";
 
 // =============================================
@@ -56,12 +57,30 @@ export default function Orders() {
             ? order.items[0]?.name || order.items[0]?.title || "Order"
             : order.fruits?.[0]?.name || "Order";
           
+          // Format delivery address for display
+          const formatDeliveryAddress = (addr) => {
+            if (!addr) return "N/A";
+            // If it's already a string, return it
+            if (typeof addr === 'string') return addr;
+            // If it's an object, format it nicely
+            if (typeof addr === 'object') {
+              const parts = [];
+              if (addr.house) parts.push(addr.house);
+              if (addr.fullName) parts.push(addr.fullName);
+              if (addr.pincode) parts.push(addr.pincode);
+              if (addr.contact) parts.push(addr.contact);
+              return parts.length > 0 ? parts.join(', ') : "N/A";
+            }
+            return "N/A";
+          };
+
           return {
             id: order._id,
             orderName: orderName,
             customerName: order.user_id?.name || "Unknown",
             phone: order.user_id?.phone || "N/A",
-            address: order.user_id?.address || "N/A",
+            // Use deliveryAddress if available, otherwise fall back to user address
+            address: order.deliveryAddress ? formatDeliveryAddress(order.deliveryAddress) : (order.user_id?.address || "N/A"),
             // Check both 'items' (payment orders with title/name) and 'fruits' (subscription orders)
             items: order.items && order.items.length > 0 
               ? order.items.map((item) => item.name || item.title || "Item").join(", ")
@@ -109,6 +128,23 @@ export default function Orders() {
       }
     } catch (err) {
       alert("Error updating status: " + (err.response?.data?.message || err.message));
+    }
+  };
+
+  // =============================================
+  // Delete order (Admin)
+  // =============================================
+  const handleDeleteOrder = async (orderId) => {
+    const confirmed = window.confirm("Are you sure you want to delete this order? This action cannot be undone.");
+    if (!confirmed) return;
+
+    try {
+      await api.delete(`/orders/${orderId}`);
+      setOrders((prev) => prev.filter((o) => o.id !== orderId));
+      setSelectedOrder(null);
+      alert("Order deleted successfully");
+    } catch (err) {
+      alert("Error deleting order: " + (err.response?.data?.message || err.message));
     }
   };
 
@@ -310,6 +346,7 @@ export default function Orders() {
             order={selectedOrder}
             onClose={() => setSelectedOrder(null)}
             onStatusUpdate={handleStatusUpdate}
+            onDelete={handleDeleteOrder}
           />
         )}
       </AnimatePresence>
@@ -349,7 +386,7 @@ function StatusBadge({ type, value }) {
 // =============================================
 // View Details Modal
 // =============================================
-function OrderDetailsModal({ order, onClose, onStatusUpdate }) {
+function OrderDetailsModal({ order, onClose, onStatusUpdate, onDelete }) {
   if (!order) return null;
 
   return (
@@ -467,10 +504,17 @@ function OrderDetailsModal({ order, onClose, onStatusUpdate }) {
         </div>
 
         {/* Footer */}
-        <div className="px-5 py-4 border-t border-gray-100">
+        <div className="px-5 py-4 border-t border-gray-100 flex gap-3">
+          <button
+            onClick={() => onDelete(order.id)}
+            className="flex-1 py-2.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2"
+          >
+            <Trash2 className="w-4 h-4" />
+            Delete
+          </button>
           <button
             onClick={onClose}
-            className="w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm font-medium transition-colors"
+            className="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm font-medium transition-colors"
           >
             Close
           </button>

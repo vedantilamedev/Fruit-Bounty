@@ -134,8 +134,15 @@ export default function TomorrowDeliveries() {
   const filteredDeliveries = (deliveryData || [])
     .filter(d => d && typeof d === 'object' && Object.keys(d).length > 0)
     .filter((d) => {
-      // Validate delivery has required fields
-      if (!d.id || !d.customer) return false;
+      // Validate delivery has at least some identifying info
+      // Allow if there's any customer name, address, or phone
+      const hasCustomer = d.customer && d.customer !== 'Unknown Customer';
+      const hasAddress = d.address && d.address !== 'N/A';
+      const hasPhone = d.phone && d.phone !== 'N/A';
+      
+      // Must have at least one piece of identifying info
+      if (!hasCustomer && !hasAddress && !hasPhone) return false;
+      
       if (filter === "all") return true;
       if (filter === "subscription") return d.type === "Subscription";
       if (filter === "corporate") return d.type === "Corporate";
@@ -225,21 +232,21 @@ export default function TomorrowDeliveries() {
         <Card className="p-6">
           <p className="text-sm text-gray-600 mb-2">Total Bowls</p>
           <h3 className="text-3xl font-bold text-green-600">
-            {(deliveryData || []).reduce((sum, d) => sum + (d.bowlsDetail?.length || 0), 0)}
+            {stats.bowls}
           </h3>
         </Card>
 
         <Card className="p-6">
           <p className="text-sm text-gray-600 mb-2">Corporate</p>
           <h3 className="text-3xl font-bold text-purple-600">
-            {deliveryData.filter((d) => d.type === "Corporate").length}
+            {stats.corporate}
           </h3>
         </Card>
 
         <Card className="p-6">
           <p className="text-sm text-gray-600 mb-2">Subscriptions</p>
           <h3 className="text-3xl font-bold text-orange-600">
-            {deliveryData.filter((d) => d.type === "Subscription").length}
+            {stats.subscription}
           </h3>
         </Card>
       </div>
@@ -291,9 +298,9 @@ export default function TomorrowDeliveries() {
                   </div>
                 ) : (
                   <div className="mt-2 flex items-center gap-1">
-                    <p className="text-sm font-semibold">{String(delivery.time || 'N/A')}</p>
+                    <p className="text-sm font-semibold">{delivery.time && delivery.time !== 'N/A' ? delivery.time : 'Not set'}</p>
                     <button 
-                      onClick={() => { setEditingTime(delivery.id); setCustomTime(delivery.time); }}
+                      onClick={() => { setEditingTime(delivery.id); setCustomTime(delivery.time && delivery.time !== 'N/A' ? delivery.time : ''); }}
                       className="p-0.5 hover:bg-gray-200 rounded"
                     >
                       <Edit2 size={10} />
@@ -305,9 +312,9 @@ export default function TomorrowDeliveries() {
               <div className="flex-1">
                 <div className="flex justify-between mb-2 flex-wrap sm:flex-nowrap gap-2">
                   <div>
-                    <h4 className="font-semibold">{String(delivery.customer || 'Unknown')}</h4>
+                    <h4 className="font-semibold">{delivery.customer || 'Unknown'}</h4>
                     <p className="flex items-center gap-1 text-sm text-gray-600">
-                      <Phone size={14} /> {String(delivery.phone || 'N/A')}
+                      <Phone size={14} /> {delivery.phone && delivery.phone !== 'N/A' ? delivery.phone : 'No phone'}
                     </p>
                   </div>
 
@@ -322,7 +329,7 @@ export default function TomorrowDeliveries() {
                 </div>
 
                 <p className="flex gap-1 text-sm text-gray-600 mb-3">
-                  <MapPin size={14} /> {String(delivery.address || 'N/A')}
+                  <MapPin size={14} /> {delivery.address && delivery.address !== 'N/A' ? delivery.address : 'No address provided'}
                 </p>
 
                 <Button size="sm" variant="outline" onClick={() => setSelected(delivery)}>
@@ -371,9 +378,9 @@ export default function TomorrowDeliveries() {
               <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-3 mb-3 border border-purple-100">
                 <h3 className="font-bold text-purple-800 mb-2 text-sm">👤 Customer Info</h3>
                 <div className="space-y-1.5 text-xs">
-                  <InfoRow label="Name" value={String(selected.customer || 'Unknown')} />
-                  <InfoRow label="Phone" value={String(selected.phone || 'N/A')} />
-                  <InfoRow label="Address" value={String(selected.address || 'N/A')} />
+                  <InfoRow label="Name" value={selected.customer || 'Unknown'} />
+                  <InfoRow label="Phone" value={selected.phone || 'N/A'} />
+                  <InfoRow label="Address" value={selected.address && selected.address !== 'N/A' ? selected.address : 'No address provided'} />
                 </div>
               </div>
 
@@ -384,11 +391,11 @@ export default function TomorrowDeliveries() {
                     <Clock size={14} className="text-blue-600" />
                     <span className="text-xs text-blue-600 font-medium">Time</span>
                   </div>
-                  <p className="font-bold text-blue-800 text-sm">{String(selected.time || 'N/A')}</p>
+                  <p className="font-bold text-blue-800 text-sm">{selected.time && selected.time !== 'N/A' ? selected.time : 'Not set'}</p>
                 </div>
                 <div className="flex-1 bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl p-3 border border-orange-100">
                   <span className="text-xs text-orange-600 font-medium">Type</span>
-                  <p className="font-bold text-orange-800 text-sm">{String(selected.type || 'Normal')}</p>
+                  <p className="font-bold text-orange-800 text-sm">{selected.type || 'Normal'}</p>
                 </div>
               </div>
 
@@ -472,9 +479,14 @@ export default function TomorrowDeliveries() {
 /* ======================
    Info Row
 ====================== */
-const InfoRow = ({ label, value }) => (
-  <div className="flex justify-between text-sm">
-    <span className="text-gray-500">{label}:</span>
-    <span className="font-medium text-gray-800">{value}</span>
-  </div>
-);
+const InfoRow = ({ label, value }) => {
+  const displayValue = value == null || value === '' || value === 'undefined' || value === 'null' 
+    ? 'N/A' 
+    : String(value);
+  return (
+    <div className="flex justify-between text-sm">
+      <span className="text-gray-500">{label}:</span>
+      <span className="font-medium text-gray-800">{displayValue}</span>
+    </div>
+  );
+};

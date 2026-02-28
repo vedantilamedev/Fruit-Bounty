@@ -188,7 +188,8 @@ export const getAllOrders = async (req, res) => {
     const orders = await Order.find()
       .populate("user_id")
       .populate("package_id")
-      .populate("fruits");
+      .populate("fruits")
+      .sort({ createdAt: -1 }); // Sort by newest first
     res.status(200).json({ success: true, data: orders });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -295,6 +296,26 @@ export const getUserOrders = async (req, res) => {
   } catch (error) {
     // Always log the full error during development
     console.error("getUserOrders error:", error.message);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// ===============================
+// DELETE ORDER (Admin)
+// ===============================
+export const deleteOrder = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ message: "Order not found" });
+
+    // Delete associated deliveries
+    await Delivery.deleteMany({ order_id: req.params.id });
+
+    // Delete the order
+    await Order.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({ success: true, message: "Order deleted successfully" });
+  } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };

@@ -115,10 +115,15 @@ export const verifyPayment = async (req, res) => {
       return res.status(400).json({ success: false, message: "Payment signature verification failed" });
     }
 
-    // Format delivery address as a string
-    const formattedAddress = deliveryAddress 
-      ? `${deliveryAddress.fullName || ''}, ${deliveryAddress.house || ''}, ${deliveryAddress.pincode || ''}, ${deliveryAddress.contact || ''}`
-      : "";
+    // Store the full delivery address object
+    const orderDeliveryAddress = deliveryAddress 
+      ? {
+          fullName: deliveryAddress.fullName || '',
+          house: deliveryAddress.house || '',
+          pincode: deliveryAddress.pincode || '',
+          contact: deliveryAddress.contact || ''
+        }
+      : null;
 
     // Check if this is a subscription order (has meals in cart items)
     const hasMeals = cartItems && cartItems.some(item => item.meals && Object.keys(item.meals).length > 0);
@@ -163,7 +168,7 @@ export const verifyPayment = async (req, res) => {
       razorpay_order_id,
       razorpay_payment_id,
       items: cartItems,
-      deliveryAddress: formattedAddress,
+      deliveryAddress: orderDeliveryAddress,
       // Subscription fields
       subscription_type: subscription_type,
       delivery_schedule: delivery_schedule,
@@ -172,6 +177,31 @@ export const verifyPayment = async (req, res) => {
       isRecurring: isRecurring,
       next_delivery_date: start_date
     });
+
+    // Update user's totalOrders and totalSpent
+    if (req.user?.id) {
+      try {
+        const User = (await import("../models/User.js")).default;
+        await User.findByIdAndUpdate(req.user.id, {
+          $inc: { totalOrders: 1, totalSpent: totalAmount },
+          // Also update address if not set
+          $setOnInsert: {
+            phone: orderDeliveryAddress?.contact || "-",
+            address: {
+              flatBuilding: orderDeliveryAddress?.house || "-",
+              fullName: orderDeliveryAddress?.fullName || "-",
+              pincode: orderDeliveryAddress?.pincode || "-",
+              contact: orderDeliveryAddress?.contact || "-",
+              fullAddress: orderDeliveryAddress?.house 
+                ? `${orderDeliveryAddress.house}${orderDeliveryAddress.pincode ? ', ' + orderDeliveryAddress.pincode : ''}`
+                : "-"
+            }
+          }
+        }, { upsert: true });
+      } catch (userError) {
+        console.error("Error updating user stats:", userError);
+      }
+    }
 
     // Create delivery schedule for subscriptions
     if (isRecurring && start_date && end_date && delivery_schedule) {

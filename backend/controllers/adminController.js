@@ -167,6 +167,33 @@ export const getDashboardStats = async (req, res) => {
     const normalOrders = await Order.countDocuments({ isRecurring: false });
     const total = recurringOrders + normalOrders || 1;
 
+    // ---- Most Selling Products ----
+    // Get all orders with lean() to get raw data
+    const allOrders = await Order.find().lean();
+    
+    // Count products from the items array in orders
+    const productCounts = {};
+    
+    allOrders.forEach(order => {
+      // Count items from the items array
+      if (order.items && order.items.length > 0) {
+        order.items.forEach(item => {
+          // Try different possible field names for product name
+          const productName = item.title || item.name || item.productName || item.itemName || null;
+          if (productName) {
+            const quantity = item.quantity || 1;
+            productCounts[productName] = (productCounts[productName] || 0) + quantity;
+          }
+        });
+      }
+    });
+
+    // Create products array from product counts
+    const topProducts = Object.entries(productCounts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 3);
+
     res.status(200).json({
       success: true,
       data: {
@@ -206,6 +233,7 @@ export const getDashboardStats = async (req, res) => {
             count: recurringOrders,
           },
         ],
+        topSellingProducts: topProducts,
       },
     });
   } catch (error) {

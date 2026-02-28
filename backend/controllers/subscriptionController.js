@@ -89,10 +89,25 @@ export const updateSubscriptionStatus = asyncHandler(async (req, res) => {
       return res.status(404).json({ success: false, message: "Subscription not found" });
     }
 
+    console.log("Current order status:", order.order_status);
+    
     // Toggle status between active and paused
-    const newStatus = order.order_status === "active" ? "paused" : "active";
+    const currentStatus = order.order_status;
+    let newStatus;
+    
+    if (currentStatus === "active") {
+      newStatus = "paused";
+    } else if (currentStatus === "paused") {
+      newStatus = "active";
+    } else {
+      // If current status is not active/paused (e.g., "Confirmed", "Pending"), set to paused
+      newStatus = "paused";
+    }
+    
     order.order_status = newStatus;
     await order.save();
+
+    console.log("New order status:", order.order_status);
 
     res.json({
       success: true,

@@ -65,11 +65,16 @@ const Subscriptions = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      setSubscribers((prev) =>
-        prev.map((s) => (s.id === id ? { ...s, status: data.subscription.status } : s))
-      );
+      if (data.success) {
+        setSubscribers((prev) =>
+          prev.map((s) => (s.id === id ? { ...s, status: data.subscription.status } : s))
+        );
+      } else {
+        alert(data.message || "Failed to update subscription status");
+      }
     } catch (err) {
       console.error("Error updating subscription status:", err.response?.data || err.message);
+      alert(err.response?.data?.message || "Failed to update subscription status. Please try again.");
     }
   };
 

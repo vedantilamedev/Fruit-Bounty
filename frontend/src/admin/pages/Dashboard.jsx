@@ -153,7 +153,7 @@ export default function Dashboard() {
         </motion.div>
       </div>
 
-      {/* PIE CHART */}
+      {/* PIE CHART + TOP PRODUCTS */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="bg-white p-4 sm:p-6 rounded-xl border shadow-sm">
@@ -188,6 +188,38 @@ export default function Dashboard() {
                 </div>
               ))}
             </div>
+          </div>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+          <div className="bg-white p-4 sm:p-6 rounded-xl border shadow-sm">
+            <h3 className="text-lg font-semibold mb-4">Top Selling Products</h3>
+            {(data?.topSellingProducts && data.topSellingProducts.length > 0) ? (
+              <div className="space-y-3">
+                {data.topSellingProducts.map((product, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-slate-50">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-[#427A43] flex items-center justify-center text-white font-bold text-sm">
+                        {index + 1}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-slate-700">{product.name}</p>
+                        <p className="text-xs text-slate-500">{product.count} orders</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
+                      <span className="text-xs font-semibold text-green-600">Top</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-40 text-gray-400">
+                <ShoppingCart className="w-10 h-10 mb-2" />
+                <p className="text-sm">No sales data available</p>
+              </div>
+            )}
           </div>
         </motion.div>
       </div>
