@@ -11,7 +11,13 @@ const userSchema = new mongoose.Schema(
 
     // Customer-specific fields
     phone: { type: String, default: "-" },
-    address: { type: String, default: "-" },
+    address: { 
+      flatBuilding: { type: String, default: "-" },
+      fullName: { type: String, default: "-" },
+      pincode: { type: String, default: "-" },
+      contact: { type: String, default: "-" },
+      fullAddress: { type: String, default: "-" }
+    },
     totalOrders: { type: Number, default: 0 },
     totalSpent: { type: Number, default: 0 },
     joinDate: { type: Date, default: Date.now },

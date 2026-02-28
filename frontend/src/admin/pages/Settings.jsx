@@ -126,7 +126,18 @@ export default function Settings() {
         },
       })
       .then((res) => {
-        setProfile(res.data);
+        // Map API response to expected format
+        const { name, email, phone } = res.data;
+        const nameParts = name ? name.split(" ") : [];
+        const firstName = nameParts[0] || "";
+        const lastName = nameParts.slice(1).join(" ") || "";
+        
+        setProfile({
+          firstName,
+          lastName,
+          email: email || "",
+          phone: phone || ""
+        });
       })
       .catch((err) => {
         console.log(err.response?.data || err.message);

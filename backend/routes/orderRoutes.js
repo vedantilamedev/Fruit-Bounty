@@ -8,7 +8,8 @@ import {
   cancelOrder,
   getAllOrders,
   updateOrderStatus,
-  updateSubscriptionStatus
+  updateSubscriptionStatus,
+  deleteOrder
 } from "../controllers/orderController.js";
 
 const router = express.Router();
@@ -25,6 +26,7 @@ router.patch("/:id/subscription-status", protect, updateSubscriptionStatus);
 // Admin routes BEFORE /:id
 router.get("/", protect, admin, getAllOrders);           // ← move up
 router.put("/:id/status", protect, admin, updateOrderStatus);
+router.delete("/:id", protect, admin, deleteOrder);
 
 // Dynamic :id routes LAST
 router.get("/:id", protect, getOrderById);
