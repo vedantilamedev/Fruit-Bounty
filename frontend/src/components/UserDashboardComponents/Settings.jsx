@@ -298,8 +298,8 @@ export default function Settings({ userData, onUpdateUser }) {
                             <Input
                                 name="phone"
                                 value={formData.phone}
-                                onChange={handleFormChange}
                                 placeholder="Enter your mobile number"
+                                readOnly
                                 className="mt-3"
                             />
                         </div>
