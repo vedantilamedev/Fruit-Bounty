@@ -467,7 +467,7 @@ function OrderDetailsModal({ order, onClose, onStatusUpdate, onDelete }) {
           {/* Items */}
           <div className="bg-gray-50 rounded-xl p-4">
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
-              📦 Items
+               Items
             </p>
             <p className="text-sm text-gray-700">{order.items}</p>
           </div>
